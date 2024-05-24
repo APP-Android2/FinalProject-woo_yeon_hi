@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
 import 'package:woo_yeon_hi/screen/register/connect_code_screen.dart';
+import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:provider/provider.dart';
 
@@ -36,9 +37,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
               // bottomNavigationBar: MainBottomNavigationBar(),
               body: ConnectCodeScreen(),
             ),
-
           ),
-
         )
     );
   }
