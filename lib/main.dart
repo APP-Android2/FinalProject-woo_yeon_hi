@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
-import 'package:woo_yeon_hi/screen/main_screen.dart';
+import 'package:woo_yeon_hi/screen/register/connect_code_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/widget/main_bottom_navigation_bar.dart';
 
 void main() {
   runApp(const WooYeonHi());
@@ -34,8 +33,8 @@ class _WooYeonHiState extends State<WooYeonHi> {
             initialIndex: 2,
             length: 5,
             child: Scaffold(
-              bottomNavigationBar: MainBottomNavigationBar(),
-              body: MainScreen(),
+              // bottomNavigationBar: MainBottomNavigationBar(),
+              body: ConnectCodeScreen(),
             ),
 
           ),
