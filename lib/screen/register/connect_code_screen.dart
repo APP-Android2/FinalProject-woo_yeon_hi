@@ -233,8 +233,9 @@ class _ConnectCodeScreenState extends State<ConnectCodeScreen> {
                     Align(
                       alignment: Alignment.bottomRight,
                         child: Container(
-                          padding: EdgeInsets.fromLTRB(0, 80, 10, 0),
+                          margin: EdgeInsets.fromLTRB(0, 54, 16, 0),
                           child: TextButton(
+                            style: ButtonStyle(overlayColor: MaterialStateProperty.all<Color>(ColorFamily.beige)),
                             onPressed: () {},
                             child: Column(
                               children: [

@@ -24,7 +24,7 @@ class RegisterScreen extends StatelessWidget {
           ),
           Padding(padding: EdgeInsets.only(bottom: 200)),
           Material(
-              color: Colors.white,
+              color: ColorFamily.white,
               elevation: 1.0,
               shadowColor: Colors.black,
               shape: RoundedRectangleBorder(
