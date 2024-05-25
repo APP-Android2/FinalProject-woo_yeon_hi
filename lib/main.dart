@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
-import 'package:woo_yeon_hi/screen/register/choose_d_day_screen.dart';
-import 'package:woo_yeon_hi/screen/register/connect_code_screen.dart';
+import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
+import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -38,7 +38,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
             length: 5,
             child: Scaffold(
               // bottomNavigationBar: MainBottomNavigationBar(),
-              body: NickNameSettingScreen(),
+              body: RegisterScreen(),
             ),
           ),
         )

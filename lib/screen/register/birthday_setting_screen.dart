@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:woo_yeon_hi/screen/register/birthday_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 
 import '../../style/color.dart';
 import '../../style/font.dart';
+import 'nickname_setting_screen.dart';
 
-class NickNameSettingScreen extends StatefulWidget {
-  const NickNameSettingScreen({super.key});
+class BirthdaySettingScreen extends StatefulWidget {
+  const BirthdaySettingScreen({super.key});
 
   @override
-  State<NickNameSettingScreen> createState() => _NickNameSettingScreenState();
+  State<BirthdaySettingScreen> createState() => _BirthdaySettingScreenState();
 }
 
-class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
+class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +35,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                 Padding(padding: EdgeInsets.only(top: 60)),
                                 Container(
                                   child: Text(
-                                    "3 / 5",
+                                    "4 / 5",
                                     style: TextStyle(
                                         fontFamily: FontFamily.mapleStoryBold,
                                         fontSize: 15,
@@ -73,7 +73,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                         height: 24,
                                       ),
                                       Image.asset(
-                                        "lib/assets/images/heart_outlined.png",
+                                        "lib/assets/images/heart_fill.png",
                                         height: 24,
                                       ),
                                       Image.asset(
@@ -90,31 +90,50 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                 Padding(padding: EdgeInsets.only(top: 50)),
                                 Container(
                                   child: Text(
-                                    "연인의 별명을 지어주세요!",
+                                    "본인의 생년월일을 등록해주세요",
                                     style: TextStyle(
                                         color: ColorFamily.black,
                                         fontSize: 15,
                                         fontFamily: FontFamily.mapleStoryLight),
                                   ),
                                 ),
-                                Padding(padding: EdgeInsets.only(top: 100)),
+                                Padding(padding: EdgeInsets.only(top: 10)),
+                                Container(
+                                  height: 15,
+                                  child: Text(
+                                    "기념일로 알려드릴게요 >.<",
+                                    style: TextStyle(
+                                        color: ColorFamily.gray,
+                                        fontSize: 12,
+                                        fontFamily: FontFamily.mapleStoryLight),
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 75)),
                                 Container(
                                   width: 250,
                                   child: TextField(
                                     decoration: InputDecoration(
+                                        hintText: "",
+                                        suffixIconConstraints: BoxConstraints(
+                                            minHeight: 24, minWidth: 24),
+                                        suffixIcon: SvgPicture.asset(
+                                            "lib/assets/icons/calendar.svg"),
                                         focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: ColorFamily.black))),
                                     cursorColor: ColorFamily.black,
-                                    maxLength: 10,
-                                    keyboardType: TextInputType.text,
                                     textAlign: TextAlign.center,
+                                    onTap: () {
+                                      print('텍스트필드를 터치하면 캘린더 위젯을 띄웁니다.');
+                                    },
+                                    readOnly: true,
                                     style: TextStyle(
                                         color: ColorFamily.black,
                                         fontSize: 20,
                                         fontFamily: FontFamily.mapleStoryLight),
                                   ),
                                 ),
+                                Padding(padding: EdgeInsets.only(top: 75)),
                               ],
                             ),
                           ),
@@ -137,7 +156,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        DdaySettingScreen()));
+                                                        NickNameSettingScreen()));
                                           },
                                           borderRadius:
                                               BorderRadius.circular(20.0),
@@ -171,7 +190,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    BirthdaySettingScreen()));
+                                                    NickNameSettingScreen()));
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
                                       child: Container(

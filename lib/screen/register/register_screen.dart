@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
 import '../../style/color.dart';
@@ -10,7 +11,8 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+        body: Container(
       padding: EdgeInsets.all(20),
       child: Column(
         children: [
@@ -30,9 +32,11 @@ class RegisterScreen extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              child:
-              InkWell(
-                onTap: (){},
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CodeConnectScreen()));
+                },
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
                     height: 48,
@@ -58,8 +62,7 @@ class RegisterScreen extends StatelessWidget {
                         )
                       ],
                     )),
-              )
-              ),
+              )),
           Padding(padding: EdgeInsets.only(bottom: 10)),
           Material(
               color: Color(0xFFFFE610),
@@ -68,9 +71,11 @@ class RegisterScreen extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              child:
-              InkWell(
-                onTap: (){},
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CodeConnectScreen()));
+                },
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
                     height: 48,
@@ -96,11 +101,9 @@ class RegisterScreen extends StatelessWidget {
                         )
                       ],
                     )),
-
-              )
-          ),
+              )),
         ],
       ),
-    );
+    ));
   }
 }
