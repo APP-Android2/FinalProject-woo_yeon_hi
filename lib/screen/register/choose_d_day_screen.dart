@@ -18,123 +18,129 @@ class ChooseDdayScreen extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Padding(padding: EdgeInsets.only(top: 60)),
                     Container(
-                      child: Text(
-                        "2 / 5",
-                        style: TextStyle(
-                            fontFamily: FontFamily.mapleStoryBold,
-                            fontSize: 15,
-                            color: ColorFamily.pink),
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 20)),
-                    Container(
-                        child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      height: 750,
+                      child: Column(
                         children: [
-                          Image.asset(
-                            "lib/assets/images/heart_fill.png",
-                            height: 24,
-                          ),
-                          Padding(padding: EdgeInsets.only(right: 3)),
-                          Image.asset(
-                            "lib/assets/images/triple_right_arrow.png",
-                            height: 24,
-                          ),
-                          Padding(padding: EdgeInsets.only(right: 3)),
-                          Image.asset(
-                            "lib/assets/images/heart_fill.png",
-                            height: 24,
-                          ),
-                          Padding(padding: EdgeInsets.only(right: 3)),
-                          Image.asset(
-                            "lib/assets/images/triple_right_arrow.png",
-                            height: 24,
-                          ),
-                          Padding(padding: EdgeInsets.only(right: 3)),
-                          Image.asset(
-                            "lib/assets/images/heart_outlined.png",
-                            height: 24,
-                          ),
-                          Padding(padding: EdgeInsets.only(right: 3)),
-                          Image.asset(
-                            "lib/assets/images/triple_right_arrow.png",
-                            height: 24,
-                          ),
-                          Padding(padding: EdgeInsets.only(right: 3)),
-                          Image.asset(
-                            "lib/assets/images/heart_outlined.png",
-                            height: 24,
-                          ),
-                          Padding(padding: EdgeInsets.only(right: 3)),
-                          Image.asset(
-                            "lib/assets/images/triple_right_arrow.png",
-                            height: 24,
-                          ),
-                          Padding(padding: EdgeInsets.only(right: 3)),
-                          Image.asset(
-                            "lib/assets/images/heart_outlined.png",
-                            height: 24,
-                          ),
-                        ],
-                      ),
-                    )),
-                    Padding(padding: EdgeInsets.only(top: 50)),
-                    Container(
-                      child: Text(
-                        "연인이 된 날을 선택해주세요!",
-                        style: TextStyle(
-                            color: ColorFamily.black,
-                            fontSize: 15,
-                            fontFamily: FontFamily.mapleStoryLight),
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 50)),
-                    Container(
-                      height: 320,
-                      width: 360,
-                      color: Colors.white,
-                      child: Text("이 공간에는 캘린더가 들어갑니다."),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 100)),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(height: 40, width: 150),
-                          ),
-                          Padding(padding: EdgeInsets.only(left: 10)),
-                          Expanded(
-                            child: Material(
-                              color: ColorFamily.beige,
-                              elevation: 1.0,
-                              shadowColor: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              child: InkWell(
-                                onTap: () {},
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
-                                    height: 40,
-                                    width: 150,
+                          Container(
+                            height: 650,
+                            child: Column(
+                              children: [
+                                Padding(padding: EdgeInsets.only(top: 60)),
+                                Container(
+                                  child: Text(
+                                    "2 / 5",
+                                    style: TextStyle(
+                                        fontFamily: FontFamily.mapleStoryBold,
+                                        fontSize: 15,
+                                        color: ColorFamily.pink),
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 20)),
+                                Container(
                                     child: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        // "연결코드 생성",
-                                        "다음",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontFamily:
-                                                FontFamily.mapleStoryLight),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "lib/assets/images/heart_fill.png",
+                                        height: 24,
                                       ),
-                                    )),
-                              ),
+                                      Image.asset(
+                                        "lib/assets/images/triple_right_arrow.png",
+                                        height: 24,
+                                      ),
+                                      Image.asset(
+                                        "lib/assets/images/heart_fill.png",
+                                        height: 24,
+                                      ),
+                                      Image.asset(
+                                        "lib/assets/images/triple_right_arrow.png",
+                                        height: 24,
+                                      ),
+                                      Image.asset(
+                                        "lib/assets/images/heart_outlined.png",
+                                        height: 24,
+                                      ),
+                                      Image.asset(
+                                        "lib/assets/images/triple_right_arrow.png",
+                                        height: 24,
+                                      ),
+                                      Image.asset(
+                                        "lib/assets/images/heart_outlined.png",
+                                        height: 24,
+                                      ),
+                                      Image.asset(
+                                        "lib/assets/images/triple_right_arrow.png",
+                                        height: 24,
+                                      ),
+                                      Image.asset(
+                                        "lib/assets/images/heart_outlined.png",
+                                        height: 24,
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                                Padding(padding: EdgeInsets.only(top: 50)),
+                                Container(
+                                  child: Text(
+                                    "연인이 된 날을 선택해주세요!",
+                                    style: TextStyle(
+                                        color: ColorFamily.black,
+                                        fontSize: 15,
+                                        fontFamily: FontFamily.mapleStoryLight),
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 50)),
+                                Container(
+                                  height: 320,
+                                  width: 360,
+                                  color: Colors.white,
+                                  child: Text("이 공간에는 캘린더가 들어갑니다."),
+                                ),
+                              ],
                             ),
-                          )
+                          ),
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Padding(padding: EdgeInsets.only(left: 50)),
+                                Expanded(
+                                  child: Container(height: 40, width: 150),
+                                ),
+                                Padding(padding: EdgeInsets.only(left: 20)),
+                                Expanded(
+                                  child: Material(
+                                    color: ColorFamily.beige,
+                                    elevation: 1.0,
+                                    shadowColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {},
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Container(
+                                          height: 40,
+                                          width: 150,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              // "연결코드 생성",
+                                              "다음",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: FontFamily
+                                                      .mapleStoryLight),
+                                            ),
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.only(left: 50)),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -143,7 +149,9 @@ class ChooseDdayScreen extends StatelessWidget {
                         child: Container(
                           margin: EdgeInsets.fromLTRB(0, 16, 16, 0),
                           child: TextButton(
-                            style: ButtonStyle(overlayColor: MaterialStateProperty.all<Color>(ColorFamily.beige)),
+                            style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all<Color>(
+                                    ColorFamily.beige)),
                             onPressed: () {},
                             child: Column(
                               children: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
 import 'package:woo_yeon_hi/screen/register/choose_d_day_screen.dart';
 import 'package:woo_yeon_hi/screen/register/connect_code_screen.dart';
+import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class WooYeonHi extends StatefulWidget {
 class _WooYeonHiState extends State<WooYeonHi> {
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
         title: "WooYeonHi",
         theme: ThemeData(
@@ -36,7 +38,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
             length: 5,
             child: Scaffold(
               // bottomNavigationBar: MainBottomNavigationBar(),
-              body: ChooseDdayScreen(),
+              body: NickNameSettingScreen(),
             ),
           ),
         )
