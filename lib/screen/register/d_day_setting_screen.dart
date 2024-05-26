@@ -118,7 +118,7 @@ class DdaySettingScreen extends StatelessWidget {
                                   Expanded(
                                     child: Material(
                                       color: ColorFamily.beige,
-                                      elevation: 1.0,
+                                      elevation: 0.5,
                                       shadowColor: Colors.black,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:

@@ -28,7 +28,7 @@ class RegisterScreen extends StatelessWidget {
           Padding(padding: EdgeInsets.only(bottom: 200)),
           Material(
               color: ColorFamily.white,
-              elevation: 1.0,
+              elevation: 0.5,
               shadowColor: Colors.black,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
@@ -64,10 +64,10 @@ class RegisterScreen extends StatelessWidget {
                       ],
                     )),
               )),
-          Padding(padding: EdgeInsets.only(bottom: 15)),
+          Padding(padding: EdgeInsets.only(bottom: 10)),
           Material(
               color: Color(0xFFFFE610),
-              elevation: 1.0,
+              elevation: 0.5,
               shadowColor: Colors.black,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),

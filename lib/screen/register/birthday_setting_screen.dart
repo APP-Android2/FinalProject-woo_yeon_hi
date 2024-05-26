@@ -146,7 +146,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                   child: Container(
                                     child: Material(
                                       color: ColorFamily.white,
-                                      elevation: 1.0,
+                                      elevation: 0.5,
                                       shadowColor: Colors.black,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -181,7 +181,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                 Expanded(
                                   child: Material(
                                     color: ColorFamily.beige,
-                                    elevation: 1.0,
+                                    elevation: 0.5,
                                     shadowColor: Colors.black,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),

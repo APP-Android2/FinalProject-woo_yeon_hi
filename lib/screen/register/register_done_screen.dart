@@ -102,7 +102,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                   child: Container(
                                     child: Material(
                                       color: ColorFamily.white,
-                                      elevation: 1.0,
+                                      elevation: 0.5,
                                       shadowColor: Colors.black,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:

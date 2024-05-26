@@ -164,7 +164,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                 child: Container(
                                   child: Material(
                                     color: ColorFamily.white,
-                                    elevation: 1.0,
+                                    elevation: 0.5,
                                     shadowColor: Colors.black,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
@@ -198,7 +198,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                               Expanded(
                                 child: Material(
                                   color: ColorFamily.beige,
-                                  elevation: 1.0,
+                                  elevation: 0.5,
                                   shadowColor: Colors.black,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0),
