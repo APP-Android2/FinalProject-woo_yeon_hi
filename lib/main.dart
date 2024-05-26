@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
+import 'package:woo_yeon_hi/routes/routes_generator.dart';
 import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
@@ -41,7 +42,8 @@ class _WooYeonHiState extends State<WooYeonHi> {
               body: RegisterScreen(),
             ),
           ),
-        )
+        ),
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

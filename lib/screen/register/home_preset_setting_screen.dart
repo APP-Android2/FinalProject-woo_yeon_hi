@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/screen/register/birthday_setting_screen.dart';
+import 'package:woo_yeon_hi/screen/register/register_done_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 
 import '../../style/color.dart';
 import '../../style/font.dart';
 
-import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:card_swiper/card_swiper.dart';
 
@@ -18,25 +17,15 @@ class HomePresetSettingScreen extends StatefulWidget {
 }
 
 class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
-  // var presetImages1 = [
-  //   Image.asset("lib/assets/images/home_preset_standard.png"),
-  //   Image.asset("lib/assets/images/home_preset_dateplan.png"),
-  //   Image.asset("lib/assets/images/home_preset_ledger.png"),
-  //   Image.asset("lib/assets/images/home_preset_dateplan_ledger.png"),
-  // ];
-  var presetImages2 = [
+
+  var presetImages = [
     "lib/assets/images/home_preset_standard.png",
     "lib/assets/images/home_preset_dateplan.png",
     "lib/assets/images/home_preset_ledger.png",
     "lib/assets/images/home_preset_dateplan_ledger.png",
   ];
 
-  var presetImagesHeight = 400.0;
-  var presetImagesWidth = 180.0;
-
   var presetPosition = 0;
-
-  late CarouselSlider cardSlider;
 
   @override
   Widget build(BuildContext context) {
@@ -140,10 +129,10 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                   scale: 0.6,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return Image.asset(presetImages2[index],
+                                    return Image.asset(presetImages[index],
                                         fit: BoxFit.contain);
                                   },
-                                  itemCount: presetImages2.length,
+                                  itemCount: presetImages.length,
                                   loop: false,
                                   autoplay: false,
                                   onIndexChanged: (index) {
@@ -156,7 +145,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                               Padding(padding: EdgeInsets.only(bottom: 15)),
                               AnimatedSmoothIndicator(
                                 activeIndex: presetPosition,
-                                count: presetImages2.length,
+                                count: presetImages.length,
                                 effect: ScrollingDotsEffect(
                                   dotColor: ColorFamily.beige,
                                   activeDotColor: ColorFamily.pink,
@@ -219,7 +208,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  HomePresetSettingScreen()));
+                                                  RegisterDoneScreen(title: '',)));
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: Container(
