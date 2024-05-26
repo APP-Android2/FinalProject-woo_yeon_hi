@@ -14,6 +14,7 @@ class DdaySettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+          color: ColorFamily.cream,
           padding: EdgeInsets.all(20),
           child: Stack(
             children: [
@@ -26,7 +27,7 @@ class DdaySettingScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Container(
-                              height: 650,
+                              height: 700,
                               child: Column(
                                 children: [
                                   Padding(padding: EdgeInsets.only(top: 60)),
@@ -98,7 +99,7 @@ class DdaySettingScreen extends StatelessWidget {
                                   ),
                                   Padding(padding: EdgeInsets.only(top: 50)),
                                   Container(
-                                    height: 320,
+                                    height: 360,
                                     width: 360,
                                     color: Colors.white,
                                     child: Text("이 공간에는 캘린더가 들어갑니다."),

@@ -18,6 +18,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: ColorFamily.cream,
         padding: EdgeInsets.all(20),
         child: Stack(
           children: [
@@ -29,7 +30,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                       child: Column(
                         children: [
                           Container(
-                            height: 650,
+                            height: 700,
                             child: Column(
                               children: [
                                 Padding(padding: EdgeInsets.only(top: 60)),
@@ -97,7 +98,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                         fontFamily: FontFamily.mapleStoryLight),
                                   ),
                                 ),
-                                Padding(padding: EdgeInsets.only(top: 100)),
+                                Padding(padding: EdgeInsets.only(top: 175)),
                                 Container(
                                   width: 250,
                                   child: TextField(

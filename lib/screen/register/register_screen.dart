@@ -13,6 +13,7 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
+          color: ColorFamily.cream,
       padding: EdgeInsets.all(20),
       child: Column(
         children: [
@@ -21,7 +22,7 @@ class RegisterScreen extends StatelessWidget {
             padding: EdgeInsets.only(top: 180),
             child: Image.asset(
               'lib/assets/images/wooyeonhi_logo.png',
-              height: 200,
+              height: 300,
             ),
           ),
           Padding(padding: EdgeInsets.only(bottom: 200)),
@@ -63,7 +64,7 @@ class RegisterScreen extends StatelessWidget {
                       ],
                     )),
               )),
-          Padding(padding: EdgeInsets.only(bottom: 10)),
+          Padding(padding: EdgeInsets.only(bottom: 15)),
           Material(
               color: Color(0xFFFFE610),
               elevation: 1.0,

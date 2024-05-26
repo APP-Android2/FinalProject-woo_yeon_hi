@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/register/home_preset_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 
 import '../../style/color.dart';
@@ -18,6 +19,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: ColorFamily.cream,
         padding: EdgeInsets.all(20),
         child: Stack(
           children: [
@@ -29,7 +31,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                       child: Column(
                         children: [
                           Container(
-                            height: 650,
+                            height: 700,
                             child: Column(
                               children: [
                                 Padding(padding: EdgeInsets.only(top: 60)),
@@ -108,7 +110,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                         fontFamily: FontFamily.mapleStoryLight),
                                   ),
                                 ),
-                                Padding(padding: EdgeInsets.only(top: 75)),
+                                Padding(padding: EdgeInsets.only(top: 150)),
                                 Container(
                                   width: 250,
                                   child: TextField(
@@ -133,7 +135,6 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                         fontFamily: FontFamily.mapleStoryLight),
                                   ),
                                 ),
-                                Padding(padding: EdgeInsets.only(top: 75)),
                               ],
                             ),
                           ),
@@ -190,7 +191,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    NickNameSettingScreen()));
+                                                    HomePresetSettingScreen()));
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
                                       child: Container(

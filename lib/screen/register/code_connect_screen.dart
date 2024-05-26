@@ -20,6 +20,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+          color: ColorFamily.cream,
           padding: EdgeInsets.all(20),
           child: Stack(
             children: [
@@ -31,7 +32,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                           height: 750,
                           child: Column(children: [
                             Container(
-                                height: 650,
+                                height: 700,
                                 child: Column(
                                   children: [
                                     Padding(padding: EdgeInsets.only(top: 60)),
