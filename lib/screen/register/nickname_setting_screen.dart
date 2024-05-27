@@ -14,6 +14,9 @@ class NickNameSettingScreen extends StatefulWidget {
 }
 
 class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
+
+  var host = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +37,8 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                             child: Column(
                               children: [
                                 Padding(padding: EdgeInsets.only(top: 60)),
-                                Container(
+                                host
+                                ? Container(
                                   child: Text(
                                     "3 / 5",
                                     style: TextStyle(
@@ -42,10 +46,19 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                         fontSize: 15,
                                         color: ColorFamily.pink),
                                   ),
+                                )
+                                : Container(
+                                  child: Text(
+                                    "2 / 4",
+                                    style: TextStyle(
+                                        fontFamily: FontFamily.mapleStoryBold,
+                                        fontSize: 15,
+                                        color: ColorFamily.pink),
+                                  ),
                                 ),
                                 Padding(padding: EdgeInsets.only(top: 20)),
-                                Container(
-                                    child: Container(
+                                host
+                                ? Container(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -87,7 +100,42 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                       ),
                                     ],
                                   ),
-                                )),
+                                )
+                                : Container(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                    Image.asset(
+                                      "lib/assets/images/heart_fill.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/triple_right_arrow.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/heart_fill.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/triple_right_arrow.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/heart_outlined.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/triple_right_arrow.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/heart_outlined.png",
+                                      height: 24,
+                                    ),
+                                    ],
+                                  ),
+                                  ),
                                 Padding(padding: EdgeInsets.only(top: 50)),
                                 Container(
                                   child: Text(
@@ -123,7 +171,8 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                             child: Row(
                               children: <Widget>[
                                 Padding(padding: EdgeInsets.only(left: 50)),
-                                Expanded(
+                                host
+                                ? Expanded(
                                   child: Container(
                                     child: Material(
                                       color: ColorFamily.white,
@@ -142,21 +191,28 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                           },
                                           borderRadius:
                                               BorderRadius.circular(20.0),
-                                          child: Container(
-                                              height: 40,
-                                              width: 120,
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "이전",
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontFamily: FontFamily
-                                                          .mapleStoryLight),
-                                                ),
-                                              ))),
+                                          child:
+                                          Container(
+                                                height: 40,
+                                                width: 120,
+                                                child:
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    "이전",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontFamily: FontFamily
+                                                            .mapleStoryLight),
+                                                  ),
+                                                )
+                                          )
+                                  ),
                                     ),
                                   ),
+                                )
+                                : Expanded(
+                                  child: Container(height: 40, width: 150),
                                 ),
                                 Padding(padding: EdgeInsets.only(left: 20)),
                                 Expanded(

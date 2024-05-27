@@ -15,6 +15,8 @@ class BirthdaySettingScreen extends StatefulWidget {
 }
 
 class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
+  var host = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,8 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                             child: Column(
                               children: [
                                 Padding(padding: EdgeInsets.only(top: 60)),
-                                Container(
+                                host
+                                ? Container(
                                   child: Text(
                                     "4 / 5",
                                     style: TextStyle(
@@ -43,9 +46,19 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                         fontSize: 15,
                                         color: ColorFamily.pink),
                                   ),
+                                )
+                                    : Container(
+                                  child: Text(
+                                    "3 / 4",
+                                    style: TextStyle(
+                                        fontFamily: FontFamily.mapleStoryBold,
+                                        fontSize: 15,
+                                        color: ColorFamily.pink),
+                                  ),
                                 ),
                                 Padding(padding: EdgeInsets.only(top: 20)),
-                                Container(
+                                host
+                                ? Container(
                                     child: Container(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -88,7 +101,43 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                       ),
                                     ],
                                   ),
-                                )),
+                                ))
+                                : Container(
+                                    child: Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            "lib/assets/images/heart_fill.png",
+                                            height: 24,
+                                          ),
+                                          Image.asset(
+                                            "lib/assets/images/triple_right_arrow.png",
+                                            height: 24,
+                                          ),
+                                          Image.asset(
+                                            "lib/assets/images/heart_fill.png",
+                                            height: 24,
+                                          ),
+                                          Image.asset(
+                                            "lib/assets/images/triple_right_arrow.png",
+                                            height: 24,
+                                          ),
+                                          Image.asset(
+                                            "lib/assets/images/heart_fill.png",
+                                            height: 24,
+                                          ),
+                                          Image.asset(
+                                            "lib/assets/images/triple_right_arrow.png",
+                                            height: 24,
+                                          ),
+                                          Image.asset(
+                                            "lib/assets/images/heart_outlined.png",
+                                            height: 24,
+                                          ),
+                                        ],
+                                      ),
+                                    )),
                                 Padding(padding: EdgeInsets.only(top: 50)),
                                 Container(
                                   child: Text(

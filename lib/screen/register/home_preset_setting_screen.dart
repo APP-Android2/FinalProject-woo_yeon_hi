@@ -18,6 +18,8 @@ class HomePresetSettingScreen extends StatefulWidget {
 
 class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
 
+  var host = true;
+
   var presetImages = [
     "lib/assets/images/home_preset_standard.png",
     "lib/assets/images/home_preset_dateplan.png",
@@ -46,7 +48,8 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                             height: 700,
                             child: Column(children: [
                               Padding(padding: EdgeInsets.only(top: 60)),
-                              Container(
+                              host
+                              ? Container(
                                 child: Text(
                                   "5 / 5",
                                   style: TextStyle(
@@ -54,9 +57,19 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                       fontSize: 15,
                                       color: ColorFamily.pink),
                                 ),
+                              )
+                              : Container(
+                                child: Text(
+                                  "4 / 4",
+                                  style: TextStyle(
+                                      fontFamily: FontFamily.mapleStoryBold,
+                                      fontSize: 15,
+                                      color: ColorFamily.pink),
+                                ),
                               ),
                               Padding(padding: EdgeInsets.only(top: 20)),
-                              Container(
+                              host
+                              ? Container(
                                   child: Container(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -69,6 +82,42 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                       "lib/assets/images/triple_right_arrow.png",
                                       height: 24,
                                     ),
+                                    Image.asset(
+                                      "lib/assets/images/heart_fill.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/triple_right_arrow.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/heart_fill.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/triple_right_arrow.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/heart_fill.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/triple_right_arrow.png",
+                                      height: 24,
+                                    ),
+                                    Image.asset(
+                                      "lib/assets/images/heart_fill.png",
+                                      height: 24,
+                                    ),
+                                  ],
+                                ),
+                              ))
+                              : Container(
+                                  child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
                                     Image.asset(
                                       "lib/assets/images/heart_fill.png",
                                       height: 24,
