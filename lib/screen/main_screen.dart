@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/screen/diary_screen.dart';
 
 import '../provider/tab_page_index_provider.dart';
 
@@ -24,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
     return Container(
       alignment: Alignment.center,
       child: [
-        Text("diary"),
+        DiaryScreen(),
         Text("ledger"),
         Text("home"),
         Text("foot_print"),

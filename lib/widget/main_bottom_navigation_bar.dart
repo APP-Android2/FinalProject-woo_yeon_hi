@@ -26,7 +26,7 @@ class _MainBottomNavigationBarState extends State<MainBottomNavigationBar> {
       unselectedLabelStyle: TextStyleFamily.normalTextStyle,
       tabs: [
         Tab(
-          text: "일기",
+          text: "교환일기",
           icon: SvgPicture.asset(
             'lib/assets/icons/diary.svg',
             colorFilter: ColorFilter.mode(
