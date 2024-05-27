@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/login/password_reset_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
@@ -74,10 +75,10 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                       overlayColor: MaterialStateProperty.all<Color>(
                           Colors.transparent)),
                   onPressed: () {
-                    // Navigator.of(context).push(
-                    //     MaterialPageRoute(
-                    //         builder: (context) =>
-                    //             ()));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PasswordResetScreen()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,

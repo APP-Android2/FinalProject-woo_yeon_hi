@@ -176,7 +176,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                       fontSize: 12,
                                                       fontFamily: FontFamily
                                                           .mapleStoryLight)),
-                                              Text("4:59",
+                                              Text("04:59",
                                                   style: TextStyle(
                                                       color: ColorFamily.pink,
                                                       fontSize: 12,
