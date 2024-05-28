@@ -97,41 +97,68 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(28),
-                          ),
+                        return Dialog(
+                          surfaceTintColor: ColorFamily.white,
                           backgroundColor: ColorFamily.white,
-                          title: Text(
-                            "일정 추가 오류",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: FontFamily.mapleStoryBold,
-                            ),
-                          ),
-                          content: Padding(
-                            padding: EdgeInsets.only(top: 15),
-                            child: Text(
-                              "시작 날짜는 종료 날짜 이전이어야 합니다.",
-                              style: TextStyleFamily.normalTextStyle,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                "확인",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: FontFamily.mapleStoryLight,
-                                  color: ColorFamily.pink,
+                          child: Wrap(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "오류가 발생했습니다.",
+                                          style: TextStyleFamily.dialogTitleTextStyle,
+                                        ),
+                                        SizedBox(height: 15),
+                                        Text(
+                                          "시작일은 종료일의 이전이어야 합니다.",
+                                          style: TextStyleFamily.hintTextStyle,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 30),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        TextButton(
+                                          style: ButtonStyle(
+                                            overlayColor: MaterialStateProperty.all(
+                                              ColorFamily.gray
+                                            )
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            "취소",
+                                            style: TextStyleFamily.dialogButtonTextStyle,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          style: ButtonStyle(
+                                              overlayColor: MaterialStateProperty.all(
+                                                  ColorFamily.gray
+                                              )
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            "확인",
+                                            style: TextStyleFamily.dialogButtonTextStyle_pink,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         );
                       },
                     );
@@ -236,6 +263,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                           maxLines: null,
                           decoration: InputDecoration(
                               hintText: "메모를 입력해주세요",
+                              hintStyle: TextStyleFamily.hintTextStyle,
                               border: InputBorder.none
                           ),
                           style: TextStyleFamily.normalTextStyle,
