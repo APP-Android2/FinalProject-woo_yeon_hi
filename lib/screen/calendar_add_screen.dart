@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
+import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/calendar_color_picker.dart';
 import 'package:woo_yeon_hi/widget/calendar_switch.dart';
 import 'package:woo_yeon_hi/widget/calendar_term_finish.dart';
@@ -91,7 +92,54 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
               padding: EdgeInsets.only(right: 20),
               child: IconButton(
                 onPressed: () {
-                  // 날짜 설정 가능 여부 검사
+                  // 일정 오류
+                  if(termFinish.isBefore(termStart)){
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                          backgroundColor: ColorFamily.white,
+                          title: Text(
+                            "일정 추가 오류",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: FontFamily.mapleStoryBold,
+                            ),
+                          ),
+                          content: Padding(
+                            padding: EdgeInsets.only(top: 15),
+                            child: Text(
+                              "시작 날짜는 종료 날짜 이전이어야 합니다.",
+                              style: TextStyleFamily.normalTextStyle,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                "확인",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: FontFamily.mapleStoryLight,
+                                  color: ColorFamily.pink,
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                    // 오류가 없을 경우
+                  } else {
+                    // 저장 처리
+                    Navigator.pop(context);
+                  }
                 },
                 icon: SvgPicture.asset("lib/assets/icons/done.svg"),
               ),
@@ -117,15 +165,12 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 20),
-                      child: TextField(
-                        style: TextStyleFamily.appBarTitleBoldTextStyle,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          hintText: "제목",
-                          border: InputBorder.none, // 밑줄 제거
-                        ),
+                    child: TextField(
+                      style: TextStyleFamily.appBarTitleBoldTextStyle,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        hintText: "제목",
+                        border: InputBorder.none, // 밑줄 제거
                       ),
                     ),
                   )
