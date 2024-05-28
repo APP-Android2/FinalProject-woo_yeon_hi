@@ -100,9 +100,6 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                   // 선택된 날짜의 이벤트 업데이트
                   _selectedEvents.value = _getEventsForDay(selectedDay);
                 });
-
-                // 선택된 날짜의 이벤트 업데이트
-                //_selectedEvents.value = _getEventsForDay(selectedDay);
               },
 
               // 페이지(월) 변경 시 호출되는 함수
@@ -120,6 +117,7 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                 dowBuilder: (context, day) {
                   if (day.weekday == DateTime.sunday) {
                     // DateFormat.E(): 요일
+                    // DateFormat.d(): 일자
                     final text = DateFormat.E('ko').format(day);
                     return Center(
                       child: Text(
@@ -236,18 +234,21 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
             ),
           ),
 
-
+          // _selectedEvents의 값이 변경될 때마다 builder 콜백을 호출하여 새로운 UI로 변경
           ValueListenableBuilder<List<Event>>(
             // 감시할 값
             valueListenable: _selectedEvents,
             builder: (context, value, _) {
               return ListView.builder(
+                // ListTile의 리스트뷰의 높이를 자식 아이템들의 높이에 맞춰 설정
                 shrinkWrap: true,
+                // ListTile의 리스트뷰 자체의 스크롤을 비활성화
                 physics: NeverScrollableScrollPhysics(),
+                // 리스트 아이템의 개수를 _selectedEvents의 길이로 설정
                 itemCount: value.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    margin: EdgeInsets.fromLTRB(10, 10, 10, 5),
+                    margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                     color: Colors.white,
                     child: ListTile(
                       leading: Icon(Icons.access_alarm),
@@ -263,6 +264,7 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
             },
           ),
 
+          SizedBox(height: 80),
         ],
       ),
     );

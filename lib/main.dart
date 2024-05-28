@@ -28,7 +28,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
         title: "WooYeonHi",
         theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-                seedColor: ColorFamily.cream,
+                seedColor: ColorFamily.white,
                 brightness: Brightness.light
             ),
             useMaterial3: true

@@ -39,8 +39,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   carousel_slider: ^4.2.1
   smooth_page_indicator: ^1.1.0
-  table_calendar: ^3.0.8
-  intl: ^0.17.0
+  table_calendar: ^3.1.1
+  intl: ^0.19.0
 
 
 dev_dependencies:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/ledger_write_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/ledger_carousel_slider.dart';
@@ -18,7 +19,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // 앱바
-      appBar: LedgerTopAppBar(),
+      appBar: LedgerTopAppBar(
+        title: '가계부',
+      ),
       // 전체 배경색
       backgroundColor: ColorFamily.cream,
       body: Stack(
@@ -42,33 +45,34 @@ class _LedgerScreenState extends State<LedgerScreen> {
                   width: 60,
                   height: 40,
                   child: FloatingActionButton(
+                    backgroundColor: ColorFamily.beige,
+                    child: Text('오늘', style: TextStyle(fontSize: 15,fontFamily: FontFamily.mapleStoryLight)),
+                    heroTag: "actionButton1",
                     onPressed: () {
                       // FAB의 액션
                       print('Center123');
                     },
-                    backgroundColor: ColorFamily.beige,
-                    child: Text('오늘', style: TextStyle(fontSize: 15,fontFamily: FontFamily.mapleStoryLight)),
                   ),
-                )
-            ),
-          ),
-
-          // 하단 오른쪽에 FloatingActionButton 배치
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0, right: 16.0), // 화면 하단과 오른쪽에서 간격 설정
-              child: FloatingActionButton(
-                  onPressed: () {
-                    // FAB의 액션
-                    print('Right123');
-                  },
-                  backgroundColor: ColorFamily.beige,
-                  child: SvgPicture.asset('lib/assets/icons/edit.svg')
-              ),
+                ),
             ),
           ),
         ],
+      ),
+
+      // 하단 오른쪽에 FloatingActionButton 배치
+      floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(),
+        backgroundColor: ColorFamily.beige,
+        child: SvgPicture.asset('lib/assets/icons/edit.svg'),
+        onPressed: () {
+          // 화면 전환
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              // 보여질 다음 화면을 설정한다.
+              builder: (context) => LedgerWriteScreen(),
+            ),
+          );
+        },
       ),
     );
   }

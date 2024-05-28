@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
+import 'package:woo_yeon_hi/style/text_style.dart';
 
 class LedgerTopAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const LedgerTopAppBar({super.key});
+
+  final String title;
+  final List<Widget> actions;
+  final Widget? leading;
+
+  const LedgerTopAppBar({required this.title, this.actions = const [], this.leading, super.key});
 
   @override
   State<LedgerTopAppBar> createState() => _LedgerTopAppBarState();
@@ -17,9 +24,12 @@ class _LedgerTopAppBarState extends State<LedgerTopAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      surfaceTintColor: ColorFamily.cream,
       backgroundColor: ColorFamily.cream,
-      title: Text('가계부', style: TextStyle(fontSize: 20,fontFamily: FontFamily.mapleStoryBold)),
       centerTitle: true,
+      title: Text(widget.title, style: TextStyleFamily.appBarTitleBoldTextStyle),
+      actions: widget.actions,
+      leading: widget.leading,
     );
   }
 }
