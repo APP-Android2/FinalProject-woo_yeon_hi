@@ -83,9 +83,12 @@ class _DiaryScreenState extends State<DiaryScreen> {
       ),
     );
   }
+  bool isSaturday(DateTime day) {
+    return day.weekday == DateTime.saturday;
+  }
 
   bool isWeekend(DateTime day) {
-    return day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
+    return day.weekday == DateTime.sunday;
   }
 
   void _showCalendarBottomSheet(String flag) {
@@ -108,7 +111,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TableCalendar(
-                                  firstDay: DateTime.utc(2024, 3, 16),
+                                  firstDay:  DateTime.utc(2024, 3, 16),
                                   lastDay: DateTime.utc(2024, 8, 14),
                                   focusedDay: _focusedDay,
                                   locale: 'ko_kr',
@@ -133,7 +136,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                             style: TextStyle(
                                                 color: isWeekend(day)
                                                     ? Colors.red
-                                                    : ColorFamily.black,
+                                                    : isSaturday(day)
+                                                    ?Colors.blueAccent
+                                                    :ColorFamily.black
+                                                ,
                                                 fontFamily: FontFamily.mapleStoryLight
                                             ),
                                           ),
@@ -183,9 +189,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                                 textAlign: TextAlign.center,
                                                 DateFormat('d').format(day),
                                                 style: TextStyle(
+                                                  decoration: TextDecoration.lineThrough,
                                                     color: isWeekend(day)
                                                         ? ColorFamily.white
-                                                        : ColorFamily.black,
+                                                        : isSaturday(day)?ColorFamily.white:ColorFamily.black,
                                                     fontFamily: FontFamily.mapleStoryLight
                                                 ),
                                               ),
