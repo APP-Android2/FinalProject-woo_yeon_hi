@@ -55,8 +55,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ? SvgPicture.asset("lib/assets/icons/list.svg")
                     : SvgPicture.asset("lib/assets/icons/calendar.svg"),
                 ),
-                const SizedBox(width: 5),
+                const SizedBox(width: 10),
                 SvgPicture.asset("lib/assets/icons/search.svg"),
+                const SizedBox(width: 5),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
