@@ -7,6 +7,10 @@ Future<void> showColorPickerDialog(BuildContext context, Color currentColor, Val
     context: context,
     builder: (context) {
       return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28),
+        ),
+        backgroundColor: ColorFamily.white,
         content: SingleChildScrollView(
           child: Column(
             children: [
