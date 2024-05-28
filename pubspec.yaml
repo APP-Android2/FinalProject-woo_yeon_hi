@@ -37,6 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.6
   provider: ^6.1.2
   flutter_svg: ^2.0.10+1
+  table_calendar: ^3.1.1
+  intl: ^0.19.0
+  flutter_colorpicker: ^1.1.0
+  flutter_datetime_picker_plus: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +89,9 @@ flutter:
     - family: MaplestoryLight
       fonts:
         - asset: fonts/Maplestory Light.ttf
+    - family: Pretendard Regular
+      fonts:
+        - asset: fonts/Pretendard-Regular.ttf
 
   #
   # For details regarding fonts from package dependencies,
