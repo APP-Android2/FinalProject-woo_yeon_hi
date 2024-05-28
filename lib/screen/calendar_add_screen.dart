@@ -19,12 +19,12 @@ class CalendarAddScreen extends StatefulWidget {
 
 class _CalendarAddScreenState extends State<CalendarAddScreen> {
 
-  // 처음 색상
+  // 현재 선택된 색상
   Color currentColor = ColorFamily.green;
 
   // 시작일 날짜
   DateTime termStart = DateTime.now().subtract(Duration(minutes: DateTime.now().minute));
-  // 종료일 날짜
+  // 종료일 날짜  +1 hour
   DateTime termFinish = DateTime.now().add(Duration(hours: 1)).subtract(Duration(minutes: DateTime.now().minute));
   // 종료일 텍스트
   TextDecoration finishTextDecoration = TextDecoration.underline;
@@ -107,7 +107,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         shape: CircleBorder(),
-                        backgroundColor: currentColor
+                        backgroundColor: currentColor // 선택된 색상
                     ),
                     // 색 선택 다이얼로그 띄우기
                     onPressed: () => showColorPickerDialog(context, currentColor, updateColor),
@@ -124,7 +124,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           hintText: "제목",
-                          border: InputBorder.none,
+                          border: InputBorder.none, // 밑줄 제거
                         ),
                       ),
                     ),
@@ -152,7 +152,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                           style: TextStyleFamily.normalTextStyle,
                         ),
                         Spacer(),
-                        // 시작 날짜 선택 위젯
+                        // 시작 날짜를 선택하는 위젯
                         CalendarTermStart(
                           onDateChanged: onTermStartChanged,
                           initialDate: termStart,
@@ -167,7 +167,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                           style: TextStyleFamily.normalTextStyle,
                         ),
                         Spacer(),
-                        // 종료 날짜 선택 위젯
+                        // 종료 날짜를 선택하는 위젯
                         CalendarTermFinish(
                           onDateChanged: onTermFinishChanged,
                           textDecoration: finishTextDecoration,
