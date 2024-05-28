@@ -17,7 +17,7 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (MediaQuery.of(context).size.width / 2) - 20,
+      width: (MediaQuery.of(context).size.width * 2 / 3) - 20,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -55,7 +55,7 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
           ),
           // 날씨 토글 버튼
           SizedBox(
-            width: (MediaQuery.of(context).size.width / 2) - 10,
+            width: (MediaQuery.of(context).size.width * 2 / 3) - 20,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -70,13 +70,16 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                       });
                     },
                     child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 60,
+                        height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), // corner radius를 5로 설정
                           border: Border.all(color: (weatherSelected == 0)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
                         ),
-                        child: Image.asset('lib/assets/icons/sunny.png'))
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Image.asset('lib/assets/icons/sunny.png'),
+                        ))
                 ),
                 const SizedBox(width:3,),
                 InkWell(
@@ -90,13 +93,16 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                       });
                     },
                     child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 60,
+                        height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), // corner radius를 5로 설정
                           border: Border.all(color: (weatherSelected == 1)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
                         ),
-                        child: Image.asset('lib/assets/icons/cloudy.png'))
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Image.asset('lib/assets/icons/cloudy.png'),
+                        ))
                 ),
                 const SizedBox(width:3,),
                 InkWell(
@@ -110,13 +116,16 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                       });
                     },
                     child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 60,
+                        height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), // corner radius를 5로 설정
                           border: Border.all(color: (weatherSelected == 2)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
                         ),
-                        child: Image.asset('lib/assets/icons/rainy.png'))
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Image.asset('lib/assets/icons/rainy.png'),
+                        ))
                 ),
                 const SizedBox(width:3,),
                 InkWell(
@@ -130,13 +139,16 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                       });
                     },
                     child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 60,
+                        height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), // corner radius를 5로 설정
                           border: Border.all(color: (weatherSelected == 3)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
                         ),
-                        child: Image.asset('lib/assets/icons/snowy.png'))
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Image.asset('lib/assets/icons/snowy.png'),
+                        ))
                 )
               ],
             ),

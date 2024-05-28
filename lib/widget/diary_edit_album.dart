@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/provider/diary_provider.dart';
 
 import '../style/color.dart';
 import '../style/font.dart';
@@ -16,13 +18,14 @@ class DiaryEditAlbum extends StatefulWidget {
 }
 
 class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
-  XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
 
   @override
   Widget build(BuildContext context) {
+    var diaryProvider = Provider.of<DiaryProvider>(context, listen:false);
+
     return SizedBox(
-      width: (MediaQuery.of(context).size.width / 2) - 20,
+      width: (MediaQuery.of(context).size.width / 3) - 20,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -51,29 +54,27 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
                   decoration: BoxDecoration(
                     color: ColorFamily.white,
                     borderRadius:
-                        BorderRadius.circular(5), // corner radius를 5로 설정
+                        BorderRadius.circular(10), // corner radius를 5로 설정
                     border: Border.all(
                         color: ColorFamily.gray), // stroke 색상을 red로 설정
                   ),
                   child: Card(
                     color: ColorFamily.white,
                     surfaceTintColor: ColorFamily.white,
-                    elevation: 1,
+                    elevation: 4,
                     margin: const EdgeInsets.all(10),
                     child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(5), // corner radius를 5로 설정
-                        border: Border.all(
-                            color: ColorFamily.gray), // stroke 색상을 red로 설정
-                      ),
-                      child: (_image != null)
+                      child: (diaryProvider.image != null)
                           ? Stack(
                               fit: StackFit.expand,
                               children: [
-                                Image.file(
-                                  File(_image!.path),
-                                  fit: BoxFit.fitWidth,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: (diaryProvider.image?.path != null)
+                                      ?Image.file(
+                                    File(diaryProvider.image!.path),
+                                    fit: BoxFit.cover,
+                                  ):Image.asset('lib/assets/images/test_couple.png', fit: BoxFit.cover,),
                                 ),
                                 Positioned(
                                   top: 0,
@@ -85,7 +86,7 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
                                     focusColor: Colors.transparent,
                                     onTap: (){
                                       setState(() {
-                                        _image = null;
+                                        diaryProvider.setImage(null);
                                       });
                                     },
                                     child:SvgPicture.asset(
@@ -100,7 +101,7 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
                               hoverColor: Colors.transparent,
                               focusColor: Colors.transparent,
                               onPressed: () {
-                                getImage(ImageSource.gallery);
+                                getImage(diaryProvider, ImageSource.gallery);
                               },
                               icon: SvgPicture.asset(
                                 'lib/assets/icons/add.svg',
@@ -120,12 +121,13 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
     );
   }
 
-  Future getImage(ImageSource imagesource) async {
+  Future getImage(DiaryProvider diaryProvider, ImageSource imagesource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
     final XFile? pickedFile = await picker.pickImage(source: imagesource);
+    print(pickedFile?.path);
     if (pickedFile != null) {
       setState(() {
-        _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장
+        diaryProvider.setImage(XFile(pickedFile.path));
       });
     }
   }

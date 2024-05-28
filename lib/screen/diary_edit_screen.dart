@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/diary_edit_album.dart';
 import 'package:woo_yeon_hi/widget/diary_edit_textInput.dart';
 import 'package:woo_yeon_hi/widget/diary_edit_top_app_bar.dart';
@@ -16,6 +15,7 @@ class DiaryEditScreen extends StatefulWidget {
 }
 
 class _DiaryEditScreenState extends State<DiaryEditScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
