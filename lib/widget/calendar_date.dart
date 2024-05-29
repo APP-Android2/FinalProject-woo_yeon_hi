@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:woo_yeon_hi/screen/calendar_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -17,13 +18,17 @@ class CalendarDate extends StatefulWidget {
 class _CalendarDateState extends State<CalendarDate> {
 
   DateTime _focusedDay = DateTime.now();  // 오늘 날짜
-  DateTime _selectedDay = DateTime(   // 선택된 날짜
-    DateTime.now().year,
-    DateTime.now().month,
-    DateTime.now().day,
-  );
+  DateTime? _selectedDay = null;
 
-  List<bool> test = [false];
+  // 주말인지
+  bool isWeekend(DateTime day){
+    return day.weekday == DateTime.sunday;
+  }
+
+  // 토요일인지
+  bool isSaturday(DateTime day){
+    return day.weekday == DateTime.saturday;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,41 +51,144 @@ class _CalendarDateState extends State<CalendarDate> {
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                   child: TableCalendar(
                     locale: 'ko_KR',  // main 에서 받음
-                    firstDay: DateTime.utc(1900, 1, 1), // 최소 날짜
+                    firstDay: DateTime.utc(2024, 1, 1), // 최소 날짜
                     lastDay: DateTime.utc(2999, 12, 31),  // 최대 날짜
                     focusedDay: _focusedDay,  // 현재
-                    onDaySelected: (selectedDay, focusedDay) {  // 선택된 날짜
+                    // 캘린더 헤더
+                    headerStyle: HeaderStyle(
+                      titleCentered: true,
+                      formatButtonVisible: false,
+                      titleTextStyle: TextStyleFamily.appBarTitleBoldTextStyle
+                    ),
+                    daysOfWeekStyle: DaysOfWeekStyle(
+                      weekdayStyle: TextStyleFamily.normalTextStyle,  // 평일
+                      weekendStyle: TextStyleFamily.normalTextStyle,  // 주말
+                    ),
+                    calendarBuilders: CalendarBuilders(
+                      // 기본 월의 빌더
+                      defaultBuilder: (context, day, focusedDay) {
+                        return Container(
+                          //color: Colors.blue,
+                          alignment: Alignment.center,
+                          child: Text(
+                            DateFormat('d').format(day),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: isWeekend(day)
+                                  ? Colors.red
+                                  : isSaturday(day)
+                                    ? Colors.blueAccent
+                                    : ColorFamily.black,
+                              fontFamily: FontFamily.mapleStoryLight
+                            ),
+                          ),
+                        );
+                      },
+                      // 다른 월의 빌더
+                      outsideBuilder: (context, day, focusedDay) {
+                        return Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            DateFormat('d').format(day),
+                            textAlign: TextAlign.center,
+                            style: TextStyleFamily.hintTextStyle
+                          ),
+                        );
+                      },
+                      // 비활성화된 날짜
+                      disabledBuilder: (context, day, focusedDay) {
+                        return Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            DateFormat('d').format(day),
+                            textAlign: TextAlign.center,
+                            style: TextStyleFamily.hintTextStyle
+                          ),
+                        );
+                      },
+                      // 선택된 날짜
+                      selectedBuilder: (context, day, focusedDay) {
+                        return Container(
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 30, height: 30,
+                            decoration: BoxDecoration(
+                              color: ColorFamily.pink,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                DateFormat('d').format(day),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: isWeekend(day)
+                                    ? ColorFamily.white
+                                    : isSaturday(day)
+                                      ? ColorFamily.white
+                                      : ColorFamily.black,
+                                  fontFamily: FontFamily.mapleStoryLight,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      // 오늘 날짜
+                      todayBuilder: (context, day, focusedDay) {
+                        return Container(
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 30, height: 30,
+                            decoration: BoxDecoration(
+                              color: ColorFamily.black,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                DateFormat('d').format(day),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ColorFamily.white,
+                                  fontFamily: FontFamily.mapleStoryLight
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      // 마커
+                      markerBuilder: (context, day, events) {
+                        var today = "${DateTime.now().toIso8601String().substring(0, 10)} 00:00:00.000Z";
+                        return Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.only(top: 20),
+                          child: Container(
+                            width: 6, height: 6,
+                            decoration: BoxDecoration(
+                              color: (day == _selectedDay || day.toString() == today)
+                                  ? ColorFamily.white
+                                  : ColorFamily.pink,
+                              shape: BoxShape.circle
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    // 선택된 날짜
+                    selectedDayPredicate: (day) {
+                      return isSameDay(_selectedDay, day);
+                    },
+                    // 날짜 선택
+                    onDaySelected: (selectedDay, focusedDay) {
                       setState(() {
                         _selectedDay = selectedDay;
                         _focusedDay = focusedDay;
                       });
                     },
-                    selectedDayPredicate: (day) { // 선택된 날짜
-                      return isSameDay(_selectedDay, day);
+                    // 화면이 바뀔때
+                    onPageChanged: (focusedDay) {
+                      _focusedDay = focusedDay;
                     },
-                    // 캘린더 헤더
-                    headerStyle: HeaderStyle(
-                      formatButtonVisible: false,
-                      titleTextStyle: TextStyle(
-                        fontSize: 15,
-                        fontFamily: FontFamily.mapleStoryBold,
-                        color: ColorFamily.black,
-                      ),
-                    ),
-                    // 마크 표시는 마크는 eventLoader 를 사용하여 표시한다.
-                    calendarStyle: CalendarStyle(
-                      markersMaxCount: 1, // 마크 개수
-                      markerDecoration: BoxDecoration(
-                        color: ColorFamily.pink,
-                        shape: BoxShape.circle,
-                      ),
-                      isTodayHighlighted: false,  // 오늘 표시 여부
-                      // 선택된 날짜
-                      selectedDecoration: BoxDecoration(
-                        color: ColorFamily.pink,
-                        shape: BoxShape.circle,
-                      )
-                    ),
                   ),
                 ),
               ),
