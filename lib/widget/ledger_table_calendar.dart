@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:woo_yeon_hi/screen/ledger_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
@@ -251,11 +252,17 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                     margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
                     color: Colors.white,
                     child: ListTile(
-                      leading: Icon(Icons.access_alarm),
-                      title: Text('식비'),
-                      trailing: Text(value[index].title),
+                      leading: SvgPicture.asset('lib/assets/icons/spoon_fork.svg', width: 24, height: 24),
+                      title: Text('식비', style: TextStyle(color: ColorFamily.black, fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
+                      trailing: Text(value[index].title + '원', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight)),
                       onTap: () {
-                        print('캘린더 상세 이동');
+                        // 화면 전환
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            // 보여질 다음 화면을 설정한다.
+                            builder: (context) => LedgerDetailScreen(),
+                          ),
+                        );
                       },
                     ),
                   );
