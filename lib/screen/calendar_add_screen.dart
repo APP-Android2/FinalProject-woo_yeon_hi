@@ -257,26 +257,33 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                     SizedBox(height: 30),
                     Text("메모", style: TextStyleFamily.normalTextStyle),
                     SizedBox(height: 10),
-                    Container(
-                      height: 320, width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: 320, // 위젯의 최소 크기
+                        maxHeight: double.infinity, // 최대 크기에 맞춰 늘어나도록
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                              hintText: "메모를 입력해주세요",
-                              hintStyle: TextStyleFamily.hintTextStyle,
-                              border: InputBorder.none
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: ColorFamily.white,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: TextField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                                hintText: "메모를 입력해주세요",
+                                hintStyle: TextStyleFamily.hintTextStyle,
+                                border: InputBorder.none
+                            ),
+                            style: TextStyleFamily.normalTextStyle,
                           ),
-                          style: TextStyleFamily.normalTextStyle,
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(height: 20),
                   ],
                 ),
               )
