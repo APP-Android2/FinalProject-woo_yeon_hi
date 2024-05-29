@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/calendar_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -44,7 +45,9 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
             padding: EdgeInsets.only(right: 20),
             child: IconButton(
               onPressed: () {
-
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CalendarEditScreen()),
+                );
               },
               icon: SvgPicture.asset("lib/assets/icons/edit.svg"),
             ),
