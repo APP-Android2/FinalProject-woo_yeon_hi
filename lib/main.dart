@@ -12,11 +12,12 @@ import 'package:woo_yeon_hi/widget/register/google_sign_in.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
   KakaoSdk.init(
     nativeAppKey: '62a1ea96953fba93f6d4e5b355e2d455',
     javaScriptAppKey: '71b46fb5f5a68ad3d8aaa257ffa704fa',
   );
+
+  initializeDateFormatting().then((_) => runApp(WooYeonHi()));
 
   runApp(const WooYeonHi());
 
