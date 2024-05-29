@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/screen/main_screen_container.dart';
 
 import '../provider/tab_page_index_provider.dart';
+import '../style/color.dart';
+import '../widget/main_bottom_navigation_bar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -13,23 +16,29 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    var tabPageIndexProvider = Provider.of<TabPageIndexProvider>(context, listen:false);
-    var currentPageIndex = tabPageIndexProvider.currentPageIndex;
-    tabPageIndexProvider.addListener(() {
-      // 화면의 순서값을 변경한다.
-      setState(() {
-        currentPageIndex = tabPageIndexProvider.currentPageIndex;
-      });
-    });
-    return Container(
-      alignment: Alignment.center,
-      child: [
-        Text("diary"),
-        Text("ledger"),
-        Text("home"),
-        Text("foot_print"),
-        Text("more")
-      ][currentPageIndex],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
+      ],
+      child: MaterialApp(
+        title: "WooYeonHi",
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: ColorFamily.cream,
+                brightness: Brightness.light
+            ),
+            useMaterial3: true
+        ),
+        home: const DefaultTabController(
+          initialIndex: 2,
+          length: 5,
+          child: Scaffold(
+            backgroundColor: ColorFamily.white,
+            bottomNavigationBar: MainBottomNavigationBar(),
+            body: MainScreenContainer(),
+          ),
+        ),
+      ),
     );
   }
 }

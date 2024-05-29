@@ -8,6 +8,8 @@ import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
+import '../../style/text_style.dart';
+
 class CodeConnectScreen extends StatefulWidget {
   const CodeConnectScreen({super.key});
 
@@ -96,11 +98,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                     Container(
                                       child: Text(
                                         "연결코드를 생성하여 연인을 초대하세요",
-                                        style: TextStyle(
-                                            color: ColorFamily.black,
-                                            fontSize: 15,
-                                            fontFamily:
-                                                FontFamily.mapleStoryLight),
+                                        style: TextStyleFamily.smallTitleTextStyle,
                                       ),
                                     ),
                                     Padding(padding: EdgeInsets.only(top: 30)),
@@ -151,23 +149,20 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                   BorderRadius.circular(20.0),
                                               child: Container(
                                                   height: 40,
-                                                  width: 200,
+                                                  width: 160,
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     child: Text(
                                                       // "연결코드 생성",
                                                       "상대 연결 확인",
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontFamily: FontFamily
-                                                              .mapleStoryLight),
+                                                      style: TextStyleFamily.normalTextStyle,
                                                     ),
                                                   ))),
                                         ),
                                         Container(
                                           alignment:
-                                              AlignmentDirectional.centerEnd,
-                                          padding: EdgeInsets.only(right: 20),
+                                              Alignment.centerRight,
+                                          padding: EdgeInsets.only(right: 30),
                                           child: Column(
                                             children: [
                                               Text("코드 유효시간",
@@ -191,18 +186,15 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                     Container(
                                       child: Text(
                                         "초대를 받았다면 상대의 연결코드를 입력해주세요",
-                                        style: TextStyle(
-                                            color: ColorFamily.black,
-                                            fontSize: 15,
-                                            fontFamily:
-                                                FontFamily.mapleStoryLight),
+                                        style: TextStyleFamily.smallTitleTextStyle,
                                       ),
                                     ),
                                     Padding(padding: EdgeInsets.only(top: 20)),
                                     Container(
-                                      width: 200,
+                                      width: 160,
                                       child: TextField(
                                         decoration: InputDecoration(
+                                          counter: SizedBox(),
                                             focusedBorder: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: ColorFamily.black))),
@@ -239,16 +231,12 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                   BorderRadius.circular(20.0),
                                               child: Container(
                                                   height: 40,
-                                                  width: 200,
+                                                  width: 160,
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                      // "연결코드 생성",
                                                       "연결하기",
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontFamily: FontFamily
-                                                              .mapleStoryLight),
+                                                      style: TextStyleFamily.normalTextStyle,
                                                     ),
                                                   ))),
                                         ),
@@ -276,10 +264,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                 children: [
                                   Text(
                                     "로그아웃",
-                                    style: TextStyle(
-                                        color: ColorFamily.black,
-                                        fontSize: 14,
-                                        fontFamily: FontFamily.mapleStoryLight),
+                                    style: TextStyleFamily.normalTextStyle,
                                   )
                                 ],
                               ),

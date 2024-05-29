@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/screen/register/birthday_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_done_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/style/text_style.dart';
 
 import '../../style/color.dart';
 import '../../style/font.dart';
@@ -37,8 +39,8 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
       padding: EdgeInsets.all(20),
       child: Stack(
         children: [
-          ListView(children: [
-            Column(
+          ListView(
+            children: [Column(
               children: [
                 Container(
                     height: 750,
@@ -153,10 +155,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                               Container(
                                 child: Text(
                                   "홈 화면 스타일을 골라주세요",
-                                  style: TextStyle(
-                                      color: ColorFamily.black,
-                                      fontSize: 15,
-                                      fontFamily: FontFamily.mapleStoryLight),
+                                  style: TextStyleFamily.smallTitleTextStyle,
                                 ),
                               ),
                               Padding(padding: EdgeInsets.only(top: 10)),
@@ -234,10 +233,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                               alignment: Alignment.center,
                                               child: Text(
                                                 "이전",
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontFamily: FontFamily
-                                                        .mapleStoryLight),
+                                                style: TextStyleFamily.normalTextStyle,
                                               ),
                                             ))),
                                   ),
@@ -266,12 +262,8 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                         child: Container(
                                           alignment: Alignment.center,
                                           child: Text(
-                                            // "연결코드 생성",
                                             "완료",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontFamily:
-                                                    FontFamily.mapleStoryLight),
+                                            style: TextStyleFamily.normalTextStyle,
                                           ),
                                         )),
                                   ),
@@ -299,10 +291,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                           children: [
                             Text(
                               "로그아웃",
-                              style: TextStyle(
-                                  color: ColorFamily.black,
-                                  fontSize: 14,
-                                  fontFamily: FontFamily.mapleStoryLight),
+                              style: TextStyleFamily.normalTextStyle,
                             )
                           ],
                         ),

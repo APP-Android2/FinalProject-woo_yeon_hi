@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
@@ -66,7 +67,7 @@ class RegisterScreen extends StatelessWidget {
               )),
           Padding(padding: EdgeInsets.only(bottom: 10)),
           Material(
-              color: Color(0xFFFFE610),
+              color: Color(0xFFFEE500),
               elevation: 0.5,
               shadowColor: Colors.black,
               shape: RoundedRectangleBorder(
@@ -75,7 +76,7 @@ class RegisterScreen extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CodeConnectScreen()));
+                      builder: (context) => PasswordEnterScreen()));
                 },
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
@@ -97,7 +98,7 @@ class RegisterScreen extends StatelessWidget {
                             "카카오톡 계정으로 등록하기",
                             style: TextStyle(
                                 fontSize: 15,
-                                fontFamily: FontFamily.mapleStoryLight),
+                                fontFamily: FontFamily.mapleStoryLight,color: Color(0xD9000000)),
                           ),
                         )
                       ],
