@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/calendar_color_picker.dart';
 import 'package:woo_yeon_hi/widget/calendar_switch.dart';
 import 'package:woo_yeon_hi/widget/calendar_term_finish.dart';
@@ -28,7 +27,9 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
   // 종료일 날짜  +1 hour
   DateTime termFinish = DateTime.now().add(Duration(hours: 1)).subtract(Duration(minutes: DateTime.now().minute));
   // 종료일 텍스트
-  TextDecoration finishTextDecoration = TextDecoration.underline;
+  TextDecoration finishTextDecoration = TextDecoration.none;
+  // 종료일 체크 참거짓
+  bool checkTerm = true;
 
   // 색 업데이트 함수
   void updateColor(Color color){
@@ -55,11 +56,13 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
 
   // 종료일 상태 업데이트
   void updateFinishDecoration() {
-    // 종료일이 시작일보다 앞서있다면
+    // 종료일이 시작일보다 먼저라면
     if (termFinish.isBefore(termStart)) {
+      checkTerm = false;
       finishTextDecoration = TextDecoration.lineThrough;
     } else {
-      finishTextDecoration = TextDecoration.underline;
+      checkTerm = true;
+      finishTextDecoration = TextDecoration.none;
     }
   }
 
@@ -244,6 +247,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                           onDateChanged: onTermFinishChanged,
                           textDecoration: finishTextDecoration,
                           initialDate: termFinish,
+                          checkTerm: checkTerm,
                         ),
                       ],
                     ),

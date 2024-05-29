@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:woo_yeon_hi/style/color.dart';
+import 'package:woo_yeon_hi/style/text_style.dart';
 
 import '../style/font.dart';
 
@@ -49,16 +51,19 @@ class _CalendarTermStartState extends State<CalendarTermStart> {
           locale: LocaleType.ko,
         );
       },
-      child: Text(
-        "${selectedDateTime.year}. "
-        "${selectedDateTime.month}. "
-        "${selectedDateTime.day}."
-        "(${DateFormat('E', 'ko_KR').format(selectedDateTime)}) "
-        "${selectedDateTime.hour}:${selectedDateTime.minute.toString().padLeft(2, '0')}",
-        style: TextStyle(
-          fontSize: 14,
-          fontFamily: FontFamily.mapleStoryLight,
-          decoration: TextDecoration.underline,
+      child: Container(
+        padding: EdgeInsets.only(bottom: 1),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: ColorFamily.black,
+              width: 1
+            )
+          )
+        ),
+        child: Text(
+          "${DateFormat('yyyy. M. dd.(E) HH:mm', 'ko_KR').format(selectedDateTime)}",
+          style: TextStyleFamily.normalTextStyle,
         ),
       ),
     );
