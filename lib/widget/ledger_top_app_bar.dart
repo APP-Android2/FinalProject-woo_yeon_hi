@@ -27,7 +27,7 @@ class _LedgerTopAppBarState extends State<LedgerTopAppBar> {
       surfaceTintColor: ColorFamily.cream,
       backgroundColor: ColorFamily.cream,
       centerTitle: true,
-      title: Text(widget.title, style: TextStyleFamily.appBarTitleBoldTextStyle),
+      title: Text(widget.title, style: widget.title == '가계부' ? TextStyleFamily.appBarTitleBoldTextStyle : TextStyleFamily.appBarTitleLightTextStyle),
       actions: widget.actions,
       leading: widget.leading,
     );
