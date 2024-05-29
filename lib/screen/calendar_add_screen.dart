@@ -253,9 +253,9 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                     ),
                     SizedBox(height: 30),
                     Text("메모", style: TextStyleFamily.normalTextStyle),
-                    SizedBox(height: 15),
+                    SizedBox(height: 10),
                     Container(
-                      height: 320,
+                      height: 320, width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
