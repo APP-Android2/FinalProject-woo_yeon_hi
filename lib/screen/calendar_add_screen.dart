@@ -101,6 +101,9 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                       context: context,
                       builder: (context) {
                         return Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(28),
+                          ),
                           surfaceTintColor: ColorFamily.white,
                           backgroundColor: ColorFamily.white,
                           child: Wrap(
