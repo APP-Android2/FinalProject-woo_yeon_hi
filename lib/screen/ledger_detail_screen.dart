@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
-import 'package:woo_yeon_hi/widget/ledger_List_view.dart';
+import 'package:woo_yeon_hi/widget/ledger_list_view.dart';
 import 'package:woo_yeon_hi/widget/ledger_top_app_bar.dart';
 
 class LedgerDetailScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _LedgerDetailScreenState extends State<LedgerDetailScreen> {
               child: Text('5. 17.', style: TextStyle(color: ColorFamily.black, fontSize: 20, fontFamily: FontFamily.mapleStoryBold)),
             ),
 
-            Padding(padding: EdgeInsets.only(bottom: 30)),
+            SizedBox(height: 30),
 
             // 아이템 항목
             LedgerListView(),
@@ -66,7 +66,7 @@ class _LedgerDetailScreenState extends State<LedgerDetailScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)
                     ),
-                    minimumSize: Size(300, 50),
+                    minimumSize: Size(double.maxFinite, 50),
                     alignment: Alignment.center,
                     textStyle: TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight),
                     backgroundColor: ColorFamily.beige,

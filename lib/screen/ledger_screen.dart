@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:woo_yeon_hi/screen/ledger_write_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/ledger_carousel_slider.dart';
+import 'package:woo_yeon_hi/widget/ledger_dialog.dart';
 import 'package:woo_yeon_hi/widget/ledger_table_calendar.dart';
 import 'package:woo_yeon_hi/widget/ledger_top_app_bar.dart';
 
@@ -65,12 +65,11 @@ class _LedgerScreenState extends State<LedgerScreen> {
         backgroundColor: ColorFamily.beige,
         child: SvgPicture.asset('lib/assets/icons/edit.svg'),
         onPressed: () {
-          // 화면 전환
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              // 보여질 다음 화면을 설정한다.
-              builder: (context) => LedgerWriteScreen(),
-            ),
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return LedgerDialog('LedgerScreen', '미등록 거래내역이 있습니다.', '이동 하시겠습니까?');
+            },
           );
         },
       ),

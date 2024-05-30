@@ -78,11 +78,12 @@ class _LedgerModalBottomSheetState extends State<LedgerModalBottomSheet> {
                 children: [
                   InkWell(
                     onTap: () {
+                      Navigator.of(context).pop();
                       // 삭제 버튼 클릭 시 다이얼로그 표시
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return LedgerDialog();
+                          return LedgerDialog('LedgerModalBottomSheet', '해당 항목을 삭제 하시겠습니까?', '다시 복구 되지 않습니다.');
                         },
                       );
 
