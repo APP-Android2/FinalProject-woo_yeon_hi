@@ -1,16 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/profile_edit_top_app_bar.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
-
-import '../../main.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -278,7 +274,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 child:
                                   TextFormField(
                                     style: TextStyleFamily.smallTitleTextStyle,
-                                    initialValue: '뒤돌아보지 않을게 바다가 보이는 집에서 평생을 살게 뒤돌아 보지 않을게 바다가 보이는 집에서 평생을 살게 바',
+                                    initialValue: '함께할 때 가장 행복해!\n너와 나, 완벽한 조합 💑',
                                     maxLines: 3,
                                     maxLength: 60,
                                     decoration: InputDecoration(border: InputBorder.none, counter: SizedBox()),

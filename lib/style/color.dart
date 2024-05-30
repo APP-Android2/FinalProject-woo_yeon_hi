@@ -9,3 +9,13 @@ class ColorFamily{
   static const Color white = Color(0xffFFFFFF);
   static const Color gray = Color(0xffB7B7B7);
 }
+
+class DotsColor{
+  static const Color scarlet = Color(0xffFF7473);
+  static const Color brown = Color(0xffAE8B72);
+  static const Color pastelYellow = Color(0xffFCD997);
+  static const Color cyan = Color(0xff4DB9DE);
+  static const Color pastelPink = Color(0xffF3C9CB);
+  static const Color green = Color(0xffD2E4CC);
+
+}

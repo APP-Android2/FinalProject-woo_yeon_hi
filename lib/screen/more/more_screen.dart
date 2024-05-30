@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/more/daily_summary_screen.dart';
 import 'package:woo_yeon_hi/screen/more/profile_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-
-import '../../widget/main_bottom_navigation_bar.dart';
 import '../../widget/more/more_top_app_bar.dart';
 
 class MoreScreen extends StatelessWidget {
@@ -50,7 +49,7 @@ class MoreScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(width: 170, child: Text("멋쟁이사자",style: TextStyle(color: ColorFamily.black,fontSize: 16,fontFamily: FontFamily.mapleStoryBold))),
+                              Container(width: 170, child: Text("우연남",style: TextStyle(color: ColorFamily.black,fontSize: 16,fontFamily: FontFamily.mapleStoryBold))),
                               InkWell(
                                   onTap: (){
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEditScreen()));
@@ -62,8 +61,8 @@ class MoreScreen extends StatelessWidget {
                         SizedBox(height: 20),
                         Container(
                           width: 190,
-                            child: Text("뒤돌아보지 않을게 바다가 보이는 집에서 평생을 살게 해줄게 그 옆에 내가 있을 수 있다면 네 옆자리에",
-                            style: TextStyle(color: ColorFamily.black,fontSize: 12,fontFamily: FontFamily.mapleStoryLight))
+                            child: Text("함께할 때 가장 행복해!\n너와 나, 완벽한 조합 💑",
+                              style: TextStyle(color: ColorFamily.black,fontSize: 12,fontFamily: FontFamily.mapleStoryLight), maxLines: 3)
                         )
                       ],
                     ),
@@ -83,7 +82,9 @@ class MoreScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DailySummaryScreen()));
+                      },
                       borderRadius: BorderRadius.circular(10.0),
                       child: Container(
                           height: 60,
