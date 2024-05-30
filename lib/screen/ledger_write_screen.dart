@@ -19,6 +19,323 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
   // 지출, 수입 버튼 상태
   List<bool> selectTypeState = [true, false];
 
+  // 현재 선택된 탭의 인덱스를 저장
+  int selectedIndex = 0;
+
+  // 각 탭의 위젯들
+  List<Widget> widgetsSample = [
+    Container(
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/spoon_fork.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('식비', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight)),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/coffee_cup.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('카페', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/bus.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('교통', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/shopping_cart.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('쇼핑', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/culture_popcorn.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('문화', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/hobby_puzzle.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('취미', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/lover.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('데이트', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/game.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('오락', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/travel.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('여행', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/maintain_home.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('주거', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/life_leaf.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('생활', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/etc_more.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('기타', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            //SizedBox(height: 15),
+          ],
+        ),
+      ),
+    ),
+    Container(
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/money_deposit.svg', width: 40, height: 40,),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('입금', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/income_add.svg', width: 40, height: 40,),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('부수입', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/income_bonus.svg', width: 40, height: 40,),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('보너스', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 40)),
+                InkWell(
+                  onTap: () {
+                    print('식비 터치');
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('lib/assets/icons/etc_more.svg'),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text('기타', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            //SizedBox(height: 15),
+          ],
+        ),
+      ),
+    ),
+  ];
+
   // GlobalKey
   final _formKey = GlobalKey<FormState>();
 
@@ -112,7 +429,6 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
                 Container(
                   padding: EdgeInsets.fromLTRB(30, 20, 0, 0),
                   width: 220,
-                  //decoration: BoxDecoration(border: Border.all(width: 3,color: Colors.red)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -171,6 +487,8 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
                               for (int i = 0; i < selectTypeState.length; i++) {
                                 selectTypeState[i] = i == index;
                               }
+                              // 선택한 인덱스를 업데이트
+                              selectedIndex = index;
                             });
                           },
                           children: [
@@ -218,7 +536,7 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
                                 maxLength: 20,
                                 textInputAction: TextInputAction.next,
                                 decoration: InputDecoration(
-                                  hintText: '지출 타이틀을 입력하세요. (20자 이내)',
+                                  hintText: '타이틀을 입력하세요. (20자 이내)',
                                   hintStyle: TextStyle(color: ColorFamily.gray, fontSize: 14, fontFamily: FontFamily.mapleStoryLight),
                                   border: InputBorder.none,
                                   counterText: ''
@@ -235,123 +553,11 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
 
                             Text('카테고리', style: TextStyle(color: ColorFamily.black, fontSize: 20, fontFamily: FontFamily.mapleStoryLight)),
                             Container(
-                              padding: EdgeInsets.only(top: 20),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/spoon_fork.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('식비', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/coffee_cup.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('카페', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/bus.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('교통', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/shopping_cart.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('쇼핑', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(padding: EdgeInsets.only(top: 20)),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/culture_popcorn.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('문화', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/hobby_puzzle.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('취미', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/lover.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('데이트', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/game.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('오락', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(padding: EdgeInsets.only(top: 20)),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/travel.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('여행', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/maintain_home.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('주거', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/life_leaf.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('생활', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                      Padding(padding: EdgeInsets.only(right: 60)),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset('lib/assets/icons/etc_more.svg'),
-                                          Padding(padding: EdgeInsets.only(top: 10)),
-                                          Text('기타', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight))
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                ],
-                              ),
+                              //decoration: BoxDecoration(border: Border.all(width: 1, color: Colors.red)),
+                              padding: EdgeInsets.only(top: 10),
+                              child: widgetsSample[selectedIndex],
                             ),
+
                             SizedBox(height: 30),
 
                             Text('메모', style: TextStyle(color: ColorFamily.black, fontSize: 20, fontFamily: FontFamily.mapleStoryLight)),
@@ -363,7 +569,7 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
                                 maxLines: 5,
                                 maxLength: 500,
                                 decoration: InputDecoration(
-                                    hintText: '메모를 입력하세요',
+                                    hintText: '메모를 입력하세요. (선택사항)',
                                     hintStyle: TextStyle(color: ColorFamily.gray, fontSize: 14, fontFamily: FontFamily.mapleStoryLight, decorationThickness: 0),
                                     border: InputBorder.none,
                                 ),
