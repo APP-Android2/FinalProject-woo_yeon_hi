@@ -9,10 +9,12 @@ import '../style/font.dart';
 class CalendarTermStart extends StatefulWidget {
   final Function(DateTime) onDateChanged;
   final DateTime initialDate; // 초기 날짜
+  final bool isTrue;
 
   const CalendarTermStart({
     required this.onDateChanged,
     required this.initialDate,
+    required this.isTrue,
     super.key
   });
 
@@ -35,37 +37,74 @@ class _CalendarTermStartState extends State<CalendarTermStart> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        DatePicker.showDateTimePicker(
-          context,
-          showTitleActions: true,
-          onConfirm: (time) {
-            setState(() {
-              selectedDateTime = time;
-              // 부모 위젯에게 전달
-              widget.onDateChanged(selectedDateTime);
-            });
+    return Column(
+      children: [
+        widget.isTrue
+        ? InkWell(
+          onTap: () {
+            DatePicker.showDatePicker(
+              context,
+              showTitleActions: true,
+              onConfirm: (time) {
+                setState(() {
+                  selectedDateTime = time;
+                  // 부모 위젯에게 전달
+                  widget.onDateChanged(selectedDateTime);
+                });
+              },
+              currentTime: DateTime.now(),
+              locale: LocaleType.ko,
+            );
           },
-          currentTime: DateTime.now(),
-          locale: LocaleType.ko,
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.only(bottom: 1),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: ColorFamily.black,
-              width: 1
-            )
-          )
+          child: Container(
+            padding: EdgeInsets.only(bottom: 1),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: ColorFamily.black,
+                  width: 1
+                )
+              )
+            ),
+            child: Text(
+              "${DateFormat('yyyy. M. dd.(E) 하루 종일', 'ko_KR').format(selectedDateTime)}",
+              style: TextStyleFamily.normalTextStyle,
+            ),
+          ),
+        )
+        : InkWell(
+          onTap: () {
+            DatePicker.showDateTimePicker(
+              context,
+              showTitleActions: true,
+              onConfirm: (time) {
+                setState(() {
+                  selectedDateTime = time;
+                  // 부모 위젯에게 전달
+                  widget.onDateChanged(selectedDateTime);
+                });
+              },
+              currentTime: DateTime.now(),
+              locale: LocaleType.ko,
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.only(bottom: 1),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        color: ColorFamily.black,
+                        width: 1
+                    )
+                )
+            ),
+            child: Text(
+              "${DateFormat('yyyy. M. dd.(E) HH:mm', 'ko_KR').format(selectedDateTime)}",
+              style: TextStyleFamily.normalTextStyle,
+            ),
+          ),
         ),
-        child: Text(
-          "${DateFormat('yyyy. M. dd.(E) HH:mm', 'ko_KR').format(selectedDateTime)}",
-          style: TextStyleFamily.normalTextStyle,
-        ),
-      ),
+      ],
     );
   }
 }

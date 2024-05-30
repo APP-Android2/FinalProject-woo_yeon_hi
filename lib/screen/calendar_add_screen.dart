@@ -22,11 +22,14 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
   // 현재 선택된 색상
   Color currentColor = ColorFamily.green;
 
+  // 하루 종일 체크여부
+  bool checkAllTime = false;
+
   // 시작일 날짜
   DateTime termStart = DateTime.now().subtract(Duration(minutes: DateTime.now().minute));
   // 종료일 날짜  +1 hour
   DateTime termFinish = DateTime.now().add(Duration(hours: 1)).subtract(Duration(minutes: DateTime.now().minute));
-  // 종료일 텍스트
+  // 종료일 텍스트 데코
   TextDecoration finishTextDecoration = TextDecoration.none;
   // 종료일 체크 참거짓
   bool checkTerm = true;
@@ -35,6 +38,14 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
   void updateColor(Color color){
     setState(() {
       currentColor = color;
+    });
+  }
+
+  // 스위치 버튼
+  void isAllTime(bool isTrue){
+    setState(() {
+      checkAllTime = !checkAllTime;
+      updateFinishDecoration();
     });
   }
 
@@ -56,14 +67,42 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
 
   // 종료일 상태 업데이트
   void updateFinishDecoration() {
-    // 종료일이 시작일보다 먼저라면
-    if (termFinish.isBefore(termStart)) {
-      checkTerm = false;
-      finishTextDecoration = TextDecoration.lineThrough;
-    } else {
-      checkTerm = true;
-      finishTextDecoration = TextDecoration.none;
+
+    // 년, 월, 일
+    var startDay = termStart.year + termStart.month + termStart.day;
+    var finishDay = termFinish.year + termFinish.month + termFinish.day;
+
+    // 하루종일 - true
+    if(checkAllTime){
+      // 년, 월, 일이 같다면
+      if(startDay == finishDay) {
+        checkTerm = true;
+        finishTextDecoration = TextDecoration.none;
+      }
+      else {
+        // 종료일이 시작일보다 먼저라면
+        if (termFinish.isBefore(termStart)) {
+          checkTerm = false;
+          finishTextDecoration = TextDecoration.lineThrough;
+        } else {
+          checkTerm = true;
+          finishTextDecoration = TextDecoration.none;
+        }
+      }
     }
+
+    // 하루종일 - false
+    else {
+      // 종료일이 시작일보다 먼저라면
+      if (termFinish.isBefore(termStart)) {
+        checkTerm = false;
+        finishTextDecoration = TextDecoration.lineThrough;
+      } else {
+        checkTerm = true;
+        finishTextDecoration = TextDecoration.none;
+      }
+    }
+
   }
 
   @override
@@ -219,7 +258,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                       children: [
                         Text("하루 종일", style: TextStyleFamily.normalTextStyle),
                         Spacer(),
-                        CalendarSwitch(), // 스위치 버튼
+                        CalendarSwitch(onSwitchChanged: isAllTime), // 스위치 버튼
                       ],
                     ),
                     SizedBox(height: 30),
@@ -234,6 +273,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                         CalendarTermStart(
                           onDateChanged: onTermStartChanged,
                           initialDate: termStart,
+                          isTrue: checkAllTime,
                         ),
                       ],
                     ),
@@ -250,6 +290,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                           onDateChanged: onTermFinishChanged,
                           textDecoration: finishTextDecoration,
                           initialDate: termFinish,
+                          isTrue: checkAllTime,
                           checkTerm: checkTerm,
                         ),
                       ],

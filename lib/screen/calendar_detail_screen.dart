@@ -18,6 +18,8 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
 
   Color currentColor = ColorFamily.green;
 
+  final String title = "한강 피크닉";
+
   // 색 업데이트 함수
   void updateColor(Color color){
     setState(() {
@@ -47,7 +49,9 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
             child: IconButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CalendarEditScreen()),
+                  MaterialPageRoute(builder: (context) {
+                    return CalendarEditScreen(title: title);
+                  }),
                 );
               },
               icon: SvgPicture.asset("lib/assets/icons/edit.svg"),
