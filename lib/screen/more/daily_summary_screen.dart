@@ -59,7 +59,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                               context: context,
                               builder: (context) =>
                                   Container(
-                                      height: 420,
+                                      height: 450,
                                       child: Column(children: [
                                         Container(
                                             padding: EdgeInsets.symmetric(
@@ -264,7 +264,6 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                               // child: 해당 데이터 위젯
                             ),
                             SizedBox(height: 30),
-
                             Row(
                               children: [
                                 Container(
