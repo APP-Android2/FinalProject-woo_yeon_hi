@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/more/profile_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
-import '../widget/main_bottom_navigation_bar.dart';
-import '../widget/more/more_top_app_bar.dart';
+import '../../widget/main_bottom_navigation_bar.dart';
+import '../../widget/more/more_top_app_bar.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -24,20 +25,23 @@ class MoreScreen extends StatelessWidget {
             Container(
               child: Row(
                 children: [
-                  SizedBox(width: 30,),
-                  InkWell(
-                      onTap: (){},
-                      borderRadius: BorderRadius.circular(50),
-                      splashColor: Colors.transparent,
-                      child: Container(
-                        height: 120,
-                        width: 120,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                        child: Image.asset("lib/assets/images/default_profile.png"),
-                      )),
+                  SizedBox(width: 20,),
+                  Material(
+                    elevation: 1,
+                    borderRadius: BorderRadius.circular(60),
+                    child: InkWell(
+                        onTap: (){},
+                        borderRadius: BorderRadius.circular(60),
+                        splashColor: Colors.transparent,
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(60),image: DecorationImage(image: AssetImage('lib/assets/images/default_profile.png'))),
+                        )),
+                  ),
                   SizedBox(width: 20,),
                   Container(
-                    height: 100,
+                    height: 120,
                     width: 210,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,15 +50,19 @@ class MoreScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(width: 170, child: Text("멋쟁이사자처럼",style: TextStyle(color: ColorFamily.black,fontSize: 16,fontFamily: FontFamily.mapleStoryBold))),
-                              InkWell(onTap: (){},child: Container(child: SvgPicture.asset('lib/assets/icons/expand.svg')))
+                              Container(width: 170, child: Text("멋쟁이사자",style: TextStyle(color: ColorFamily.black,fontSize: 16,fontFamily: FontFamily.mapleStoryBold))),
+                              InkWell(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEditScreen()));
+                                  },
+                                  child: Container(width: 40, height: 40, child: SvgPicture.asset('lib/assets/icons/expand.svg',fit: BoxFit.none,)))
                             ],
                           ),
                         ),
-                        SizedBox(height: 15),
+                        SizedBox(height: 20),
                         Container(
                           width: 190,
-                            child: Text("베낭매고 여행이나 갈까~\n베낭매고 여행이나 갈까~\n베낭매고 여행이나 갈까~",
+                            child: Text("뒤돌아보지 않을게 바다가 보이는 집에서 평생을 살게 해줄게 그 옆에 내가 있을 수 있다면 네 옆자리에",
                             style: TextStyle(color: ColorFamily.black,fontSize: 12,fontFamily: FontFamily.mapleStoryLight))
                         )
                       ],

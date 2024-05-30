@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/tab_page_index_provider.dart';
-import 'more_screen.dart';
+import 'more/more_screen.dart';
 
 class MainScreenContainer extends StatefulWidget {
   const MainScreenContainer({super.key});
