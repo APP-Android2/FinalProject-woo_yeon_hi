@@ -4,6 +4,8 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/ui_setting_top_app_bar.dart';
 
+import 'home_ui_setting_screen.dart';
+
 class UiStyleSettingScreen extends StatelessWidget {
   const UiStyleSettingScreen({super.key});
 
@@ -22,7 +24,9 @@ class UiStyleSettingScreen extends StatelessWidget {
                 child: Material(
                   color: ColorFamily.cream,
                   child: InkWell(
-                    onTap: (){},
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeUiSettingScreen(),));
+                    },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
