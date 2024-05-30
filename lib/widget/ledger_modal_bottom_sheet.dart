@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/ledger_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/ledger_dialog.dart';
@@ -52,7 +53,13 @@ class _LedgerModalBottomSheetState extends State<LedgerModalBottomSheet> {
                 children: [
                   InkWell(
                     onTap: () {
-                      print('수정');
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => LedgerEditScreen(),
+                        ),
+                      );
+
                     },
                     borderRadius: BorderRadius.circular(10),
                     child: Row(
