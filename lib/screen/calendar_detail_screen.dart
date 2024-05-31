@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:woo_yeon_hi/screen/calendar_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-import 'package:woo_yeon_hi/widget/calendar_color_picker.dart';
 
 class CalendarDetailScreen extends StatefulWidget {
   const CalendarDetailScreen({super.key});
@@ -18,7 +18,10 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
 
   Color currentColor = ColorFamily.green;
 
-  final String title = "한강 피크닉";
+  final String titleDetail = "한강 피크닉";
+  final DateTime startTimeDetail = DateTime(2024, 5, 31, 12, 0);
+  final DateTime finishTimeDetail = DateTime(2024, 5, 31, 18, 0);
+  final String memoDetail = "썬글라스 챙기기\n도시락 챙기기\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb";
 
   // 색 업데이트 함수
   void updateColor(Color color){
@@ -50,7 +53,12 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) {
-                    return CalendarEditScreen(title: title);
+                    return CalendarEditScreen(
+                      title: titleDetail,
+                      termStart: startTimeDetail,
+                      termFinish: finishTimeDetail,
+                      memo: memoDetail,
+                    );
                   }),
                 );
               },
@@ -83,7 +91,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                         ),
                         Expanded(
                           child: Text(
-                            "한강 피크닉",
+                            titleDetail,
                             style: TextStyleFamily.appBarTitleBoldTextStyle,
                           ),
                         )
@@ -95,14 +103,24 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // 일정 날짜
                           Text(
-                            "2024. 5. 28.(화)",
+                            "${DateFormat("yyyy. M. dd.(E)", "ko_KR").format(startTimeDetail)}",
                             style: TextStyleFamily.normalTextStyle,
                           ),
                           SizedBox(height: 5),
-                          Text(
-                            "12:00 ~ 18:00",
-                            style: TextStyleFamily.normalTextStyle,
+                          Row(
+                            children: [
+                              // 일정
+                              Text(
+                                "${DateFormat("H:mm ~").format(startTimeDetail)}",
+                                style: TextStyleFamily.normalTextStyle,
+                              ),
+                              Text(
+                                "${DateFormat(" H:mm").format(finishTimeDetail)}",
+                                style: TextStyleFamily.normalTextStyle,
+                              ),
+                            ],
                           ),
                           SizedBox(height: 45),
                           Text("메모", style: TextStyleFamily.normalTextStyle),
@@ -122,7 +140,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                                 padding: EdgeInsets.all(15),
                                 child: SingleChildScrollView(
                                   child: Text(
-                                    "썬글라스 챙기기\n도시락 챙기기\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb",
+                                    memoDetail,
                                     style: TextStyleFamily.normalTextStyle,
                                   ),
                                 ),
