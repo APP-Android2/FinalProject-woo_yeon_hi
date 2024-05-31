@@ -23,7 +23,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
   Color currentColor = ColorFamily.green;
 
   // 하루 종일 체크여부
-  bool checkAllTime = false;
+  bool checkAllDay = false;
 
   // 시작일 날짜
   DateTime termStart = DateTime.now().subtract(Duration(minutes: DateTime.now().minute));
@@ -41,10 +41,10 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
     });
   }
 
-  // 스위치 버튼
-  void isAllTime(bool isTrue){
+  // 스위치 버튼 - 하루종일
+  void isAllDay(bool isTrue){
     setState(() {
-      checkAllTime = !checkAllTime;
+      checkAllDay = !checkAllDay;
       updateFinishDecoration();
     });
   }
@@ -73,7 +73,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
     var finishDay = termFinish.year + termFinish.month + termFinish.day;
 
     // 하루종일 - true
-    if(checkAllTime){
+    if(checkAllDay){
       // 년, 월, 일이 같다면
       if(startDay == finishDay) {
         checkTerm = true;
@@ -258,39 +258,33 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                       children: [
                         Text("하루 종일", style: TextStyleFamily.normalTextStyle),
                         Spacer(),
-                        CalendarSwitch(onSwitchChanged: isAllTime), // 스위치 버튼
+                        CalendarSwitch(onSwitchChanged: isAllDay), // 스위치 버튼
                       ],
                     ),
                     SizedBox(height: 30),
                     Row(
                       children: [
-                        Text(
-                          "시작",
-                          style: TextStyleFamily.normalTextStyle,
-                        ),
+                        Text("시작", style: TextStyleFamily.normalTextStyle),
                         Spacer(),
                         // 시작 날짜를 선택하는 위젯
                         CalendarTermStart(
                           onDateChanged: onTermStartChanged,
                           initialDate: termStart,
-                          isTrue: checkAllTime,
+                          isTrue: checkAllDay,
                         ),
                       ],
                     ),
                     SizedBox(height: 30),
                     Row(
                       children: [
-                        Text(
-                          "종료",
-                          style: TextStyleFamily.normalTextStyle,
-                        ),
+                        Text("종료", style: TextStyleFamily.normalTextStyle),
                         Spacer(),
                         // 종료 날짜를 선택하는 위젯
                         CalendarTermFinish(
                           onDateChanged: onTermFinishChanged,
                           textDecoration: finishTextDecoration,
                           initialDate: termFinish,
-                          isTrue: checkAllTime,
+                          isTrue: checkAllDay,
                           checkTerm: checkTerm,
                         ),
                       ],
