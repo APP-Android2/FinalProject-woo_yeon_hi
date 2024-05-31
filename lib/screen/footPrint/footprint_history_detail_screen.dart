@@ -30,7 +30,7 @@ class _FootprintHistoryDetailScreenState
             backgroundColor: ColorFamily.cream,
             appBar: FootprintHistoryDetailTopAppBar(widget.title),
             body: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: ListView.builder(
                     itemCount: 5,
                     itemBuilder: (context, index) => makeHistoryDeatil(context, index, provider))),
@@ -186,7 +186,8 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
               )
             ],
           ),
-        )
+        ),
+        const Divider(height: 20,color: ColorFamily.gray,)
       ],
     ),
   );
