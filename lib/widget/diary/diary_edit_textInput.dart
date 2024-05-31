@@ -37,6 +37,7 @@ class _DiaryEditTextInputState extends State<DiaryEditTextInput> {
                   maxLength: 20,
                   controller: diaryProvider.titleTextEditController,
                   cursorColor: ColorFamily.black,
+                  onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
                   decoration: const InputDecoration(
                     hintText: '제목을 입력해주세요.',
                     hintStyle: TextStyleFamily.hintTitleTextStyle,
@@ -59,6 +60,7 @@ class _DiaryEditTextInputState extends State<DiaryEditTextInput> {
                   keyboardType: TextInputType.multiline,
                   cursorColor: ColorFamily.black,
                   scrollPhysics: const NeverScrollableScrollPhysics(),
+                  onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
                   decoration: const InputDecoration(
                     hintText: '내용을 입력해주세요.',
                     hintStyle: TextStyleFamily.hintTextStyle,

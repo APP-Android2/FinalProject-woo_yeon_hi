@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class FootprintProvider extends ChangeNotifier{
   // 탭 전환
@@ -56,6 +57,38 @@ class FootPrintHistoyDetailProvider extends ChangeNotifier{
 
   void setMoreState(int index, bool isMore){
     _isMoreList[index] = isMore;
+    notifyListeners();
+  }
+}
+
+class FootprintHistoryEditProvider extends ChangeNotifier{
+  String? _selectedPlace;
+  String? _date;
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+
+  String? get selectedPlace => _selectedPlace;
+  String? get date => _date;
+  TextEditingController get titleController => _titleController;
+  TextEditingController get contentController => _contentController;
+
+  void setPlace(String place){
+    _selectedPlace = place;
+    notifyListeners();
+  }
+
+  void setDate(String date){
+    _date = date;
+    notifyListeners();
+  }
+
+  void setTitle(String title){
+    _titleController.text = title;
+    notifyListeners();
+  }
+
+  void setContent(String content){
+    _contentController.text = content;
     notifyListeners();
   }
 }
