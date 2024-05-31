@@ -20,6 +20,7 @@ class _MainBottomNavigationBarState extends State<MainBottomNavigationBar> {
 
     return TabBar(
       indicatorColor: Colors.transparent,
+      overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
       unselectedLabelColor: ColorFamily.black,
       labelColor: ColorFamily.pink,
       labelStyle: TextStyleFamily.normalTextStyle,

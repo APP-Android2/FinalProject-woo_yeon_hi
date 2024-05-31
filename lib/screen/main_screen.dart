@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/screen/diary_screen.dart';
+import 'package:woo_yeon_hi/screen/footPrint/footprint_screen.dart';
 
 import '../provider/tab_page_index_provider.dart';
+import 'diary/diary_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -25,10 +26,10 @@ class _MainScreenState extends State<MainScreen> {
     return Container(
       alignment: Alignment.center,
       child: [
-        DiaryScreen(),
+        const DiaryScreen(),
         Text("ledger"),
         Text("home"),
-        Text("foot_print"),
+        const FootprintScreen(),
         Text("more")
       ][currentPageIndex],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:woo_yeon_hi/provider/diary_provider.dart';
+import 'package:woo_yeon_hi/provider/footprint_provider.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -24,7 +25,8 @@ class _WooYeonHiState extends State<WooYeonHi> {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
-          ChangeNotifierProvider(create: (context) => DiaryProvider())
+          ChangeNotifierProvider(create: (context) => DiaryProvider()),
+          ChangeNotifierProvider(create: (context) => FootprintProvider()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -34,6 +36,8 @@ class _WooYeonHiState extends State<WooYeonHi> {
                   seedColor: ColorFamily.white,
                 ),
                 textSelectionTheme: const TextSelectionThemeData(selectionHandleColor: ColorFamily.black),
+                highlightColor: ColorFamily.gray,
+                splashColor: ColorFamily.gray,
                 useMaterial3: true),
             home: const DefaultTabController(
               initialIndex: 2,
