@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_photo_map_detail_top_app_bar.dart';
 
@@ -13,6 +16,9 @@ class FootprintPhotoMapDetailScreen extends StatefulWidget {
 }
 
 class _FootprintPhotoMapDetailScreenState extends State<FootprintPhotoMapDetailScreen> {
+  // NaverMapController 객체의 비동기 작업 완료를 나타내는 Completer 생성
+  final Completer<NaverMapController> mapControllerCompleter = Completer();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,17 +32,10 @@ class _FootprintPhotoMapDetailScreenState extends State<FootprintPhotoMapDetailS
           Navigator.push(context, MaterialPageRoute(builder: (context) => const FootprintHistoryEditScreen()));
         },
       ),
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 1/2,
-          child: InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onTap: (){
-            },
-            child: Image.asset('lib/assets/images/korea_full.png', fit: BoxFit.contain,),
-          ),
-        ),
+      body:NaverMap(
+        options: const NaverMapViewOptions(),
+        onMapReady: (controller) {
+        },
       ),
 
     );

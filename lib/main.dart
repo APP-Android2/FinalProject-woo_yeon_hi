@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:woo_yeon_hi/provider/diary_provider.dart';
 import 'package:woo_yeon_hi/provider/footprint_provider.dart';
@@ -8,7 +10,15 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/widget/main_bottom_navigation_bar.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env"); // .env 환경변수 파일 로드
+  await NaverMapSdk.instance.initialize(
+    clientId: dotenv.env['NAVER_CLIENT_ID'],
+    onAuthFailed: (ex){
+      print(ex);
+    }
+  );
   initializeDateFormatting().then((_) => runApp(const WooYeonHi()));
 }
 
@@ -35,7 +45,8 @@ class _WooYeonHiState extends State<WooYeonHi> {
                 colorScheme: ColorScheme.fromSeed(
                   seedColor: ColorFamily.white,
                 ),
-                textSelectionTheme: const TextSelectionThemeData(selectionHandleColor: ColorFamily.black),
+                textSelectionTheme: const TextSelectionThemeData(
+                    selectionHandleColor: ColorFamily.black),
                 highlightColor: ColorFamily.gray,
                 splashColor: ColorFamily.gray,
                 useMaterial3: true),
