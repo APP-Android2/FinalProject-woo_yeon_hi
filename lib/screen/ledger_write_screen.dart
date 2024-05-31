@@ -408,7 +408,7 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
           title: '가계부 작성',
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.popUntil(context, (route) => route.isFirst);
             },
             icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
           ),
