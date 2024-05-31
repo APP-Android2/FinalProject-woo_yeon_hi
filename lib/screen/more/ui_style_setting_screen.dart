@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/more/top_bar_ui_setting_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/ui_setting_top_app_bar.dart';
@@ -56,7 +57,9 @@ class UiStyleSettingScreen extends StatelessWidget {
                   child: Material(
                     color: ColorFamily.cream,
                     child: InkWell(
-                      onTap: (){},
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => TopBarUiSettingScreen(),));
+                      },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
