@@ -47,6 +47,8 @@ dependencies:
   scroll_date_picker: ^3.8.0
   google_sign_in: ^6.1.2
   kakao_flutter_sdk: ^1.9.2
+  material_floating_search_bar_2: ^0.5.0
+  flutter_datetime_picker_plus: ^2.2.0
 
 dev_dependencies:
   flutter_test:

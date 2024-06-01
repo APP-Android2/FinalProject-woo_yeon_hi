@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/screen/more/daily_summary_screen.dart';
+import 'package:woo_yeon_hi/screen/more/help_screen.dart';
 import 'package:woo_yeon_hi/screen/more/profile_edit_screen.dart';
 import 'package:woo_yeon_hi/screen/more/ui_style_setting_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -149,7 +150,9 @@ class MoreScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => HelpScreen()));
+                        },
                         borderRadius: BorderRadius.circular(10.0),
                         child: Container(
                             height: 60,

@@ -9,6 +9,7 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/daily_summary_calendar.dart';
 import 'package:woo_yeon_hi/widget/more/daily_summary_top_app_bar.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as picker;
 
 import '../../style/font.dart';
 
@@ -39,7 +40,11 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                      child: IconButton(onPressed: () {},
+                      child: IconButton(onPressed: (){
+                        setState(() {
+                            _summaryDay = _summaryDay.subtract(Duration(days: 1));}
+                        );
+                      },
                           icon: SvgPicture.asset(
                               "lib/assets/icons/arrow_left.svg"))),
                   Material(
@@ -59,12 +64,10 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                               context: context,
                               builder: (context) =>
                                   Container(
-                                      height: 450,
+                                    height: 475,
                                       child: Column(children: [
                                         Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            height: 360,
+                                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                                             child: DailySummaryCalendar()
                                         ),
                                         Material(
@@ -79,7 +82,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                                           child: InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  _summaryDay = _selectedDay!;
+                                                  _summaryDay = _selectedDay;
                                                 });
                                                 Navigator.pop(context);
                                               },
@@ -129,7 +132,12 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                         ),
                       )),
                   Container(
-                      child: IconButton(onPressed: () {},
+                      child: IconButton(onPressed: () {
+                        setState(() {
+                          if(_summaryDay != DateTime.now()){
+                          _summaryDay = _summaryDay.add(Duration(days: 1));}
+                        });
+                      },
                           icon: SvgPicture.asset(
                               "lib/assets/icons/arrow_right.svg"))),
                 ],

@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:woo_yeon_hi/style/color.dart';
+import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
 import '../../widget/more/top_bar_ui_setting_top_app_bar.dart';
@@ -18,6 +22,7 @@ class TopBarUiSettingScreen extends StatefulWidget {
 class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
 
   var _topBarIndex = 1;
+  var _topbarActivated = false;
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +235,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                       child: Stack(
                         children: [
                           Align(alignment: Alignment.centerLeft, child: Padding(padding: EdgeInsets.only(left: 60), child: Text("100일", style: TextStyleFamily.smallTitleTextStyle))),
-                          Align(alignment: Alignment.centerLeft, child: Padding(padding: EdgeInsets.only(left: 120), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33))),
+                          Align(alignment: Alignment.centerLeft, child: Padding(padding: EdgeInsets.only(left: 110), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33))),
                           Align(alignment: Alignment.centerRight,
                               child: Padding(padding: EdgeInsets.only(right: 40),
                                 child: ClipRRect(
@@ -255,6 +260,30 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                     )
                 ),
               ),
+              SizedBox(height: 30),
+              Container(
+                width: 375,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text("상단바 활성화", style: TextStyle(fontFamily: FontFamily.mapleStoryLight,fontSize: 12,color: ColorFamily.black)),
+                    Switch(
+                      value: _topbarActivated,
+                      activeColor: ColorFamily.white,
+                      activeTrackColor: ColorFamily.pink,
+                      inactiveThumbColor: ColorFamily.gray,
+                      inactiveTrackColor: ColorFamily.white,
+                      trackOutlineWidth: MaterialStatePropertyAll(0.5),
+                      onChanged: (bool value) {
+                        // This is called when the user toggles the switch.
+                        setState(() {
+                          _topbarActivated = value;
+                        });
+                      }),
+                  ],
+                ),
+              ),
+
             ],
           ),
         ),

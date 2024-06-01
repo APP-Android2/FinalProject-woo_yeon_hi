@@ -37,6 +37,7 @@ class _DailySummaryCalendarState extends State<DailySummaryCalendar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 415,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: ColorFamily.white),
       child: TableCalendar(
         firstDay: DateTime.utc(2010, 1, 1),
