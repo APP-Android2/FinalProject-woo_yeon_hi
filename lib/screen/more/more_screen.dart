@@ -9,6 +9,7 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import '../../widget/more/more_top_app_bar.dart';
+import 'account_management_screen.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -183,7 +184,10 @@ class MoreScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AccountManagementScreen()));
+
+                        },
                         borderRadius: BorderRadius.circular(10.0),
                         child: Container(
                             height: 60,
@@ -198,7 +202,7 @@ class MoreScreen extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    "계정 설정",
+                                    "계정 관리",
                                     style: TextStyleFamily.normalTextStyle),
                                 )
                               ],

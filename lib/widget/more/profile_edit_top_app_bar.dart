@@ -21,7 +21,7 @@ class _ProfileEditTopAppBarState extends State<ProfileEditTopAppBar> {
       backgroundColor: ColorFamily.cream,
       centerTitle: true,
       title: const Text(
-        "프로필 설정",
+        "프로필 관리",
         style: TextStyleFamily.appBarTitleLightTextStyle,
       ),
       leading: IconButton(
