@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:woo_yeon_hi/screen/more/account_delete_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/more/account_management_top_app_bar.dart';
 
@@ -62,7 +63,7 @@ class AccountManagementScreen extends StatelessWidget {
                             color: ColorFamily.cream,
                             child: InkWell(
                               onTap: () {
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => TopBarUiSettingScreen(),));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDeleteScreen()));
                               },
                               child: Column(
                                 mainAxisAlignment:

@@ -186,7 +186,6 @@ class MoreScreen extends StatelessWidget {
                       child: InkWell(
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => AccountManagementScreen()));
-
                         },
                         borderRadius: BorderRadius.circular(10.0),
                         child: Container(
