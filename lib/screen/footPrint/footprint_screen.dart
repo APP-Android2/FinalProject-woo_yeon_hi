@@ -50,7 +50,7 @@ class _FootprintScreenState extends State<FootprintScreen> {
             const FootprintTabBar(),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: [
                   const FootprintPhotoMapScreen(),
                   const FootprintDatePlanScreen()

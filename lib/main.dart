@@ -27,6 +27,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
           ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
           ChangeNotifierProvider(create: (context) => DiaryProvider()),
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
+          ChangeNotifierProvider(create: (context) => FootPrintSlidableProvider()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

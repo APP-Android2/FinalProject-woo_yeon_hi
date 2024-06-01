@@ -59,3 +59,43 @@ class FootPrintHistoyDetailProvider extends ChangeNotifier{
     notifyListeners();
   }
 }
+
+// 데이트 플랜 메인 화면 상태관리
+class FootPrintSlidableProvider extends ChangeNotifier {
+  final List<Item> _items = List<Item>.generate(5, (index) => Item(title: "제주도 여행 ${index + 1}"));
+
+  // List<Item> _items = [
+  //   Item(title: 'Item 1'),
+  //   Item(title: 'Item 2'),
+  //   Item(title: 'Item 3'),
+  //   Item(title: 'Item 4'),
+  //   Item(title: 'Item 5'),
+  //   Item(title: 'Item 6'),
+  //   Item(title: 'Item 7'),
+  // ];
+
+  List<Item> get items => _items;
+
+  void addItem(String title) {
+    _items.add(Item(title: title));
+    notifyListeners();
+  }
+
+  void removeItem(int index) {
+    _items.removeAt(index);
+    notifyListeners();
+  }
+
+  void toggleCompleteItem(int index) {
+    _items[index].isCompleted = !_items[index].isCompleted;
+    notifyListeners();
+  }
+}
+
+// 데이트 플랜 메인 화면 상태관리
+class Item {
+  final String title;
+  bool isCompleted;
+
+  Item({required this.title, this.isCompleted = false});
+}
