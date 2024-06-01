@@ -49,8 +49,8 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
           titleCentered: true,
           titleTextStyle: TextStyleFamily.appBarTitleBoldTextStyle,
           formatButtonVisible: false,
-          // leftChevronMargin: EdgeInsets.only(left: 75),
-          // rightChevronMargin: EdgeInsets.only(right: 75)
+          leftChevronIcon: SvgPicture.asset('lib/assets/icons/arrow_left.svg'),
+          rightChevronIcon: SvgPicture.asset('lib/assets/icons/arrow_right.svg'),
         ),
         daysOfWeekHeight:40,
         daysOfWeekStyle: DaysOfWeekStyle(
