@@ -99,3 +99,20 @@ class Item {
 
   Item({required this.title, this.isCompleted = false});
 }
+
+// 데이트 플랜 작성 화면 슬라이드 상태관리
+class FootPrintDatePlanSlidableProvider extends ChangeNotifier {
+  final List<Item> _items = List<Item>.generate(5, (index) => Item(title: "방이역 ${index + 1}"));
+
+  List<Item> get items => _items;
+
+  void addItem(String title) {
+    _items.add(Item(title: title));
+    notifyListeners();
+  }
+
+  void removeItem(int index) {
+    _items.removeAt(index);
+    notifyListeners();
+  }
+}

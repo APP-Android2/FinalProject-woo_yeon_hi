@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/provider/footprint_provider.dart';
+import 'package:woo_yeon_hi/screen/footPrint/footprint_date_plan_write_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_date_plan_slidable_action.dart';
@@ -121,7 +122,11 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                     children: [
                       InkWell(
                         onTap: () {
-                          print('데이트 플랜 상세');
+                          Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const FootprintDatePlanWriteScreen(),
+                              )
+                          );
                         },
                         child: Row(
                           children: [
