@@ -85,7 +85,6 @@ class AccountManagementScreen extends StatelessWidget {
                                   ),
                                   Container(
                                     height: 0.5,
-                                    color: ColorFamily.pink,
                                     child: Divider(
                                         color: ColorFamily.gray,
                                         thickness: 0.5),

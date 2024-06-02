@@ -26,7 +26,7 @@ class UiStyleSettingScreen extends StatelessWidget {
                   color: ColorFamily.cream,
                   child: InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeUiSettingScreen(),));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeUiSettingScreen()));
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,7 +43,6 @@ class UiStyleSettingScreen extends StatelessWidget {
                         ),
                         Container(
                           height: 0.5,
-                          color: ColorFamily.pink,
                           child: Divider(color: ColorFamily.gray, thickness: 0.5),
                         )
                       ],
@@ -75,7 +74,6 @@ class UiStyleSettingScreen extends StatelessWidget {
                           ),
                           Container(
                             height: 0.5,
-                            color: ColorFamily.pink,
                             child: Divider(color: ColorFamily.gray, thickness: 0.5),
                           )
                         ],
