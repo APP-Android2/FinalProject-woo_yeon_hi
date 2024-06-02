@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:woo_yeon_hi/provider/ledger_carousel_provider.dart';
 import 'package:woo_yeon_hi/provider/ledger_check_box_provider.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
@@ -16,6 +17,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => TabPageIndexProvider()),
         ChangeNotifierProvider(create: (_) => LedgerCheckBoxProvider()),
+        ChangeNotifierProvider(create: (_) => LedgerCarouselProvider()),
       ],
       child: WooYeonHi(),
     ),
