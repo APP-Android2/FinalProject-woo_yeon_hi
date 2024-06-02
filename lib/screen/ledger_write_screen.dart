@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -15,6 +16,17 @@ class LedgerWriteScreen extends StatefulWidget {
 }
 
 class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
+
+  // 날짜 설정
+  late String _dateSetting;
+
+  // 요일 변환
+  String _getWeekday(int weekday) {
+    const weekdays = [
+      '월', '화', '수', '목', '금', '토', '일'
+    ];
+    return weekdays[weekday - 1];
+  }
 
   // 지출, 수입 버튼 상태
   List<bool> selectTypeState = [true, false];
@@ -354,6 +366,27 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
     super.initState();
     // 텍스트 변경 시 숫자 형식을 지정하기 위해 컨트롤러에 리스너를 추가
     priceController.addListener(_formatNumber);
+
+    // 오늘 날짜로 지정
+    final now = DateTime.now();
+    _dateSetting = '${now.year}. ${now.month}. ${now.day}.\(${_getWeekday(now.weekday)}\) ${now.hour}:${now.minute}';
+  }
+
+  // DatePicker 기능
+  void _showDateTimePicker(){
+    DatePicker.showDateTimePicker(
+      context,
+      showTitleActions: true,
+      minTime: DateTime(2020, 1, 1),
+      maxTime: DateTime(2030, 12, 31),
+      onConfirm: (date) {
+        setState(() {
+          _dateSetting = '${date.year}. ${date.month}. ${date.day}.\(${_getWeekday(date.weekday)}\) ${date.hour}:${date.minute}';
+        });
+      },
+      currentTime: DateTime.now(),
+      locale: LocaleType.ko,
+    );
   }
 
   void _formatNumber() {
@@ -423,7 +456,21 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
               children: [
                 Container(
                   padding: EdgeInsets.only(top: 30),
-                  child: Text('2024. 5. 21(월) 13:00 555', style: TextStyleFamily.appBarTitleLightTextStyle),
+                  child: InkWell(
+                    // 클릭 제스처 투명
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      _showDateTimePicker();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(_dateSetting , style: TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight, color: ColorFamily.gray)),
+                        SizedBox(width: 7),
+                        SvgPicture.asset('lib/assets/icons/calendar.svg', color: ColorFamily.gray),
+                      ],
+                    ),
+                  ),
                 ),
 
                 Container(
