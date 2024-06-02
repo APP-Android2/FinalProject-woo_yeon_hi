@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_history_edit_album.dart';
+import 'package:woo_yeon_hi/widget/footPrint/footprint_history_edit_input.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_history_edit_top_app_bar.dart';
 
 import '../../style/color.dart';
@@ -17,14 +18,16 @@ class _FootprintHistoryEditScreenState extends State<FootprintHistoryEditScreen>
     return const Scaffold(
       backgroundColor: ColorFamily.cream,
       appBar: FootprintHistoryEditTopAppBar(),
-      body: Padding(
-          padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            FootprintHistoryEditAlbum(),
-
-
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              FootprintHistoryEditAlbum(),
+              FootprintHistoryEditInput()
+        
+            ],
+          ),
         ),
       ),
 

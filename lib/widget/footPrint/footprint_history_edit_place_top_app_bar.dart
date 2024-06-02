@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:woo_yeon_hi/screen/footPrint/footprint_photo_map_detail_screen.dart';
 
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 
-class FootprintHistoryTopAppBar extends StatefulWidget implements PreferredSizeWidget{
-  const FootprintHistoryTopAppBar({super.key});
+class FootprintHistoryEditPlaceTopAppBar extends StatefulWidget implements PreferredSizeWidget {
+  const FootprintHistoryEditPlaceTopAppBar({super.key});
 
   @override
-  State<FootprintHistoryTopAppBar> createState() => _FootprintHistoryTopAppBarState();
+  State<FootprintHistoryEditPlaceTopAppBar> createState() => _FootprintHistoryEditPlaceTopAppBarState();
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _FootprintHistoryTopAppBarState extends State<FootprintHistoryTopAppBar> {
+class _FootprintHistoryEditPlaceTopAppBarState extends State<FootprintHistoryEditPlaceTopAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -23,7 +22,7 @@ class _FootprintHistoryTopAppBarState extends State<FootprintHistoryTopAppBar> {
       backgroundColor: ColorFamily.cream,
       centerTitle: true,
       title: const Text(
-        "히스토리",
+        "지역 선택",
         style: TextStyleFamily.appBarTitleLightTextStyle,
       ),
       leading: IconButton(
@@ -32,14 +31,6 @@ class _FootprintHistoryTopAppBarState extends State<FootprintHistoryTopAppBar> {
         },
         icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
       ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FootprintPhotoMapDetailScreen()));
-          },
-          icon: SvgPicture.asset('lib/assets/icons/map.svg'),
-        ),
-      ],
     );
   }
 }

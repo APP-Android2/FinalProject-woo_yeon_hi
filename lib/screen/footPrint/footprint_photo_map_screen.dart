@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_history_screen.dart';
+import 'package:woo_yeon_hi/screen/footPrint/footprint_photo_map_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
@@ -28,7 +29,7 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const FootprintHistoryScreen()));
+                builder: (context) => const FootprintPhotoMapDetailScreen()));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:woo_yeon_hi/screen/footPrint/footprint_photo_map_detail_screen.dart';
+import 'package:woo_yeon_hi/screen/footPrint/footprint_history_screen.dart';
 
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 
-class FootprintHistoryTopAppBar extends StatefulWidget implements PreferredSizeWidget{
-  const FootprintHistoryTopAppBar({super.key});
+class FootprintPhotoMapDetailTopappBar extends StatefulWidget implements PreferredSizeWidget{
+  const FootprintPhotoMapDetailTopappBar({super.key});
 
   @override
-  State<FootprintHistoryTopAppBar> createState() => _FootprintHistoryTopAppBarState();
+  State<FootprintPhotoMapDetailTopappBar> createState() => _FootprintPhotoMapDetailTopappBarState();
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _FootprintHistoryTopAppBarState extends State<FootprintHistoryTopAppBar> {
+class _FootprintPhotoMapDetailTopappBarState extends State<FootprintPhotoMapDetailTopappBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -23,7 +23,7 @@ class _FootprintHistoryTopAppBarState extends State<FootprintHistoryTopAppBar> {
       backgroundColor: ColorFamily.cream,
       centerTitle: true,
       title: const Text(
-        "히스토리",
+        "우리의 기록들(포토맵 제목)",
         style: TextStyleFamily.appBarTitleLightTextStyle,
       ),
       leading: IconButton(
@@ -35,9 +35,9 @@ class _FootprintHistoryTopAppBarState extends State<FootprintHistoryTopAppBar> {
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FootprintPhotoMapDetailScreen()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FootprintHistoryScreen()));
           },
-          icon: SvgPicture.asset('lib/assets/icons/map.svg'),
+          icon: SvgPicture.asset('lib/assets/icons/list.svg'),
         ),
       ],
     );
