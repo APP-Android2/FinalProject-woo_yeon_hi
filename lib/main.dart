@@ -3,6 +3,7 @@ import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
+import 'package:woo_yeon_hi/style/font.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +30,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "WooYeonHi",
-      theme: ThemeData(
+        theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
               seedColor: ColorFamily.cream,
               brightness: Brightness.light

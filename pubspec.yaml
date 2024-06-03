@@ -49,6 +49,8 @@ dependencies:
   kakao_flutter_sdk: ^1.9.2
   material_floating_search_bar_2: ^0.5.0
   flutter_datetime_picker_plus: ^2.2.0
+  local_auth: ^2.2.0
+  local_auth_android: ^1.0.38
 
 dev_dependencies:
   flutter_test:

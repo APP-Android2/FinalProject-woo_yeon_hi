@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:woo_yeon_hi/widget/more/app_setting_top_app_bar.dart';
 
 import '../../style/color.dart';
 import '../../style/text_style.dart';
+import 'app_lock_setting_screen.dart';
 
 class AppSettingScreen extends StatefulWidget {
   const AppSettingScreen({super.key});
@@ -14,7 +16,18 @@ class AppSettingScreen extends StatefulWidget {
 
 class _AppSettingScreenState extends State<AppSettingScreen> {
 
+  final LocalAuthentication auth = LocalAuthentication();
+
   var _appNoticeActivated = false;
+  late bool _isSupported;
+
+  @override
+  void initState() {
+    super.initState();
+    auth.isDeviceSupported().then(
+          (bool isSupported) => setState(() => _isSupported = isSupported),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +60,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                                     inactiveTrackColor: ColorFamily.white,
                                     trackOutlineWidth: MaterialStatePropertyAll(0.5),
                                     onChanged: (bool value) {
-                                      // This is called when the user toggles the switch.
                                       setState(() {
                                         _appNoticeActivated = value;
                                       });
@@ -70,7 +82,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                       color: ColorFamily.cream,
                       child: InkWell(
                         onTap: (){
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(isBioAuthSupported: _isSupported)));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
