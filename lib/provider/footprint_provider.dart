@@ -79,7 +79,7 @@ class FootprintHistoryEditProvider extends ChangeNotifier{
   TextEditingController get titleController => _titleController;
   TextEditingController get contentController => _contentController;
 
-  void setPlace(String place){
+  void setPlace(String? place){
     _selectedPlace = place;
     notifyListeners();
   }

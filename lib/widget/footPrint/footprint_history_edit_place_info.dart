@@ -20,59 +20,62 @@ class FootprintHistoryEditPlaceInfo extends StatefulWidget {
 class _FootprintHistoryEditPlaceInfoState extends State<FootprintHistoryEditPlaceInfo> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.7,
-      decoration: BoxDecoration(
-        color: ColorFamily.white,
-        borderRadius: BorderRadius.circular(15), // 모서리를 둥글게 설정
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7 - 40,
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7 - 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(widget.title, style: TextStyleFamily.normalTextStyle,),
-                        const SizedBox(width: 5,),
-                        Text(widget.classfication, style: const TextStyle(
-                          fontFamily: FontFamily.mapleStoryLight,
-                          fontSize: 10,
-                          color: ColorFamily.gray
-                        ),)
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10,),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7 - 40,
+    return Card(
+      elevation: 1,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.7,
+        decoration: BoxDecoration(
+          color: ColorFamily.white,
+          borderRadius: BorderRadius.circular(15), // 모서리를 둥글게 설정
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.7 - 40,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7 - 40,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(widget.address, style: TextStyleFamily.normalTextStyle,),
+                          Text(widget.title, style: TextStyleFamily.normalTextStyle,),
+                          const SizedBox(width: 5,),
+                          Text(widget.classfication, style: const TextStyle(
+                            fontFamily: FontFamily.mapleStoryLight,
+                            fontSize: 10,
+                            color: ColorFamily.gray
+                          ),)
                         ],
-                      ))
-                ],
+                      ),
+                    ),
+                    const SizedBox(height: 10,),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7 - 40,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(widget.address, style: TextStyleFamily.normalTextStyle,),
+                          ],
+                        ))
+                  ],
+                ),
               ),
-            ),
-            InkWell(
-              splashColor: ColorFamily.gray,
-              onTap: (){
-                _showDoneDialog(context, widget.provider);
-              },
-              child: SvgPicture.asset('lib/assets/icons/add.svg'),
-            )
-          ],
+              InkWell(
+                splashColor: ColorFamily.gray,
+                onTap: (){
+                  _showDoneDialog(context, widget.provider);
+                },
+                child: SvgPicture.asset('lib/assets/icons/add.svg'),
+              )
+            ],
+          ),
         ),
-      ),
 
+      ),
     );
   }
 }

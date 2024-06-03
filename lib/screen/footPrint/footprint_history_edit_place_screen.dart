@@ -27,10 +27,17 @@ class FootprintHistoryEditPlaceScreen extends StatefulWidget {
 class _FootprintHistoryEditPlaceScreenState
     extends State<FootprintHistoryEditPlaceScreen> {
   late NaverMapController _mapController;
+  final searchBarController = FloatingSearchBarController();
+
+  @override
+  void initState() {
+    widget.provider.setPlace(null);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final searchBarController = FloatingSearchBarController();
+
 
     return ChangeNotifierProvider(
       create: (context) => FootprintPhotoMapOverlayProvider(widget.mapType),
