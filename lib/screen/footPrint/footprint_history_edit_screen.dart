@@ -25,7 +25,6 @@ class _FootprintHistoryEditScreenState extends State<FootprintHistoryEditScreen>
             children: [
               FootprintHistoryEditAlbum(),
               FootprintHistoryEditInput()
-        
             ],
           ),
         ),

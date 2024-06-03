@@ -34,7 +34,7 @@ class _FootprintHistoryEditTopAppBarState extends State<FootprintHistoryEditTopA
       actions: [
         IconButton(
             onPressed: (){
-              
+              Navigator.pop(context);
             }, 
             icon: SvgPicture.asset('lib/assets/icons/done.svg')
         )

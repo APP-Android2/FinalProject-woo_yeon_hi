@@ -8,6 +8,7 @@ import 'package:woo_yeon_hi/provider/footprint_provider.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_history_edit_place_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../model/enums.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 
@@ -36,7 +37,7 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> FootprintHistoryEditPlaceScreen(provider)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> FootprintHistoryEditPlaceScreen(provider, MapType.KOREA_FULL.type)));
                     },
                     child: Row(
                       children: [

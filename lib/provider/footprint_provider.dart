@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:woo_yeon_hi/model/enums.dart';
+import 'package:woo_yeon_hi/model/place_info.dart';
 
 /// 탭 전환 상태 관리 프로바이더
 class FootprintProvider extends ChangeNotifier{
@@ -103,13 +104,15 @@ class FootprintHistoryEditProvider extends ChangeNotifier{
 class FootprintPhotoMapOverlayProvider extends ChangeNotifier{
   MapType? _mapType;
   OverlayInfo? _overlayInfo;
-  Map<int, List<String>> _polygonInfos = {};
+  Map<int, PlaceInfo> _polygonInfos = {};
   List<NPolygonOverlay> _polygonOverlays = [];
+  List<NMarker> _markers = [];
 
   MapType? get mapType => _mapType;
   OverlayInfo? get overlayInfo => _overlayInfo;
-  Map<int, List<String>> get polygonInfos => _polygonInfos;
+  Map<int, PlaceInfo> get polygonInfos => _polygonInfos;
   List<NPolygonOverlay> get polygonOverlays => _polygonOverlays;
+  List<NMarker> get markers => _markers;
 
   FootprintPhotoMapOverlayProvider(int type){
     setMapType(type);
@@ -128,8 +131,8 @@ class FootprintPhotoMapOverlayProvider extends ChangeNotifier{
     }
   }
 
-  void addInfo(int id, List<String> name){
-    _polygonInfos[id] = name;
+  void addInfo(int id, PlaceInfo info){
+    _polygonInfos[id] = info;
     notifyListeners();
   }
 
@@ -138,6 +141,15 @@ class FootprintPhotoMapOverlayProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void addMarker(NMarker marker){
+    _markers.add(marker);
+    notifyListeners();
+  }
+
+  void clearMarker(){
+    _markers.clear();
+    notifyListeners();
+  }
 
 }
 
