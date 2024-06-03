@@ -23,40 +23,42 @@ class _LedgerScreenState extends State<LedgerScreen> {
         title: '가계부',
       ),
       // 전체 배경색
-      backgroundColor: ColorFamily.cream,
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              // 상단 베너
-              LedgerCarouselSlider(),
-              // 캘린더
-              LedgerTableCalendar(),
-            ],
-          ),
-
-          // 하단 중앙에 FloatingActionButton 배치
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-                padding: const EdgeInsets.only(bottom: 16.0), // 화면 하단에서 간격 설정
-                child: Container(
-                  color: ColorFamily.cream,
-                  width: 60,
-                  height: 40,
-                  child: FloatingActionButton(
-                    backgroundColor: ColorFamily.beige,
-                    child: Text('오늘', style: TextStyle(fontSize: 15,fontFamily: FontFamily.mapleStoryLight)),
-                    heroTag: "actionButton1",
-                    onPressed: () {
-                      // FAB의 액션
-                      print('Center123');
-                    },
-                  ),
-                ),
+      body: Container(
+        color: ColorFamily.cream,
+        child: Stack(
+          children: [
+            ListView(
+              children: [
+                // 상단 베너
+                LedgerCarouselSlider(),
+                // 캘린더
+                LedgerTableCalendar(),
+              ],
             ),
-          ),
-        ],
+
+            // 하단 중앙에 FloatingActionButton 배치
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0), // 화면 하단에서 간격 설정
+                  child: Container(
+                    color: ColorFamily.cream,
+                    width: 60,
+                    height: 40,
+                    child: FloatingActionButton(
+                      backgroundColor: ColorFamily.beige,
+                      child: Text('오늘', style: TextStyle(fontSize: 15,fontFamily: FontFamily.mapleStoryLight)),
+                      heroTag: "actionButton1",
+                      onPressed: () {
+                        // FAB의 액션
+                        print('Center123');
+                      },
+                    ),
+                  ),
+              ),
+            ),
+          ],
+        ),
       ),
 
       // 하단 오른쪽에 FloatingActionButton 배치

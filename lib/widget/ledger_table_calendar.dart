@@ -82,7 +82,7 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
               // 언어 설정
               locale: 'ko_KR',
               // 요일 부분의 높이 조절
-              daysOfWeekHeight: 20,
+              daysOfWeekHeight: 30,
               // 날짜 부분의 셀의 높이
               rowHeight: 80,
               // 헤더 지우기
@@ -122,10 +122,18 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                     final text = DateFormat.E('ko').format(day);
                     return Center(
                       child: Text(
-                          text, style: TextStyle(fontSize: 15, color: ColorFamily.pink, fontFamily: FontFamily.mapleStoryBold)
+                          text, style: TextStyle(fontSize: 15, color: Colors.red.shade300, fontFamily: FontFamily.mapleStoryBold)
                       ),
                     );
-                  } else{
+                  } else if (day.weekday == DateTime.saturday) {
+                    final text = DateFormat.E('ko').format(day);
+                    return Center(
+                      child: Text(
+                          text, style: TextStyle(fontSize: 15, color: Colors.blue.shade300, fontFamily: FontFamily.mapleStoryBold)
+                      ),
+                    );
+                  }
+                  else{
                     final text = DateFormat.E('ko').format(day);
                     return Center(
                       child: Text(
@@ -202,8 +210,8 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                       Container(
                         width: 60,
                         height: 70,
-                        decoration: BoxDecoration(
-                            color: ColorFamily.pink,
+                        decoration: const BoxDecoration(
+                            color: Color(0x50FEBE98),
                             borderRadius: BorderRadius.all(Radius.circular(10))
                         ),
                         child: Column(
@@ -214,10 +222,6 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                               Container(
                                 padding: EdgeInsets.symmetric(vertical: 2),
                                 alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: ColorFamily.pink,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
                                 child: Text(
                                   event.title,
                                   style: TextStyle(fontSize: 10, color: ColorFamily.black, fontFamily: FontFamily.mapleStoryLight),
@@ -248,22 +252,29 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                 // 리스트 아이템의 개수를 _selectedEvents의 길이로 설정
                 itemCount: value.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
-                    color: Colors.white,
-                    child: ListTile(
-                      leading: SvgPicture.asset('lib/assets/icons/spoon_fork.svg', width: 24, height: 24),
-                      title: Text('식비', style: TextStyle(color: ColorFamily.black, fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
-                      trailing: Text(value[index].title + '원', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight)),
-                      onTap: () {
-                        // 화면 전환
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            // 보여질 다음 화면을 설정한다.
-                            builder: (context) => LedgerDetailScreen(),
-                          ),
-                        );
-                      },
+                  return Padding(
+                    padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
+                    child: Material(
+                      color: ColorFamily.white,
+                      elevation: 1,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: ColorFamily.white),
+                        child: ListTile(
+                          leading: SvgPicture.asset('lib/assets/icons/spoon_fork.svg', width: 24, height: 24),
+                          title: Text('식비', style: TextStyle(color: ColorFamily.black, fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
+                          trailing: Text(value[index].title + '원', style: TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight)),
+                          onTap: () {
+                            // 화면 전환
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                // 보여질 다음 화면을 설정한다.
+                                builder: (context) => LedgerDetailScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   );
                 },
