@@ -3,15 +3,10 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../style/color.dart';
 
-class PhotoMapMarker extends StatefulWidget {
+class PhotoMapMarker extends StatelessWidget {
   PhotoMapMarker(this.image, {super.key});
   String image;
 
-  @override
-  State<PhotoMapMarker> createState() => _PhotoMapMarkerState();
-}
-
-class _PhotoMapMarkerState extends State<PhotoMapMarker> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,7 +23,7 @@ class _PhotoMapMarkerState extends State<PhotoMapMarker> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image.asset(
-                  widget.image,
+                  image,
                   fit: BoxFit.cover,
                 ),
               ),
