@@ -42,10 +42,11 @@ class _LedgerScreenState extends State<LedgerScreen> {
               child: Padding(
                   padding: const EdgeInsets.only(bottom: 16.0), // 화면 하단에서 간격 설정
                   child: Container(
-                    color: ColorFamily.cream,
+                    color: Colors.transparent,
                     width: 60,
                     height: 40,
                     child: FloatingActionButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                       backgroundColor: ColorFamily.beige,
                       child: Text('오늘', style: TextStyle(fontSize: 15,fontFamily: FontFamily.mapleStoryLight)),
                       heroTag: "actionButton1",
@@ -70,7 +71,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return LedgerDialog('LedgerScreen', '미등록 거래내역이 있습니다.', '이동 하시겠습니까?');
+              return LedgerDialog('LedgerScreen', '미등록 거래내역이 있습니다.', '이동하시겠습니까?');
             },
           );
         },

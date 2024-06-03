@@ -5,6 +5,8 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/ledger_list_view.dart';
 import 'package:woo_yeon_hi/widget/ledger_top_app_bar.dart';
 
+import '../style/text_style.dart';
+
 class LedgerDetailScreen extends StatefulWidget {
   const LedgerDetailScreen({super.key});
 
@@ -42,39 +44,30 @@ class _LedgerDetailScreenState extends State<LedgerDetailScreen> {
 
             // 작성 버튼
             Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    // 그림자 색상
-                    color: Colors.black.withOpacity(0.3),
-                    // 그림자 오프셋 (x, y)
-                    offset: Offset(0, 4),
-                    // 그림자 흐림 반경
-                    blurRadius: 6,
-                    // 그림자 확산 반경
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              child: ElevatedButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: Text('확인'),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)
-                    ),
-                    minimumSize: Size(double.maxFinite, 50),
+              padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+              child: Material(
+                color: ColorFamily.beige,
+                elevation: 1,
+                shadowColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Container(
+                    height: 40,
                     alignment: Alignment.center,
-                    textStyle: TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight),
-                    backgroundColor: ColorFamily.beige,
-                    foregroundColor: ColorFamily.black
+                    child: Text(
+                      "확인",
+                      style: TextStyleFamily.normalTextStyle,
+                    ),
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: 20)
           ],
         ),
       ),

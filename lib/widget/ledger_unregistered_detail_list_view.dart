@@ -63,6 +63,7 @@ class _LedgerUnregisteredDetailListViewState extends State<LedgerUnregisteredDet
                       children: [
                         Checkbox(
                           activeColor: ColorFamily.pink,
+                          checkColor: ColorFamily.white,
                           // 개별 항목의 체크박스 상태
                           value: ledgerCheckBoxProvider.checkedItems[index],
                           // 개별 체크박스 상태 변경 시
