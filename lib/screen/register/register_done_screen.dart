@@ -73,25 +73,49 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                             fontFamily: FontFamily.cafe24Moyamoya),
                                       ),
                                     ),
-                                    Padding(padding: EdgeInsets.only(top: 200)),
+                                    Padding(padding: EdgeInsets.only(top: 160)),
                                     Container(
                                       child: Text(
-                                        "커플 등록을 완료했습니다!",
+                                        "커플 등록이 완료되었습니다!",
                                         style: TextStyle(
                                             color: ColorFamily.black,
                                             fontSize: 18,
                                             fontFamily: FontFamily.mapleStoryLight),
                                       ),
                                     ),
-                                    Padding(padding: EdgeInsets.only(top: 10)),
-                                    Container(
-                                      child: Text(
-                                        "지금부터 우연남 님과 소중한 추억을 쌓아보세요!",
-                                        style: TextStyle(
-                                            color: ColorFamily.black,
-                                            fontSize: 18,
-                                            fontFamily: FontFamily.mapleStoryLight),
-                                      ),
+                                    SizedBox(height: 15),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "지금부터 ",
+                                          style: TextStyle(
+                                              color: ColorFamily.black,
+                                              fontSize: 18,
+                                              fontFamily: FontFamily.mapleStoryLight),
+                                        ),
+                                        Text(
+                                          "멋쟁이사자",
+                                          style: TextStyle(
+                                              color: ColorFamily.black,
+                                              fontSize: 20,
+                                              fontFamily: FontFamily.mapleStoryBold),
+                                        ),Text(
+                                          " 님과",
+                                          style: TextStyle(
+                                              color: ColorFamily.black,
+                                              fontSize: 18,
+                                              fontFamily: FontFamily.mapleStoryLight),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 15),
+                                    Text(
+                                      "소중한 추억을 쌓아보세요!",
+                                      style: TextStyle(
+                                          color: ColorFamily.black,
+                                          fontSize: 18,
+                                          fontFamily: FontFamily.mapleStoryLight),
                                     )
                                   ])),
                               Container(
@@ -118,6 +142,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                                   height: 40,
                                                   width: 120,
                                                   child: Container(
+                                                    decoration: BoxDecoration(border: Border.all(color: ColorFamily.pink),borderRadius: BorderRadius.circular(20)),
                                                     alignment: Alignment.center,
                                                     child: Text(
                                                       "홈 화면으로 이동",

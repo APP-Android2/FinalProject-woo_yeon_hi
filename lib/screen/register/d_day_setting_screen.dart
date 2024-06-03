@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -10,25 +11,15 @@ import '../../style/font.dart';
 import '../../widget/register/d_day_setting_calendar.dart';
 
 class DdaySettingScreen extends StatefulWidget {
-  const DdaySettingScreen({super.key});
+  final bool isHost;
+
+  DdaySettingScreen({super.key, required this.isHost});
 
   @override
   State<StatefulWidget> createState() => _DdaySettingScreen();
   }
 
 class _DdaySettingScreen extends State<DdaySettingScreen> {
-
-  List<String> editorType = ["전체", "나", "상대방"];
-  String startPeriod = "";
-  String endPeriod = "";
-  TextEditingController startPeriodController = TextEditingController(text: "");
-  TextEditingController endPeriodController = TextEditingController(text: "");
-  List<String> sortType = ["최신순", "오래된순"];
-
-  List<bool> isSelected_editor = [true, false, false];
-  List<bool> isSelected_sort = [true, false];
-
-  List<String> filterList = ["전체", "최신순"];
 
   @override
   Widget build(BuildContext context) {
@@ -66,42 +57,15 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                         mainAxisAlignment:
                                         MainAxisAlignment.center,
                                         children: [
-                                          Image.asset(
-                                            "lib/assets/images/heart_fill.png",
-                                            height: 24,
-                                          ),
-                                          Image.asset(
-                                            "lib/assets/images/triple_right_arrow.png",
-                                            height: 24,
-                                          ),
-                                          Image.asset(
-                                            "lib/assets/images/heart_fill.png",
-                                            height: 24,
-                                          ),
-                                          Image.asset(
-                                            "lib/assets/images/triple_right_arrow.png",
-                                            height: 24,
-                                          ),
-                                          Image.asset(
-                                            "lib/assets/images/heart_outlined.png",
-                                            height: 24,
-                                          ),
-                                          Image.asset(
-                                            "lib/assets/images/triple_right_arrow.png",
-                                            height: 24,
-                                          ),
-                                          Image.asset(
-                                            "lib/assets/images/heart_outlined.png",
-                                            height: 24,
-                                          ),
-                                          Image.asset(
-                                            "lib/assets/images/triple_right_arrow.png",
-                                            height: 24,
-                                          ),
-                                          Image.asset(
-                                            "lib/assets/images/heart_outlined.png",
-                                            height: 24,
-                                          ),
+                                          SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                          SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                          SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                          SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                          SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
+                                          SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                          SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
+                                          SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                          SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
                                         ],
                                       ),
                                     )),
@@ -143,7 +107,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    NickNameSettingScreen()));
+                                                    NickNameSettingScreen(isHost: widget.isHost)));
                                       },
                                       borderRadius:
                                       BorderRadius.circular(20.0),

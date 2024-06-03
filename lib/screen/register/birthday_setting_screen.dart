@@ -15,14 +15,15 @@ import '../../style/text_style.dart';
 import 'nickname_setting_screen.dart';
 
 class BirthdaySettingScreen extends StatefulWidget {
-  const BirthdaySettingScreen({super.key});
+  final bool isHost;
+
+  BirthdaySettingScreen({super.key, required this.isHost});
 
   @override
   State<BirthdaySettingScreen> createState() => _BirthdaySettingScreenState();
 }
 
 class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
-  var host = true;
   DateTime _selectedDate = DateTime.now();
   DateTime _birthday = DateTime.now();
 
@@ -45,7 +46,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                               height: 700,
                               child: Column(children: [
                                 Padding(padding: EdgeInsets.only(top: 60)),
-                                host
+                                widget.isHost
                                     ? Container(
                                         child: Text(
                                           "4 / 5",
@@ -67,49 +68,22 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                         ),
                                       ),
                                 Padding(padding: EdgeInsets.only(top: 20)),
-                                host
+                                widget.isHost
                                     ? Container(
                                         child: Container(
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Image.asset(
-                                              "lib/assets/images/heart_fill.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/triple_right_arrow.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/heart_fill.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/triple_right_arrow.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/heart_fill.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/triple_right_arrow.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/heart_fill.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/triple_right_arrow.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/heart_outlined.png",
-                                              height: 24,
-                                            ),
+                                            SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
                                           ],
                                         ),
                                       ))
@@ -119,34 +93,13 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Image.asset(
-                                              "lib/assets/images/heart_fill.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/triple_right_arrow.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/heart_fill.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/triple_right_arrow.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/heart_fill.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/triple_right_arrow.png",
-                                              height: 24,
-                                            ),
-                                            Image.asset(
-                                              "lib/assets/images/heart_outlined.png",
-                                              height: 24,
-                                            ),
+                                            SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                            SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
                                           ],
                                         ),
                                       )),
@@ -274,7 +227,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        NickNameSettingScreen()));
+                                                        NickNameSettingScreen(isHost: widget.isHost)));
                                           },
                                           borderRadius:
                                               BorderRadius.circular(20.0),
@@ -306,7 +259,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    HomePresetSettingScreen()));
+                                                    HomePresetSettingScreen(isHost: widget.isHost)));
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
                                       child: Container(

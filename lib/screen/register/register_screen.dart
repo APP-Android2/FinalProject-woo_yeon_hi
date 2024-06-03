@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:woo_yeon_hi/provider/user_control_provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
@@ -58,12 +59,11 @@ class _RegisterScreen extends State<RegisterScreen> {
                       alignment: Alignment.centerLeft,
                       children: [
                         Container(
-                          padding: EdgeInsets.only(left: 20),
-                          child: Image.asset(
-                            'lib/assets/images/google_logo.png',
-                            height: 20,
-                          ),
-                        ),
+                            padding: EdgeInsets.only(left: 20),
+                            child: SvgPicture.asset(
+                                "lib/assets/icons/google_logo.svg",
+                                height: 24,
+                                width: 24)),
                         Container(
                           alignment: Alignment.center,
                           child: Text(
@@ -127,12 +127,11 @@ class _RegisterScreen extends State<RegisterScreen> {
                       alignment: Alignment.centerLeft,
                       children: [
                         Container(
-                          padding: EdgeInsets.only(left: 20),
-                          child: Image.asset(
-                            'lib/assets/images/kakaotalk_logo.png',
-                            height: 20,
-                          ),
-                        ),
+                            padding: EdgeInsets.only(left: 20),
+                            child: SvgPicture.asset(
+                                "lib/assets/icons/kakao_logo.svg",
+                                height: 24,
+                                width: 24)),
                         Container(
                           alignment: Alignment.center,
                           child: Text(

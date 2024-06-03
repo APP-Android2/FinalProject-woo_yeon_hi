@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/screen/register/birthday_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_done_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
@@ -12,16 +14,15 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:card_swiper/card_swiper.dart';
 
 class HomePresetSettingScreen extends StatefulWidget {
-  const HomePresetSettingScreen({super.key});
+  final bool isHost;
+
+  HomePresetSettingScreen({super.key, required this.isHost});
 
   @override
   State<HomePresetSettingScreen> createState() => _RegisterDoneScreenState();
 }
 
 class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
-
-  var host = true;
-
   var presetImages = [
     "lib/assets/images/home_preset_standard.png",
     "lib/assets/images/home_preset_dateplan.png",
@@ -50,8 +51,8 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                             height: 700,
                             child: Column(children: [
                               Padding(padding: EdgeInsets.only(top: 60)),
-                              host
-                              ? Container(
+                              widget.isHost
+                                  ? Container(
                                 child: Text(
                                   "5 / 5",
                                   style: TextStyle(
@@ -70,48 +71,21 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                 ),
                               ),
                               Padding(padding: EdgeInsets.only(top: 20)),
-                              host
+                              widget.isHost
                               ? Container(
                                   child: Container(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
                                   ],
                                 ),
                               ))
@@ -120,34 +94,13 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                    SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
                                   ],
                                 ),
                               )),
@@ -174,7 +127,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                 height: 400,
                                 child: Swiper(
                                   viewportFraction: 0.5,
-                                  scale: 0.6,
+                                  scale: 0.5,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Image.asset(presetImages[index],
@@ -222,7 +175,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      BirthdaySettingScreen()));
+                                                      BirthdaySettingScreen(isHost: widget.isHost)));
                                         },
                                         borderRadius:
                                             BorderRadius.circular(20.0),

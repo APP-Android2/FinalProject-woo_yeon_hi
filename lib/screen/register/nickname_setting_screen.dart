@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/screen/register/birthday_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
@@ -8,15 +9,15 @@ import '../../style/color.dart';
 import '../../style/font.dart';
 
 class NickNameSettingScreen extends StatefulWidget {
-  const NickNameSettingScreen({super.key});
+  final bool isHost;
+
+  NickNameSettingScreen({super.key, required this.isHost});
 
   @override
   State<NickNameSettingScreen> createState() => _NickNameSettingScreenState();
 }
 
 class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
-
-  var host = true;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                             child: Column(
                               children: [
                                 Padding(padding: EdgeInsets.only(top: 60)),
-                                host
+                                widget.isHost
                                 ? Container(
                                   child: Text(
                                     "3 / 5",
@@ -56,47 +57,20 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                   ),
                                 ),
                                 Padding(padding: EdgeInsets.only(top: 20)),
-                                host
+                                widget.isHost
                                 ? Container(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Image.asset(
-                                        "lib/assets/images/heart_fill.png",
-                                        height: 24,
-                                      ),
-                                      Image.asset(
-                                        "lib/assets/images/triple_right_arrow.png",
-                                        height: 24,
-                                      ),
-                                      Image.asset(
-                                        "lib/assets/images/heart_fill.png",
-                                        height: 24,
-                                      ),
-                                      Image.asset(
-                                        "lib/assets/images/triple_right_arrow.png",
-                                        height: 24,
-                                      ),
-                                      Image.asset(
-                                        "lib/assets/images/heart_fill.png",
-                                        height: 24,
-                                      ),
-                                      Image.asset(
-                                        "lib/assets/images/triple_right_arrow.png",
-                                        height: 24,
-                                      ),
-                                      Image.asset(
-                                        "lib/assets/images/heart_outlined.png",
-                                        height: 24,
-                                      ),
-                                      Image.asset(
-                                        "lib/assets/images/triple_right_arrow.png",
-                                        height: 24,
-                                      ),
-                                      Image.asset(
-                                        "lib/assets/images/heart_outlined.png",
-                                        height: 24,
-                                      ),
+                                      SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                      SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                      SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                      SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                      SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                      SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                      SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
+                                      SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                      SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
                                     ],
                                   ),
                                 )
@@ -104,35 +78,14 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_fill.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_outlined.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/triple_right_arrow.png",
-                                      height: 24,
-                                    ),
-                                    Image.asset(
-                                      "lib/assets/images/heart_outlined.png",
-                                      height: 24,
-                                    ),
-                                    ],
+                                        SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                        SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                        SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
+                                        SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                        SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
+                                        SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
+                                        SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
+                                      ],
                                   ),
                                   ),
                                 Padding(padding: EdgeInsets.only(top: 50)),
@@ -149,6 +102,9 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                 Container(
                                   width: 250,
                                   child: TextField(
+                                    onTapOutside: (event) {
+                                      FocusScope.of(context).unfocus();
+                                    },
                                     decoration: InputDecoration(
                                         focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
@@ -170,7 +126,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                             child: Row(
                               children: <Widget>[
                                 Padding(padding: EdgeInsets.only(left: 50)),
-                                host
+                                widget.isHost
                                 ? Expanded(
                                   child: Container(
                                     child: Material(
@@ -186,7 +142,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        DdaySettingScreen()));
+                                                        DdaySettingScreen(isHost: widget.isHost)));
                                           },
                                           borderRadius:
                                               BorderRadius.circular(20.0),
@@ -224,7 +180,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    BirthdaySettingScreen()));
+                                                    BirthdaySettingScreen(isHost: widget.isHost)));
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
                                       child: Container(
