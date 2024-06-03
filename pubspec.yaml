@@ -42,8 +42,6 @@ dependencies:
   intl: ^0.19.0
   image_picker: ^1.1.1
   fluttertoast: ^8.2.5
-  flutter_map: ^4.0.0
-  latlong2: ^0.8.2
   geojson: ^1.0.0
   flutter_carousel_widget: ^2.2.0
   flutter_dotenv: ^5.1.0

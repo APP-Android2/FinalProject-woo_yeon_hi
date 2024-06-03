@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
 
+/// 탭 전환 상태 관리 프로바이더
 class FootprintProvider extends ChangeNotifier{
-  // 탭 전환
+
   int _currentPageIndex = 0;
 
   int get currentPageIndex => _currentPageIndex;
@@ -15,8 +18,9 @@ class FootprintProvider extends ChangeNotifier{
 
 }
 
+/// 포토 맵 ExpansionTile 상태 관리 프로바이더
 class FootprintHistoryProvider extends ChangeNotifier{
-  // 포토 맵 ExpansionTile 상태 관리
+
   List<bool> _isExpandedList = [];
 
   FootprintHistoryProvider(int itemCount){
@@ -44,6 +48,7 @@ class FootprintHistoryProvider extends ChangeNotifier{
   }
 }
 
+/// 히스토리 내용 더보기 버튼 상태 관리 프로바이더
 class FootPrintHistoyDetailProvider extends ChangeNotifier{
   List<bool> _isMoreList = [];
 
@@ -61,6 +66,7 @@ class FootPrintHistoyDetailProvider extends ChangeNotifier{
   }
 }
 
+/// 히스토리 작성 상태 관리 프로바이더
 class FootprintHistoryEditProvider extends ChangeNotifier{
   String? _selectedPlace;
   String? _date;
@@ -91,6 +97,48 @@ class FootprintHistoryEditProvider extends ChangeNotifier{
     _contentController.text = content;
     notifyListeners();
   }
+}
+
+/// 포토맵 오버레이 상태관리 프로바이더
+class FootprintPhotoMapOverlayProvider extends ChangeNotifier{
+  MapType? _mapType;
+  OverlayInfo? _overlayInfo;
+  Map<int, List<String>> _polygonInfos = {};
+  List<NPolygonOverlay> _polygonOverlays = [];
+
+  MapType? get mapType => _mapType;
+  OverlayInfo? get overlayInfo => _overlayInfo;
+  Map<int, List<String>> get polygonInfos => _polygonInfos;
+  List<NPolygonOverlay> get polygonOverlays => _polygonOverlays;
+
+  FootprintPhotoMapOverlayProvider(int type){
+    setMapType(type);
+    setOverlayInfo();
+  }
+
+  void setMapType(int type){
+    _mapType = MapType.fromType(type);
+    notifyListeners();
+  }
+
+  void setOverlayInfo(){
+    if(mapType != null){
+      _overlayInfo = OverlayInfo.fromType(mapType!.type);
+      notifyListeners();
+    }
+  }
+
+  void addInfo(int id, List<String> name){
+    _polygonInfos[id] = name;
+    notifyListeners();
+  }
+
+  void addOverlay(NPolygonOverlay overlay){
+    _polygonOverlays.add(overlay);
+    notifyListeners();
+  }
+
+
 }
 
 // 데이트 플랜 메인 화면 상태관리
