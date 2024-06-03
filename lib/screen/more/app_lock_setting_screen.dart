@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
 import '../../style/color.dart';
@@ -124,9 +125,9 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                   onChanged: (bool value) {
                                     setState(() {
                                       _appLockActivated = value;
-                                      // _appLockActivated
-                                      // ? Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen()));
-                                      // : _bioAuthActivated = false;
+                                      _appLockActivated
+                                      ? Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(widget.isBioAuthSupported)))
+                                      : _bioAuthActivated = false;
                                     });
                                   }),
                             ],

@@ -20,7 +20,7 @@ class _AppLockSettingTopAppBarState extends State<AppLockSettingTopAppBar> {
       surfaceTintColor: ColorFamily.cream,
       backgroundColor: ColorFamily.cream,
       centerTitle: true,
-      title: const Text("앱 잠금 설정 ", style: TextStyleFamily.appBarTitleLightTextStyle,),
+      title: const Text("앱 잠금 설정", style: TextStyleFamily.appBarTitleLightTextStyle,),
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);

@@ -19,13 +19,13 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
   final LocalAuthentication auth = LocalAuthentication();
 
   var _appNoticeActivated = false;
-  late bool _isSupported;
+  late bool _isBioAuthSupported;
 
   @override
   void initState() {
     super.initState();
     auth.isDeviceSupported().then(
-          (bool isSupported) => setState(() => _isSupported = isSupported),
+          (bool isSupported) => setState(() => _isBioAuthSupported = isSupported),
     );
   }
 
@@ -82,7 +82,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                       color: ColorFamily.cream,
                       child: InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(isBioAuthSupported: _isSupported)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(isBioAuthSupported: _isBioAuthSupported)));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
