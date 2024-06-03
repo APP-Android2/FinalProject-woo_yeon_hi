@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_svg/svg.dart';
@@ -52,8 +54,10 @@ class _FootprintPhotoMapDetailScreenState
           body: NaverMap(
             onMapReady: (NaverMapController controller) {
               _mapController = controller;
-              _addPlaceOverlay(provider);
-              _addMarkerOverlay(provider);
+              _preloadImages(context).then((_) {
+                _addPlaceOverlay(provider); // 지역 구분 오버레이
+                _addMarkerOverlay(provider); // 마커 오버레이
+              });
             },
             onMapTapped: (NPoint point, NLatLng latLng) {
               // 화면상의 좌표 (x, y)
@@ -96,7 +100,7 @@ class _FootprintPhotoMapDetailScreenState
       const NLatLng(35.1595, 126.8526) // 광주
     ];
 
-    List<String> images = [
+    List<String> imagePaths = [
       'lib/assets/images/puppy1.jpg',
       'lib/assets/images/puppy2.jpg',
       'lib/assets/images/puppy3.jpg',
@@ -104,18 +108,19 @@ class _FootprintPhotoMapDetailScreenState
       'lib/assets/images/puppy5.jpg',
     ];
 
-
     for (var i = 0 ; i< majorCities.length ; i++) {
+      final markerWidget = PhotoMapMarker(imagePaths[i]);
+
       final iconImage = await NOverlayImage.fromWidget(
-          widget: PhotoMapMarker(images[i]),
+          widget: markerWidget,
           size: const Size(70, 80),
           context: context);
 
-
       final marker = NMarker(
-          id: "${provider.markers.length}",
-          position: majorCities[i],
-          icon: iconImage);
+        id: "marker_$i",
+        position: majorCities[i],
+        icon: iconImage,
+      );
 
       provider.addMarker(marker);
     }
@@ -169,5 +174,20 @@ class _FootprintPhotoMapDetailScreenState
         provider.addOverlay(overlay);
       }
     }
+  }
+}
+
+Future<void> _preloadImages(BuildContext context) async {
+  List<String> imagePaths = [
+    'lib/assets/images/puppy1.jpg',
+    'lib/assets/images/puppy2.jpg',
+    'lib/assets/images/puppy3.jpg',
+    'lib/assets/images/puppy4.jpg',
+    'lib/assets/images/puppy5.jpg',
+  ];
+
+  for (String path in imagePaths) {
+    final imageProvider = AssetImage(path);
+    await precacheImage(imageProvider, context);
   }
 }
