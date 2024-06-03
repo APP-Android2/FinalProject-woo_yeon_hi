@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/screen/calendar_add_screen.dart';
+import 'package:woo_yeon_hi/screen/calendar_search_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -56,7 +57,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     : SvgPicture.asset("lib/assets/icons/calendar.svg"),
                 ),
                 const SizedBox(width: 10),
-                SvgPicture.asset("lib/assets/icons/search.svg"),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CalendarSearchScreen())
+                    );
+                  },
+                  child: SvgPicture.asset("lib/assets/icons/search.svg"),
+                ),
                 const SizedBox(width: 5),
                 InkWell(
                   onTap: () {
