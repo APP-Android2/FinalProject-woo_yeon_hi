@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/diary_provider.dart';
 import '../provider/footprint_provider.dart';
-import '../provider/ledger_carousel_provider.dart';
-import '../provider/ledger_check_box_provider.dart';
+import '../provider/ledger_provider.dart';
 import '../provider/tab_page_index_provider.dart';
 import 'package:woo_yeon_hi/screen/main_screen_container.dart';
 import '../style/color.dart';
@@ -25,12 +24,11 @@ class _MainScreenState extends State<MainScreen> {
 
           ChangeNotifierProvider(create: (context) => DiaryProvider()),
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
+          ChangeNotifierProvider(create: (context) => LedgerProvider()),
           ChangeNotifierProvider(create: (context) => FootPrintSlidableProvider()),
           ChangeNotifierProvider(create: (context) => FootPrintDatePlanSlidableProvider()),
           ChangeNotifierProvider(create: (context) => FootprintDraggableSheetProvider()),
           ChangeNotifierProvider(create: (_) => TabPageIndexProvider()),
-          ChangeNotifierProvider(create: (_) => LedgerCheckBoxProvider()),
-          ChangeNotifierProvider(create: (_) => LedgerCarouselProvider()),
       ],
       child: MaterialApp(
         title: "WooYeonHi",
