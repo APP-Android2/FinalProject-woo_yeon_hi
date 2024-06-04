@@ -39,6 +39,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
           ChangeNotifierProvider(create: (context) => FootPrintSlidableProvider()),
           ChangeNotifierProvider(create: (context) => FootPrintDatePlanSlidableProvider()),
+          ChangeNotifierProvider(create: (context) => FootprintDraggableSheetProvider()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
