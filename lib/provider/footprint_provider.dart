@@ -135,8 +135,7 @@ class Item {
 
 // 데이트 플랜 작성 화면 슬라이드 상태관리
 class FootPrintDatePlanSlidableProvider extends ChangeNotifier {
-  final List<Item> _items = List<Item>.generate(
-      5, (index) => Item(title: "방이역 ${index + 1}"));
+  final List<Item> _items = List<Item>.generate(5, (index) => Item(title: "방이역 ${index + 1}"));
 
   List<Item> get items => _items;
 
@@ -147,5 +146,65 @@ class FootPrintDatePlanSlidableProvider extends ChangeNotifier {
 
   void removeItem(int index) {
     _items.removeAt(index);
+    notifyListeners();
   }
+}
+
+// 데이트 플랜 DraggableSheet 상태관리
+class FootprintDraggableSheetProvider extends ChangeNotifier {
+
+  // 상세 화면에서 사용할 입력 컨트롤러
+  final TextEditingController memoTitleController = TextEditingController();
+  final TextEditingController memoSubController = TextEditingController();
+
+  // sheet 키
+  final GlobalKey _sheetKey = GlobalKey();
+  final DraggableScrollableController _controller = DraggableScrollableController();
+  List<String> _items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+
+  DraggableSheetState() {
+    _controller.addListener(_onChanged);
+  }
+
+  GlobalKey get sheetKey => _sheetKey;
+  DraggableScrollableController get controller => _controller;
+  List<String> get items => _items;
+
+  void _onChanged() {
+    final currentSize = _controller.size;
+    if (currentSize <= 0.05) collapse();
+  }
+
+  void collapse() => _animateSheet(sheet.snapSizes!.first);
+  void anchor() => _animateSheet(sheet.snapSizes!.last);
+  void expand() => _animateSheet(sheet.maxChildSize);
+  void hide() => _animateSheet(sheet.minChildSize);
+
+  void _animateSheet(double size) {
+    _controller.animateTo(
+      size,
+      duration: const Duration(milliseconds: 50),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void addItem(String item) {
+    _items.add(item);
+    notifyListeners();
+  }
+
+  void removeItem(int index) {
+    if (index >= 0 && index < _items.length) {
+      _items.removeAt(index);
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  DraggableScrollableSheet get sheet => (_sheetKey.currentWidget as DraggableScrollableSheet);
 }
