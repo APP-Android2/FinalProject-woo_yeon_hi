@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:intl/intl.dart';
 
-import '../style/color.dart';
-import '../style/font.dart';
+import '../../style/color.dart';
+import '../../style/font.dart';
 
 class CalendarTermFinish extends StatefulWidget {
   final Function(DateTime) onDateChanged;

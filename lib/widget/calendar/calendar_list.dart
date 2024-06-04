@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:woo_yeon_hi/screen/calendar_detail_screen.dart';
+import 'package:woo_yeon_hi/screen/calendar/calendar_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
-
-import '../style/text_style.dart';
+import 'package:woo_yeon_hi/style/text_style.dart';
 
 class CalendarList extends StatefulWidget {
   const CalendarList({super.key});

@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
-import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/screen/calendar/calendar_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/widget/calendar_search_date.dart';
+import 'package:woo_yeon_hi/widget/calendar/calendar_search_date.dart';
 
-import '../screen/calendar_detail_screen.dart';
-import '../style/font.dart';
-import '../style/text_style.dart';
+import '../../style/font.dart';
+import '../../style/text_style.dart';
 
 class CalendarSearchBar extends StatefulWidget {
   const CalendarSearchBar({super.key});

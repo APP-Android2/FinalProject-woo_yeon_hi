@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:woo_yeon_hi/widget/calendar_search_bar.dart';
+import 'package:woo_yeon_hi/widget/calendar/calendar_search_bar.dart';
 
 class CalendarSearchScreen extends StatefulWidget {
   const CalendarSearchScreen({super.key});

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/widget/calendar_color_picker.dart';
-import 'package:woo_yeon_hi/widget/calendar_switch.dart';
-import 'package:woo_yeon_hi/widget/calendar_term_finish.dart';
-import 'package:woo_yeon_hi/widget/calendar_term_start.dart';
+import 'package:woo_yeon_hi/widget/calendar/calendar_color_picker.dart';
+import 'package:woo_yeon_hi/widget/calendar/calendar_switch.dart';
+import 'package:woo_yeon_hi/widget/calendar/calendar_term_finish.dart';
+import 'package:woo_yeon_hi/widget/calendar/calendar_term_start.dart';
 
-import '../style/text_style.dart';
+import '../../style/text_style.dart';
 
 class CalendarAddScreen extends StatefulWidget {
   const CalendarAddScreen({super.key});

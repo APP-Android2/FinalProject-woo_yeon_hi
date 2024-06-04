@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
-import '../style/font.dart';
+import '../../style/font.dart';
 
 class CalendarTermStart extends StatefulWidget {
   final Function(DateTime) onDateChanged;

@@ -1,134 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:woo_yeon_hi/screen/calendar/calendar_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
+import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-import 'package:woo_yeon_hi/widget/calendar_color_picker.dart';
-import 'package:woo_yeon_hi/widget/calendar_switch.dart';
 
-import '../style/font.dart';
-import '../widget/calendar_term_finish.dart';
-import '../widget/calendar_term_start.dart';
-import 'calendar_detail_screen.dart';
-
-class CalendarEditScreen extends StatefulWidget {
-
-  final String title;
-  final DateTime termStart;
-  final DateTime termFinish;
-  final String memo;
-
-  const CalendarEditScreen({
-    required this.title,
-    required this.termStart,
-    required this.termFinish,
-    required this.memo,
-    super.key
-  });
+class CalendarDetailScreen extends StatefulWidget {
+  const CalendarDetailScreen({super.key});
 
   @override
-  State<CalendarEditScreen> createState() => _CalendarEditScreenState();
+  State<CalendarDetailScreen> createState() => _CalendarDetailScreenState();
 }
 
-class _CalendarEditScreenState extends State<CalendarEditScreen> {
+class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
 
-  // 현재 선택된 색상
   Color currentColor = ColorFamily.green;
 
-  // 제목
-  late TextEditingController titleController = TextEditingController();
-  // 메모 내용
-  late TextEditingController memoController = TextEditingController();
-
-  // 하루 종일 체크여부
-  bool checkAllDay = false;
-
-  // 시작일 날짜
-  late DateTime termStart;
-  // 종료일 날짜
-  late DateTime termFinish;
-  // 종료일 텍스트 데코
-  TextDecoration finishTextDecoration = TextDecoration.none;
-  // 종료일 체크 참거짓
-  bool checkTerm = true;
+  final String titleDetail = "한강 피크닉";
+  final DateTime startTimeDetail = DateTime(2024, 5, 31, 12, 0);
+  final DateTime finishTimeDetail = DateTime(2024, 5, 31, 18, 0);
+  final String memoDetail = "썬글라스 챙기기\n도시락 챙기기\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb";
 
   // 색 업데이트 함수
   void updateColor(Color color){
     setState(() {
       currentColor = color;
     });
-  }
-
-  // 스위치 버튼
-  void isAllTime(bool isTrue){
-    setState(() {
-      checkAllDay = !checkAllDay;
-      updateFinishDecoration();
-    });
-  }
-
-  // 시작일이 변경될 때
-  void onTermStartChanged(DateTime date){
-    setState(() {
-      termStart = date;
-      updateFinishDecoration();
-    });
-  }
-
-  // 종료일이 변경될 때
-  void onTermFinishChanged(DateTime date){
-    setState(() {
-      termFinish = date;
-      updateFinishDecoration();
-    });
-  }
-
-  // 종료일 상태 업데이트
-  void updateFinishDecoration() {
-
-    // 년, 월, 일
-    var startDay = termStart.year + termStart.month + termStart.day;
-    var finishDay = termFinish.year + termFinish.month + termFinish.day;
-
-    // 하루종일 - true
-    if(checkAllDay){
-      // 년, 월, 일이 같다면
-      if(startDay == finishDay) {
-        checkTerm = true;
-        finishTextDecoration = TextDecoration.none;
-      }
-      else {
-        // 종료일이 시작일보다 먼저라면
-        if (termFinish.isBefore(termStart)) {
-          checkTerm = false;
-          finishTextDecoration = TextDecoration.lineThrough;
-        } else {
-          checkTerm = true;
-          finishTextDecoration = TextDecoration.none;
-        }
-      }
-    }
-    // 하루종일 - false
-    else {
-      // 종료일이 시작일보다 먼저라면
-      if (termFinish.isBefore(termStart)) {
-        checkTerm = false;
-        finishTextDecoration = TextDecoration.lineThrough;
-      } else {
-        checkTerm = true;
-        finishTextDecoration = TextDecoration.none;
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    titleController = TextEditingController(text: widget.title);
-    termStart = widget.termStart;
-    termFinish = widget.termFinish;
-    memoController = TextEditingController(text: widget.memo);
   }
 
   @override
@@ -138,22 +37,32 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
         centerTitle: true,
         scrolledUnderElevation: 0,
         title: Text(
-          "일정 편집",
-          style: TextStyleFamily.appBarTitleLightTextStyle,
+          "일정 세부사항",
+          style: TextStyleFamily.appBarTitleLightTextStyle
         ),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset("lib/assets/icons/arrow_back.svg"),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 20),
+            padding: EdgeInsets.only(right: 20),
             child: IconButton(
               onPressed: () {
-                // 저장처리
-                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return CalendarEditScreen(
+                      title: titleDetail,
+                      termStart: startTimeDetail,
+                      termFinish: finishTimeDetail,
+                      memo: memoDetail,
+                    );
+                  }),
+                );
               },
-              icon: SvgPicture.asset('lib/assets/icons/done.svg'),
+              icon: SvgPicture.asset("lib/assets/icons/edit.svg"),
             ),
           )
         ],
@@ -163,84 +72,63 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: constraints.maxHeight
+                minHeight: constraints.maxHeight,
               ),
               child: IntrinsicHeight(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 30),
                     Row(
                       children: [
                         ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            backgroundColor: currentColor,
-                          ),
-                          onPressed: () => showColorPickerDialog(context, currentColor, updateColor),
-                          child: Icon(
-                            Icons.color_lens,
-                            color: ColorFamily.white,
-                          ),
+                            style: ElevatedButton.styleFrom(
+                                shape: CircleBorder(),
+                                backgroundColor: currentColor // 선택된 색상
+                            ),
+                            onPressed: () {},
+                            child: Icon(null)
                         ),
                         Expanded(
-                          child: TextField(
-                            controller: titleController,
+                          child: Text(
+                            titleDetail,
                             style: TextStyleFamily.appBarTitleBoldTextStyle,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              hintText: "제목",
-                              border: InputBorder.none,
-                            ),
                           ),
-                        ),
+                        )
                       ],
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text("하루 종일", style: TextStyleFamily.normalTextStyle),
-                              Spacer(),
-                              CalendarSwitch(onSwitchChanged: isAllTime)
-                            ],
+                          // 일정 날짜
+                          Text(
+                            "${DateFormat("yyyy. M. dd.(E)", "ko_KR").format(startTimeDetail)}",
+                            style: TextStyleFamily.normalTextStyle,
                           ),
-                          SizedBox(height: 30),
+                          SizedBox(height: 5),
                           Row(
                             children: [
-                              Text("시작", style: TextStyleFamily.normalTextStyle),
-                              Spacer(),
-                              CalendarTermStart(
-                                onDateChanged: onTermStartChanged,
-                                initialDate: termStart,
-                                isTrue: checkAllDay,
+                              // 일정
+                              Text(
+                                "${DateFormat("H:mm ~").format(startTimeDetail)}",
+                                style: TextStyleFamily.normalTextStyle,
+                              ),
+                              Text(
+                                "${DateFormat(" H:mm").format(finishTimeDetail)}",
+                                style: TextStyleFamily.normalTextStyle,
                               ),
                             ],
                           ),
-                          SizedBox(height: 30),
-                          Row(
-                            children: [
-                              Text("종료", style: TextStyleFamily.normalTextStyle),
-                              Spacer(),
-                              CalendarTermFinish(
-                                onDateChanged: onTermFinishChanged,
-                                textDecoration: finishTextDecoration,
-                                initialDate: termFinish,
-                                isTrue: checkAllDay,
-                                checkTerm: checkTerm,
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 30),
+                          SizedBox(height: 45),
                           Text("메모", style: TextStyleFamily.normalTextStyle),
                           SizedBox(height: 10),
                           ConstrainedBox(
                             constraints: BoxConstraints(
                               minHeight: 320, // 위젯의 최소 크기
-                              maxHeight: double.infinity  // 최대 크기에 맞춰서 늘어나도록
+                              maxHeight: double.infinity  // 최대 크기에 맞춰 늘어나도록
                             ),
                             child: Container(
                               width: double.infinity,
@@ -249,17 +137,12 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
-                                child: TextField(
-                                  controller: memoController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  decoration: InputDecoration(
-                                    hintText: "메모를 입력해주세요",
-                                    hintStyle: TextStyleFamily.hintTextStyle,
-                                    border: InputBorder.none,
+                                padding: EdgeInsets.all(15),
+                                child: SingleChildScrollView(
+                                  child: Text(
+                                    memoDetail,
+                                    style: TextStyleFamily.normalTextStyle,
                                   ),
-                                  style: TextStyleFamily.normalTextStyle,
                                 ),
                               ),
                             ),
@@ -270,14 +153,14 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                     Spacer(),
                     SizedBox(height: 15),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorFamily.pink,
-                          minimumSize: Size(double.infinity, 40),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          )
+                            backgroundColor: ColorFamily.pink,
+                            minimumSize: Size(double.infinity, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            )
                         ),
                         onPressed: () {
                           // 다이얼로그
@@ -341,10 +224,10 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                                               TextButton(
                                                 onPressed: () {
                                                   // 삭제 처리
-
-                                                  Navigator.pop(context); // 다이얼로그
-                                                  Navigator.pop(context); // 일정 편집화면
-                                                  Navigator.pop(context); // 일정 세부사항 화면
+                                                  Navigator.pop(context);
+                                                  Navigator.of(context).pop(
+                                                      MaterialPageRoute(builder: (context) => CalendarDetailScreen())
+                                                  );
                                                 },
                                                 child: Text(
                                                   "확인",
@@ -365,9 +248,9 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                         child: Text(
                           "일정 삭제",
                           style: TextStyle(
-                            color: ColorFamily.white,
+                            color: Colors.white,
                             fontSize: 14,
-                            fontFamily: FontFamily.mapleStoryLight
+                            fontFamily: FontFamily.mapleStoryLight,
                           ),
                         ),
                       ),
@@ -378,8 +261,8 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
               ),
             ),
           );
-        }
-      ),
+        },
+      )
     );
   }
 }
