@@ -42,7 +42,7 @@ class _FootprintPhotoMapDetailScreenState
           floatingActionButton: FloatingActionButton(
             backgroundColor: ColorFamily.beige,
             shape: const CircleBorder(),
-            child: SvgPicture.asset('lib/assets/icons/edit.svg'),
+            child: SvgPicture.asset('lib/assets/icons/edit.svg', colorFilter: ColorFilter.mode(ColorFamily.black, BlendMode.srcIn),),
             onPressed: () {
               Navigator.push(
                   context,
@@ -55,7 +55,7 @@ class _FootprintPhotoMapDetailScreenState
             onMapReady: (NaverMapController controller) {
               _mapController = controller;
               _preloadImages(context).then((_) {
-                _addPlaceOverlay(provider); // 지역 구분 오버레이
+                // _addPlaceOverlay(provider); // 지역 구분 오버레이
                 _addMarkerOverlay(provider); // 마커 오버레이
               });
             },

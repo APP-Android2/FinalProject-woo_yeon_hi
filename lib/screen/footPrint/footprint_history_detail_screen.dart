@@ -47,37 +47,6 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
     padding: const EdgeInsets.only(bottom: 20),
     child: Column(
       children: [
-        // 사진
-        Container(
-          width: MediaQuery.of(context).size.width - 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: FlutterCarousel(
-                items: List.generate(
-                    5,
-                    (index) => Image.asset(
-                          'lib/assets/images/test_couple.png',
-                          fit: BoxFit.contain,
-                        )),
-                options: CarouselOptions(
-                  viewportFraction: 1.0,
-                  showIndicator: true,
-                  floatingIndicator: false,
-                  aspectRatio: 2/3,
-                  slideIndicator: const CircularSlideIndicator(
-                    currentIndicatorColor: ColorFamily.pink,
-                    indicatorBackgroundColor: ColorFamily.gray
-
-                  ),
-                ),
-              )),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
         // 프로필 사진, 타이틀, 날짜, 메뉴
         SizedBox(
           width: MediaQuery.of(context).size.width - 40,
@@ -103,7 +72,7 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
                   // 제목, 날짜
                   SizedBox(
                     width:
-                        MediaQuery.of(context).size.width - 40 - 56 - 48 - 10,
+                    MediaQuery.of(context).size.width - 40 - 56 - 48 - 10,
                     child: Column(
                       children: [
                         const Row(
@@ -135,6 +104,37 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
                   icon: SvgPicture.asset('lib/assets/icons/menu_vertical.svg'))
             ],
           ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        // 사진
+        Container(
+          width: MediaQuery.of(context).size.width - 40,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: FlutterCarousel(
+                items: List.generate(
+                    5,
+                    (index) => Image.asset(
+                          'lib/assets/images/test_couple.png',
+                          fit: BoxFit.contain,
+                        )),
+                options: CarouselOptions(
+                  viewportFraction: 1.0,
+                  showIndicator: true,
+                  floatingIndicator: false,
+                  aspectRatio: 2/3,
+                  slideIndicator: const CircularSlideIndicator(
+                    currentIndicatorColor: ColorFamily.pink,
+                    indicatorBackgroundColor: ColorFamily.gray
+
+                  ),
+                ),
+              )),
         ),
         const SizedBox(
           height: 10,
@@ -221,11 +221,11 @@ void _showModalBottomSheet(BuildContext context) {
                   splashColor: Colors.transparent,
                   onTap: (){},
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
+                    padding: const EdgeInsets.fromLTRB(30, 5, 30, 15),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SvgPicture.asset('lib/assets/icons/edit.svg'),
                           const Text("수정", style: TextStyleFamily.dialogButtonTextStyle,),
@@ -245,11 +245,11 @@ void _showModalBottomSheet(BuildContext context) {
                     _showDoneDialog(context);
                   },
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 25),
+                    padding: const EdgeInsets.fromLTRB(30, 20, 30, 25),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SvgPicture.asset('lib/assets/icons/delete.svg', colorFilter: const ColorFilter.mode(ColorFamily.pink, BlendMode.srcIn)),
                           const Text("삭제", style: TextStyleFamily.dialogButtonTextStyle_pink,),
@@ -284,7 +284,7 @@ void _showDoneDialog(BuildContext context) {
                   children: [
                     const Text(
                       "히스토리를 삭제하시겠습니까?",
-                      style: TextStyleFamily.dialogTitleTextStyle,
+                      style: TextStyleFamily.dialogButtonTextStyle,
                     ),
                     const SizedBox(
                       height: 30,

@@ -18,9 +18,12 @@ class FootprintPhotoMapScreen extends StatefulWidget {
 class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) => makePhotoMap(context, index));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListView.builder(
+          itemCount: 5,
+          itemBuilder: (context, index) => makePhotoMap(context, index)),
+    );
   }
 
   Widget makePhotoMap(BuildContext context, int index) {
@@ -40,7 +43,7 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
             surfaceTintColor: ColorFamily.white,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            elevation: 4,
+            elevation: 1,
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: Stack(

@@ -74,31 +74,31 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                             MainAxisAlignment.center,
                                         children: [
                                           SvgPicture.asset(
-                                              "lib/assets/icons/heart_fill.svg",
+                                              'lib/assets/icons/heart_fill.svg',
                                               height: 24),
                                           SvgPicture.asset(
-                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              'lib/assets/icons/triple_right_arrow.svg',
                                               height: 24),
                                           SvgPicture.asset(
-                                              "lib/assets/icons/heart_outlined.svg",
+                                              'lib/assets/icons/heart_outlined.svg',
                                               height: 24),
                                           SvgPicture.asset(
-                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              'lib/assets/icons/triple_right_arrow.svg',
                                               height: 24),
                                           SvgPicture.asset(
-                                              "lib/assets/icons/heart_outlined.svg",
+                                              'lib/assets/icons/heart_outlined.svg',
                                               height: 24),
                                           SvgPicture.asset(
-                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              'lib/assets/icons/triple_right_arrow.svg',
                                               height: 24),
                                           SvgPicture.asset(
-                                              "lib/assets/icons/heart_outlined.svg",
+                                              'lib/assets/icons/heart_outlined.svg',
                                               height: 24),
                                           SvgPicture.asset(
-                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              'lib/assets/icons/triple_right_arrow.svg',
                                               height: 24),
                                           SvgPicture.asset(
-                                              "lib/assets/icons/heart_outlined.svg",
+                                              'lib/assets/icons/heart_outlined.svg',
                                               height: 24),
                                         ],
                                       ),
@@ -150,10 +150,10 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                               '$_randomCode');
                                                         },
                                                         icon: SvgPicture.asset(
-                                                            "lib/assets/icons/send.svg")),
+                                                            'lib/assets/icons/send.svg')),
                                                   ),
                                                 )
-                                              : SvgPicture.asset("")
+                                              : const SizedBox()
                                         ],
                                       ),
                                     ),

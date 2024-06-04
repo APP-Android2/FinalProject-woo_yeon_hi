@@ -160,7 +160,7 @@ class _CalendarSearchBarState extends State<CalendarSearchBar> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(),
+          child: Divider(color: ColorFamily.gray, thickness: 0.5,),
         ),
         InkWell(
           onTap: () {

@@ -34,7 +34,7 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                     spreadRadius: 0,
                     blurRadius: 2,
                     // 그림자 위치 설정
-                    offset: Offset(0, 4),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),

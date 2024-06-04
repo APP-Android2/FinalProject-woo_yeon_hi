@@ -63,6 +63,9 @@ dependencies:
   local_auth_android: ^1.0.38
   share_plus: ^9.0.0
   flutter_timer_countdown: ^1.0.7
+  firebase_core: ^2.31.0
+  cloud_firestore: ^4.17.3
+  firebase_storage: ^11.7.5
 
 dev_dependencies:
   flutter_test:

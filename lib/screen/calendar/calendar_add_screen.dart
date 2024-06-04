@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_color_picker.dart';
@@ -28,7 +26,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
   // 시작일 날짜
   DateTime termStart = DateTime.now().subtract(Duration(minutes: DateTime.now().minute));
   // 종료일 날짜  +1 hour
-  DateTime termFinish = DateTime.now().add(Duration(hours: 1)).subtract(Duration(minutes: DateTime.now().minute));
+  DateTime termFinish = DateTime.now().add(const Duration(hours: 1)).subtract(Duration(minutes: DateTime.now().minute));
   // 종료일 텍스트 데코
   TextDecoration finishTextDecoration = TextDecoration.none;
   // 종료일 체크 참거짓
@@ -116,10 +114,13 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorFamily.cream,
         appBar: AppBar(
+          surfaceTintColor: ColorFamily.cream,
+          backgroundColor: ColorFamily.cream,
           centerTitle: true,
           scrolledUnderElevation: 0,
-          title: Text(
+          title: const Text(
               "일정 추가",
               style: TextStyleFamily.appBarTitleLightTextStyle
           ),
@@ -130,142 +131,140 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
             icon: SvgPicture.asset("lib/assets/icons/arrow_back.svg"),
           ),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: IconButton(
-                onPressed: () {
-                  // 일정 오류
-                  if(termFinish.isBefore(termStart)){
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                          surfaceTintColor: ColorFamily.white,
-                          backgroundColor: ColorFamily.white,
-                          child: Wrap(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          "오류가 발생했습니다.",
-                                          style: TextStyleFamily.dialogTitleTextStyle,
+            IconButton(
+              onPressed: () {
+                // 일정 오류
+                if(termFinish.isBefore(termStart)){
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        surfaceTintColor: ColorFamily.white,
+                        backgroundColor: ColorFamily.white,
+                        child: Wrap(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 30, 0, 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Column(
+                                    children: [
+                                      Text(
+                                        "오류가 발생했습니다.",
+                                        style: TextStyleFamily.dialogTitleTextStyle,
+                                      ),
+                                      SizedBox(height: 15),
+                                      Text(
+                                        "시작일은 종료일의 이전이어야 합니다.",
+                                        style: TextStyleFamily.hintTextStyle,
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      TextButton(
+                                        style: ButtonStyle(
+                                          overlayColor: MaterialStateProperty.all(
+                                            ColorFamily.gray
+                                          )
                                         ),
-                                        SizedBox(height: 15),
-                                        Text(
-                                          "시작일은 종료일의 이전이어야 합니다.",
-                                          style: TextStyleFamily.hintTextStyle,
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(height: 30),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        TextButton(
-                                          style: ButtonStyle(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          "취소",
+                                          style: TextStyleFamily.dialogButtonTextStyle,
+                                        ),
+                                      ),
+                                      TextButton(
+                                        style: ButtonStyle(
                                             overlayColor: MaterialStateProperty.all(
-                                              ColorFamily.gray
+                                                ColorFamily.gray
                                             )
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            "취소",
-                                            style: TextStyleFamily.dialogButtonTextStyle,
-                                          ),
                                         ),
-                                        TextButton(
-                                          style: ButtonStyle(
-                                              overlayColor: MaterialStateProperty.all(
-                                                  ColorFamily.gray
-                                              )
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            "확인",
-                                            style: TextStyleFamily.dialogButtonTextStyle_pink,
-                                          ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          "확인",
+                                          style: TextStyleFamily.dialogButtonTextStyle_pink,
                                         ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                    // 오류가 없을 경우
-                  } else {
-                    // 저장 처리
-                    Navigator.pop(context);
-                  }
-                },
-                icon: SvgPicture.asset("lib/assets/icons/done.svg"),
-              ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                  // 오류가 없을 경우
+                } else {
+                  // 저장 처리
+                  Navigator.pop(context);
+                }
+              },
+              icon: SvgPicture.asset("lib/assets/icons/done.svg"),
             )
           ],
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Row(
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
+                        shape: const CircleBorder(),
                         backgroundColor: currentColor // 선택된 색상
                     ),
                     // 색 선택 다이얼로그 띄우기
                     onPressed: () => showColorPickerDialog(context, currentColor, updateColor),
-                    child: Icon(
+                    child: const Icon(
                       Icons.color_lens,
                       color: Colors.white,
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                     child: TextField(
                       style: TextStyleFamily.appBarTitleBoldTextStyle,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         hintText: "제목",
+                        hintStyle: TextStyleFamily.hintTitleTextStyle,
                         border: InputBorder.none, // 밑줄 제거
                       ),
                     ),
                   )
                 ],
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Text("하루 종일", style: TextStyleFamily.normalTextStyle),
-                        Spacer(),
+                        const Text("하루 종일", style: TextStyleFamily.normalTextStyle),
+                        const Spacer(),
                         CalendarSwitch(onSwitchChanged: isAllDay), // 스위치 버튼
                       ],
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Row(
                       children: [
-                        Text("시작", style: TextStyleFamily.normalTextStyle),
-                        Spacer(),
+                        const Text("시작", style: TextStyleFamily.normalTextStyle),
+                        const Spacer(),
                         // 시작 날짜를 선택하는 위젯
                         CalendarTermStart(
                           onDateChanged: onTermStartChanged,
@@ -274,11 +273,11 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Row(
                       children: [
-                        Text("종료", style: TextStyleFamily.normalTextStyle),
-                        Spacer(),
+                        const Text("종료", style: TextStyleFamily.normalTextStyle),
+                        const Spacer(),
                         // 종료 날짜를 선택하는 위젯
                         CalendarTermFinish(
                           onDateChanged: onTermFinishChanged,
@@ -289,11 +288,11 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
-                    Text("메모", style: TextStyleFamily.normalTextStyle),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 30),
+                    const Text("메모", style: TextStyleFamily.normalTextStyle),
+                    const SizedBox(height: 10),
                     ConstrainedBox(
-                      constraints: BoxConstraints(
+                      constraints: const BoxConstraints(
                         minHeight: 320, // 위젯의 최소 크기
                         maxHeight: double.infinity, // 최대 크기에 맞춰 늘어나도록
                       ),
@@ -303,7 +302,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                           color: ColorFamily.white,
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Padding(
+                        child: const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15),
                           child: TextField(
                             keyboardType: TextInputType.multiline,
@@ -318,7 +317,7 @@ class _CalendarAddScreenState extends State<CalendarAddScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               )

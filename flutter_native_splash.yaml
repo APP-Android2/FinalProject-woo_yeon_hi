@@ -1,22 +1,26 @@
 flutter_native_splash:
   color: "#FCF8F5"
-  image: lib/assets/images/wooyeonhi_logo.png
-
+  image: lib/assets/images/woo_yeon_hi.png
+  branding: lib/assets/images/woo_yeon_hi_brand.png
+  branding_mode: bottom
   android_gravity: center
   ios_content_mode: center # ios "
   web_image_mode: center # web "
   fullscreen: true
 
+
   # Android 12 이상 버전에서 적용
   android_12:
-    image: lib/assets/images/wooyeonhi_logo.png
+    image: lib/assets/images/woo_yeon_hi.png
     color: "#FCF8F5"
     icon_background_color: "#FCF8F5"
-
-    image_dark: lib/assets/images/wooyeonhi_logo.png
+    branding: lib/assets/images/woo_yeon_hi_brand.png
+    branding_mode: bottom
+    image_dark: lib/assets/images/woo_yeon_hi.png
     color_dark: "#FCF8F5"
     icon_background_color_dark: "#FCF8F5"
 
   android: true
   ios: true
   web: true
+

@@ -48,7 +48,7 @@ class _CalendarDateState extends State<CalendarDate> {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: TableCalendar(
                     locale: 'ko_KR',  // main 에서 받음
                     firstDay: DateTime.utc(2024, 1, 1), // 최소 날짜
@@ -201,12 +201,12 @@ class _CalendarDateState extends State<CalendarDate> {
               child: Container(
                 color: Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.only(top: 0),
                   child: ListView.separated(
                     itemCount: 10,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: index == 0?EdgeInsets.fromLTRB(20, 10, 20, 0):EdgeInsets.symmetric(horizontal: 20),
                         child: InkWell(
                           onTap: () {
                             // 항목 클릭
@@ -246,7 +246,7 @@ class _CalendarDateState extends State<CalendarDate> {
                     separatorBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Divider(),
+                        child: Divider(color: ColorFamily.gray, thickness: 0.5,),
                       );
                     },
                   ),

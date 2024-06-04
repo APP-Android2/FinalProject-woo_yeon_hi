@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/screen/calendar/calendar_add_screen.dart';
 import 'package:woo_yeon_hi/screen/calendar/calendar_search_screen.dart';
+import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_date.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_list.dart';
@@ -23,7 +24,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorFamily.cream,
       appBar: AppBar(
+        backgroundColor: ColorFamily.cream,
+        surfaceTintColor: ColorFamily.cream,
         centerTitle: true,
         scrolledUnderElevation: 0,
         title: Text(

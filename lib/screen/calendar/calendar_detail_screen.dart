@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -33,10 +32,13 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorFamily.cream,
       appBar: AppBar(
+        surfaceTintColor: ColorFamily.cream,
+        backgroundColor: ColorFamily.cream,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        title: Text(
+        title: const Text(
           "일정 세부사항",
           style: TextStyleFamily.appBarTitleLightTextStyle
         ),
@@ -97,7 +99,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                         )
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
@@ -105,28 +107,28 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                         children: [
                           // 일정 날짜
                           Text(
-                            "${DateFormat("yyyy. M. dd.(E)", "ko_KR").format(startTimeDetail)}",
+                            DateFormat("yyyy. M. dd.(E)", "ko_KR").format(startTimeDetail),
                             style: TextStyleFamily.normalTextStyle,
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
                               // 일정
                               Text(
-                                "${DateFormat("H:mm ~").format(startTimeDetail)}",
+                                DateFormat("H:mm ~").format(startTimeDetail),
                                 style: TextStyleFamily.normalTextStyle,
                               ),
                               Text(
-                                "${DateFormat(" H:mm").format(finishTimeDetail)}",
+                                DateFormat(" H:mm").format(finishTimeDetail),
                                 style: TextStyleFamily.normalTextStyle,
                               ),
                             ],
                           ),
-                          SizedBox(height: 45),
-                          Text("메모", style: TextStyleFamily.normalTextStyle),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 45),
+                          const Text("메모", style: TextStyleFamily.normalTextStyle),
+                          const SizedBox(height: 10),
                           ConstrainedBox(
-                            constraints: BoxConstraints(
+                            constraints: const BoxConstraints(
                               minHeight: 320, // 위젯의 최소 크기
                               maxHeight: double.infinity  // 최대 크기에 맞춰 늘어나도록
                             ),
@@ -150,14 +152,14 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                         ],
                       ),
                     ),
-                    Spacer(),
-                    SizedBox(height: 15),
+                    const Spacer(),
+                    const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: ColorFamily.pink,
-                            minimumSize: Size(double.infinity, 40),
+                            minimumSize: const Size(double.infinity, 40),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             )
@@ -180,7 +182,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                                         children: [
                                           // 텍스트마다 각각 속성을 부여하는 RichText - TextSpan
                                           RichText(
-                                            text: TextSpan(
+                                            text: const TextSpan(
                                                 text: "정말 ",
                                                 style: TextStyle(
                                                   fontSize: 16,
@@ -207,7 +209,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                                                 ]
                                             ),
                                           ),
-                                          SizedBox(height: 40),
+                                          const SizedBox(height: 40),
                                           Row(
                                             // 같은 크기만큼 양 옆 공간차지
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -216,7 +218,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                                child: Text(
+                                                child: const Text(
                                                   "취소",
                                                   style: TextStyleFamily.dialogButtonTextStyle,
                                                 ),
@@ -229,7 +231,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                                                       MaterialPageRoute(builder: (context) => CalendarDetailScreen())
                                                   );
                                                 },
-                                                child: Text(
+                                                child: const Text(
                                                   "확인",
                                                   style: TextStyleFamily.dialogButtonTextStyle_pink,
                                                 ),
@@ -245,7 +247,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                             },
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           "일정 삭제",
                           style: TextStyle(
                             color: Colors.white,
@@ -255,7 +257,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

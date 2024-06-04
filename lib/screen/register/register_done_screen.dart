@@ -148,6 +148,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                                       "홈 화면으로 이동",
                                                       style: TextStyle(
                                                           fontSize: 15,
+                                                          color: ColorFamily.black,
                                                           fontFamily: FontFamily
                                                               .mapleStoryLight),
                                                     ),

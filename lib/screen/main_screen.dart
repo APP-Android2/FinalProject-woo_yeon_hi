@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/ledger_screen.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_screen.dart';
 
+import '../provider/diary_provider.dart';
+import '../provider/footprint_provider.dart';
+import '../provider/ledger_carousel_provider.dart';
+import '../provider/ledger_check_box_provider.dart';
 import '../provider/tab_page_index_provider.dart';
 import 'diary/diary_screen.dart';
 import 'package:woo_yeon_hi/screen/main_screen_container.dart';
@@ -36,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
       child: MaterialApp(
         title: "WooYeonHi",
         theme: ThemeData(
-            colorScheme: ColorScheme(
+            colorScheme: const ColorScheme(
                   brightness: Brightness.light,
                   primary: Colors.white,
                   onPrimary: Colors.black,
@@ -54,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
                 highlightColor: ColorFamily.gray,
                 splashColor: ColorFamily.gray,
                 useMaterial3: true),
+        debugShowCheckedModeBanner: false,
         home: const DefaultTabController(
           initialIndex: 2,
           length: 5,

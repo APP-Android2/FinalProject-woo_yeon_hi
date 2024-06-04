@@ -76,7 +76,6 @@ class _FootprintHistoryEditPlaceScreenState
                   hint: "장소 검색",
                   hintStyle: TextStyleFamily.hintTextStyle,
                   queryStyle: TextStyleFamily.normalTextStyle,
-                  backdropColor: Colors.transparent,
                   onQueryChanged: (query) {},
                   onSubmitted: (query) {
                     searchBarController.close();

@@ -37,7 +37,7 @@ class _CalendarListState extends State<CalendarList> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Divider(),
+                  child: Divider(color: ColorFamily.gray,),
                 ),
                 InkWell(
                   onTap: () {

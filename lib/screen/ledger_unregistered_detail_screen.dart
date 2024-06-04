@@ -3,12 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/provider/ledger_check_box_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/style/font.dart';
-import 'package:woo_yeon_hi/widget/ledger_dialog.dart';
 import 'package:woo_yeon_hi/widget/ledger_top_app_bar.dart';
 import 'package:woo_yeon_hi/widget/ledger_unregistered_detail_list_view.dart';
 
 import '../style/text_style.dart';
+import '../widget/ledger_dialog.dart';
 
 class LedgerUnregisteredDetailScreen extends StatefulWidget {
   const LedgerUnregisteredDetailScreen({super.key});
@@ -56,8 +55,23 @@ class _LedgerUnregisteredDetailScreenState extends State<LedgerUnregisteredDetai
                 ),
                 child: InkWell(
                   onTap: () {
-                    Navigator.pop(context);
+                    // 체크되지 않은 항목이 있는지 확인
+                    if (ledgerCheckBoxProvider.checkedItems.contains(false)) {
+                      // 체크되지 않은 항목이 있으면 다이얼로그 표시
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return LedgerDialog('LedgerUnregisteredDetailScreen', '선택되지 않은 항목이 있습니다.', '선택되지 않은 항목은 삭제 됩니다.');
+                        },
+                      );
+                    }else {
+                      // 모든 아이템이 체크되어 있는 경우.
+                      showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                      return LedgerDialog('LedgerUnregisteredDetailScreen', '거래내역이 등록 되었습니다.', '가계부를 작성 하러 가보세요.');});}
                   },
+                    //Navigator.pop(context);
                   borderRadius: BorderRadius.circular(20.0),
                   child: Container(
                     height: 40,
@@ -76,3 +90,5 @@ class _LedgerUnregisteredDetailScreenState extends State<LedgerUnregisteredDetai
     );
   }
 }
+
+

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -8,8 +7,6 @@ import 'package:woo_yeon_hi/widget/calendar/calendar_color_picker.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_switch.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_term_finish.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_term_start.dart';
-
-import 'calendar_detail_screen.dart';
 
 class CalendarEditScreen extends StatefulWidget {
 
@@ -134,10 +131,13 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorFamily.cream,
       appBar: AppBar(
+        backgroundColor: ColorFamily.cream,
+        surfaceTintColor: ColorFamily.cream,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        title: Text(
+        title: const Text(
           "일정 편집",
           style: TextStyleFamily.appBarTitleLightTextStyle,
         ),
@@ -168,16 +168,16 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
               child: IntrinsicHeight(
                 child: Column(
                   children: [
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Row(
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
+                            shape: const CircleBorder(),
                             backgroundColor: currentColor,
                           ),
                           onPressed: () => showColorPickerDialog(context, currentColor, updateColor),
-                          child: Icon(
+                          child: const Icon(
                             Icons.color_lens,
                             color: ColorFamily.white,
                           ),
@@ -187,7 +187,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                             controller: titleController,
                             style: TextStyleFamily.appBarTitleBoldTextStyle,
                             keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: "제목",
                               border: InputBorder.none,
                             ),
@@ -195,7 +195,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
@@ -203,16 +203,16 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                         children: [
                           Row(
                             children: [
-                              Text("하루 종일", style: TextStyleFamily.normalTextStyle),
-                              Spacer(),
+                              const Text("하루 종일", style: TextStyleFamily.normalTextStyle),
+                              const Spacer(),
                               CalendarSwitch(onSwitchChanged: isAllTime)
                             ],
                           ),
-                          SizedBox(height: 30),
+                          const SizedBox(height: 30),
                           Row(
                             children: [
-                              Text("시작", style: TextStyleFamily.normalTextStyle),
-                              Spacer(),
+                              const Text("시작", style: TextStyleFamily.normalTextStyle),
+                              const Spacer(),
                               CalendarTermStart(
                                 onDateChanged: onTermStartChanged,
                                 initialDate: termStart,
@@ -220,11 +220,11 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 30),
+                          const SizedBox(height: 30),
                           Row(
                             children: [
-                              Text("종료", style: TextStyleFamily.normalTextStyle),
-                              Spacer(),
+                              const Text("종료", style: TextStyleFamily.normalTextStyle),
+                              const Spacer(),
                               CalendarTermFinish(
                                 onDateChanged: onTermFinishChanged,
                                 textDecoration: finishTextDecoration,
@@ -234,11 +234,11 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                               )
                             ],
                           ),
-                          SizedBox(height: 30),
-                          Text("메모", style: TextStyleFamily.normalTextStyle),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 30),
+                          const Text("메모", style: TextStyleFamily.normalTextStyle),
+                          const SizedBox(height: 10),
                           ConstrainedBox(
-                            constraints: BoxConstraints(
+                            constraints: const BoxConstraints(
                               minHeight: 320, // 위젯의 최소 크기
                               maxHeight: double.infinity  // 최대 크기에 맞춰서 늘어나도록
                             ),
@@ -249,12 +249,12 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
                                 child: TextField(
                                   controller: memoController,
                                   keyboardType: TextInputType.multiline,
                                   maxLines: null,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     hintText: "메모를 입력해주세요",
                                     hintStyle: TextStyleFamily.hintTextStyle,
                                     border: InputBorder.none,
@@ -267,14 +267,14 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                         ],
                       ),
                     ),
-                    Spacer(),
-                    SizedBox(height: 15),
+                    const Spacer(),
+                    const SizedBox(height: 15),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: ColorFamily.pink,
-                          minimumSize: Size(double.infinity, 40),
+                          minimumSize: const Size(double.infinity, 40),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           )
@@ -297,7 +297,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                                         children: [
                                           // 텍스트마다 각각 속성을 부여하는 RichText - TextSpan
                                           RichText(
-                                            text: TextSpan(
+                                            text: const TextSpan(
                                                 text: "정말 ",
                                                 style: TextStyle(
                                                   fontSize: 16,
@@ -324,7 +324,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                                                 ]
                                             ),
                                           ),
-                                          SizedBox(height: 40),
+                                          const SizedBox(height: 40),
                                           Row(
                                             // 같은 크기만큼 양 옆 공간차지
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -333,7 +333,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                                child: Text(
+                                                child: const Text(
                                                   "취소",
                                                   style: TextStyleFamily.dialogButtonTextStyle,
                                                 ),
@@ -346,7 +346,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                                                   Navigator.pop(context); // 일정 편집화면
                                                   Navigator.pop(context); // 일정 세부사항 화면
                                                 },
-                                                child: Text(
+                                                child: const Text(
                                                   "확인",
                                                   style: TextStyleFamily.dialogButtonTextStyle_pink,
                                                 ),
@@ -362,7 +362,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                             },
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           "일정 삭제",
                           style: TextStyle(
                             color: ColorFamily.white,
@@ -372,7 +372,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
