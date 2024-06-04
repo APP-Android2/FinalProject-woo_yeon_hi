@@ -40,7 +40,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                 children: [
                   Material(
                       color: ColorFamily.white,
-                      elevation: 1,
+                      elevation: 0.5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
@@ -82,7 +82,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                             const SizedBox(height: 10),
                             Material(
                 color: const Color(0xFFFEE500),
-                elevation: 1,
+                elevation: 0.5,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
