@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/screen/ledger_screen.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_screen.dart';
 
 import '../provider/tab_page_index_provider.dart';
@@ -27,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
       alignment: Alignment.center,
       child: [
         const DiaryScreen(),
-        Text("ledger"),
+        LedgerScreen(),
         Text("home"),
         const FootprintScreen(),
         Text("more")
