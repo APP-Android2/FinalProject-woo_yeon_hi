@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/provider/ledger_check_box_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/widget/ledger_top_app_bar.dart';
-import 'package:woo_yeon_hi/widget/ledger_unregistered_detail_list_view.dart';
+import 'package:woo_yeon_hi/widget/ledger/ledger_top_app_bar.dart';
+import 'package:woo_yeon_hi/widget/ledger/ledger_unregistered_detail_list_view.dart';
 
-import '../style/text_style.dart';
-import '../widget/ledger_dialog.dart';
+import '../../style/text_style.dart';
+import '../../widget/ledger/ledger_dialog.dart';
 
 class LedgerUnregisteredDetailScreen extends StatefulWidget {
   const LedgerUnregisteredDetailScreen({super.key});

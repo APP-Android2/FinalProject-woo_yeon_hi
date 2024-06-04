@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-import 'package:woo_yeon_hi/widget/ledger_top_app_bar.dart';
+import 'package:woo_yeon_hi/widget/ledger/ledger_top_app_bar.dart';
 
 class LedgerWriteScreen extends StatefulWidget {
   const LedgerWriteScreen({super.key});

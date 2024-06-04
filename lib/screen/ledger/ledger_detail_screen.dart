@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
-import 'package:woo_yeon_hi/widget/ledger_list_view.dart';
-import 'package:woo_yeon_hi/widget/ledger_top_app_bar.dart';
+import 'package:woo_yeon_hi/widget/ledger/ledger_list_view.dart';
+import 'package:woo_yeon_hi/widget/ledger/ledger_top_app_bar.dart';
 
-import '../style/text_style.dart';
+import '../../style/text_style.dart';
 
 class LedgerDetailScreen extends StatefulWidget {
   const LedgerDetailScreen({super.key});

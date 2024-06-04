@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
-import 'package:woo_yeon_hi/widget/ledger_modal_bottom_sheet.dart';
+import 'package:woo_yeon_hi/widget/ledger/ledger_modal_bottom_sheet.dart';
 
 class LedgerListView extends StatefulWidget {
   const LedgerListView({super.key});
