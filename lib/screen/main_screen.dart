@@ -7,7 +7,6 @@ import '../provider/tab_page_index_provider.dart';
 import 'diary/diary_screen.dart';
 import 'package:woo_yeon_hi/screen/main_screen_container.dart';
 
-
 import '../style/color.dart';
 import '../widget/main_bottom_navigation_bar.dart';
 
@@ -24,6 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
+
           ChangeNotifierProvider(create: (context) => DiaryProvider()),
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
           ChangeNotifierProvider(create: (context) => FootPrintSlidableProvider()),

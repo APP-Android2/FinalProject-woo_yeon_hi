@@ -8,8 +8,15 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:woo_yeon_hi/provider/diary_provider.dart';
 import 'package:woo_yeon_hi/provider/footprint_provider.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
-import 'package:woo_yeon_hi/screen/main_screen.dart';
+import 'package:woo_yeon_hi/provider/user_control_provider.dart';
+import 'package:woo_yeon_hi/routes/routes_generator.dart';
+import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
+import 'package:woo_yeon_hi/widget/login/kakao_login.dart';
+import 'package:woo_yeon_hi/widget/register/google_sign_in.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:woo_yeon_hi/style/font.dart';
@@ -31,6 +38,7 @@ Future<void> main() async {
   initializeDateFormatting().then((_) => runApp(const WooYeonHi()));
 }
 
+}
 class WooYeonHi extends StatefulWidget {
   const WooYeonHi({super.key});
 
@@ -52,7 +60,6 @@ class _WooYeonHiState extends State<WooYeonHi> {
           useMaterial3: true
       ),
       home: MainScreen(),
-
     );
   }
 }
