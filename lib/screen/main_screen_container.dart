@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:woo_yeon_hi/screen/more/account_processing_screen.dart';
+import 'package:woo_yeon_hi/widget/more/account_processing_top_app_bar.dart';
+
 import '../provider/tab_page_index_provider.dart';
+import 'more/more_screen.dart';
 
 class MainScreenContainer extends StatefulWidget {
   const MainScreenContainer({super.key});
@@ -25,11 +29,11 @@ class _MainScreenContainerState extends State<MainScreenContainer> {
     return Container(
       alignment: Alignment.center,
       child: [
-        Text("diary"),
-        Text("ledger"),
+        const DiaryScreen(),
+        LedgerScreen(),
         Text("home"),
-        Text("foot_print"),
-        Text("more")
+        const FootprintScreen(),
+        MoreScreen()
       ][currentPageIndex],
     );
   }

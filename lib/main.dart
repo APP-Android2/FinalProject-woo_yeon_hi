@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+import 'package:woo_yeon_hi/provider/ledger_carousel_provider.dart';
+import 'package:woo_yeon_hi/provider/ledger_check_box_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:woo_yeon_hi/provider/diary_provider.dart';
+import 'package:woo_yeon_hi/provider/footprint_provider.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
 import 'package:woo_yeon_hi/provider/user_control_provider.dart';
 import 'package:woo_yeon_hi/routes/routes_generator.dart';
@@ -9,17 +17,26 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:woo_yeon_hi/widget/login/kakao_login.dart';
 import 'package:woo_yeon_hi/widget/register/google_sign_in.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
+import 'package:woo_yeon_hi/style/font.dart';
 
-void main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env"); // .env 환경변수 파일 로드
   KakaoSdk.init(
     nativeAppKey: '62a1ea96953fba93f6d4e5b355e2d455',
     javaScriptAppKey: '71b46fb5f5a68ad3d8aaa257ffa704fa',
   );
-
-  initializeDateFormatting().then((_) => runApp(WooYeonHi()));
-
-  runApp(const WooYeonHi());
+  await NaverMapSdk.instance.initialize(
+    clientId: dotenv.env['NAVER_CLIENT_ID'],
+    onAuthFailed: (ex){
+      print(ex);
+    }
+  );
+  // ko_KR 언어 설정을 위함
+  initializeDateFormatting().then((_) => runApp(const WooYeonHi()));
+}
 
 }
 class WooYeonHi extends StatefulWidget {
@@ -35,26 +52,14 @@ class _WooYeonHiState extends State<WooYeonHi> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "WooYeonHi",
-      theme: ThemeData(
-          colorScheme: ColorScheme(
-            brightness: Brightness.light,
-            primary: Colors.white,
-            onPrimary: Colors.black,
-            secondary: Colors.white,
-            onSecondary: Colors.black,
-            error: Colors.red,
-            onError: Colors.white,
-            background: Colors.white,
-            onBackground: Colors.black,
-            surface: Colors.white,
-            onSurface: Colors.black,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: ColorFamily.cream,
+              brightness: Brightness.light
           ),
           useMaterial3: true
       ),
-      home: RegisterScreen(),
-
-      onGenerateRoute: RouteGenerator.generateRoute,
+      home: MainScreen(),
     );
   }
 }
-
