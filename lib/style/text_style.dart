@@ -62,4 +62,11 @@ class TextStyleFamily{
       fontSize: 20,
       color: ColorFamily.pink
   );
+  /// 소제목 텍스트 스타일. size 15
+  static const TextStyle smallTitleTextStyle = TextStyle(fontFamily: FontFamily.mapleStoryLight, fontSize: 15, color: ColorFamily.black);
+
+  
+
+  /// 비밀번호 입력 숫자 텍스트 스타일. size 20
+  static const TextStyle passwordTextStyle = TextStyle(fontFamily: FontFamily.mapleStoryLight, fontSize: 20, color: ColorFamily.black);
 }
