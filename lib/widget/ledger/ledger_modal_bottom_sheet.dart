@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:woo_yeon_hi/screen/ledger_edit_screen.dart';
+import 'package:woo_yeon_hi/screen/ledger/ledger_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
-import 'package:woo_yeon_hi/widget/ledger_dialog.dart';
+import 'package:woo_yeon_hi/widget/ledger/ledger_dialog.dart';
 
 class LedgerModalBottomSheet extends StatefulWidget {
   const LedgerModalBottomSheet({super.key});

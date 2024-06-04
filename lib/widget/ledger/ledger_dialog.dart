@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:woo_yeon_hi/screen/ledger_unregistered_detail_screen.dart';
-import 'package:woo_yeon_hi/screen/ledger_write_screen.dart';
+import 'package:woo_yeon_hi/screen/ledger/ledger_unregistered_detail_screen.dart';
+import 'package:woo_yeon_hi/screen/ledger/ledger_write_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 

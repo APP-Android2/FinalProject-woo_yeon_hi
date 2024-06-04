@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/screen/ledger_screen.dart';
-import 'package:woo_yeon_hi/screen/footPrint/footprint_screen.dart';
-
 import '../provider/diary_provider.dart';
 import '../provider/footprint_provider.dart';
 import '../provider/ledger_carousel_provider.dart';
 import '../provider/ledger_check_box_provider.dart';
 import '../provider/tab_page_index_provider.dart';
-import 'diary/diary_screen.dart';
 import 'package:woo_yeon_hi/screen/main_screen_container.dart';
-
 import '../style/color.dart';
 import '../widget/main_bottom_navigation_bar.dart';
 
