@@ -20,13 +20,14 @@ class _MainBottomNavigationBarState extends State<MainBottomNavigationBar> {
 
     return TabBar(
       indicatorColor: Colors.transparent,
+      overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
       unselectedLabelColor: ColorFamily.black,
       labelColor: ColorFamily.pink,
       labelStyle: TextStyleFamily.normalTextStyle,
       unselectedLabelStyle: TextStyleFamily.normalTextStyle,
       tabs: [
         Tab(
-          text: "일기",
+          text: "교환일기",
           icon: SvgPicture.asset(
             'lib/assets/icons/diary.svg',
             colorFilter: ColorFilter.mode(
