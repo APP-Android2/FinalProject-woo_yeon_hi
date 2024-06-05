@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:woo_yeon_hi/provider/ledger_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
+import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
 class LedgerCarouselSlider extends StatefulWidget {
@@ -27,11 +28,10 @@ class _LedgerCarouselSliderState extends State<LedgerCarouselSlider> {
             children: [
               Container(
                 height: 145,
-                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: CarouselSlider.builder(
                   options: CarouselOptions(
                     height: 140.0,
-                    // 보여줄 비율
+                    // 보여줄 슬라이더의 비율
                     viewportFraction: 1.0,
                     autoPlay: false,
                     onPageChanged: (index, reason) {
@@ -43,10 +43,19 @@ class _LedgerCarouselSliderState extends State<LedgerCarouselSlider> {
                     final item = provider.items[index];
                     return Material(
                       color: ColorFamily.cream,
-                      elevation: 1,
-                      borderRadius: BorderRadius.circular(20),
                       child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: ColorFamily.white),
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: ColorFamily.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.6),
+                                spreadRadius: 0,
+                                blurRadius: 1,
+                              )
+                            ]
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -59,8 +68,14 @@ class _LedgerCarouselSliderState extends State<LedgerCarouselSlider> {
                                     ...item['texts1'].map<Widget>((text) => Text(text, style: TextStyleFamily.normalTextStyle)).toList(),
                                     const SizedBox(height: 10),
                                     ...item['texts2'].map<Widget>((text) => Text(text, style: TextStyleFamily.appBarTitleBoldTextStyle)).toList(),
-                                    const SizedBox(height: 5), // Text(text, style: const TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight))).toList(),
-                                    ...item['texts3'].map<Widget>((text) => Text(text, style: TextStyleFamily.normalTextStyle)).toList(),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        ...item['texts3'].map<Widget>((text) => Text(text, style: TextStyleFamily.normalTextStyle)).toList(),
+                                        ...item['texts4'].map<Widget>((text) => Text(text, style: TextStyle(fontSize: 14, color: ColorFamily.pink, fontFamily: FontFamily.mapleStoryLight))).toList(),
+                                        ...item['texts5'].map<Widget>((text) => Text(text, style: TextStyleFamily.normalTextStyle)).toList(),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               )
@@ -100,8 +115,8 @@ class _LedgerCarouselSliderState extends State<LedgerCarouselSlider> {
                       child: AnimatedSmoothIndicator(
                         activeIndex: provider.currentIndex,
                         count: provider.items.length,
-                        // 설정
-                        effect: const WormEffect(
+                        // 속성 설정
+                        effect: const ScrollingDotsEffect(
                           dotWidth: 10,
                           dotHeight: 10,
                           activeDotColor: ColorFamily.pink,
