@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../provider/tab_page_index_provider.dart';
 import 'calendar/calendar_screen.dart';
+import 'dDay/dDay_screen.dart';
 import 'diary/diary_screen.dart';
 import 'footPrint/footprint_screen.dart';
 import 'ledger_screen.dart';
@@ -31,10 +32,10 @@ class _MainScreenContainerState extends State<MainScreenContainer> {
       alignment: Alignment.center,
       child: [
         const DiaryScreen(),
-        LedgerScreen(),
-        CalendarScreen(),
+        const LedgerScreen(),
+        const CalendarScreen(),
         const FootprintScreen(),
-        MoreScreen()
+        const MoreScreen()
       ][currentPageIndex],
     );
   }
