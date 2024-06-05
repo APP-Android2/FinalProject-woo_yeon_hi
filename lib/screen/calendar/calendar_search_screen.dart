@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_search_bar.dart';
 
 class CalendarSearchScreen extends StatefulWidget {
@@ -14,10 +15,8 @@ class _CalendarSearchScreenState extends State<CalendarSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: CalendarSearchBar(),
-      ),
+      backgroundColor: ColorFamily.cream,
+      body: CalendarSearchBar(),
     );
   }
 }

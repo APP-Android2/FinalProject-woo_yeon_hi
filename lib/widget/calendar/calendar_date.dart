@@ -18,7 +18,7 @@ class CalendarDate extends StatefulWidget {
 class _CalendarDateState extends State<CalendarDate> {
 
   DateTime _focusedDay = DateTime.now();  // 오늘 날짜
-  DateTime? _selectedDay = null;
+  DateTime? _selectedDay;
 
   // 주말인지
   bool isWeekend(DateTime day){
@@ -35,7 +35,7 @@ class _CalendarDateState extends State<CalendarDate> {
     return Expanded(
       child: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             //  달력 위젯
@@ -55,12 +55,12 @@ class _CalendarDateState extends State<CalendarDate> {
                     lastDay: DateTime.utc(2999, 12, 31),  // 최대 날짜
                     focusedDay: _focusedDay,  // 현재
                     // 캘린더 헤더
-                    headerStyle: HeaderStyle(
+                    headerStyle: const HeaderStyle(
                       titleCentered: true,
                       formatButtonVisible: false,
                       titleTextStyle: TextStyleFamily.appBarTitleBoldTextStyle
                     ),
-                    daysOfWeekStyle: DaysOfWeekStyle(
+                    daysOfWeekStyle: const DaysOfWeekStyle(
                       weekdayStyle: TextStyleFamily.normalTextStyle,  // 평일
                       weekendStyle: TextStyleFamily.normalTextStyle,  // 주말
                     ),
@@ -112,7 +112,7 @@ class _CalendarDateState extends State<CalendarDate> {
                           alignment: Alignment.center,
                           child: Container(
                             width: 30, height: 30,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: ColorFamily.pink,
                               shape: BoxShape.circle,
                             ),
@@ -139,7 +139,7 @@ class _CalendarDateState extends State<CalendarDate> {
                           alignment: Alignment.center,
                           child: Container(
                             width: 30, height: 30,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: ColorFamily.black,
                               shape: BoxShape.circle,
                             ),
@@ -147,7 +147,7 @@ class _CalendarDateState extends State<CalendarDate> {
                               child: Text(
                                 DateFormat('d').format(day),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: ColorFamily.white,
                                   fontFamily: FontFamily.mapleStoryLight
                                 ),
@@ -200,56 +200,55 @@ class _CalendarDateState extends State<CalendarDate> {
               padding: EdgeInsets.only(top: 15),
               child: Container(
                 color: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 0),
-                  child: ListView.separated(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: index == 0?EdgeInsets.fromLTRB(20, 10, 20, 0):EdgeInsets.symmetric(horizontal: 20),
-                        child: InkWell(
-                          onTap: () {
-                            // 항목 클릭
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => CalendarDetailScreen())
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8),
-                                child: SizedBox(
-                                  width: 5, height: 35,
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: ColorFamily.green,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
+                child: ListView.separated(
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: index == 0
+                          ? EdgeInsets.fromLTRB(20, 10, 20, 0)
+                          : EdgeInsets.symmetric(horizontal: 20),
+                      child: InkWell(
+                        onTap: () {
+                          // 항목 클릭
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => CalendarDetailScreen())
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: SizedBox(
+                                width: 5, height: 35,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    color: ColorFamily.green,
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10),
-                              Text(
-                                "롯데월드 $index",
-                                style: TextStyleFamily.normalTextStyle,
-                              ),
-                              Spacer(),
-                              Text(
-                                "10:00 ~ 12:00",
-                                style: TextStyleFamily.normalTextStyle,
-                              )
-                            ],
-                          ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "롯데월드 $index",
+                              style: TextStyleFamily.normalTextStyle,
+                            ),
+                            Spacer(),
+                            Text(
+                              "10:00 ~ 12:00",
+                              style: TextStyleFamily.normalTextStyle,
+                            )
+                          ],
                         ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Divider(color: ColorFamily.gray, thickness: 0.5,),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Divider(color: ColorFamily.gray),
+                    );
+                  },
                 ),
               ),
             ),

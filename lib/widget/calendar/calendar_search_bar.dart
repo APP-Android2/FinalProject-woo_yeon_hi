@@ -21,7 +21,11 @@ class _CalendarSearchBarState extends State<CalendarSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: buildSearchBar(context),
+      backgroundColor: ColorFamily.cream,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: buildSearchBar(context),
+      ),
     );
   }
   
@@ -38,10 +42,10 @@ class _CalendarSearchBarState extends State<CalendarSearchBar> {
       automaticallyImplyBackButton: false,
       // controller: controller,
       hint: "일정 검색",
-      backgroundColor: ColorFamily.white,
+      backgroundColor: ColorFamily.beige,
       hintStyle: TextStyleFamily.hintTextStyle,
       queryStyle: TextStyleFamily.normalTextStyle,
-      backdropColor: Colors.transparent,
+      backdropColor: ColorFamily.cream,
       textInputType: TextInputType.text,
       onSubmitted: (query) {},
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
@@ -68,11 +72,7 @@ class _CalendarSearchBarState extends State<CalendarSearchBar> {
       ],
       actions: [
         InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => CalendarSearchDate())
-            );
-          },
+          onTap: () {},
           child: SvgPicture.asset('lib/assets/icons/calendar.svg'),
         ),
 
@@ -93,52 +93,45 @@ class _CalendarSearchBarState extends State<CalendarSearchBar> {
       //     controller.close();
       //   }
       // },
-      transition: CircularFloatingSearchBarTransition(spacing: 16),
+      transition: CircularFloatingSearchBarTransition(spacing: 20),
       builder: (context, transition) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Material(
-              elevation: 4.0,
-              // 검색 컨테이너
-              child: Container(
-                height: 300,
-                color: ColorFamily.beige,
-                // Column(
-                //   mainAxisSize: MainAxisSize.min,
-                //   children: Colors.accents.map((color) {
-                //     return Container(height: 112, color: color);
-                //   }).toList(),
-                // ),
-              )
+          borderRadius: BorderRadius.circular(15),
+          child: Card(
+            elevation: 4.0,
+            // 검색 컨테이너
+            child: Container(
+              height: 400,
+              // Column(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: Colors.accents.map((color) {
+              //     return Container(height: 112, color: color);
+              //   }).toList(),
+              // ),
+              child: buildBody(),
+            )
           ),
         );
       },
-      body: buildBody(),
+      //body: buildBody(),
     );
   }
   
   Widget buildBody(){
-    return Container(
-      padding: EdgeInsets.all(5),
-      color: ColorFamily.cream,
-      width: double.infinity,
-      height: double.infinity,
-      child: Column(
-        children: [
-          SizedBox(height: 85),
-          Expanded(
-            child: Container(
-              color: ColorFamily.cream,
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return searchListItem(context, index);
-                },
-              ),
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            color: ColorFamily.beige,
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return searchListItem(context, index);
+              },
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -160,7 +153,7 @@ class _CalendarSearchBarState extends State<CalendarSearchBar> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(color: ColorFamily.gray, thickness: 0.5,),
+          child: Divider(color: ColorFamily.gray),
         ),
         InkWell(
           onTap: () {
