@@ -98,7 +98,7 @@ void _showDoneDialog(
                   children: [
                     const Text(
                       "서울 지역을 선택하시겠습니까?",
-                      style: TextStyleFamily.dialogTitleTextStyle,
+                      style: TextStyleFamily.dialogButtonTextStyle,
                     ),
                     const SizedBox(
                       height: 30,

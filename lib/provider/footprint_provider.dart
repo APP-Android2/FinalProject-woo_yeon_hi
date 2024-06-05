@@ -19,7 +19,30 @@ class FootprintProvider extends ChangeNotifier{
 
 }
 
-/// 포토 맵 ExpansionTile 상태 관리 프로바이더
+/// 포토 맵 목록 상태 관리 프로바이더
+class FootprintPhotoMapProvider extends ChangeNotifier{
+  List<String> _photoMapNameList = [];
+
+  List<String> get photoMapNameList => _photoMapNameList;
+
+  FootprintPhotoMapProvider(List<String> nameList){
+    for(var name in nameList){
+      _photoMapNameList.add(name);
+    }
+  }
+
+  void setName(int index, String name){
+    _photoMapNameList[index] = name;
+    notifyListeners();
+  }
+
+  void removeItem(int index){
+    _photoMapNameList.removeAt(index);
+    notifyListeners();
+  }
+}
+
+/// 히스토리 목록 ExpansionTile 상태 관리 프로바이더
 class FootprintHistoryProvider extends ChangeNotifier{
 
   List<bool> _isExpandedList = [];

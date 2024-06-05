@@ -21,10 +21,11 @@ class FootprintHistoryScreen extends StatefulWidget {
 
 class _FootprintHistoryScreenState extends State<FootprintHistoryScreen> {
   List<String> historyPlace = ["서교동", "역삼동", "이태원동", "명동", "한남동"];
-  List<Widget> historyItems = List.generate(5, (index) => makeHistoryItem());
+  List<Widget> historyItems = [];
 
   @override
   Widget build(BuildContext context) {
+    historyItems = List.generate(5, (index) => makeHistoryItem(context, index));
     return ChangeNotifierProvider(
       create: (context) => FootprintHistoryProvider(historyItems.length),
       child:
@@ -113,90 +114,87 @@ class _FootprintHistoryScreenState extends State<FootprintHistoryScreen> {
       children: [
         SizedBox(
             height: 120,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            FootprintHistoryDetailScreen(historyPlace[index])));
-              },
-              child: ListView(
-                  scrollDirection: Axis.horizontal, children: historyItems),
-            ))
+            child: ListView(
+                scrollDirection: Axis.horizontal, children: historyItems))
       ],
+    );
+  }
+  Widget makeHistoryItem(BuildContext context, int index) {
+    return InkWell(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => FootprintHistoryDetailScreen(historyPlace[index], index)));
+      },
+      child: SizedBox(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    'lib/assets/images/test_couple.png',
+                    fit: BoxFit.cover,
+                  )),
+              Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Wrap(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xff393939).withOpacity(0.6),
+                          borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)), // 원하는 반지름 값
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                  width: 120,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "한강 산책",
+                                        style: historyCardTextStyle,
+                                      )
+                                    ],
+                                  )),
+                              SizedBox(
+                                  width: 120,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "2024. 5. 14.",
+                                        style: historyCardTextStyle,
+                                      )
+                                    ],
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ))
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
-Widget makeHistoryItem() {
-  return SizedBox(
-    width: 120,
-    height: 120,
-    child: Card(
-      color: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 4,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'lib/assets/images/test_couple.png',
-                fit: BoxFit.cover,
-              )),
-          Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Wrap(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xff393939).withOpacity(0.6),
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)), // 원하는 반지름 값
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                              width: 120,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "한강 산책",
-                                    style: historyCardTextStyle,
-                                  )
-                                ],
-                              )),
-                          SizedBox(
-                              width: 120,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "2024. 5. 14.",
-                                    style: historyCardTextStyle,
-                                  )
-                                ],
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ))
-        ],
-      ),
-    ),
-  );
-}
+
 
 TextStyle historyCardTextStyle = const TextStyle(
     fontFamily: FontFamily.mapleStoryLight,
