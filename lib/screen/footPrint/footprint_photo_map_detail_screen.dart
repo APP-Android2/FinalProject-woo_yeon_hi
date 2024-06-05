@@ -55,14 +55,10 @@ class _FootprintPhotoMapDetailScreenState
             onMapReady: (NaverMapController controller) {
               _mapController = controller;
               _preloadImages(context).then((_) {
-                // _addPlaceOverlay(provider); // 지역 구분 오버레이
                 _addMarkerOverlay(provider); // 마커 오버레이
               });
             },
             onMapTapped: (NPoint point, NLatLng latLng) {
-              // 화면상의 좌표 (x, y)
-              //print("enung NPoint : $point");
-
               // 실제 장소의 위도, 경도 (latitude, longitude)
               print("enung NLatLng : $latLng");
             },
@@ -78,11 +74,6 @@ class _FootprintPhotoMapDetailScreenState
         );
       }),
     );
-  }
-
-  Future<void> _addPlaceOverlay(FootprintPhotoMapOverlayProvider provider) async {
-    await _loadmapdata(provider);
-    _mapController.addOverlayAll(provider.polygonOverlays.toSet());
   }
 
   Future<void> _addMarkerOverlay(FootprintPhotoMapOverlayProvider provider) async {
@@ -123,56 +114,6 @@ class _FootprintPhotoMapDetailScreenState
       );
 
       provider.addMarker(marker);
-    }
-  }
-
-  Future<void> _loadmapdata(FootprintPhotoMapOverlayProvider provider) async {
-    final geojson = GeoJson();
-    // GeoJson에서 데이터를 추출 하는 중이라 데이터 호출
-    final data = await rootBundle.loadString(provider.mapType!.path);
-
-    // data를 geojson으로 가공
-    await geojson.parse(data);
-
-    // 현재 데이터의 위도,경도에 맞춰서 _polygon에 넣는다.
-    // polygon 값들이 여러개 일 경우에 맞춰 for문 적용
-    for (final feature in geojson.features) {
-      final geoJsonMultiPolygon = feature.geometry as GeoJsonMultiPolygon;
-      final properties =
-          feature.properties; // AREA_CD, AREA_ENG_NM, AREA_KOR_NM
-      final _CD = properties?['AREA_CD'];
-      final _ENG_NM = properties?['AREA_ENG_NM'];
-      final _KOR_NM = properties?['AREA_KOR_NM'];
-      for (final polygon in geoJsonMultiPolygon.polygons) {
-        final geoseries = polygon.geoSeries; // 한 구역안의 존재하는 polygon들
-        List<NLatLng> _polygonPoints = []; // polygon 좌표들
-        for (final geoserie in geoseries) {
-          for (final geopoint in geoserie.geoPoints) {
-            _polygonPoints.add(NLatLng(geopoint.latitude, geopoint.longitude));
-          }
-        }
-        // 오버레이 좌표 리스트의 처음과 끝은 같아야한다.
-        _polygonPoints.add(_polygonPoints.first);
-
-        // polygon 좌표로 NPolygonOverlay를 만든다.
-        var overlay = NPolygonOverlay(
-            id: "${provider.polygonOverlays.length}",
-            coords: _polygonPoints,
-            color: Colors.transparent,
-            outlineColor: Colors.transparent,
-            outlineWidth: 1);
-        // 해당 구역을 클릭 했을 때 리스너
-        overlay.setOnTapListener((overlay) {
-          final id  = int.parse(overlay.info.id);
-          final infos = provider.polygonInfos;
-          print("enung ${id}");
-          print(
-              "enung ${infos[id]!.korNm}");
-        });
-        provider.addInfo(provider.polygonOverlays.length,
-            PlaceInfo(cd: _CD, engNm: _ENG_NM, korNm: _KOR_NM));
-        provider.addOverlay(overlay);
-      }
     }
   }
 }
