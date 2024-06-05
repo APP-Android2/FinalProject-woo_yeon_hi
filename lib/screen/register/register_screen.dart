@@ -30,12 +30,12 @@ class _RegisterScreen extends State<RegisterScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              SizedBox(height: deviceHeight/5),
+              SizedBox(height: deviceHeight*0.2),
               Image.asset(
                 'lib/assets/images/wooyeonhi_logo.png',
-                height: deviceHeight/3,
+                height: deviceHeight*0.35,
               ),
-              SizedBox(height: deviceHeight/4),
+              SizedBox(height: deviceHeight*0.25),
               Column(
                 children: [
                   Material(
@@ -61,8 +61,8 @@ class _RegisterScreen extends State<RegisterScreen> {
                         },
                         borderRadius: BorderRadius.circular(20.0),
                         child: SizedBox(
-                            height: 48,
-                            width: 340,
+                            height: deviceHeight*0.06,
+                            width: deviceWidth*0.75,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -162,8 +162,8 @@ class _RegisterScreen extends State<RegisterScreen> {
                   },
                   borderRadius: BorderRadius.circular(20.0),
                   child: SizedBox(
-                      height: 48,
-                      width: 340,
+                      height: deviceHeight*0.06,
+                      width: deviceWidth*0.75,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

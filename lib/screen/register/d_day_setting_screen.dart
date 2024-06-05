@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
@@ -13,7 +13,7 @@ import '../../widget/register/d_day_setting_calendar.dart';
 class DdaySettingScreen extends StatefulWidget {
   final bool isHost;
 
-  DdaySettingScreen({super.key, required this.isHost});
+  const DdaySettingScreen({super.key, required this.isHost});
 
   @override
   State<StatefulWidget> createState() => _DdaySettingScreen();
@@ -23,145 +23,142 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Container(
           color: ColorFamily.cream,
-          padding: EdgeInsets.all(20),
-          child: Stack(
+          padding: const EdgeInsets.all(20),
+          child: Column(
             children: [
-              ListView(
-                children: [Column(
+              SizedBox(
+                height: deviceHeight - 40,
+                width: deviceWidth - 40,
+                child: Column(
                   children: [
-                    Container(
-                      height: 750,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 700,
-                            child: Column(
+                    SizedBox(
+                      height: deviceHeight - 90,
+                      width: deviceWidth - 40,
+                      child: Column(children: [
+                        SizedBox(
+                          height: deviceHeight - 170,
+                          width: deviceWidth - 40,
+                          child: Column(
                               children: [
-                                Padding(padding: EdgeInsets.only(top: 60)),
-                                Container(
-                                  child: Text(
-                                    "2 / 5",
-                                    style: TextStyle(
-                                        fontFamily: FontFamily.mapleStoryBold,
-                                        fontSize: 15,
-                                        color: ColorFamily.pink),
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.only(top: 20)),
-                                Container(
-                                    child: Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
-                                          SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                          SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
-                                          SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                          SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
-                                          SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                          SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
-                                          SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                          SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
-                                        ],
-                                      ),
-                                    )),
-                                Padding(padding: EdgeInsets.only(top: 50)),
-                                Container(
-                                  child: Text(
-                                    "연인이 된 날을 선택해주세요!",
-                                    style: TextStyleFamily
-                                        .smallTitleTextStyle,
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.only(top: 30)),
-                                Container(
-                                  width: 360,
-                                  child: DdaySettingCalendar()
-                                ),
-                              ],
+                              SizedBox(height: deviceHeight*0.1),
+                              const Text(
+                              "2 / 5",
+                              style: TextStyle(
+                                  fontFamily: FontFamily.mapleStoryBold,
+                                  fontSize: 15,
+                                  color: ColorFamily.pink),
                             ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                              'lib/assets/icons/heart_fill.svg',
+                              height: 24),
+                              SvgPicture.asset(
+                              'lib/assets/icons/triple_right_arrow.svg',
+                              height: 24),
+                              SvgPicture.asset(
+                              'lib/assets/icons/heart_fill.svg',
+                              height: 24),
+                              SvgPicture.asset(
+                              'lib/assets/icons/triple_right_arrow.svg',
+                              height: 24),
+                              SvgPicture.asset(
+                              'lib/assets/icons/heart_outlined.svg',
+                              height: 24),
+                              SvgPicture.asset(
+                              'lib/assets/icons/triple_right_arrow.svg',
+                              height: 24),
+                              SvgPicture.asset(
+                              'lib/assets/icons/heart_outlined.svg',
+                              height: 24),
+                              SvgPicture.asset(
+                              'lib/assets/icons/triple_right_arrow.svg',
+                              height: 24),
+                              SvgPicture.asset(
+                              'lib/assets/icons/heart_outlined.svg',
+                              height: 24),
+                            ],
                           ),
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                Padding(padding: EdgeInsets.only(left: 50)),
-                                Expanded(
-                                  child: Container(height: 40, width: 150),
-                                ),
-                                Padding(padding: EdgeInsets.only(left: 20)),
-                                Expanded(
-                                  child: Material(
-                                    color: ColorFamily.beige,
-                                    elevation: 0.5,
-                                    shadowColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(20.0),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NickNameSettingScreen(isHost: widget.isHost)));
-                                      },
-                                      borderRadius:
-                                      BorderRadius.circular(20.0),
-                                      child: Container(
-                                          height: 40,
-                                          width: 150,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "다음",
-                                              style: TextStyleFamily
-                                                  .normalTextStyle,
-                                            ),
-                                          )),
-                                    ),
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.only(left: 50)),
-                              ],
-                            ),
+                          SizedBox(height: deviceHeight *0.07),
+                          const Text(
+                            "연인이 된 날을 선택해주세요!",
+                            style: TextStyleFamily
+                                .smallTitleTextStyle,
                           ),
+                          const SizedBox(height: 30),
+                          const DdaySettingCalendar()
                         ],
                       ),
                     ),
-                    Align(
-                        alignment: Alignment.bottomRight,
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(0, 16, 16, 0),
-                          child: TextButton(
-                            style: ButtonStyle(
-                                overlayColor:
-                                MaterialStateProperty.all<Color>(
-                                    ColorFamily.beige)),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          RegisterScreen()));
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  "로그아웃",
-                                  style: TextStyleFamily.normalTextStyle,
-                                )
-                              ],
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                  height: deviceHeight*0.045,
+                                  width: deviceWidth*0.4),
+                              Material(
+                                color: ColorFamily.beige,
+                                elevation: 0.5,
+                                shadowColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                child: InkWell(
+                                    onTap: () {
+                                      //TODO 입력값이 현재 유효한지 체크
+                                      //유효하지 않다면 토스트메시지 출력("해당 코드는 유효하지 않은 코드입니다.")
+                                      //유효하다면
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NickNameSettingScreen(
+                                                      isHost: false)));
+                                    },
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: Container(
+                                      height: deviceHeight*0.045,
+                                      width: deviceWidth*0.4,
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        "다음",
+                                        style:
+                                        TextStyleFamily.normalTextStyle,
+                                      ),
+                                    )),
+                              ),
+                            ],
                           ),
-                        ))
-                  ],
+                        ),
+                      ],
+                      )),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterScreen()));
+                  },
+                  child: const Text(
+                    "로그아웃",
+                    style: TextStyleFamily.normalTextStyle,
+                  ),
                 ),
-              ])
-            ],
-          )),
-    );
+              )
+    ],
+    ))])));
   }
 }
