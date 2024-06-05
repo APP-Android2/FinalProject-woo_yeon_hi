@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +11,7 @@ import '../../widget/diary/diary_filter_list_view.dart';
 import '../../widget/diary/diary_grid_view.dart';
 import '../../widget/diary/diary_top_app_bar.dart';
 import 'diary_edit_screen.dart';
+import 'diary_unchecked_screen.dart';
 
 
 class DiaryScreen extends StatefulWidget {
@@ -51,26 +53,31 @@ class _DiaryScreenState extends State<DiaryScreen> {
         },
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
         child: Column(
           children: [
             SizedBox(
               height: 48,
               child: Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () {
                       setState(() {
                         _showModalBottomSheet();
                       });
                     },
-                    icon: SvgPicture.asset(
+                    onLongPress: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const DiaryUncheckedScreen()));
+                    },
+                    child: SvgPicture.asset(
                       'lib/assets/icons/Filter_alt_fill.svg',
                       width: 24,
                       height: 24,
                     ),
-                    iconSize: 24,
                   ),
+                  const SizedBox(width: 10,),
                   Expanded(child: DiaryFilterListView(filterList))
                 ],
               ),
@@ -78,7 +85,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
             const SizedBox(
               height: 10,
             ),
-            Expanded(child: DiaryGridView()),
+            const Expanded(child: DiaryGridView()),
           ],
         ),
       ),
@@ -102,230 +109,219 @@ class _DiaryScreenState extends State<DiaryScreen> {
         builder: (context){
           return StatefulBuilder(
               builder: (context, bottomState) {
-                return Wrap(
-                    children: [
-                      Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Stack(
+                        children: [
+                          TableCalendar(
+                            firstDay:  DateTime.utc(2024, 3, 16),
+                            lastDay: DateTime.utc(2024, 8, 14),
+                            focusedDay: _focusedDay,
+                            locale: 'ko_kr',
+                            rowHeight: 50,
+                            headerStyle: const HeaderStyle(
+                                titleCentered: true,
+                                titleTextStyle: TextStyleFamily.appBarTitleBoldTextStyle,
+                                formatButtonVisible: false,
+                            ),
+                            daysOfWeekStyle: const DaysOfWeekStyle(
+                                weekdayStyle: TextStyleFamily.normalTextStyle,
+                                weekendStyle: TextStyleFamily.normalTextStyle
+                            ),
+                            calendarBuilders: CalendarBuilders(
+                                defaultBuilder: (context, day, focusedDay){
+                                  return Container(
+                                    alignment: Alignment.topCenter,
+                                    padding: const EdgeInsets.only(top: 15),
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+                                      DateFormat('d').format(day),
+                                      style: TextStyle(
+                                          color: isWeekend(day)
+                                              ? Colors.red
+                                              : isSaturday(day)
+                                              ?Colors.blueAccent
+                                              :ColorFamily.black
+                                          ,
+                                          fontFamily: FontFamily.mapleStoryLight
+                                      ),
+                                    ),
+                                  );
+                                },
+                                outsideBuilder: (context, day, focusedDay){
+                                  return Container(
+                                    alignment: Alignment.topCenter,
+                                    padding: const EdgeInsets.only(top: 15),
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+                                      DateFormat('d').format(day),
+                                      style: const TextStyle(
+                                          color: ColorFamily.gray,
+                                          fontFamily: FontFamily.mapleStoryLight
+                                      ),
+                                    ),
+                                  );
+                                },
+                                disabledBuilder: (context, day, focusedDay){
+                                  return Container(
+                                    alignment: Alignment.topCenter,
+                                    padding: const EdgeInsets.only(top: 15),
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+                                      DateFormat('d').format(day),
+                                      style: const TextStyle(
+                                          color: ColorFamily.gray,
+                                          fontFamily: FontFamily.mapleStoryLight
+                                      ),
+                                    ),
+                                  );
+                                },
+                                selectedBuilder: (context, day, focusedDay){
+                                  return Container(
+                                    alignment: Alignment.topCenter,
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: const BoxDecoration(
+                                        color: ColorFamily.pink,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          DateFormat('d').format(day),
+                                          style: TextStyle(
+                                              color: isWeekend(day)
+                                                  ? ColorFamily.white
+                                                  : isSaturday(day)?ColorFamily.white:ColorFamily.black,
+                                              fontFamily: FontFamily.mapleStoryLight
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                todayBuilder: (context, day, focusedDay){
+                                  return Container(
+                                    alignment: Alignment.topCenter,
+                                    padding: const EdgeInsets.only(top: 15),
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+                                      DateFormat('d').format(day),
+                                      style: const TextStyle(
+                                          color: ColorFamily.pink,
+                                          fontFamily: FontFamily.mapleStoryLight
+                                      ),
+                                    ),
+                                  );
+                                },
+                              markerBuilder: (context, day, events){
+                                  var _toDay = "${DateTime.now().toIso8601String().substring(0, 10)} 00:00:00.000Z";
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.only(top: 20),
+                                    child: Container(
+                                      width: 6,
+                                      height: 6,
+                                      decoration: BoxDecoration(
+                                        color: (day == _selectedDay)
+                                            ?ColorFamily.white
+                                            :ColorFamily.pink,
+                                        shape: BoxShape.circle
+                                      ),
+                                    ),
+                                  );
+                              }
+                            ),
+                            selectedDayPredicate: (day){
+                              return isSameDay(_selectedDay, day);
+                            },
+                            onDaySelected: (selectedDay, focusedDay) {
+                              bottomState((){
+                                setState(() {
+                                  _selectedDay = selectedDay;
+                                  _focusedDay = focusedDay; // update `_focusedDay` here as well
+                                });
+                              });
+                            },
+                            onPageChanged: (focusedDay) {
+                              _focusedDay = focusedDay;
+                            },
+                          ),
+                          // 이벤트 버튼들
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 20,
+                            child: Row(
                               children: [
-                                TableCalendar(
-                                  firstDay:  DateTime.utc(2024, 3, 16),
-                                  lastDay: DateTime.utc(2024, 8, 14),
-                                  focusedDay: _focusedDay,
-                                  locale: 'ko_kr',
-                                  rowHeight: 50,
-                                  headerStyle: const HeaderStyle(
-                                      titleCentered: true,
-                                      titleTextStyle: TextStyleFamily.appBarTitleBoldTextStyle,
-                                      formatButtonVisible: false,
+                                SizedBox(
+                                  width: ((MediaQuery.of(context).size.width - 40) / 2) - 10,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: ColorFamily.white,
+                                        surfaceTintColor: ColorFamily.white
+                                      ),
+                                      onPressed: (){
+                                        bottomState((){
+                                          setState(() {
+                                            _focusedDay = DateTime.now();
+                                          });
+                                        });
+                                      },
+                                      child: const Text("오늘 날짜로", style: TextStyleFamily.normalTextStyle,)
                                   ),
-                                  daysOfWeekStyle: const DaysOfWeekStyle(
-                                      weekdayStyle: TextStyleFamily.normalTextStyle,
-                                      weekendStyle: TextStyleFamily.normalTextStyle
-                                  ),
-                                  calendarBuilders: CalendarBuilders(
-                                      defaultBuilder: (context, day, focusedDay){
-                                        return Container(
-                                          alignment: Alignment.topCenter,
-                                          padding: const EdgeInsets.only(top: 15),
-                                          child: Text(
-                                            textAlign: TextAlign.center,
-                                            DateFormat('d').format(day),
-                                            style: TextStyle(
-                                                color: isWeekend(day)
-                                                    ? Colors.red
-                                                    : isSaturday(day)
-                                                    ?Colors.blueAccent
-                                                    :ColorFamily.black
-                                                ,
-                                                fontFamily: FontFamily.mapleStoryLight
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      outsideBuilder: (context, day, focusedDay){
-                                        return Container(
-                                          alignment: Alignment.topCenter,
-                                          padding: const EdgeInsets.only(top: 15),
-                                          child: Text(
-                                            textAlign: TextAlign.center,
-                                            DateFormat('d').format(day),
-                                            style: const TextStyle(
-                                                color: ColorFamily.gray,
-                                                fontFamily: FontFamily.mapleStoryLight
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      disabledBuilder: (context, day, focusedDay){
-                                        return Container(
-                                          alignment: Alignment.topCenter,
-                                          padding: const EdgeInsets.only(top: 15),
-                                          child: Text(
-                                            textAlign: TextAlign.center,
-                                            DateFormat('d').format(day),
-                                            style: const TextStyle(
-                                                color: ColorFamily.gray,
-                                                fontFamily: FontFamily.mapleStoryLight
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      selectedBuilder: (context, day, focusedDay){
-                                        return Container(
-                                          alignment: Alignment.topCenter,
-                                          padding: const EdgeInsets.only(top: 10),
-                                          child: Container(
-                                            width: 30,
-                                            height: 30,
-                                            decoration: const BoxDecoration(
-                                              color: ColorFamily.pink,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                textAlign: TextAlign.center,
-                                                DateFormat('d').format(day),
-                                                style: TextStyle(
-                                                  decoration: TextDecoration.lineThrough,
-                                                    color: isWeekend(day)
-                                                        ? ColorFamily.white
-                                                        : isSaturday(day)?ColorFamily.white:ColorFamily.black,
-                                                    fontFamily: FontFamily.mapleStoryLight
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      todayBuilder: (context, day, focusedDay){
-                                        return Container(
-                                          alignment: Alignment.topCenter,
-                                          padding: const EdgeInsets.only(top: 10),
-                                          child: Container(
-                                            width: 30,
-                                            height: 30,
-                                            decoration: const BoxDecoration(
-                                              color: ColorFamily.black,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                textAlign: TextAlign.center,
-                                                DateFormat('d').format(day),
-                                                style: const TextStyle(
-                                                    color: ColorFamily.white,
-                                                    fontFamily: FontFamily.mapleStoryLight
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    markerBuilder: (context, day, events){
-                                        var _toDay = "${DateTime.now().toIso8601String().substring(0, 10)} 00:00:00.000Z";
-                                        return Container(
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.only(top: 20),
-                                          child: Container(
-                                            width: 6,
-                                            height: 6,
-                                            decoration: BoxDecoration(
-                                              color: (day == _selectedDay || day.toString() == _toDay)
-                                                  ?ColorFamily.white
-                                                  :ColorFamily.pink,
-                                              shape: BoxShape.circle
-                                            ),
-                                          ),
-                                        );
-                                    }
-                                  ),
-                                  selectedDayPredicate: (day){
-                                    return isSameDay(_selectedDay, day);
-                                  },
-                                  onDaySelected: (selectedDay, focusedDay) {
-                                    bottomState((){
-                                      setState(() {
-                                        _selectedDay = selectedDay;
-                                        _focusedDay = focusedDay; // update `_focusedDay` here as well
-                                      });
-                                    });
-                                  },
-                                  onPageChanged: (focusedDay) {
-                                    _focusedDay = focusedDay;
-                                  },
                                 ),
-                                const SizedBox(height: 30,),
-                                // 이벤트 버튼들
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: ((MediaQuery.of(context).size.width - 40) / 2) - 10,
-                                      height: 40,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: ColorFamily.white,
-                                            surfaceTintColor: ColorFamily.white
-                                          ),
-                                          onPressed: (){
-                                            bottomState((){
-                                              setState(() {
-                                                _focusedDay = DateTime.now();
-                                              });
-                                            });
-                                          },
-                                          child: const Text("오늘 날짜로", style: TextStyleFamily.normalTextStyle,)
+                                const SizedBox(width: 20,),
+                                SizedBox(
+                                  width: ((MediaQuery.of(context).size.width - 40) / 2) - 10,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: ColorFamily.beige,
+                                          surfaceTintColor: ColorFamily.beige
                                       ),
-                                    ),
-                                    const SizedBox(width: 20,),
-                                    SizedBox(
-                                      width: ((MediaQuery.of(context).size.width - 40) / 2) - 10,
-                                      height: 40,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: ColorFamily.beige,
-                                              surfaceTintColor: ColorFamily.beige
-                                          ),
-                                          onPressed: (){
-                                            setState(() {
-                                              if(_selectedDay != null){
-                                                String formattedDate = DateFormat('yyyy. M.dd').format(_selectedDay!);
-                                                if(flag == "start"){
-                                                  startPeriod = formattedDate;
-                                                  startPeriodController.text = startPeriod;
-                                                  Navigator.pop(context, "start");
-                                                }else{
-                                                  endPeriod = formattedDate;
-                                                  endPeriodController.text = endPeriod;
-                                                  Navigator.pop(context, "end");
-                                                }
-                                              }else{
-                                                String formattedDate = DateFormat('yyyy. M.dd').format(_focusedDay);
-                                                if(flag == "start"){
-                                                  startPeriod = formattedDate;
-                                                  startPeriodController.text = startPeriod;
-                                                  Navigator.pop(context, "start");
-                                                }else{
-                                                  endPeriod = formattedDate;
-                                                  endPeriodController.text = endPeriod;
-                                                  Navigator.pop(context, "end");
-                                                }
-                                              }
-                                            });
-                                          },
-                                          child: const Text("확인", style: TextStyleFamily.normalTextStyle,)
-                                      ),
-                                    ),
-                                  ],
-                                )
+                                      onPressed: (){
+                                        setState(() {
+                                          if(_selectedDay != null){
+                                            String formattedDate = DateFormat('yyyy. M.dd').format(_selectedDay!);
+                                            if(flag == "start"){
+                                              startPeriod = formattedDate;
+                                              startPeriodController.text = startPeriod;
+                                              Navigator.pop(context, "start");
+                                            }else{
+                                              endPeriod = formattedDate;
+                                              endPeriodController.text = endPeriod;
+                                              Navigator.pop(context, "end");
+                                            }
+                                          }else{
+                                            String formattedDate = DateFormat('yyyy. M.dd').format(_focusedDay);
+                                            if(flag == "start"){
+                                              startPeriod = formattedDate;
+                                              startPeriodController.text = startPeriod;
+                                              Navigator.pop(context, "start");
+                                            }else{
+                                              endPeriod = formattedDate;
+                                              endPeriodController.text = endPeriod;
+                                              Navigator.pop(context, "end");
+                                            }
+                                          }
+                                        });
+                                      },
+                                      child: const Text("확인", style: TextStyleFamily.normalTextStyle,)
+                                  ),
+                                ),
                               ],
                             ),
                           )
-                      )
-                    ]
+                        ],
+                      ),
+                    )
                 );
               }
           );

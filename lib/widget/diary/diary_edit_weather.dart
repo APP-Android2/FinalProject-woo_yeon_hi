@@ -79,7 +79,7 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.asset('lib/assets/icons/sunny.png'),
+                          child: Image.asset('lib/assets/images/sunny.png'),
                         ))
                 ),
                 const SizedBox(width:3,),
@@ -102,7 +102,7 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.asset('lib/assets/icons/cloudy.png'),
+                          child: Image.asset('lib/assets/images/cloudy.png'),
                         ))
                 ),
                 const SizedBox(width:3,),
@@ -125,7 +125,7 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.asset('lib/assets/icons/rainy.png'),
+                          child: Image.asset('lib/assets/images/rainy.png'),
                         ))
                 ),
                 const SizedBox(width:3,),
@@ -148,7 +148,7 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.asset('lib/assets/icons/snowy.png'),
+                          child: Image.asset('lib/assets/images/snowy.png'),
                         ))
                 )
               ],
