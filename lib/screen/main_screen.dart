@@ -49,7 +49,7 @@ class _MainScreenState extends State<MainScreen> {
                   onSurface: Colors.black,
             ),
             textSelectionTheme: const TextSelectionThemeData(
-                    selectionHandleColor: ColorFamily.black),
+                    selectionHandleColor: ColorFamily.black,),
                 highlightColor: ColorFamily.gray,
                 splashColor: ColorFamily.gray,
                 useMaterial3: true),
