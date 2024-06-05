@@ -10,13 +10,23 @@ import '../style/color.dart';
 import '../widget/main_bottom_navigation_bar.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({required this.loginData, super.key});
+  final String loginData;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  late String loginData;
+
+  @override
+  void initState() {
+    super.initState();
+    loginData = widget.loginData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

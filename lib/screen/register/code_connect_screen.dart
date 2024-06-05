@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
@@ -213,12 +211,10 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                               //TODO 해당 코드로 연결한 상대가 있는지 여부 파악
                                               //없을 시 토스트메시지 노출("연결된 상대가 없습니다.")
                                               //있을 시 해당 코드 만료 후,
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DdaySettingScreen(
-                                                              isHost: true)));
+                                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const DdaySettingScreen(
+                                                          isHost: true)), (route) => false);
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -278,12 +274,10 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                         //TODO 입력값이 현재 유효한지 체크
                                         //유효하지 않다면 토스트메시지 출력("해당 코드는 유효하지 않은 코드입니다.")
                                         //유효하다면
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NickNameSettingScreen(
-                                                        isHost: false)));
+                                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                                            builder: (context) =>
+                                                NickNameSettingScreen(
+                                                    isHost: false)), (route) => false);
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
                                       child: Container(
@@ -304,10 +298,9 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const RegisterScreen()));
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                            builder: (context) =>
+                                const RegisterScreen()), (route) => false);
                       },
                       child: const Text(
                         "로그아웃",

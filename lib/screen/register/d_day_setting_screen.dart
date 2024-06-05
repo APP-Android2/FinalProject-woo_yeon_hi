@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
@@ -28,7 +26,8 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
     var deviceHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: Container(
+        resizeToAvoidBottomInset: false,
+        body: Container(
           color: ColorFamily.cream,
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -116,15 +115,10 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                 ),
                                 child: InkWell(
                                     onTap: () {
-                                      //TODO 입력값이 현재 유효한지 체크
-                                      //유효하지 않다면 토스트메시지 출력("해당 코드는 유효하지 않은 코드입니다.")
-                                      //유효하다면
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  NickNameSettingScreen(
-                                                      isHost: false)));
+                                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                                          builder: (context) =>
+                                              const NickNameSettingScreen(
+                                                  isHost: true)), (route) => false);
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: Container(
@@ -143,21 +137,20 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                         ),
                       ],
                       )),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterScreen()));
-                  },
-                  child: const Text(
-                    "로그아웃",
-                    style: TextStyleFamily.normalTextStyle,
-                  ),
-                ),
-              )
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                              builder: (context) =>
+                                  const RegisterScreen()), (route) => false);
+                        },
+                        child: const Text(
+                          "로그아웃",
+                          style: TextStyleFamily.normalTextStyle,
+                        ),
+                      ),
+                    )
     ],
     ))])));
   }
