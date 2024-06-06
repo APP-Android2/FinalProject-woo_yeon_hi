@@ -7,7 +7,6 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/help_top_app_bar.dart';
-import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({super.key});
@@ -17,187 +16,144 @@ class HelpScreen extends StatefulWidget {
 }
 
 class _HelpScreenState extends State<HelpScreen> {
-  final FloatingSearchBarController controller = FloatingSearchBarController();
-  var _searchKeyword = "";
-  var _expandIndex = false;
+  String _searchKeyword = "";
+  bool _isUnExpanded = true;
+
+  List<String> helpListTitle = [
+    "탈퇴 시 상대방 계정 처리가 궁금해요.",
+    "로그아웃은 어떻게 하나요?",
+    "데이터 백업은 어떻게 하나요?",
+    "잠금 비밀번호를 잊어버렸을 때 해결방법이 궁금해요.",
+    "탈퇴 시 상대방 계정 처리가 궁금해요.",
+    "로그아웃은 어떻게 하나요?",
+    "데이터 백업은 어떻게 하나요?",
+    "잠금 비밀번호를 잊어버렸을 때 해결방법이 궁금해요.",
+    "탈퇴 시 상대방 계정 처리가 궁금해요.",
+    "로그아웃은 어떻게 하나요?",
+    "데이터 백업은 어떻게 하나요?",
+    "잠금 비밀번호를 잊어버렸을 때 해결방법이 궁금해요.",
+  ];
+
+
 
   @override
   Widget build(BuildContext context) {
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-        appBar: HelpTopAppBar(),
+        appBar: const HelpTopAppBar(),
         body: Container(
-            padding: EdgeInsets.all(20),
+            width: deviceWidth,
+            height: deviceHeight,
+            padding: const EdgeInsets.all(20),
             color: ColorFamily.cream,
-            child: buildSearchBar(context)));
+            child: Column(
+              children: [
+                Material(
+                  elevation: 1,
+                  color: ColorFamily.beige,
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: deviceWidth - 60,
+                    height: deviceHeight * 0.07,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFormField(
+                      cursorColor: ColorFamily.black,
+                      textInputAction: TextInputAction.search,
+                      style: TextStyleFamily.normalTextStyle,
+                      decoration: InputDecoration(
+                          suffixIcon:
+                          SvgPicture.asset("lib/assets/icons/search.svg"),
+                          suffixIconConstraints:
+                          const BoxConstraints(minHeight: 24, minWidth: 24),
+                          hintText: "어떤 도움이 필요하신가요?",
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: ColorFamily.black.withOpacity(0.5),
+                              fontFamily: FontFamily.mapleStoryLight),
+                          counterText: "",
+                          border: InputBorder.none),
+                      onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      onFieldSubmitted: (value) {
+                        //TODO value를 포함하는 도움말 항목들만 노출되도록 기능 구현
+                        setState(() {
+                          _searchKeyword = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    color: ColorFamily.cream,
+                    child: ListView.builder(
+                      itemCount: 12,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Material(
+                              borderRadius: BorderRadius.circular(10),
+                              color: ColorFamily.white,
+                              elevation: 1,
+                              child: Theme(
+                                data: Theme.of(context).copyWith(
+                                  splashColor: Colors.transparent,
+                                ),
+                                child: ExpansionTile(
+                                    onExpansionChanged: (isExpanded) {
+                                      setState(() {
+                                        _isUnExpanded = !_isUnExpanded;
+                                      });
+                                    },
+                                    iconColor: ColorFamily.black,
+                                    leading: _isUnExpanded
+                                        ? SvgPicture.asset(
+                                        "lib/assets/icons/arrow_right_fill.svg")
+                                        : SvgPicture.asset("lib/assets/icons/arrow_down_fill.svg"),
+                                    trailing: SvgPicture.asset(""),
+                                    title: Text(helpListTitle[index], style: TextStyleFamily.normalTextStyle),
+                                    backgroundColor: ColorFamily.beige,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                    collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                    children: [
+                                      makeHelpListItem(context, index)
+                                    ]),
+                              ),
+                            ),
+                            const SizedBox(height: 10)
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                )
+              ],
+            )));
   }
 }
 
-Widget buildSearchBar(BuildContext context) {
-  final List<FloatingSearchBarAction> actions = <FloatingSearchBarAction>[];
-
-  final bool isPortrait =
-      MediaQuery.of(context).orientation == Orientation.portrait;
-
-  return
-      // Consumer<SearchModel>(
-      // builder: (BuildContext context, SearchModel model, _) =>
-      FloatingSearchBar(
-      iconColor: ColorFamily.black,
-      height: 60,
-      borderRadius: BorderRadius.circular(20),
-      elevation: 1,
-      automaticallyImplyBackButton: false,
-      // controller: controller,
-      hint: '어떤 도움이 필요하신가요?',
-      backgroundColor: ColorFamily.beige,
-      hintStyle: TextStyleFamily.normalTextStyle,
-      queryStyle: TextStyleFamily.normalTextStyle,
-      // backdropColor: ColorFamily.cream,
-      backdropColor: Colors.transparent,
-      textInputType: TextInputType.text,
-      onSubmitted: (query) {},
-      // leadingActions: [SvgPicture.asset('lib/assets/icons/arrow_back.svg')],
-      scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-      transitionDuration: const Duration(milliseconds: 500),
-      transitionCurve: Curves.easeInOut,
-      physics: const BouncingScrollPhysics(),
-      axisAlignment: isPortrait ? 0.0 : -1.0,
-      openAxisAlignment: 0.0,
-      width: isPortrait ? 600 : 500,
-      debounceDelay: const Duration(milliseconds: 500),
-      onQueryChanged: (query) {
-        // Call your model, bloc, controller here.
-      },
-      // Specify a custom transition to be used for
-      // animating between opened and closed stated.
-      // transition: CircularFloatingSearchBarTransition(),
-      actions: [
-        SvgPicture.asset('lib/assets/icons/search.svg'),
-
-        // FloatingSearchBarAction(
-        //   showIfOpened: false,
-        //   child: SvgPicture.asset('lib/assets/icons/delete.svg'),
-        // ),
-        // FloatingSearchBarAction.searchToClear(
-        //   showIfClosed: true,
-        // ),
-      ],
-      // actions: actions,
-      // progress: model.isLoading,
-      // onQueryChanged: model.onQueryChanged,
-      // onKeyEvent: (KeyEvent keyEvent) {
-      //   if (keyEvent.logicalKey == LogicalKeyboardKey.escape) {
-      //     controller.query = '';
-      //     controller.close();
-      //   }
-      // },
-      transition: CircularFloatingSearchBarTransition(spacing: 16),
-      builder: (context, transition) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Material(
-              elevation: 4.0,
-              child: Container(height: 300, color: ColorFamily.beige)
-              // Column(
-              //   mainAxisSize: MainAxisSize.min,
-              //   children: Colors.accents.map((color) {
-              //     return Container(height: 112, color: color);
-              //   }).toList(),
-              // ),
-              ),
-        );
-      },
-      body: ListView(children: [buildBody()]),
-  );
-}
-
-Widget buildBody() {
-  return Container(
-    padding: EdgeInsets.all(10),
-    color: ColorFamily.cream,
-    width: 360,
-    height: 800,
-    child: Column(
-      children: [
-        SizedBox(height: 100),
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.only(bottom: 30),
-            color: ColorFamily.cream,
-            child: ListView.builder(
-              itemCount: 15,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Material(
-                      borderRadius: BorderRadius.circular(10),
-                      color: ColorFamily.white,
-                      elevation: 1,
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          splashColor: Colors.transparent, // 원하는 splashColor로 변경
-                        ),
-                        child: ExpansionTile(
-                            iconColor: ColorFamily.black,
-                            leading:
-                            //TODO 펼침 여부에 따라 아이콘 변경
-                            SvgPicture.asset("lib/assets/icons/arrow_right_fill.svg"),
-                            //SvgPicture.asset("lib/assets/icons/arrow_down_fill.svg"),
-                            trailing: SvgPicture.asset(""),
-                            title: Text("탈퇴시 상대방 계정 처리가 궁금해요.",
-                                style: TextStyleFamily.normalTextStyle),
-                            backgroundColor: ColorFamily.beige,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            collapsedShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            children: [helpListItem(context, index)]),
-                      ),
-                    ),
-                    SizedBox(height: 10)
-                  ],
-                );
-              },
-            ),
-          ),
-        )
-      ],
-    ),
-  );
-}
-
-Widget helpListItem(BuildContext context, int index) {
-  return Container(
-      child: Column(
+Widget makeHelpListItem(BuildContext context, int index) {
+  return const Column(
     children: [
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              // child:
-              // SvgPicture.asset("lib/assets/icons/arrow_right_fill.svg")
-              // SvgPicture.asset("lib/assets/icons/arrow_down_fill.svg")
-              ),
-          SizedBox(width: 50),
-          Container(
-            width: 330,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Text("탈퇴시 상대방 계정 처리가 궁금해요.", style: TextStyleFamily.normalTextStyle),
-                // SizedBox(height: 10),
-                Text(
-                    "계정삭제(탈퇴)를 할 경우 상대방 계정은 lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: ColorFamily.black,
-                        fontFamily: FontFamily.mapleStoryLight)),
-              ],
-            ),
-          ),
-        ],
+      Padding(
+        padding: EdgeInsets.only(left: 30),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+              style: TextStyle(
+                  fontSize: 12,
+                  color: ColorFamily.black,
+                  fontFamily: FontFamily.mapleStoryLight)),
+        ),
       ),
       SizedBox(height: 20),
     ],
-  ));
+  );
 }

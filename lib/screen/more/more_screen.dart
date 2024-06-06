@@ -213,7 +213,7 @@ class _MoreScreen extends State<MoreScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HelpScreen()));
+                              builder: (context) => const HelpScreen()));
                     },
                     borderRadius: BorderRadius.circular(10.0),
                     child: SizedBox(
