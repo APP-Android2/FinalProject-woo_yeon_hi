@@ -42,6 +42,9 @@ class LedgerCheckBoxProvider extends ChangeNotifier{
   // 체크된 아이템 리스트를 반환
   List<bool> get checkedItems => _checkedItems;
 
+  // 전체 선택 상태를 반환
+  bool get allChecked => _checkedItems.every((item) => item);
+
   // 인덱스에 해당하는 항목의 체크 상태를 토글
   void toggleCheck(int index) {
     _checkedItems[index] = !_checkedItems[index];

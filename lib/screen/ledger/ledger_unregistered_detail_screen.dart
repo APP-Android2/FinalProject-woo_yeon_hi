@@ -40,7 +40,7 @@ class _LedgerUnregisteredDetailScreenState extends State<LedgerUnregisteredDetai
               padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Column(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: LedgerUnregisteredDetailListView(),
                   ),
 
@@ -62,7 +62,7 @@ class _LedgerUnregisteredDetailScreenState extends State<LedgerUnregisteredDetai
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return LedgerDialog('LedgerUnregisteredDetailScreen', '선택되지 않은 항목이 있습니다.', '선택되지 않은 항목은 삭제 됩니다.');
+                                return LedgerDialog('LedgerUnregisteredDetailScreen', '이대로 등록 하시겠습니까?', '선택 되지 않은 항목은 삭제 됩니다.');
                               },
                             );
                           }else {
@@ -70,14 +70,14 @@ class _LedgerUnregisteredDetailScreenState extends State<LedgerUnregisteredDetai
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return LedgerDialog('LedgerUnregisteredDetailScreen', '거래내역이 등록 되었습니다.', '가계부를 작성 하러 가보세요.');});}
+                                  return LedgerDialog('DoneLedgerUnregisteredDetailScreen', '거래내역이 등록 되었습니다.', '가계부를 작성 하러 가보세요.');});}
                         },
                         //Navigator.pop(context);
                         borderRadius: BorderRadius.circular(20.0),
                         child: Container(
                           height: 40,
                           alignment: Alignment.center,
-                          child: Text(
+                          child: const Text(
                             "등록",
                             style: TextStyleFamily.normalTextStyle,
                           ),
