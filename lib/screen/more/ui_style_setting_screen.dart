@@ -12,36 +12,41 @@ class UiStyleSettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: UiStyleSettingTopAppBar(),
+      appBar: const UiStyleSettingTopAppBar(),
       body: Container(
-        padding: EdgeInsets.all(20),
+          width: deviceWidth,
+          height: deviceHeight,
+        padding: const EdgeInsets.all(20),
         color: ColorFamily.cream,
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+              SizedBox(
+                width: deviceWidth-40,
                 height: 60,
                 child: Material(
                   color: ColorFamily.cream,
                   child: InkWell(
+                    splashColor: ColorFamily.gray,
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeUiSettingScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeUiSettingScreen()));
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(height: 5),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("홈 화면 스타일",style: TextStyleFamily.smallTitleTextStyle),
-                              SvgPicture.asset("lib/assets/icons/expand.svg")
-                            ],
-                          ),
+                        const SizedBox(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("홈 화면 스타일",style: TextStyleFamily.smallTitleTextStyle),
+                            SvgPicture.asset("lib/assets/icons/expand.svg")
+                          ],
                         ),
-                        Container(
+                        const SizedBox(
                           height: 0.5,
                           child: Divider(color: ColorFamily.gray, thickness: 0.5),
                         )
@@ -50,29 +55,27 @@ class UiStyleSettingScreen extends StatelessWidget {
                   ),
                 )
               ),
-              Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+              SizedBox(
+                  width: deviceWidth-40,
                   height: 60,
                   child: Material(
                     color: ColorFamily.cream,
                     child: InkWell(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => TopBarUiSettingScreen(),));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const TopBarUiSettingScreen(),));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(height: 5),
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("상단바 스타일",style: TextStyleFamily.smallTitleTextStyle),
-                                SvgPicture.asset("lib/assets/icons/expand.svg")
-                              ],
-                            ),
+                          const SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("상단바 스타일",style: TextStyleFamily.smallTitleTextStyle),
+                              SvgPicture.asset("lib/assets/icons/expand.svg")
+                            ],
                           ),
-                          Container(
+                          const SizedBox(
                             height: 0.5,
                             child: Divider(color: ColorFamily.gray, thickness: 0.5),
                           )

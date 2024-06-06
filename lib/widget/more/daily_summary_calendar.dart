@@ -55,7 +55,7 @@ class _DailySummaryCalendarState extends State<DailySummaryCalendar> {
           rightChevronIcon: SvgPicture.asset('lib/assets/icons/arrow_right.svg'),
         ),
         daysOfWeekHeight:40,
-        daysOfWeekStyle: DaysOfWeekStyle(
+        daysOfWeekStyle: const DaysOfWeekStyle(
             weekdayStyle: TextStyleFamily.normalTextStyle,
             weekendStyle: TextStyleFamily.normalTextStyle),
         calendarBuilders: CalendarBuilders(
@@ -119,8 +119,8 @@ class _DailySummaryCalendarState extends State<DailySummaryCalendar> {
                       DateFormat('d').format(day),
                       style: TextStyle(
                           color: isHoliday(day)
-                              ? ColorFamily.white
-                              : ColorFamily.black,
+                              ? Colors.red
+                              : isSaturday(day)?Colors.blueAccent :ColorFamily.black,
                           fontFamily: FontFamily.mapleStoryLight),
                     ),
                   ),
@@ -143,16 +143,17 @@ class _DailySummaryCalendarState extends State<DailySummaryCalendar> {
               );
             },
             markerBuilder: (context, day, events){
+              var _toDay = "${DateTime.now().toIso8601String().substring(0, 10)} 00:00:00.000Z";
               return Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.only(top: 20),
                 child: Container(
                   width: 6,
                   height: 6,
                   decoration: BoxDecoration(
-                      color: (summaryIndex == true)
-                          ? ColorFamily.pink
-                          :Colors.transparent,
+                      color: (day == _selectedDay || day.toString() == _toDay)
+                          ? ColorFamily.white
+                          : ColorFamily.pink,
                       shape: BoxShape.circle
                   ),
                 ),
@@ -161,16 +162,10 @@ class _DailySummaryCalendarState extends State<DailySummaryCalendar> {
         ),
         calendarFormat: _calendarFormat,
         selectedDayPredicate: (day) {
-          // Use `selectedDayPredicate` to determine which day is currently selected.
-          // If this returns true, then `day` will be marked as selected.
-
-          // Using `isSameDay` is recommended to disregard
-          // the time-part of compared DateTime objects.
           return isSameDay(_selectedDay, day);
         },
         onDaySelected: (selectedDay, focusedDay) {
           if (!isSameDay(_selectedDay, selectedDay)) {
-            // Call `setState()` when updating the selected day
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;

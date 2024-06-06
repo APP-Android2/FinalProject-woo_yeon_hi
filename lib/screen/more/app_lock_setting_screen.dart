@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
@@ -13,7 +12,7 @@ import 'package:local_auth_android/local_auth_android.dart';
 class AppLockSettingScreen extends StatefulWidget {
   final bool isBioAuthSupported;
 
-  AppLockSettingScreen({super.key, required this.isBioAuthSupported});
+  const AppLockSettingScreen({super.key, required this.isBioAuthSupported});
 
   @override
   State<AppLockSettingScreen> createState() => _AppLockSettingScreenState();
@@ -46,13 +45,14 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
 
   Future<void> _authenticateWithBiometrics() async {
     bool authenticated = false;
+
     try {
       setState(() {
         _isAuthenticating = true;
       });
       authenticated = await auth.authenticate(
         authMessages: [
-          AndroidAuthMessages(
+          const AndroidAuthMessages(
             biometricHint: '',
             biometricNotRecognized: '생체정보가 일치하지 않습니다.',
             biometricRequiredTitle: '생체정보가 필요합니다.',
@@ -94,46 +94,50 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-        appBar: AppLockSettingTopAppBar(),
+        appBar: const AppLockSettingTopAppBar(),
         body: Container(
-            padding: EdgeInsets.all(20),
+            width: deviceWidth,
+            height: deviceHeight,
+            padding: const EdgeInsets.all(20),
             color: ColorFamily.cream,
             child: Column(
               children: [
-                Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                SizedBox(
+                    width: deviceWidth-40,
                     height: 60,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(height: 5),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("잠금 설정",
-                                  style: TextStyleFamily.smallTitleTextStyle),
-                              Switch(
-                                  value: _appLockActivated,
-                                  activeColor: ColorFamily.white,
-                                  activeTrackColor: ColorFamily.pink,
-                                  inactiveThumbColor: ColorFamily.gray,
-                                  inactiveTrackColor: ColorFamily.white,
-                                  trackOutlineWidth:
-                                      MaterialStatePropertyAll(0.5),
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      _appLockActivated = value;
-                                      _appLockActivated
-                                      ? Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(widget.isBioAuthSupported)))
-                                      : _bioAuthActivated = false;
-                                    });
-                                  }),
-                            ],
-                          ),
+                        const SizedBox(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("잠금 설정",
+                                style: TextStyleFamily.smallTitleTextStyle),
+                            Switch(
+                                value: _appLockActivated,
+                                activeColor: ColorFamily.white,
+                                activeTrackColor: ColorFamily.pink,
+                                inactiveThumbColor: ColorFamily.gray,
+                                inactiveTrackColor: ColorFamily.white,
+                                trackOutlineColor:
+                                _appLockActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                trackOutlineWidth: const MaterialStatePropertyAll(1),
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _appLockActivated = value;
+                                    _appLockActivated
+                                        ? Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(widget.isBioAuthSupported)))
+                                        : _bioAuthActivated = false;
+                                  });
+                                }),
+                          ],
                         ),
-                        Container(
+                        const SizedBox(
                           height: 0.5,
                           child:
                               Divider(color: ColorFamily.gray, thickness: 0.5),
@@ -141,64 +145,61 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                       ],
                     )),
                 widget.isBioAuthSupported
-                    ? Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                    ? SizedBox(
+                        width: deviceWidth-40,
                         height: 60,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(height: 5),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("생체 인증 (Touch ID, Face ID)",
-                                      style:
-                                          TextStyleFamily.smallTitleTextStyle),
-                                  Switch(
-                                      value: _bioAuthActivated,
-                                      activeColor: ColorFamily.white,
-                                      activeTrackColor: ColorFamily.pink,
-                                      inactiveThumbColor: ColorFamily.gray,
-                                      inactiveTrackColor: ColorFamily.white,
-                                      trackOutlineWidth:
-                                          MaterialStatePropertyAll(0.5),
-                                      onChanged: (bool value) {
-                                        setState(() {
-                                          _bioAuthActivated = value;
-                                        });
-                                        _bioAuthActivated
-                                        ? _authenticateWithBiometrics()
-                                        : null;
-                                      }),
-                                ],
-                              ),
+                            const SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("생체 인증 (Touch ID, Face ID)",
+                                    style:
+                                        TextStyleFamily.smallTitleTextStyle),
+                                Switch(
+                                    value: _bioAuthActivated,
+                                    activeColor: ColorFamily.white,
+                                    activeTrackColor: ColorFamily.pink,
+                                    inactiveThumbColor: ColorFamily.gray,
+                                    inactiveTrackColor: ColorFamily.white,
+                                    trackOutlineColor:
+                                    _bioAuthActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                    trackOutlineWidth: const MaterialStatePropertyAll(1),
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        _bioAuthActivated = value;
+                                      });
+                                      _bioAuthActivated
+                                          ? _authenticateWithBiometrics()
+                                          : null;
+                                    }),
+                              ],
                             ),
-                            Container(
+                            const SizedBox(
                               height: 0.5,
                               child: Divider(
                                   color: ColorFamily.gray, thickness: 0.5),
                             )
                           ],
                         ))
-                    : Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                    : SizedBox(
+                    width: deviceWidth-40,
                         height: 60,
-                        child: Column(
+                        child: const Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(height: 5),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("생체 인증 (Touch ID, Face ID)",
-                                      style:
-                                          TextStyleFamily.smallTitleTextStyle),
-                                ],
-                              ),
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("생체 인증 (Touch ID, Face ID)",
+                                    style:
+                                        TextStyleFamily.smallTitleTextStyle),
+                              ],
                             ),
                             Align(
                               alignment: Alignment.centerLeft,
@@ -209,7 +210,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                       FontFamily.mapleStoryLight,
                                       color: ColorFamily.gray)),
                             ),
-                            Container(
+                            SizedBox(
                               height: 0.5,
                               child: Divider(
                                   color: ColorFamily.gray, thickness: 0.5),

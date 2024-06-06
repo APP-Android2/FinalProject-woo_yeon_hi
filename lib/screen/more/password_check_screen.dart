@@ -42,6 +42,282 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
     });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      appBar: const AppLockSettingTopAppBar(),
+      body: Container(
+        width: deviceWidth,
+        height: deviceHeight,
+        padding: const EdgeInsets.all(20),
+        color: ColorFamily.cream,
+        child: Column(
+          children: [
+            SizedBox(height: deviceHeight * 0.1),
+            const Text("비밀번호 확인", style: TextStyleFamily.passwordTextStyle),
+            SizedBox(height: deviceHeight * 0.08),
+            SizedBox(
+              height: 50,
+              width: deviceWidth * 0.6,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg",
+                      width: 48, height: 48),
+                  const SizedBox(width: 20),
+                  SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg",
+                      width: 48, height: 48),
+                  const SizedBox(width: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: SvgPicture.asset(
+                        "lib/assets/icons/password_bar_24px.svg",
+                        width: 24),
+                  ),
+                  const SizedBox(width: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: SvgPicture.asset(
+                        "lib/assets/icons/password_bar_24px.svg",
+                        width: 24),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: deviceHeight * 0.25),
+            SizedBox(
+              height: deviceHeight * 0.08,
+              width: deviceWidth - 40,
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("1번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "1",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("2번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "2",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("3번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "3",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: deviceHeight * 0.08,
+              width: deviceWidth - 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("4번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "4",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("5번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "5",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("6번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "6",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: deviceHeight * 0.08,
+              width: deviceWidth - 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("7번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "7",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("8번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "8",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("9번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "9",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: deviceHeight * 0.08,
+              width: deviceWidth - 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        showBioAuthDialog(context);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("0번 클릭됨");
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "0",
+                          style: TextStyleFamily.passwordTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.08,
+                    width: (deviceWidth - 40) / 3,
+                    child: InkWell(
+                      onTap: () {
+                        print("지우기 클릭됨");
+                      },
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset(
+                              "lib/assets/icons/backspace.svg")),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _authenticateWithBiometrics() async {
     bool authenticated = false;
     try {
@@ -50,7 +326,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
       });
       authenticated = await auth.authenticate(
         authMessages: [
-          AndroidAuthMessages(
+          const AndroidAuthMessages(
             biometricHint: '',
             biometricNotRecognized: '생체정보가 일치하지 않습니다.',
             biometricRequiredTitle: '생체정보가 필요합니다.',
@@ -63,8 +339,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
             signInTitle: '생체정보 스캔',
           )
         ],
-        localizedReason:
-        '기기에 등록된 생체정보를 스캔해주세요.',
+        localizedReason: '기기에 등록된 생체정보를 스캔해주세요.',
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,
@@ -84,7 +359,6 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
       return;
     }
 
-
     Future<void> _cancelAuthentication() async {
       await auth.stopAuthentication();
       setState(() => _isAuthenticating = false);
@@ -92,390 +366,135 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
   }
 
   //TODO widget.isBioAuthSupported를 조건으로 노출 여부 결정
-  void showBioAuthDialog(BuildContext context){
+  void showBioAuthDialog(BuildContext context) {
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
 
     showMaterialModalBottomSheet(
         backgroundColor: ColorFamily.white,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                topLeft: Radius.circular(20))),
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
         context: context,
-        builder: (context) =>
-            Container(
-                height: 390,
-                child: Column(children: [
-                  Container(
-                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: Column(
+        builder: (context) => SizedBox(
+            height: deviceHeight*0.43,
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    const Text('생체 인증 등록',
+                        style: TextStyle(
+                            color: ColorFamily.black,
+                            fontFamily: FontFamily.mapleStoryLight,
+                            fontSize: 20)),
+                    const SizedBox(height: 50),
+                    SizedBox(
+                      width: deviceWidth*0.55,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(height: 30),
-                          Text('생체 인증 등록', style: TextStyle(color: ColorFamily.black,fontFamily: FontFamily.mapleStoryLight,fontSize: 20)),
-                          SizedBox(height: 50),
-                          Container(
-                            width: 250,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(width:75, child: SvgPicture.asset("lib/assets/icons/fingerprint.svg", height: 64)),
-                                SvgPicture.asset("lib/assets/icons/face_id.svg", width: 64, height: 64)
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 15),
-                          Container(
-                            width: 250,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Touch ID",style: TextStyleFamily.appBarTitleLightTextStyle),
-                                Text("Face ID",style: TextStyleFamily.appBarTitleLightTextStyle)
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 30),
-                          Text("기기에 등록되어 있는 생체정보를 통해",style: TextStyleFamily.normalTextStyle),
-                          Text("앱 잠금을 해제할 수 있습니다.",style: TextStyleFamily.normalTextStyle),
+                          SizedBox(
+                              width: 64,
+                              child: SvgPicture.asset(
+                                  "lib/assets/icons/fingerprint.svg",
+                                  height: 64)),
+                          SvgPicture.asset("lib/assets/icons/face_id.svg",
+                              width: 64, height: 64)
                         ],
-                      )
-                  ),
-                  SizedBox(height: 40),
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        Padding(padding: EdgeInsets.only(left: 50)),
-                        Expanded(
-                          child: Container(
-                            child: Material(
-                              color: ColorFamily.white,
-                              elevation: 0.5,
-                              shadowColor: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(20.0),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                      width: deviceWidth*0.55,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("지문 인식",
+                              style:
+                                  TextStyleFamily.appBarTitleLightTextStyle),
+                          Text("Face ID",
+                              style:
+                                  TextStyleFamily.appBarTitleLightTextStyle)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const Text("기기에 등록되어 있는 생체정보를 통해",
+                        style: TextStyleFamily.normalTextStyle),
+                    const Text("앱 잠금을 해제할 수 있습니다.",
+                        style: TextStyleFamily.normalTextStyle),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: deviceWidth-80,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Material(
+                        color: ColorFamily.white,
+                        elevation: 0.5,
+                        shadowColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AppLockSettingScreen(
+                                              isBioAuthSupported: widget
+                                                  .isBioAuthSupported)));
+                            },
+                            borderRadius: BorderRadius.circular(20.0),
+                            child: Container(
+                              decoration: BoxDecoration(border: Border.all(color: ColorFamily.gray,width: 0.2),borderRadius: BorderRadius.circular(20)),
+                              height: 40,
+                              alignment: Alignment.center,
+                              child: const Text(
+                                "다음에",
+                                style: TextStyleFamily.normalTextStyle,
                               ),
-                              child: InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(isBioAuthSupported: widget.isBioAuthSupported)));
-                                  },
-                                  borderRadius:
-                                  BorderRadius.circular(20.0),
-                                  child:
-                                  Container(
-                                      height: 40,
-                                      width: 120,
-                                      child:
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "다음에",
-                                          style: TextStyleFamily.normalTextStyle,
-                                        ),
-                                      )
-                                  )
+                            )),
+                      ),
+                    ),
+                      const SizedBox(width: 20),
+                    Expanded(
+                      child: Material(
+                        color: ColorFamily.beige,
+                        elevation: 0.5,
+                        shadowColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            _authenticateWithBiometrics();
+                          },
+                          borderRadius: BorderRadius.circular(20.0),
+                            child: Container(
+                              height: 40,
+                              alignment: Alignment.center,
+                              child: const Text(
+                                "사용하기",
+                                style: TextStyleFamily.normalTextStyle,
                               ),
                             ),
                           ),
                         ),
-                        Padding(padding: EdgeInsets.only(left: 20)),
-                        Expanded(
-                          child: Material(
-                            color: ColorFamily.beige,
-                            elevation: 0.5,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                _authenticateWithBiometrics();
-                              },
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Container(
-                                  height: 40,
-                                  width: 120,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "사용하기",
-                                      style: TextStyleFamily.normalTextStyle,
-                                    ),
-                                  )),
-                            ),
-                          ),
-                        ),
-                        Padding(padding: EdgeInsets.only(right: 50)),
-                      ],
-                    ),
-                  ),
-                ])));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppLockSettingTopAppBar(),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        color: ColorFamily.cream,
-        child: Column(
-          children: [
-            Padding(padding: EdgeInsets.only(top: 170)),
-            Container(
-                child: Text("비밀번호 확인",
-                    style: TextStyleFamily.passwordTextStyle)),
-            Padding(padding: EdgeInsets.only(top: 75)),
-            Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    child:
-                    SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg"),
-                  ),
-                  Padding(padding: EdgeInsets.only(right: 20)),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    child:
-                    SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg"),
-                  ),
-                  Padding(padding: EdgeInsets.only(right: 20)),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    child:
-                    SvgPicture.asset("lib/assets/icons/password_bar_24px.svg"),
-                  ),
-                  Padding(padding: EdgeInsets.only(right: 20)),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    child:
-                    SvgPicture.asset("lib/assets/icons/password_bar_24px.svg"),
-                  ),
-                ],
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 210)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "1",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "2",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(0.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 60,
-                        height: 30,
-                        child: Text(
-                          "3",
-                          style: TextStyleFamily.passwordTextStyle,
-                        ),
                       ),
-                    ),
-                  )
-                ],
+                  ],
+                ),
               ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 35)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "4",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "5",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(0.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 60,
-                        height: 30,
-                        child: Text(
-                          "6",
-                          style: TextStyleFamily.passwordTextStyle,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 35)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "7",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "8",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(0.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 60,
-                        height: 30,
-                        child: Text(
-                          "9",
-                          style: TextStyleFamily.passwordTextStyle,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 35)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          showBioAuthDialog(context);
-                        },
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "0",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(0.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 60,
-                        height: 30,
-                        child: SvgPicture.asset("lib/assets/icons/backspace.svg"),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ])));
   }
 }
 
+//TODO 비밀번호 4자리 입력 완료시 widget.isBioAuthSupporeted = true 이면 생체인증 다이얼로그 띄우기
