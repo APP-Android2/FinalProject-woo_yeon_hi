@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:woo_yeon_hi/screen/home/home_screen_set1.dart';
+import 'package:woo_yeon_hi/screen/home/home_screen_set2.dart';
+import 'package:woo_yeon_hi/screen/home/home_screen_set4.dart';
+import 'home/home_screen_set3.dart';
 import '../provider/tab_page_index_provider.dart';
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -26,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
       child: [
         Text("diary"),
         Text("ledger"),
-        Text("home"),
+        const HomeScreenSet1(),
         Text("foot_print"),
         Text("more")
       ][currentPageIndex],
