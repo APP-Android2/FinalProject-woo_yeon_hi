@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/model/user_model.dart';
 import 'package:woo_yeon_hi/screen/register/home_preset_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
+import 'package:woo_yeon_hi/widget/login/kakao_login.dart';
 
+import '../../model/enums.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
@@ -21,8 +27,40 @@ class BirthdaySettingScreen extends StatefulWidget {
 }
 
 class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = LoginType.none;
+    });
+  }
+
   DateTime _selectedDate = DateTime.now();
-  DateTime _birthday = DateTime.now();
+  late DateTime _birthday;
+
+  dynamic birthDateTextEditController;
+  dynamic userProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    _birthday = userProvider.userBirth;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +224,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                           setState(() {
                                             _selectedDate = date;
                                             _birthday = _selectedDate;
+                                            userProvider.userBirth = _birthday;
                                           });
                                         },
                                             // onCancel: (){},
@@ -235,8 +274,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                widget.isHost
-                                    ? Material(
+                                    Material(
                                         color: ColorFamily.white,
                                         elevation: 0.5,
                                         shadowColor: Colors.black,
@@ -256,8 +294,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           NickNameSettingScreen(
-                                                              isHost: widget
-                                                                  .isHost)));
+                                                              isHost: widget.isHost)));
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -272,10 +309,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                                         .normalTextStyle,
                                                   ),
                                                 ))),
-                                      )
-                                    : SizedBox(
-                                        height: deviceHeight * 0.045,
-                                        width: deviceWidth * 0.4),
+                                      ),
                                 Material(
                                   color: ColorFamily.beige,
                                   elevation: 0.5,
@@ -314,10 +348,11 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
+                          signOut();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const RegisterScreen()),
+                                  builder: (context) => RegisterScreen()),
                               (route) => false);
                         },
                         child: const Text(

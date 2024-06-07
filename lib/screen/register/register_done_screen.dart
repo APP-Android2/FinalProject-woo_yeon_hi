@@ -1,10 +1,13 @@
 import 'package:animated_background/animated_background.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../model/enums.dart';
+import '../../model/user_model.dart';
 import '../../style/font.dart';
 
 class RegisterDoneScreen extends StatefulWidget {
@@ -20,6 +23,15 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
     with TickerProviderStateMixin {
 
   static const storage = FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
+
+  dynamic userProvider;
+  @override
+  void initState() {
+    super.initState();
+
+    userProvider = Provider.of<UserModel>(context, listen: false);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -129,14 +141,22 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                 ),
                                 child: InkWell(
                                     onTap: () async {
+                                      //TODO user데이터모델 서버에 저장
+
+                                      // 자동로그인
                                       // write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
                                       //{"login" : "id id_value password password_value"}
                                       //와 같은 형식으로 저장이 된다고 생각을 하면 됩니다.
+                                      if(userProvider.loginType == LoginType.google){
                                       await storage.write(
                                       key: "loginData",
-                                      value: "현재 로그인 계정 정보");
-
-                                      runApp(const MainScreen(loginData: "현재 로그인 계정 정보"));
+                                      value: "googleUser?.id");
+                                      } else{
+                                      await storage.write(
+                                      key: "loginData",
+                                      value: "OAuthToken.accessToken");
+                                      }
+                                      runApp(const MainScreen(loginData: "loginData"));
                                     },
                                     borderRadius:
                                     BorderRadius.circular(20.0),

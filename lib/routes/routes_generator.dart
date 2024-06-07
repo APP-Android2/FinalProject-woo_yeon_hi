@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../model/enums.dart';
 import '../screen/register/register_done_screen.dart';
 
 class RouteGenerator {
