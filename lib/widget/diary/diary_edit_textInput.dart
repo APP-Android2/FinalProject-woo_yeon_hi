@@ -8,7 +8,8 @@ import '../../style/color.dart';
 import '../../style/text_style.dart';
 
 class DiaryEditTextInput extends StatefulWidget {
-  const DiaryEditTextInput({super.key});
+  DiaryEditTextInput(this.provider, {super.key});
+  DiaryProvider provider;
 
   @override
   State<DiaryEditTextInput> createState() => _DiaryEditTextInputState();

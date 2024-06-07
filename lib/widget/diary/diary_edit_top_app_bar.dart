@@ -11,7 +11,8 @@ import '../../provider/diary_provider.dart';
 
 
 class DiaryEditTopAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const DiaryEditTopAppBar({super.key});
+  DiaryEditTopAppBar(this.provider, {super.key});
+  DiaryProvider provider;
 
   @override
   State<DiaryEditTopAppBar> createState() => _DiaryEditTopAppBarState();
@@ -113,8 +114,6 @@ class _DiaryEditTopAppBarState extends State<DiaryEditTopAppBar> {
                                   overlayColor: MaterialStateProperty.all(
                                       ColorFamily.gray)),
                               onPressed: () {
-                                //프로바이더 초기화
-                                diaryProvider.resetProvider();
                                 Navigator.pop(context); // 다이얼로그 팝
                                 Navigator.pop(context); // 일기 작성 페이지 팝
                               },
@@ -185,8 +184,6 @@ class _DiaryEditTopAppBarState extends State<DiaryEditTopAppBar> {
                                   overlayColor: MaterialStateProperty.all(
                                       ColorFamily.gray)),
                               onPressed: () {
-                                // 프로바이더 초기화
-                                diaryProvider.resetProvider();
                                 Navigator.pop(context); // 다이얼로그 팝
                                 Navigator.pop(context); // 일기 작성 페이지 팝
                               },

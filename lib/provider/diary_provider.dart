@@ -5,10 +5,12 @@ class DiaryProvider extends ChangeNotifier{
   final TextEditingController _titleTextEditController = TextEditingController();
   final TextEditingController _contentTextEditController = TextEditingController();
   XFile? _image;
+  int _weatherType = 0;
 
   TextEditingController get titleTextEditController => _titleTextEditController;
   TextEditingController get contentTextEditController => _contentTextEditController;
   XFile? get image => _image;
+  int get weatherType => _weatherType;
 
   bool checkProvider(){
     if(titleTextEditController.text.isNotEmpty || contentTextEditController.text.isNotEmpty || image != null){
@@ -22,6 +24,7 @@ class DiaryProvider extends ChangeNotifier{
     _titleTextEditController.clear();
     _contentTextEditController.clear();
     _image = null;
+    _weatherType = 0;
   }
 
   void setTitleController(String title){
@@ -39,10 +42,8 @@ class DiaryProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  @override
-  void dispose() {
-    _titleTextEditController.dispose();
-    _contentTextEditController.dispose();
-    super.dispose();
+  void setWeather(int type){
+    _weatherType = type;
+    notifyListeners();
   }
 }

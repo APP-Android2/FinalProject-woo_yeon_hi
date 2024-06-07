@@ -12,7 +12,8 @@ import '../../style/color.dart';
 import '../../style/font.dart';
 
 class DiaryEditAlbum extends StatefulWidget {
-  const DiaryEditAlbum({super.key});
+  DiaryEditAlbum(this.provider, {super.key});
+  DiaryProvider provider;
 
   @override
   State<DiaryEditAlbum> createState() => _DiaryEditAlbumState();
@@ -23,8 +24,6 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
 
   @override
   Widget build(BuildContext context) {
-    var diaryProvider = Provider.of<DiaryProvider>(context, listen:false);
-
     return SizedBox(
       width: (MediaQuery.of(context).size.width / 3) - 20,
       child: Column(
@@ -56,15 +55,15 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
                   surfaceTintColor: ColorFamily.white,
                   elevation: 1,
                   child: Container(
-                    child: (diaryProvider.image != null)
+                    child: (widget.provider.image != null)
                         ? Stack(
                             fit: StackFit.expand,
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: (diaryProvider.image?.path != null)
+                                child: (widget.provider.image?.path != null)
                                     ?Image.file(
-                                  File(diaryProvider.image!.path),
+                                  File(widget.provider.image!.path),
                                   fit: BoxFit.cover,
                                 ):Image.asset('lib/assets/images/test_couple.png', fit: BoxFit.cover,),
                               ),
@@ -78,7 +77,7 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
                                   focusColor: Colors.transparent,
                                   onTap: (){
                                     setState(() {
-                                      diaryProvider.setImage(null);
+                                      widget.provider.setImage(null);
                                     });
                                   },
                                   child:SvgPicture.asset(
@@ -91,7 +90,7 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onPressed: () {
-                              getImage(diaryProvider, ImageSource.gallery);
+                              getImage(widget.provider, ImageSource.gallery);
                             },
                             icon: SvgPicture.asset(
                               'lib/assets/icons/add.svg',
@@ -116,7 +115,6 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
     if (pickedFile != null) {
       setState(() {
         diaryProvider.setImage(XFile(pickedFile.path));
-        uploadDiaryImage(pickedFile);
       });
     }
   }
