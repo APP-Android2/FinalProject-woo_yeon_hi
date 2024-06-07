@@ -26,36 +26,28 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
       color: ColorFamily.cream,
       child: Column(
         children: [
-          SizedBox(height: deviceHeight * 0.2),
+          SizedBox(height: deviceHeight * 0.22),
           const Text("비밀번호 입력", style: TextStyleFamily.passwordTextStyle),
-          SizedBox(height: deviceHeight * 0.1),
+          SizedBox(height: deviceHeight * 0.08),
           SizedBox(
-            width: deviceWidth * 0.6,
+            height: 50,
+            width: deviceWidth*0.6,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: SvgPicture.asset(
-                        "lib/assets/icons/woo_yeon_hi_48px.svg",
-                        height: 50,
-                        width: 50)),
-                SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: SvgPicture.asset(
-                        "lib/assets/icons/woo_yeon_hi_48px.svg",
-                        height: 50,
-                        width: 50)),
-                SizedBox(
-                    width: 50,
-                    child: SvgPicture.asset(
-                        "lib/assets/icons/password_bar_24px.svg")),
-                SizedBox(
-                    width: 50,
-                    child: SvgPicture.asset(
-                        "lib/assets/icons/password_bar_24px.svg")),
+                SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg", width: 48, height: 48),
+                const SizedBox(width: 20),
+                SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg", width: 48, height: 48),
+                const SizedBox(width: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg", width: 24),
+                ),
+                const SizedBox(width: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg", width: 24),
+                )
               ],
             ),
           ),
@@ -87,13 +79,13 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
           ),
           SizedBox(height: deviceHeight * 0.18),
           SizedBox(
-            width: deviceWidth * 0.9,
+            height: deviceHeight * 0.08,
+            width: deviceWidth-40,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("1번 클릭됨");
@@ -109,7 +101,7 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                 ),
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("2번 클릭됨");
@@ -125,7 +117,7 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                 ),
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("3번 클릭됨");
@@ -143,13 +135,14 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
             ),
           ),
           SizedBox(
-            width: deviceWidth * 0.9,
+            height: deviceHeight * 0.08,
+            width: deviceWidth-40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("4번 클릭됨");
@@ -165,7 +158,7 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                 ),
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("5번 클릭됨");
@@ -181,7 +174,7 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                 ),
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("6번 클릭됨");
@@ -199,13 +192,14 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
             ),
           ),
           SizedBox(
-            width: deviceWidth * 0.9,
+            height: deviceHeight * 0.08,
+            width: deviceWidth-40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("7번 클릭됨");
@@ -221,7 +215,7 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                 ),
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("8번 클릭됨");
@@ -237,7 +231,7 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                 ),
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("9번 클릭됨");
@@ -255,13 +249,14 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
             ),
           ),
           SizedBox(
-            width: deviceWidth * 0.9,
+            height: deviceHeight * 0.08,
+            width: deviceWidth-40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {},
                     child: Container(
@@ -275,30 +270,30 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                 ),
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("0번 클릭됨");
                     },
                     child: Container(
-                    alignment: Alignment.center,
-                    child: const Text(
-                      "0",
-                      style: TextStyleFamily.passwordTextStyle,
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "0",
+                        style: TextStyleFamily.passwordTextStyle,
+                      ),
                     ),
-                  ),
                   ),
                 ),
                 SizedBox(
                   height: deviceHeight * 0.08,
-                  width: deviceWidth * 0.3,
+                  width: (deviceWidth-40)/3,
                   child: InkWell(
                     onTap: () {
                       print("지우기 클릭됨");
                     },
                     child: Container(
-                      alignment: Alignment.center,
-                      child: SvgPicture.asset("lib/assets/icons/backspace.svg")
+                        alignment: Alignment.center,
+                        child: SvgPicture.asset("lib/assets/icons/backspace.svg")
                     ),
                   ),
                 )

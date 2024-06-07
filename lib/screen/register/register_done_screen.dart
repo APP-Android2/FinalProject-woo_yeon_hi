@@ -62,7 +62,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                             width: deviceWidth - 40,
                             child: Column(children: [
                               SizedBox(
-                                height: deviceHeight - 170,
+                                height: deviceHeight - 140,
                                 width: deviceWidth - 40,
                                 child: Column(children: [
                                     SizedBox(height: deviceHeight * 0.1),
@@ -141,7 +141,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                     borderRadius:
                                     BorderRadius.circular(20.0),
                                     child: Container(
-                                      decoration: BoxDecoration(border: Border.all(color: ColorFamily.pink),borderRadius: BorderRadius.circular(20)),
+                                      decoration: BoxDecoration(border: Border.all(color: ColorFamily.pink,width: 0.5),borderRadius: BorderRadius.circular(20)),
                                       alignment: Alignment.center,
                                       child: const Text(
                                         "홈 화면으로 이동",

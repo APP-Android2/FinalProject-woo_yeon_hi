@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -48,6 +49,12 @@ class _RegisterScreen extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       child: InkWell(
+                        onLongPress: (){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const PasswordEnterScreen()));
+                        },
                         onTap: () {
                           Navigator.pushReplacement(
                               context,

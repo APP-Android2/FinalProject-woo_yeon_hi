@@ -40,7 +40,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: deviceHeight - 170,
+                            height: deviceHeight - 140,
                             width: deviceWidth - 40,
                             child: Column(
                               children: [
@@ -124,7 +124,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                               height: 24),
                                         ],
                                       ),
-                                SizedBox(height: deviceHeight * 0.07),
+                                SizedBox(height: deviceHeight * 0.05),
                                 const Text("연인의 별명을 지어주세요!",
                                     style: TextStyleFamily.smallTitleTextStyle),
                                 SizedBox(height: deviceHeight * 0.2),

@@ -45,7 +45,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                         width: deviceWidth - 40,
                         child: Column(children: [
                           SizedBox(
-                              height: deviceHeight - 170,
+                              height: deviceHeight - 140,
                               width: deviceWidth - 40,
                               child: Column(children: [
                                 SizedBox(height: deviceHeight * 0.1),
@@ -132,7 +132,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                               height: 24),
                                         ],
                                       ),
-                                SizedBox(height: deviceHeight * 0.07),
+                                SizedBox(height: deviceHeight * 0.05),
                                 const Text(
                                   "본인의 생년월일을 등록해주세요",
                                   style: TextStyleFamily.smallTitleTextStyle,

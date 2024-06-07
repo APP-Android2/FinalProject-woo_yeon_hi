@@ -77,8 +77,8 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
                         Container(
                             decoration:
                             presetPosition == index
-                            ? BoxDecoration(border: Border.all(color: ColorFamily.pink, width: 2), borderRadius: BorderRadius.circular(20))
-                            : BoxDecoration(border: Border.all(color: Colors.transparent, width: 2), borderRadius: BorderRadius.circular(20)),
+                            ? BoxDecoration(border: Border.all(color: ColorFamily.pink, width: 1.5), borderRadius: BorderRadius.circular(20))
+                            : BoxDecoration(border: Border.all(color: Colors.transparent, width: 1.5), borderRadius: BorderRadius.circular(20)),
                             child: Material(borderRadius: BorderRadius.circular(20), elevation: 1.0, child: ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.asset(presetImages[index], fit: BoxFit.cover,)))),
                       ],
                     );

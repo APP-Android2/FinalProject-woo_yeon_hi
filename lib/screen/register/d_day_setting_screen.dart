@@ -42,7 +42,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                       width: deviceWidth - 40,
                       child: Column(children: [
                         SizedBox(
-                          height: deviceHeight - 170,
+                          height: deviceHeight - 140,
                           width: deviceWidth - 40,
                           child: Column(
                               children: [
@@ -87,7 +87,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                               height: 24),
                             ],
                           ),
-                          SizedBox(height: deviceHeight *0.07),
+                                SizedBox(height: deviceHeight * 0.05),
                           const Text(
                             "연인이 된 날을 선택해주세요!",
                             style: TextStyleFamily

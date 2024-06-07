@@ -47,7 +47,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                       width: deviceWidth - 40,
                       child: Column(children: [
                         SizedBox(
-                            height: deviceHeight - 170,
+                            height: deviceHeight - 140,
                             width: deviceWidth - 40,
                             child: Column(
                               children: [
@@ -92,7 +92,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                         height: 24),
                                   ],
                                 ),
-                                SizedBox(height: deviceHeight *0.07),
+                                SizedBox(height: deviceHeight * 0.05),
                                 const Text(
                                   "연결코드를 생성하여 연인을 초대하세요",
                                   style: TextStyleFamily.smallTitleTextStyle,

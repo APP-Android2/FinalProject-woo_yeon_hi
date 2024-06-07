@@ -22,10 +22,10 @@ class HomePresetSettingScreen extends StatefulWidget {
 
 class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
   var presetImages = [
-    "lib/assets/images/home_preset_standard.png",
-    "lib/assets/images/home_preset_dateplan.png",
-    "lib/assets/images/home_preset_ledger.png",
-    "lib/assets/images/home_preset_dateplan_ledger.png",
+    "lib/assets/images/home_preset_standard_4x.png",
+    "lib/assets/images/home_preset_dateplan_4x.png",
+    "lib/assets/images/home_preset_ledger_4x.png",
+    "lib/assets/images/home_preset_dateplan_ledger_4x.png",
   ];
 
   var presetPosition = 0;
@@ -51,7 +51,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                         width: deviceWidth - 40,
                         child: Column(children: [
                           SizedBox(
-                              height: deviceHeight - 170,
+                              height: deviceHeight - 140,
                               width: deviceWidth - 40,
                               child: Column(children: [
                                 SizedBox(height: deviceHeight * 0.1),
@@ -134,12 +134,12 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                               height: 24),
                                         ],
                                       ),
-                                SizedBox(height: deviceHeight * 0.07),
+                                SizedBox(height: deviceHeight * 0.05),
                                 const Text(
                                   "홈 화면 스타일을 골라주세요",
                                   style: TextStyleFamily.smallTitleTextStyle,
                                 ),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 5),
                                 const Text(
                                   "언제든지 변경할 수 있어요 :)",
                                   style: TextStyle(
@@ -149,14 +149,19 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                 ),
                                 const SizedBox(height: 20),
                                 SizedBox(
-                                  height: 400,
+                                  height: deviceHeight*0.5,
                                   child: Swiper(
                                     viewportFraction: 0.5,
-                                    scale: 0.5,
+                                    scale: 0.6,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return Image.asset(presetImages[index],
-                                          fit: BoxFit.contain);
+                                      return Container(
+                                        decoration:
+                                        presetPosition == index
+                                            ? BoxDecoration(border: Border.all(color: ColorFamily.pink, width: 1.5), borderRadius: BorderRadius.circular(20))
+                                            : BoxDecoration(border: Border.all(color: Colors.transparent, width: 1.5), borderRadius: BorderRadius.circular(20)),
+                                          child: Material(borderRadius: BorderRadius.circular(20), elevation: 1.0, child: ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.asset(presetImages[index], fit: BoxFit.contain))),
+                                      );
                                     },
                                     itemCount: presetImages.length,
                                     loop: false,
