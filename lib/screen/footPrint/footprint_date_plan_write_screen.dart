@@ -32,6 +32,7 @@ class _FootprintDatePlanWriteScreenState extends State<FootprintDatePlanWriteScr
           icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
         ),
       ),
+      resizeToAvoidBottomInset: false,
       // 전체 배경색
       backgroundColor: ColorFamily.cream,
       body: Stack(
@@ -46,13 +47,11 @@ class _FootprintDatePlanWriteScreenState extends State<FootprintDatePlanWriteScr
             },
           ),
 
-          Expanded(
-            child: FootprintDatePlanSearchBar(),
-          ),
+          // 검색 바
+          FootprintDatePlanSearchBar(),
 
-          Expanded(
-            child: FootprintDatePlanDraggableSheet(),
-          ),
+          // 바텀 시트
+          FootprintDatePlanDraggableSheet(),
         ],
       ),
     );

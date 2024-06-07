@@ -240,36 +240,10 @@ class FootprintDraggableSheetProvider extends ChangeNotifier {
   final TextEditingController memoTitleController = TextEditingController();
   final TextEditingController memoSubController = TextEditingController();
 
-  // sheet 키
-  final GlobalKey _sheetKey = GlobalKey();
-  final DraggableScrollableController _controller = DraggableScrollableController();
-  List<String> _items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  //List<String> _items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  List<String> _items = List.generate(20, (index) => "방이역");
 
-  DraggableSheetState() {
-    _controller.addListener(_onChanged);
-  }
-
-  GlobalKey get sheetKey => _sheetKey;
-  DraggableScrollableController get controller => _controller;
   List<String> get items => _items;
-
-  void _onChanged() {
-    final currentSize = _controller.size;
-    if (currentSize <= 0.05) collapse();
-  }
-
-  void collapse() => _animateSheet(sheet.snapSizes!.first);
-  void anchor() => _animateSheet(sheet.snapSizes!.last);
-  void expand() => _animateSheet(sheet.maxChildSize);
-  void hide() => _animateSheet(sheet.minChildSize);
-
-  void _animateSheet(double size) {
-    _controller.animateTo(
-      size,
-      duration: const Duration(milliseconds: 50),
-      curve: Curves.easeInOut,
-    );
-  }
 
   void addItem(String item) {
     _items.add(item);
@@ -283,11 +257,13 @@ class FootprintDraggableSheetProvider extends ChangeNotifier {
     }
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  // 항목 아이템 순서 변경
+  void reorderItems(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final item = items.removeAt(oldIndex);
+    items.insert(newIndex, item);
+    notifyListeners();
   }
-
-  DraggableScrollableSheet get sheet => (_sheetKey.currentWidget as DraggableScrollableSheet);
 }
