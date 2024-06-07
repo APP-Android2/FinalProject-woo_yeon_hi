@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/screen/footPrint/footprint_date_plan_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_date_plan_draggable_sheet.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_date_plan_search_bar.dart';
@@ -31,6 +32,25 @@ class _FootprintDatePlanWriteScreenState extends State<FootprintDatePlanWriteScr
           },
           icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FootprintDatePlanDetailScreen()
+                  )
+              );
+            },
+            icon: SvgPicture.asset('lib/assets/icons/list.svg'),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: SvgPicture.asset('lib/assets/icons/done.svg'),
+          ),
+        ],
       ),
       resizeToAvoidBottomInset: false,
       // 전체 배경색
