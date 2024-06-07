@@ -2,11 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/account_delete_top_app_bar.dart';
 
+import '../../model/user_model.dart';
 import '../register/register_screen.dart';
 
 class AccountDeleteScreen extends StatefulWidget {
@@ -19,6 +24,35 @@ class AccountDeleteScreen extends StatefulWidget {
 class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
 
   bool isAgreed = false;
+  dynamic userProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    userProvider = Provider.of<UserModel>(context, listen: false);
+  }
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = LoginType.none;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +132,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               ),
               child: InkWell(
                   onTap: () {
+                    signOut();
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => const RegisterScreen()),
                           (Route<dynamic> route) => false);
