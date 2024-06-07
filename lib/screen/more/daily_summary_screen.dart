@@ -154,213 +154,217 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
               child: SingleChildScrollView(
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 20),
-                  child: Material(
-                    elevation: 3,
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: ColorFamily.white),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 10,
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: DotsColor.scarlet),
-                              ),
-                              const SizedBox(width: 10),
-                              const Text("디데이",
-                                  style: TextStyleFamily.smallTitleTextStyle)
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          // 이벤트가 없을 경우 child
-                          // const Padding(
-                          //       padding: EdgeInsets.only(left: 20),
-                          //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
-                          SizedBox(
-                            height: deviceHeight*0.11,
-                            child: Swiper(
-                              scrollDirection: Axis.vertical,
-                              viewportFraction: 1.0,
-                              scale: 0.5,
-                              itemBuilder:
-                                  (BuildContext context, int index) {
-                                return dDayItems[index];
-                              },
-                              itemCount: dDayItems.length,
-                              loop: false,
-                              autoplay: false,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Container(
-                                height: 10,
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: DotsColor.brown),
-                              ),
-                              const SizedBox(width: 10),
-                              const Text("캘린더",
-                                  style: TextStyleFamily.smallTitleTextStyle)
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          // 이벤트가 없을 경우 child
-                          // const Padding(
-                          //       padding: EdgeInsets.only(left: 20),
-                          //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
-                          SizedBox(
-                            height: deviceHeight * 0.13,
-                            child: ListView.separated(
-                                shrinkWrap: true,
-                                itemCount: 5,
-                                itemBuilder: (context, index) => makeCalendarItem(
-                                    context,
-                                    index,
-                                    DateFormat('yyyy. M. d.')
-                                        .format(_summaryDay)),
-                              separatorBuilder: (context, index) {
-                                return const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Divider(color: ColorFamily.gray, thickness: 0.5,),
-                                );
-                              }
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-
-                          Row(
-                            children: [
-                              Container(
-                                height: 10,
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: DotsColor.pastelYellow),
-                              ),
-                              const SizedBox(width: 10),
-                              const Text("가계부",
-                                  style: TextStyleFamily.smallTitleTextStyle)
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          // 이벤트가 없을 경우 child
-                          // const Padding(
-                          //       padding: EdgeInsets.only(left: 20),
-                          //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
-                          SizedBox(
-                            height: deviceHeight * 0.15,
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: 5,
-                                itemBuilder: (context, index) => makeLedgerItem(
-                                    context,
-                                    index,
-                                    DateFormat('yyyy. M. d.')
-                                        .format(_summaryDay))),
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Container(
-                                height: 10,
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: DotsColor.cyan),
-                              ),
-                              const SizedBox(width: 10),
-                              const Text("교환일기",
-                                  style: TextStyleFamily.smallTitleTextStyle)
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          // 이벤트가 없을 경우 child
-                          // const Padding(
-                          //       padding: EdgeInsets.only(left: 20),
-                          //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
-                          SizedBox(
-                            height: deviceHeight * 0.2,
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 4,
-                                itemBuilder: (context, index) => makeDiaryItem(
-                                    context,
-                                    index,
-                                    DateFormat('yyyy. M. d.')
-                                        .format(_summaryDay))),
-                          ),
-                          const SizedBox(height: 20),
-
-                          Row(
-                            children: [
-                              Container(
-                                height: 10,
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: DotsColor.pastelPink),
-                              ),
-                              const SizedBox(width: 10),
-                              const Text("히스토리",
-                                  style: TextStyleFamily.smallTitleTextStyle)
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          // 이벤트가 없을 경우 child
-                          // const Padding(
-                          //       padding: EdgeInsets.only(left: 20),
-                          //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
-                          SizedBox(
-                            height: deviceHeight * 0.15,
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 4,
-                                itemBuilder: (context, index) => makeHistoryItem(
-                                    context,
-                                    index,
-                                    DateFormat('yyyy. M. d.')
-                                        .format(_summaryDay))),
-                          ),
-                          const SizedBox(height: 20),
-
-                          Row(
-                            children: [
-                              Container(
-                                height: 10,
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: DotsColor.green),
-                              ),
-                              const SizedBox(width: 10),
-                              const Text("데이트 플랜",
-                                  style: TextStyleFamily.smallTitleTextStyle)
-                            ],
-                          ),
-                          const SizedBox(height: 10),
                           Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: const Text("이벤트가 없습니다.",
-                                  style: TextStyleFamily
-                                      .normalTextStyle) // 데이터가 없을 때
-                              //TODO 데이터가 있을 때 child -> 해당 데이터 보여줄 컨테이너(누르면 해당 데이터 페이지로 이동)
-                              ),
+                            height: 10,
+                            width: 10,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: DotsColor.scarlet),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text("디데이",
+                              style: TextStyleFamily.smallTitleTextStyle)
                         ],
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      // 이벤트가 없을 경우
+                      // const Padding(
+                      //       padding: EdgeInsets.only(left: 20),
+                      //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle)),
+                      // SizedBox(
+                      //   height: deviceHeight*0.11,
+                      //   child:
+                      //   Swiper(
+                      //     scrollDirection: Axis.vertical,
+                      //     viewportFraction: 1.0,
+                      //     scale: 0.5,
+                      //     itemBuilder:
+                      //         (BuildContext context, int index) {
+                      //       return dDayItems[index];
+                      //     },
+                      //     itemCount: dDayItems.length,
+                      //     loop: false,
+                      //     autoplay: false,
+                      //   ),
+                      // ),
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 3,
+                          itemBuilder: (context, index) => makeDdayItem(
+                              context,
+                              index,
+                              DateFormat('yyyy. M. d.')
+                                  .format(_summaryDay))),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Container(
+                            height: 10,
+                            width: 10,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: DotsColor.brown),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text("캘린더",
+                              style: TextStyleFamily.smallTitleTextStyle)
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      // 이벤트가 없을 경우 child
+                      // const Padding(
+                      //       padding: EdgeInsets.only(left: 20),
+                      //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: deviceWidth-60,
+                          color: ColorFamily.white,
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: 5,
+                              itemBuilder: (context, index) => makeCalendarItem(
+                                  context,
+                                  index,
+                                  DateFormat('yyyy. M. d.')
+                                      .format(_summaryDay)),
+                            separatorBuilder: (context, index) {
+                              return const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Divider(color: ColorFamily.gray, thickness: 0.5,),
+                              );
+                            }
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      Row(
+                        children: [
+                          Container(
+                            height: 10,
+                            width: 10,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: DotsColor.pastelYellow),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text("가계부",
+                              style: TextStyleFamily.smallTitleTextStyle)
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      // 이벤트가 없을 경우 child
+                      // const Padding(
+                      //       padding: EdgeInsets.only(left: 20),
+                      //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 5,
+                          itemBuilder: (context, index) => makeLedgerItem(
+                              context,
+                              index,
+                              DateFormat('yyyy. M. d.')
+                                  .format(_summaryDay))),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Container(
+                            height: 10,
+                            width: 10,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: DotsColor.cyan),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text("교환일기",
+                              style: TextStyleFamily.smallTitleTextStyle)
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      // 이벤트가 없을 경우 child
+                      // const Padding(
+                      //       padding: EdgeInsets.only(left: 20),
+                      //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
+                      SizedBox(
+                        height: deviceHeight * 0.2,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 4,
+                            itemBuilder: (context, index) => makeDiaryItem(
+                                context,
+                                index,
+                                DateFormat('yyyy. M. d.')
+                                    .format(_summaryDay))),
+                      ),
+                      const SizedBox(height: 20),
+
+                      Row(
+                        children: [
+                          Container(
+                            height: 10,
+                            width: 10,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: DotsColor.pastelPink),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text("히스토리",
+                              style: TextStyleFamily.smallTitleTextStyle)
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      // 이벤트가 없을 경우 child
+                      // const Padding(
+                      //       padding: EdgeInsets.only(left: 20),
+                      //       child: Text("이벤트가 없습니다.", style: TextStyleFamily.normalTextStyle),
+                      SizedBox(
+                        height: deviceHeight * 0.15,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 4,
+                            itemBuilder: (context, index) => makeHistoryItem(
+                                context,
+                                index,
+                                DateFormat('yyyy. M. d.')
+                                    .format(_summaryDay))),
+                      ),
+                      const SizedBox(height: 20),
+
+                      Row(
+                        children: [
+                          Container(
+                            height: 10,
+                            width: 10,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: DotsColor.green),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text("데이트 플랜",
+                              style: TextStyleFamily.smallTitleTextStyle)
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: const Text("이벤트가 없습니다.",
+                              style: TextStyleFamily
+                                  .normalTextStyle) // 데이터가 없을 때
+                          //TODO 데이터가 있을 때 child -> 해당 데이터 보여줄 컨테이너(누르면 해당 데이터 페이지로 이동)
+                          ),
+                    ],
                   ),
                 ),
               ),
@@ -371,9 +375,6 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
     );
   }
 }
-
-
-
 
 
 // 디데이 아이템
@@ -443,20 +444,22 @@ Widget makeDdayItem(BuildContext context, int index, String summaryDay){
   );
 }
 
+
 // 캘린더 아이템
 Widget makeCalendarItem(BuildContext context, int index, String summaryDay) {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20),
+    padding: const EdgeInsets.symmetric(horizontal: 20),
     child: InkWell(
       onTap: () {
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => CalendarDetailScreen()));
+            MaterialPageRoute(builder: (context) => const CalendarDetailScreen()));
       },
-      child: Row(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: SizedBox(
+      child: Container(
+        color: ColorFamily.white,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            SizedBox(
               width: 5,
               height: 35,
               child: DecoratedBox(
@@ -466,18 +469,18 @@ Widget makeCalendarItem(BuildContext context, int index, String summaryDay) {
                 ),
               ),
             ),
-          ),
-          SizedBox(width: 10),
-          Text(
-            "롯데월드 $index",
-            style: TextStyleFamily.normalTextStyle,
-          ),
-          Spacer(),
-          Text(
-            "10:00 ~ 12:00",
-            style: TextStyleFamily.normalTextStyle,
-          )
-        ],
+            const SizedBox(width: 10),
+            Text(
+              "롯데월드 $index",
+              style: TextStyleFamily.normalTextStyle,
+            ),
+            const Spacer(),
+            const Text(
+              "10:00 ~ 12:00",
+              style: TextStyleFamily.normalTextStyle,
+            )
+          ],
+        ),
       ),
     ),
   );
@@ -490,31 +493,29 @@ Widget makeLedgerItem(BuildContext context, int index, String summaryDay) {
     padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
     margin: const EdgeInsets.only(bottom: 5),
     child: Material(
-      color: ColorFamily.beige,
+      color: ColorFamily.white,
       elevation: 1,
       borderRadius: BorderRadius.circular(10),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: ColorFamily.beige),
+            borderRadius: BorderRadius.circular(10), color: ColorFamily.white),
         child: ListTile(
           splashColor: Colors.transparent,
           leading: SvgPicture.asset('lib/assets/icons/spoon_fork.svg',
               width: 24, height: 24),
-          title: Text('식비',
+          title: const Text('식비',
               style: TextStyle(
                   color: ColorFamily.black,
                   fontSize: 14,
                   fontFamily: FontFamily.mapleStoryLight)),
-          trailing: Text("5,900" + '원',
+          trailing: const Text("5,900" + '원',
               style: TextStyle(
                   color: ColorFamily.black,
                   fontSize: 10,
                   fontFamily: FontFamily.mapleStoryLight)),
           onTap: () {
-// 화면 전환
             Navigator.of(context).push(
               MaterialPageRoute(
-// 보여질 다음 화면을 설정한다.
                 builder: (context) => LedgerDetailScreen(),
               ),
             );
