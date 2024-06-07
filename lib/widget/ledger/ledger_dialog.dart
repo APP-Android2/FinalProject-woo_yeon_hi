@@ -105,6 +105,9 @@ class _LedgerDialogState extends State<LedgerDialog> {
           ),
         );
         break;
+      case 'LedgerWriteScreen':
+        Navigator.pop(context);
+        break;
     }
   }
 

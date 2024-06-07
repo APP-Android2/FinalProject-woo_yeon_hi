@@ -27,13 +27,15 @@ class _LedgerScreenState extends State<LedgerScreen> {
         color: ColorFamily.cream,
         child: Stack(
           children: [
-            ListView(
-              children: [
-                // 상단 베너
-                LedgerCarouselSlider(),
-                // 캘린더
-                LedgerTableCalendar(),
-              ],
+            const SingleChildScrollView(
+              child: Column(
+                children: [
+                  // 상단 베너
+                  LedgerCarouselSlider(),
+                  // 캘린더
+                  LedgerTableCalendar(),
+                ],
+              ),
             ),
 
             // 하단 중앙에 FloatingActionButton 배치
@@ -48,12 +50,12 @@ class _LedgerScreenState extends State<LedgerScreen> {
                     child: FloatingActionButton(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                       backgroundColor: ColorFamily.beige,
-                      child: Text('오늘', style: TextStyle(fontSize: 15,fontFamily: FontFamily.mapleStoryLight)),
                       heroTag: "actionButton1",
                       onPressed: () {
                         // FAB의 액션
                         print('Center123');
                       },
+                      child: const Text('오늘', style: TextStyle(fontSize: 15,fontFamily: FontFamily.mapleStoryLight)),
                     ),
                   ),
               ),
