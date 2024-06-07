@@ -43,3 +43,31 @@ enum OverlayInfo {
   }
 
 }
+
+enum DiaryWeather{
+  SUNNY(0, 'lib/assets/images/sunny.png'),
+  CLOUDY(1, 'lib/assets/images/cloudy.png'),
+  RAINY(2, 'lib/assets/images/rainy.png'),
+  SNOWY(3, 'lib/assets/images/snowy.png');
+
+  final int type; // 날씨 타입
+  final String image; // 날씨 이미지
+  const DiaryWeather(this.type, this.image);
+
+  static DiaryWeather? fromType(int type){
+    for (var value in DiaryWeather.values) {
+      if (value.type == type) {
+        return value;
+      }
+    }
+    return null; // 해당 type 값이 없을 경우 null 반환
+  }
+}
+
+enum DiaryState{
+  STATE_NORMAL(0),
+  STATE_DELETE(1);
+
+  final int state; // 상태
+  const DiaryState(this.state);
+}

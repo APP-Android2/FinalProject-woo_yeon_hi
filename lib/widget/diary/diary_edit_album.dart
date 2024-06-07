@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/diary_dao.dart';
 import 'package:woo_yeon_hi/provider/diary_provider.dart';
 
 import '../../style/color.dart';
@@ -115,6 +116,7 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
     if (pickedFile != null) {
       setState(() {
         diaryProvider.setImage(XFile(pickedFile.path));
+        uploadDiaryImage(pickedFile);
       });
     }
   }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/diary_dao.dart';
+import 'package:woo_yeon_hi/model/diary_model.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
@@ -43,7 +45,7 @@ class _DiaryEditTopAppBarState extends State<DiaryEditTopAppBar> {
       ),
       actions: [
         IconButton(
-            onPressed: () {
+            onPressed: () async {
               if (diaryProvider.checkProvider()) {
                 print(
                     "diary title : ${diaryProvider.titleTextEditController.text}");
