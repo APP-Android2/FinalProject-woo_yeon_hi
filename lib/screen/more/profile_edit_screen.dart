@@ -5,9 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/profile_edit_top_app_bar.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+as picker;
 
+import '../../style/font.dart';
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
 
@@ -17,49 +18,66 @@ class ProfileEditScreen extends StatefulWidget {
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   DateTime _selectedDate = DateTime.now();
-  DateTime birthday = DateTime.now();
+  DateTime _birthday = DateTime.now();
+
+  late String userName;
+  late String userNickName;
+  late String profileMsg;
+
+  @override
+  void initState() {
+    super.initState();
+
+    userName = "김멋사"; // 유저 이름 가져오기
+    userNickName = "멋쟁이사자"; // 유저 닉네임 가져오기
+    profileMsg = "너와 함께할 때 가장 행복해!"; // 유저 상태 메시지 가져오기
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: ProfileEditTopAppBar(),
+      appBar: const ProfileEditTopAppBar(),
       body: Container(
+        width: deviceWidth,
+        height: deviceHeight,
         color: ColorFamily.cream,
+        padding: const EdgeInsets.all(20),
         child: ListView(children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Container(
-              child: Column(
+          Column(children: [
+              Column(
                 children: [
-                  Container(
-                    height: 230,
-                    width: 200,
-                    child: Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Material(
-                          elevation: 1,
-                          borderRadius: BorderRadius.circular(60),
-                          child: InkWell(
-                              onTap: () {},
-                              borderRadius: BorderRadius.circular(60),
-                              splashColor: Colors.transparent,
-                              child: Container(
-                                height: 150,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(60),
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'lib/assets/images/default_profile.png'))),
-                              )),
+                  Stack(
+                    children: [
+                      Material(
+                        elevation: 1,
+                        borderRadius: BorderRadius.circular(65),
+                        child: InkWell(
+                            onTap: () {},
+                            borderRadius: BorderRadius.circular(65),
+                            splashColor: Colors.transparent,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(65),
+                              child: Image.asset(
+                                'lib/assets/images/default_profile.png',
+                                width: deviceWidth * 0.35,
+                                height: deviceWidth * 0.35,
+                              ), // Text(key['title']),
+                            ),
                         ),
-                        InkWell(
+                      ),
+                      Positioned(
+                        top: deviceWidth * 0.25,
+                        left: deviceWidth * 0.26,
+                        child: InkWell(
                           splashColor: ColorFamily.cream,
                           borderRadius: BorderRadius.circular(100),
                           onTap: () {},
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(135, 115, 0, 0),
                             height: 36,
                             width: 36,
                             decoration: BoxDecoration(
@@ -74,220 +92,149 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               fit: BoxFit.none,
                             ),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                  SizedBox(height: 20),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 30),
-                          child: Text("닉네임",
-                              style: TextStyleFamily.normalTextStyle),
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Material(
-                            elevation: 0.5,
-                            color: ColorFamily.white,
-                            borderRadius: BorderRadius.circular(15),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                              height: 50,
-                              width: 370,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-                              child:
-                              TextFormField(
-                                style: TextStyleFamily.smallTitleTextStyle,
-                                initialValue: '멋쟁이사자',
-                                decoration: InputDecoration(border: InputBorder.none))
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30),
-                        Container(
-                          padding: EdgeInsets.only(left: 30),
-                          child: Text("생년월일",
-                              style: TextStyleFamily.normalTextStyle),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            SizedBox(width: 20),
-                            Material(
-                              elevation: 0.5,
-                              color: ColorFamily.white,
-                              borderRadius: BorderRadius.circular(15),
-                              child: Container(
-                                height: 50,
-                                width: 370,
-                                decoration: BoxDecoration(
-                                    color: ColorFamily.white,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: InkWell(
-                                  splashColor: ColorFamily.cream,
-                                  onTap: () {
-                                    showMaterialModalBottomSheet(
-                                        backgroundColor: ColorFamily.white,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(20),
-                                                topLeft: Radius.circular(20))),
-                                        context: context,
-                                        builder: (context) => Container(
-                                            color: ColorFamily.white,
-                                            height: 410,
-                                            child: Column(children: [
-                                              Container(
-                                                color: ColorFamily.white,
-                                                height: 350,
-                                                child: ScrollDatePicker(
-                                                  options: DatePickerOptions(
-                                                      isLoop: false),
-                                                  selectedDate: _selectedDate,
-                                                  locale: Locale('ko'),
-                                                  scrollViewOptions:
-                                                      DatePickerScrollViewOptions(
-                                                          year:
-                                                              ScrollViewDetailOptions(
-                                                            textStyle:
-                                                                TextStyleFamily
-                                                                    .passwordTextStyle,
-                                                            selectedTextStyle:
-                                                                TextStyleFamily
-                                                                    .passwordTextStyle,
-                                                            label: '년',
-                                                            margin:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right: 50),
-                                                          ),
-                                                          month:
-                                                              ScrollViewDetailOptions(
-                                                            textStyle:
-                                                                TextStyleFamily
-                                                                    .passwordTextStyle,
-                                                            selectedTextStyle:
-                                                                TextStyleFamily
-                                                                    .passwordTextStyle,
-                                                            label: '월',
-                                                            margin:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right: 50),
-                                                          ),
-                                                          day:
-                                                              ScrollViewDetailOptions(
-                                                            textStyle:
-                                                                TextStyleFamily
-                                                                    .passwordTextStyle,
-                                                            selectedTextStyle:
-                                                                TextStyleFamily
-                                                                    .passwordTextStyle,
-                                                            label: '일',
-                                                          )),
-                                                  onDateTimeChanged:
-                                                      (DateTime value) {
-                                                    setState(() {
-                                                      birthday = value;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              Material(
-                                                color: ColorFamily.beige,
-                                                elevation: 0.5,
-                                                shadowColor: Colors.black,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                ),
-                                                child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _selectedDate =
-                                                            birthday;
-                                                      });
-                                                      Navigator.pop(context);
-                                                    },
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.0),
-                                                    child: Container(
-                                                        width: 380,
-                                                        height: 40,
-                                                        child: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                            "확인",
-                                                            style: TextStyleFamily
-                                                                .normalTextStyle,
-                                                          ),
-                                                        ))),
-                                              ),
-                                              Padding(
-                                                  padding:
-                                                      EdgeInsets.only(top: 20))
-                                            ])));
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
-                                        height: 30,
-                                        width: 200,
-                                        child: Container(
-                                          child: Text(
-                                            DateFormat('yyyy. M. d.')
-                                                .format(_selectedDate),
-                                            style: TextStyleFamily
-                                                .smallTitleTextStyle,
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        SizedBox(height: 30),
-                        Container(
-                          padding: EdgeInsets.only(left: 30),
-                          child: Text("상태 메시지",
-                              style: TextStyleFamily.normalTextStyle),
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Material(
-                            elevation: 0.5,
-                            color: ColorFamily.white,
-                            borderRadius: BorderRadius.circular(15),
-                            child: Container(
-                                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                height: 110,
-                                width: 370,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-                                child:
-                                  TextFormField(
-                                    style: TextStyleFamily.smallTitleTextStyle,
-                                    initialValue: '함께할 때 가장 행복해!\n너와 나, 완벽한 조합 💑',
-                                    maxLines: 3,
-                                    maxLength: 60,
-                                    decoration: InputDecoration(border: InputBorder.none, counter: SizedBox()),
-                                )
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                  const SizedBox(height: 15),
+                  Text(userName, style: TextStyleFamily.smallTitleTextStyle)
                 ],
               ),
+              const SizedBox(height: 40),
+              const Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("닉네임",
+                      style: TextStyleFamily.normalTextStyle),
+                ),
+              ),
+              const SizedBox(height: 10),
+            SizedBox(
+              height: 50,
+              width: deviceWidth-60,
+              child: Material(
+                    elevation: 0.5,
+                    color: ColorFamily.white,
+                    borderRadius: BorderRadius.circular(15),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: TextFormField(
+                          onTapOutside: (event) {
+                            FocusScope.of(context).unfocus();
+                          },
+                          style: TextStyleFamily.smallTitleTextStyle,
+                          initialValue: userNickName,
+                          decoration: const InputDecoration(border: InputBorder.none)),
+                      )
+                    ),
             ),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("생년월일",
+                    style: TextStyleFamily.normalTextStyle),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 50,
+              width: deviceWidth-60,
+              child: Material(
+                  elevation: 0.5,
+                  color: ColorFamily.white,
+                  borderRadius: BorderRadius.circular(15),
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      picker.DatePicker.showDatePicker(
+                          context,
+                          showTitleActions: true,
+                          minTime: DateTime(1900, 1, 1),
+                          maxTime: DateTime.now(),
+                          theme: const picker.DatePickerTheme(
+                              titleHeight: 60,
+                              containerHeight: 300,
+                              itemHeight: 50,
+                              headerColor: ColorFamily.white,
+                              backgroundColor:
+                              ColorFamily.white,
+                              itemStyle: TextStyleFamily
+                                  .smallTitleTextStyle,
+                              cancelStyle: TextStyle(
+                                  color: ColorFamily.black,
+                                  fontSize: 18,
+                                  fontFamily: FontFamily
+                                      .mapleStoryLight),
+                              doneStyle: TextStyle(
+                                  color: ColorFamily.black,
+                                  fontSize: 18,
+                                  fontFamily: FontFamily
+                                      .mapleStoryLight)),
+                          // onChanged: (date) {
+                          //   print('change $date in time zone ' +
+                          //    date.timeZoneOffset.inHours.toString());
+                          // },
+                          onConfirm: (date) {
+                            setState(() {
+                              _selectedDate = date;
+                              _birthday = _selectedDate;
+                            });
+                          },
+                          // onCancel: (){},
+                          currentTime: DateTime.now(),
+                          locale: picker.LocaleType.ko);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          DateFormat('yyyy. M. d.')
+                              .format(_birthday),
+                          style: TextStyleFamily
+                              .smallTitleTextStyle,
+                        ),
+                      ),
+                    ),
+                  )
+              ),
+            ),
+
+              const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("상태 메시지",
+                    style: TextStyleFamily.normalTextStyle),
+              ),
+            ),
+              const SizedBox(height: 10),
+            SizedBox(
+              height: 100,
+              width: deviceWidth-60,
+              child: Material(
+                  elevation: 0.5,
+                  color: ColorFamily.white,
+                  borderRadius: BorderRadius.circular(15),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: TextFormField(
+                        maxLines: 3,
+                        maxLength: 60,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
+                        style: TextStyleFamily.smallTitleTextStyle,
+                        initialValue: profileMsg,
+                        decoration: const InputDecoration(border: InputBorder.none, counter: SizedBox())),
+                  )
+              ),
+            ),
+            ],
           ),
         ]),
       ),

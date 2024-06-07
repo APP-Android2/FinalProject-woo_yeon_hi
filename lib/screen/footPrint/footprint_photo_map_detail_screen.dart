@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geojson/geojson.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/model/place_info.dart';
+import 'package:woo_yeon_hi/screen/footPrint/footprint_history_detail_screen.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_photo_map_detail_top_app_bar.dart';
 
 import '../../model/enums.dart';
@@ -23,73 +25,88 @@ class FootprintPhotoMapDetailScreen extends StatefulWidget {
   @override
   State<FootprintPhotoMapDetailScreen> createState() =>
       _FootprintPhotoMapDetailScreenState();
+
+  // 뒤로가기, 히스토리 이동, 히스토리 작성 시 스냅 샷 저장
+  static Future<void> capture(GlobalKey globalKey) async {
+    var renderObject = globalKey.currentContext!.findRenderObject();
+    if (renderObject is RenderRepaintBoundary) {
+      var boundary = renderObject;
+      final directory = (await getApplicationDocumentsDirectory()).path;
+
+      ui.Image image = await boundary.toImage();
+      ByteData? byteData =
+      await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List? pngBytes = byteData!.buffer.asUint8List();
+      File imgFile = File('$directory/screenshot.png');
+      imgFile.writeAsBytes(pngBytes);
+      print("FINISH CAPTURE ${imgFile.path}");
+    }
+  }
 }
 
 class _FootprintPhotoMapDetailScreenState
     extends State<FootprintPhotoMapDetailScreen> {
   late NaverMapController _mapController;
+  var globalkey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) =>
-          FootprintPhotoMapOverlayProvider(MapType.KOREA_FULL.type),
-      child: Consumer<FootprintPhotoMapOverlayProvider>(
+    return Scaffold(
+      backgroundColor: ColorFamily.cream,
+      appBar: FootprintPhotoMapDetailTopappBar(globalkey),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ColorFamily.beige,
+        shape: const CircleBorder(),
+        child: SvgPicture.asset('lib/assets/icons/edit.svg', colorFilter: ColorFilter.mode(ColorFamily.black, BlendMode.srcIn),),
+        onPressed: () {
+          // 스냅샷 저장
+          FootprintPhotoMapDetailScreen.capture(globalkey);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                  const FootprintHistoryEditScreen()));
+        },
+      ),
+      body: ChangeNotifierProvider(
+        create: (context) =>
+            FootprintPhotoMapOverlayProvider(MapType.KOREA_SEOUL.type),
+        child: Consumer<FootprintPhotoMapOverlayProvider>(
           builder: (context, provider, _) {
-        return Scaffold(
-          backgroundColor: ColorFamily.cream,
-          appBar: const FootprintPhotoMapDetailTopappBar(),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: ColorFamily.beige,
-            shape: const CircleBorder(),
-            child: SvgPicture.asset('lib/assets/icons/edit.svg', colorFilter: ColorFilter.mode(ColorFamily.black, BlendMode.srcIn),),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const FootprintHistoryEditScreen()));
-            },
-          ),
-          body: NaverMap(
-            onMapReady: (NaverMapController controller) {
-              _mapController = controller;
-              _preloadImages(context).then((_) {
-                // _addPlaceOverlay(provider); // 지역 구분 오버레이
-                _addMarkerOverlay(provider); // 마커 오버레이
-              });
-            },
-            onMapTapped: (NPoint point, NLatLng latLng) {
-              // 화면상의 좌표 (x, y)
-              //print("enung NPoint : $point");
-
-              // 실제 장소의 위도, 경도 (latitude, longitude)
-              print("enung NLatLng : $latLng");
-            },
-            options: NaverMapViewOptions(
-                scaleBarEnable: false,
-                logoClickEnable: false,
-                minZoom: provider.overlayInfo!.zoom,
-                initialCameraPosition: NCameraPosition(
-                  target: provider.overlayInfo!.coordinate,
-                  zoom: provider.overlayInfo!.zoom,
-                )),
-          ),
-        );
-      }),
+            return RepaintBoundary(
+                key: globalkey,
+                child: NaverMap(
+                  onMapReady: (NaverMapController controller) {
+                    _mapController = controller;
+                    _preloadImages().then((_) {
+                      // 마커 오버레이
+                      _addMarkerOverlay(provider);
+                    });
+                  },
+                  onMapTapped: (NPoint point, NLatLng latLng) {
+                    // 실제 장소의 위도, 경도 (latitude, longitude)
+                    print("enung NLatLng : $latLng");
+                  },
+                  options: NaverMapViewOptions(
+                      scaleBarEnable: false,
+                      logoClickEnable: false,
+                      minZoom: provider.overlayInfo!.zoom,
+                      initialCameraPosition: NCameraPosition(
+                        target: provider.overlayInfo!.coordinate,
+                        zoom: provider.overlayInfo!.zoom,
+                      )),
+                )
+            );
+          },
+        ),
+      ),
     );
   }
-
-  Future<void> _addPlaceOverlay(FootprintPhotoMapOverlayProvider provider) async {
-    await _loadmapdata(provider);
-    _mapController.addOverlayAll(provider.polygonOverlays.toSet());
-  }
-
-  Future<void> _addMarkerOverlay(FootprintPhotoMapOverlayProvider provider) async {
+  Future<void> _addMarkerOverlay(
+      FootprintPhotoMapOverlayProvider provider) async {
     await _addMarker(provider);
     _mapController.addOverlayAll(provider.markers.toSet());
   }
-
 
   Future<void> _addMarker(FootprintPhotoMapOverlayProvider provider) async {
     List<NLatLng> majorCities = [
@@ -108,86 +125,46 @@ class _FootprintPhotoMapDetailScreenState
       'lib/assets/images/puppy5.jpg',
     ];
 
-    for (var i = 0 ; i< majorCities.length ; i++) {
+    List<String> names = [
+      "서교동",
+      "역삼동",
+      "이태원동",
+      "명동",
+      "한남동"
+    ];
+
+    for (var i = 0; i < majorCities.length; i++) {
       final markerWidget = PhotoMapMarker(imagePaths[i]);
 
       final iconImage = await NOverlayImage.fromWidget(
-          widget: markerWidget,
-          size: const Size(70, 80),
-          context: context);
+          widget: markerWidget, size: const Size(70, 80), context: context);
 
       final marker = NMarker(
-        id: "marker_$i",
+        id: names[i],
         position: majorCities[i],
         icon: iconImage,
       );
+      marker.setOnTapListener((overlay){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => FootprintHistoryDetailScreen(overlay.info.id, i)));
+      });
 
       provider.addMarker(marker);
     }
   }
 
-  Future<void> _loadmapdata(FootprintPhotoMapOverlayProvider provider) async {
-    final geojson = GeoJson();
-    // GeoJson에서 데이터를 추출 하는 중이라 데이터 호출
-    final data = await rootBundle.loadString(provider.mapType!.path);
+  Future<void> _preloadImages() async {
+    List<String> imagePaths = [
+      'lib/assets/images/puppy1.jpg',
+      'lib/assets/images/puppy2.jpg',
+      'lib/assets/images/puppy3.jpg',
+      'lib/assets/images/puppy4.jpg',
+      'lib/assets/images/puppy5.jpg',
+    ];
 
-    // data를 geojson으로 가공
-    await geojson.parse(data);
-
-    // 현재 데이터의 위도,경도에 맞춰서 _polygon에 넣는다.
-    // polygon 값들이 여러개 일 경우에 맞춰 for문 적용
-    for (final feature in geojson.features) {
-      final geoJsonMultiPolygon = feature.geometry as GeoJsonMultiPolygon;
-      final properties =
-          feature.properties; // AREA_CD, AREA_ENG_NM, AREA_KOR_NM
-      final _CD = properties?['AREA_CD'];
-      final _ENG_NM = properties?['AREA_ENG_NM'];
-      final _KOR_NM = properties?['AREA_KOR_NM'];
-      for (final polygon in geoJsonMultiPolygon.polygons) {
-        final geoseries = polygon.geoSeries; // 한 구역안의 존재하는 polygon들
-        List<NLatLng> _polygonPoints = []; // polygon 좌표들
-        for (final geoserie in geoseries) {
-          for (final geopoint in geoserie.geoPoints) {
-            _polygonPoints.add(NLatLng(geopoint.latitude, geopoint.longitude));
-          }
-        }
-        // 오버레이 좌표 리스트의 처음과 끝은 같아야한다.
-        _polygonPoints.add(_polygonPoints.first);
-
-        // polygon 좌표로 NPolygonOverlay를 만든다.
-        var overlay = NPolygonOverlay(
-            id: "${provider.polygonOverlays.length}",
-            coords: _polygonPoints,
-            color: Colors.transparent,
-            outlineColor: Colors.transparent,
-            outlineWidth: 1);
-        // 해당 구역을 클릭 했을 때 리스너
-        overlay.setOnTapListener((overlay) {
-          final id  = int.parse(overlay.info.id);
-          final infos = provider.polygonInfos;
-          print("enung ${id}");
-          print(
-              "enung ${infos[id]!.korNm}");
-        });
-        provider.addInfo(provider.polygonOverlays.length,
-            PlaceInfo(cd: _CD, engNm: _ENG_NM, korNm: _KOR_NM));
-        provider.addOverlay(overlay);
-      }
+    for (String path in imagePaths) {
+      final imageProvider = AssetImage(path);
+      await precacheImage(imageProvider, context);
     }
   }
 }
 
-Future<void> _preloadImages(BuildContext context) async {
-  List<String> imagePaths = [
-    'lib/assets/images/puppy1.jpg',
-    'lib/assets/images/puppy2.jpg',
-    'lib/assets/images/puppy3.jpg',
-    'lib/assets/images/puppy4.jpg',
-    'lib/assets/images/puppy5.jpg',
-  ];
-
-  for (String path in imagePaths) {
-    final imageProvider = AssetImage(path);
-    await precacheImage(imageProvider, context);
-  }
-}

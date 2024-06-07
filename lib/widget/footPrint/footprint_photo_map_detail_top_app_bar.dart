@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_history_screen.dart';
 
+import '../../screen/footPrint/footprint_photo_map_detail_screen.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 
 class FootprintPhotoMapDetailTopappBar extends StatefulWidget implements PreferredSizeWidget{
-  const FootprintPhotoMapDetailTopappBar({super.key});
+  FootprintPhotoMapDetailTopappBar(this.globalkey, {super.key});
+  GlobalKey globalkey;
 
   @override
   State<FootprintPhotoMapDetailTopappBar> createState() => _FootprintPhotoMapDetailTopappBarState();
@@ -28,6 +30,8 @@ class _FootprintPhotoMapDetailTopappBarState extends State<FootprintPhotoMapDeta
       ),
       leading: IconButton(
         onPressed: () {
+          // 스냅샷 저장
+          FootprintPhotoMapDetailScreen.capture(widget.globalkey);
           Navigator.pop(context);
         },
         icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
@@ -35,6 +39,8 @@ class _FootprintPhotoMapDetailTopappBarState extends State<FootprintPhotoMapDeta
       actions: [
         IconButton(
           onPressed: () {
+            // 스냅샷 저장
+            FootprintPhotoMapDetailScreen.capture(widget.globalkey);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FootprintHistoryScreen()));
           },
           icon: SvgPicture.asset('lib/assets/icons/list.svg'),

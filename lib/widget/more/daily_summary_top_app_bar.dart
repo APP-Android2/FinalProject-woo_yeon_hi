@@ -20,7 +20,7 @@ class _DailySummaryTopAppBarState extends State<DailySummaryTopAppBar> {
       surfaceTintColor: ColorFamily.cream,
       backgroundColor: ColorFamily.cream,
       centerTitle: true,
-      title: const Text("활동 모아보기", style: TextStyleFamily.appBarTitleLightTextStyle,),
+      title: const Text("추억 모아보기", style: TextStyleFamily.appBarTitleLightTextStyle,),
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);

@@ -66,6 +66,10 @@ dependencies:
   firebase_core: ^2.31.0
   cloud_firestore: ^4.17.3
   firebase_storage: ^11.7.5
+  flutter_secure_storage: ^9.2.2
+  widgets_to_image: ^1.0.0
+  path_provider: ^2.1.3
+  scroll_to_index: ^3.0.1
 
 dev_dependencies:
   flutter_test:

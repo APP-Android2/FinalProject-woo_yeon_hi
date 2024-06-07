@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:woo_yeon_hi/provider/footprint_provider.dart';
+import 'package:woo_yeon_hi/screen/footPrint/footprint_history_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_history_detail_top_app_bar.dart';
@@ -10,8 +12,9 @@ import 'package:woo_yeon_hi/widget/footPrint/footprint_history_detail_top_app_ba
 import '../../style/font.dart';
 
 class FootprintHistoryDetailScreen extends StatefulWidget {
-  const FootprintHistoryDetailScreen(this.title, {super.key});
-  final String title;
+  FootprintHistoryDetailScreen(this.title, this.index, {super.key});
+  String title;
+  int index;
 
   @override
   State<FootprintHistoryDetailScreen> createState() =>
@@ -20,30 +23,48 @@ class FootprintHistoryDetailScreen extends StatefulWidget {
 
 class _FootprintHistoryDetailScreenState
     extends State<FootprintHistoryDetailScreen> {
+  // scroll controller.
+  final AutoScrollController _controller = AutoScrollController();
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => FootPrintHistoyDetailProvider(5),
       child: Consumer<FootPrintHistoyDetailProvider>(
         builder: (context, provider, _) {
+          // 해당 인덱스로 스크롤을 이동합니다.
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _controller.scrollToIndex(
+              widget.index,
+              duration: const Duration(milliseconds: 300),
+              preferPosition: AutoScrollPosition.middle,
+            );
+          });
           return Scaffold(
-            backgroundColor: ColorFamily.cream,
-            appBar: FootprintHistoryDetailTopAppBar(widget.title),
-            body: Padding(
+              backgroundColor: ColorFamily.cream,
+              appBar: FootprintHistoryDetailTopAppBar(widget.title),
+              body: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: ListView.builder(
+                    controller: _controller,
                     itemCount: 5,
-                    itemBuilder: (context, index) => makeHistoryDeatil(context, index, provider))),
-          );
+                    itemBuilder: (context, index) {
+                      return AutoScrollTag(
+                          key: ValueKey(index),
+                          controller: _controller,
+                          index: index,
+                          child: makeHistoryDeatil(context, index, provider));
+                    }),
+              ));
         },
       ),
     );
   }
 }
 
-Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailProvider provider) {
+Widget makeHistoryDeatil(
+    BuildContext context, int index, FootPrintHistoyDetailProvider provider) {
   return Padding(
-    key: UniqueKey(),
     padding: const EdgeInsets.only(bottom: 20),
     child: Column(
       children: [
@@ -72,7 +93,7 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
                   // 제목, 날짜
                   SizedBox(
                     width:
-                    MediaQuery.of(context).size.width - 40 - 56 - 48 - 10,
+                        MediaQuery.of(context).size.width - 40 - 56 - 48 - 10,
                     child: Column(
                       children: [
                         const Row(
@@ -127,12 +148,10 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
                   viewportFraction: 1.0,
                   showIndicator: true,
                   floatingIndicator: false,
-                  aspectRatio: 2/3,
+                  aspectRatio: 2 / 3,
                   slideIndicator: const CircularSlideIndicator(
-                    currentIndicatorColor: ColorFamily.pink,
-                    indicatorBackgroundColor: ColorFamily.gray
-
-                  ),
+                      currentIndicatorColor: ColorFamily.pink,
+                      indicatorBackgroundColor: ColorFamily.gray),
                 ),
               )),
         ),
@@ -149,12 +168,9 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
                 child: Text(
                   tmpContent,
                   style: TextStyleFamily.normalTextStyle,
-                  overflow: provider.isMoreList[index]
-                      ?TextOverflow.ellipsis
-                  : null,
-                  maxLines: provider.isMoreList[index]
-                      ?2
-                  :null,
+                  overflow:
+                      provider.isMoreList[index] ? TextOverflow.ellipsis : null,
+                  maxLines: provider.isMoreList[index] ? 2 : null,
                 ),
               ),
               const SizedBox(
@@ -168,16 +184,14 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
                     InkWell(
                       splashColor: Colors.transparent,
                       onTap: () {
-                        if(provider.isMoreList[index]){
+                        if (provider.isMoreList[index]) {
                           provider.setMoreState(index, false);
-                        }else{
+                        } else {
                           provider.setMoreState(index, true);
                         }
                       },
                       child: Text(
-                        provider.isMoreList[index]
-                            ?"더보기"
-                        :"접기",
+                        provider.isMoreList[index] ? "더보기" : "접기",
                         style: contentMoreTextStyle,
                       ),
                     ),
@@ -187,7 +201,10 @@ Widget makeHistoryDeatil(BuildContext context, int index, FootPrintHistoyDetailP
             ],
           ),
         ),
-        const Divider(height: 20,color: ColorFamily.gray,)
+        const Divider(
+          height: 20,
+          color: ColorFamily.gray,
+        )
       ],
     ),
   );
@@ -219,7 +236,12 @@ void _showModalBottomSheet(BuildContext context) {
                 InkWell(
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
-                  onTap: (){},
+                  onTap: () {
+                    // 바텀 시트 다이얼로그 팝
+                    Navigator.pop(context);
+                    // 수정 페이지로
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FootprintHistoryEditScreen()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(30, 5, 30, 15),
                     child: SizedBox(
@@ -228,8 +250,13 @@ void _showModalBottomSheet(BuildContext context) {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SvgPicture.asset('lib/assets/icons/edit.svg'),
-                          const Text("수정", style: TextStyleFamily.dialogButtonTextStyle,),
-                          const SizedBox(width: 24,)
+                          const Text(
+                            "수정",
+                            style: TextStyleFamily.dialogButtonTextStyle,
+                          ),
+                          const SizedBox(
+                            width: 24,
+                          )
                         ],
                       ),
                     ),
@@ -241,7 +268,7 @@ void _showModalBottomSheet(BuildContext context) {
                 InkWell(
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
-                  onTap: (){
+                  onTap: () {
                     _showDoneDialog(context);
                   },
                   child: Padding(
@@ -251,9 +278,16 @@ void _showModalBottomSheet(BuildContext context) {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SvgPicture.asset('lib/assets/icons/delete.svg', colorFilter: const ColorFilter.mode(ColorFamily.pink, BlendMode.srcIn)),
-                          const Text("삭제", style: TextStyleFamily.dialogButtonTextStyle_pink,),
-                          const SizedBox(width: 24,)
+                          SvgPicture.asset('lib/assets/icons/delete.svg',
+                              colorFilter: const ColorFilter.mode(
+                                  ColorFamily.pink, BlendMode.srcIn)),
+                          const Text(
+                            "삭제",
+                            style: TextStyleFamily.dialogButtonTextStyle_pink,
+                          ),
+                          const SizedBox(
+                            width: 24,
+                          )
                         ],
                       ),
                     ),
@@ -261,11 +295,9 @@ void _showModalBottomSheet(BuildContext context) {
                 )
               ],
             ),
-
           ],
         );
-      }
-  );
+      });
 }
 
 void _showDoneDialog(BuildContext context) {
@@ -310,12 +342,10 @@ void _showDoneDialog(BuildContext context) {
                             onPressed: () {
                               Navigator.pop(context); // 다이얼로그 팝
                               Navigator.pop(context); // 바텀시트 팝
-                              Navigator.pop(context); // 히스토리 페이지 팝
                             },
                             child: const Text(
                               "확인",
-                              style:
-                              TextStyleFamily.dialogButtonTextStyle_pink,
+                              style: TextStyleFamily.dialogButtonTextStyle_pink,
                             ))
                       ],
                     )

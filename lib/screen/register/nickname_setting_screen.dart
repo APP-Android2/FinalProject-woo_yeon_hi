@@ -11,101 +11,130 @@ import '../../style/font.dart';
 class NickNameSettingScreen extends StatefulWidget {
   final bool isHost;
 
-  NickNameSettingScreen({super.key, required this.isHost});
+  const NickNameSettingScreen({super.key, required this.isHost});
 
   @override
   State<NickNameSettingScreen> createState() => _NickNameSettingScreenState();
 }
 
 class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
-
   @override
   Widget build(BuildContext context) {
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Container(
-        color: ColorFamily.cream,
-        padding: EdgeInsets.all(20),
-        child: Stack(children: [
-            ListView(children: [
-              Column(children: [
-                  Container(
-                      height: 750,
+          color: ColorFamily.cream,
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+              child: Column(children: [
+                SizedBox(
+              height: deviceHeight - 40,
+              width: deviceWidth - 40,
+              child: Column(
+                children: [
+                  SizedBox(
+                      height: deviceHeight - 90,
+                      width: deviceWidth - 40,
                       child: Column(
                         children: [
-                          Container(
-                            height: 700,
+                          SizedBox(
+                            height: deviceHeight - 140,
+                            width: deviceWidth - 40,
                             child: Column(
                               children: [
-                                Padding(padding: EdgeInsets.only(top: 60)),
+                                SizedBox(height: deviceHeight * 0.1),
                                 widget.isHost
-                                ? Container(
-                                  child: Text(
-                                    "3 / 5",
-                                    style: TextStyle(
-                                        fontFamily: FontFamily.mapleStoryBold,
-                                        fontSize: 15,
-                                        color: ColorFamily.pink),
-                                  ),
-                                )
-                                : Container(
-                                  child: Text(
-                                    "2 / 4",
-                                    style: TextStyle(
-                                        fontFamily: FontFamily.mapleStoryBold,
-                                        fontSize: 15,
-                                        color: ColorFamily.pink),
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.only(top: 20)),
+                                    ? const Text(
+                                        "3 / 5",
+                                        style: TextStyle(
+                                            fontFamily:
+                                                FontFamily.mapleStoryBold,
+                                            fontSize: 15,
+                                            color: ColorFamily.pink),
+                                      )
+                                    : const Text(
+                                        "2 / 4",
+                                        style: TextStyle(
+                                            fontFamily:
+                                                FontFamily.mapleStoryBold,
+                                            fontSize: 15,
+                                            color: ColorFamily.pink),
+                                      ),
+                                const SizedBox(height: 20),
                                 widget.isHost
-                                ? Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
-                                      SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                      SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
-                                      SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                      SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
-                                      SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                      SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
-                                      SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                      SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
-                                    ],
-                                  ),
-                                )
-                                : Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
-                                        SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                        SvgPicture.asset("lib/assets/icons/heart_fill.svg", height: 24),
-                                        SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                        SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
-                                        SvgPicture.asset("lib/assets/icons/triple_right_arrow.svg", height: 24),
-                                        SvgPicture.asset("lib/assets/icons/heart_outlined.svg", height: 24),
-                                      ],
-                                  ),
-                                  ),
-                                Padding(padding: EdgeInsets.only(top: 50)),
-                                Container(
-                                  child: Text(
-                                    "연인의 별명을 지어주세요!",
-                                    style: TextStyle(
-                                        color: ColorFamily.black,
-                                        fontSize: 15,
-                                        fontFamily: FontFamily.mapleStoryLight),
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.only(top: 175)),
-                                Container(
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_fill.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_fill.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_fill.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_outlined.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_outlined.svg",
+                                              height: 24),
+                                        ],
+                                      )
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_fill.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_fill.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_outlined.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/triple_right_arrow.svg",
+                                              height: 24),
+                                          SvgPicture.asset(
+                                              "lib/assets/icons/heart_outlined.svg",
+                                              height: 24),
+                                        ],
+                                      ),
+                                SizedBox(height: deviceHeight * 0.05),
+                                const Text("연인의 별명을 지어주세요!",
+                                    style: TextStyleFamily.smallTitleTextStyle),
+                                SizedBox(height: deviceHeight * 0.2),
+                                SizedBox(
                                   width: 250,
                                   child: TextField(
                                     onTapOutside: (event) {
                                       FocusScope.of(context).unfocus();
                                     },
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: ColorFamily.black))),
@@ -113,7 +142,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                     maxLength: 10,
                                     keyboardType: TextInputType.text,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: ColorFamily.black,
                                         fontSize: 20,
                                         fontFamily: FontFamily.mapleStoryLight),
@@ -122,116 +151,108 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                               ],
                             ),
                           ),
-                          Container(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
-                              children: <Widget>[
-                                Padding(padding: EdgeInsets.only(left: 50)),
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                                 widget.isHost
-                                ? Expanded(
-                                  child: Container(
-                                    child: Material(
-                                      color: ColorFamily.white,
-                                      elevation: 0.5,
-                                      shadowColor: Colors.black,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                      ),
-                                      child: InkWell(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DdaySettingScreen(isHost: widget.isHost)));
-                                          },
+                                    ? Material(
+                                        color: ColorFamily.white,
+                                        elevation: 0.5,
+                                        shadowColor: Colors.black,
+                                        shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20.0),
-                                          child:
-                                          Container(
-                                                height: 40,
-                                                width: 120,
-                                                child:
-                                                Container(
+                                        ),
+                                        child: InkWell(
+                                            onTap: () {
+                                              // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                                              //     builder: (context) =>
+                                              //     const NickNameSettingScreen(
+                                              //         isHost: true)), (route) => false);
+
+                                              Navigator.pushReplacement(
+                                                context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DdaySettingScreen(
+                                                              isHost: widget
+                                                                  .isHost)));
+                                            },
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                            child: SizedBox(
+                                                height: deviceHeight*0.045,
+                                                width: deviceWidth*0.4,
+                                                child: Container(
                                                   alignment: Alignment.center,
-                                                  child: Text(
+                                                  child: const Text(
                                                     "이전",
-                                                    style: TextStyleFamily.normalTextStyle,
+                                                    style: TextStyleFamily
+                                                        .normalTextStyle,
                                                   ),
-                                                )
-                                          )
+                                                ))),
+                                      )
+                                    : SizedBox(
+                                        height: deviceHeight * 0.045,
+                                        width: deviceWidth * 0.4),
+                                Material(
+                                  color: ColorFamily.beige,
+                                  elevation: 0.5,
+                                  shadowColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
                                   ),
-                                    ),
-                                  ),
-                                )
-                                : Expanded(
-                                  child: Container(height: 40, width: 150),
-                                ),
-                                Padding(padding: EdgeInsets.only(left: 20)),
-                                Expanded(
-                                  child: Material(
-                                    color: ColorFamily.beige,
-                                    elevation: 0.5,
-                                    shadowColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    BirthdaySettingScreen(isHost: widget.isHost)));
-                                      },
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: Container(
-                                          height: 40,
-                                          width: 120,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "다음",
-                                              style: TextStyleFamily.normalTextStyle,
-                                            ),
-                                          )),
-                                    ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BirthdaySettingScreen(
+                                                      isHost: widget
+                                                          .isHost)));
+                                    },
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: SizedBox(
+                                        height: deviceHeight*0.045,
+                                        width: deviceWidth*0.4,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: const Text(
+                                            "다음",
+                                            style: TextStyleFamily
+                                                .normalTextStyle,
+                                          ),
+                                        )),
                                   ),
                                 ),
-                                Padding(padding: EdgeInsets.only(right: 50)),
                               ],
                             ),
                           ),
                         ],
                       )),
                   Align(
-                      alignment: Alignment.bottomRight,
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 16, 16, 0),
-                        child: TextButton(
-                          style: ButtonStyle(
-                              overlayColor: MaterialStateProperty.all<Color>(
-                                  ColorFamily.beige)),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        RegisterScreen()));
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                "로그아웃",
-                                style: TextStyleFamily.normalTextStyle,
-                              )
-                            ],
-                          ),
-                        ),
-                      ))
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterScreen()),
+                            (route) => false);
+                      },
+                      child: const Text(
+                        "로그아웃",
+                        style: TextStyleFamily.normalTextStyle,
+                      ),
+                    ),
+                  )
                 ],
               ),
-            ]),
-          ],
-        ),
-      ),
+            ),
+          ]))),
     );
   }
 }

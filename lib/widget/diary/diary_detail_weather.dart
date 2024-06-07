@@ -54,21 +54,18 @@ class _DiaryDetailWeatherState extends State<DiaryDetailWeather> {
           ),
         ),
         const SizedBox(width: 5,),
-        SizedBox(
-          width: (MediaQuery.of(context).size.width - 40) * 0.3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Image.asset('lib/assets/icons/sunny.png'),
-                  )
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+                width: 60,
+                height: 60,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Image.asset('lib/assets/images/snowy.png'),
+                )
+            ),
+          ],
         )
       ],
     );

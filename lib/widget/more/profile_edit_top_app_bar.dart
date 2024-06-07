@@ -26,14 +26,20 @@ class _ProfileEditTopAppBarState extends State<ProfileEditTopAppBar> {
       ),
       leading: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          FocusScope.of(context).unfocus();
+          Future.delayed(const Duration(milliseconds: 100), () {
+            Navigator.pop(context);
+          });
         },
         icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
       ),
       actions: [
         IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              FocusScope.of(context).unfocus();
+              Future.delayed(const Duration(milliseconds: 100), () {
+                Navigator.pop(context);
+              });
             },
             icon: SvgPicture.asset('lib/assets/icons/done.svg'))
       ],

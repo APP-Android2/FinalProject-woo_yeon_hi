@@ -1,11 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -22,270 +17,233 @@ class TopBarUiSettingScreen extends StatefulWidget {
 class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
 
   var _topBarIndex = 1;
-  var _topbarActivated = false;
+  var _topBarActivated = false;
 
   @override
   Widget build(BuildContext context) {
+
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: TopBarUiSettingTopAppBar(),
+      appBar: const TopBarUiSettingTopAppBar(),
       body: Container(
-        padding: EdgeInsets.all(20),
+        width: deviceWidth,
+        height: deviceHeight,
+        padding: const EdgeInsets.all(20),
         color: ColorFamily.cream,
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: [
-              Material(
-                elevation: 1,
+        child: Column(
+          children: [
+            Material(
+              elevation: 1,
+              borderRadius: BorderRadius.circular(20),
+              borderOnForeground: true,
+              child: InkWell(
                 borderRadius: BorderRadius.circular(20),
-                borderOnForeground: true,
-                child: InkWell(
+                onTap: (){
+                  setState(() {
+                    _topBarIndex = 0;
+                  });
+                },
+                child: Container(
+                  width: deviceWidth-60,
+                  height: deviceHeight*0.07,
+                  decoration:
+                  _topBarIndex == 0
+                  ? BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20))
+                  : BoxDecoration(color: ColorFamily.white, border: Border.all(color: Colors.transparent,width: 1),borderRadius: BorderRadius.circular(20)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(width: 80),
+                        const Text("100일", style: TextStyleFamily.smallTitleTextStyle),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 50),
+                          child: Image.asset("lib/assets/images/top_bar_heart_36px.png", width: 30, height: 33),
+                        ),
+                    ],
+                  ),
+                  )
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            Material(
+              elevation: 1,
+              borderRadius: BorderRadius.circular(20),
+              borderOnForeground: true,
+              child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   onTap: (){
                     setState(() {
-                      _topBarIndex = 0;
+                      _topBarIndex = 1;
                     });
                   },
-                  child: _topBarIndex == 0
-                  ? Container(
-                    width: 380,
-                    height: 60,
-                    decoration: BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20)),
-                    child: Stack(
+                  child: Container(
+                    width: deviceWidth-60,
+                    height: deviceHeight*0.07,
+                    decoration:
+                    _topBarIndex == 1
+                        ? BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20))
+                        : BoxDecoration(color: ColorFamily.white, border: Border.all(color: Colors.transparent,width: 1),borderRadius: BorderRadius.circular(20)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                          Align(alignment: Alignment.center, child: Text("100일", style: TextStyleFamily.smallTitleTextStyle)),
-                          Align(alignment: Alignment.center, child: Padding(padding: EdgeInsets.only(left: 250), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33)))
-                      ],
-                    ),
-                    )
-                  : Container(
-                      width: 380,
-                      height: 60,
-                      decoration: BoxDecoration(color: ColorFamily.white, borderRadius: BorderRadius.circular(20)),
-                      child: Stack(
-                        children: [
-                          Align(alignment: Alignment.center, child: Text("100일", style: TextStyleFamily.smallTitleTextStyle)),
-                          Align(alignment: Alignment.center, child: Padding(padding: EdgeInsets.only(left: 250), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33)))
+                        const SizedBox(width: 80),
+                        const Text("+100", style: TextStyleFamily.smallTitleTextStyle),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 50),
+                          child: Image.asset("lib/assets/images/top_bar_heart_36px.png", width: 30, height: 33),
+                        ),
                       ],
                     ),
                   )
-                ),
               ),
-              SizedBox(height: 20),
-              Material(
-                elevation: 1,
-                borderRadius: BorderRadius.circular(20),
-                borderOnForeground: true,
-                child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: (){
-                      setState(() {
-                        _topBarIndex = 1;
-                      });
-                    },
-                    child: _topBarIndex == 1
-                        ? Container(
-                          width: 380,
-                          height: 60,
-                          decoration: BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20)),
+            ),
+            const SizedBox(height: 20),
+            Material(
+              elevation: 1,
+              borderRadius: BorderRadius.circular(20),
+              borderOnForeground: true,
+              child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: (){
+                    setState(() {
+                      _topBarIndex = 2;
+                    });
+                  },
+                  child: Container(
+                    width: deviceWidth-60,
+                    height: deviceHeight*0.14,
+                    decoration:
+                    _topBarIndex == 2
+                        ? BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20))
+                        : BoxDecoration(color: ColorFamily.white, border: Border.all(color: Colors.transparent,width: 1),borderRadius: BorderRadius.circular(20)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                        padding: const EdgeInsets.only(left: 40),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: Image.asset(
+                              'lib/assets/images/default_profile.png',
+                              fit: BoxFit.cover, width: 80, height: 80),
+                        )),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 10),
+                              Image.asset("lib/assets/images/top_bar_heart_36px.png", width: 30, height: 33),
+                          const SizedBox(height: 10),
+                          const Text("100일", style: TextStyleFamily.smallTitleTextStyle),
+                        ]),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 40),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100.0),
+                            child: Image.asset(
+                                'lib/assets/images/default_profile.png',
+                                fit: BoxFit.cover, width: 80, height: 80),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            Material(
+              elevation: 1,
+              borderRadius: BorderRadius.circular(20),
+              borderOnForeground: true,
+              child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: (){
+                    setState(() {
+                      _topBarIndex = 3;
+                    });
+                  },
+                  child: Container(
+                    width: deviceWidth-60,
+                    height: deviceHeight*0.14,
+                    decoration:
+                    _topBarIndex == 3
+                        ? BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20))
+                        : BoxDecoration(color: ColorFamily.white, border: Border.all(color: Colors.transparent,width: 1),borderRadius: BorderRadius.circular(20)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(width: 50),
+                              const Text("100일", style: TextStyleFamily.smallTitleTextStyle),
+                              const SizedBox(width: 10),
+                              Image.asset("lib/assets/images/top_bar_heart_36px.png", width: 30, height: 33),
+                            ]),
+                        SizedBox(
+                          width: (deviceWidth-60)/2,
                           child: Stack(
                             children: [
-                              Align(alignment: Alignment.center, child: Text("+100", style: TextStyleFamily.smallTitleTextStyle)),
-                              Align(alignment: Alignment.center, child: Padding(padding: EdgeInsets.only(left: 250), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33)))
+                              Positioned(
+                                top: deviceHeight*0.025,
+                                right: 40,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  child: Image.asset(
+                                      'lib/assets/images/default_profile.png',
+                                      fit: BoxFit.cover, width: 80, height: 80),
+                                ),
+                              ),
+                              Positioned(
+                                top: deviceHeight*0.025,
+                                left: 10,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  child: Image.asset(
+                                      'lib/assets/images/default_profile.png',
+                                      fit: BoxFit.cover, width: 80, height: 80),
+                                ),
+                              ),
                             ],
                           ),
-                        )
-                            : Container(
-                          width: 380,
-                          height: 60,
-                          decoration: BoxDecoration(color: ColorFamily.white, borderRadius: BorderRadius.circular(20)),
-                          child: Stack(
-                            children: [
-                              Align(alignment: Alignment.center, child: Text("+100", style: TextStyleFamily.smallTitleTextStyle)),
-                              Align(alignment: Alignment.center, child: Padding(padding: EdgeInsets.only(left: 250), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33)))
-                        ],
-                      ),
-                    )
-                ),
+                        ),
+                      ],
+                    ),
+                  )
               ),
-              SizedBox(height: 20),
-              Material(
-                elevation: 1,
-                borderRadius: BorderRadius.circular(20),
-                borderOnForeground: true,
-                child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: (){
-                      setState(() {
-                        _topBarIndex = 2;
-                      });
-                    },
-                    child: _topBarIndex == 2
-                        ? Container(
-                      width: 380,
-                      height: 120,
-                      decoration: BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20)),
-                      child: Stack(
-                        children: [
-                          Align(alignment: Alignment.centerLeft,
-                              child: Padding(padding: EdgeInsets.only(left: 30),
-                               child: ClipRRect(
-                                 borderRadius: BorderRadius.circular(100.0),
-                                 child: Image.asset(
-                                   'lib/assets/images/default_profile.png',
-                                   fit: BoxFit.cover, width: 80, height: 80),
-                               )
-                          )),
-                          Align(alignment: Alignment.center, child: Padding(padding: EdgeInsets.only(bottom: 20), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33))),
-                          Align(alignment: Alignment.center, child: Padding(padding: EdgeInsets.only(top: 40), child: Text("100일", style: TextStyleFamily.smallTitleTextStyle))),
-                          Align(alignment: Alignment.centerRight, child: Padding(padding: EdgeInsets.only(left: 30),
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 30),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.asset(
-                                      'lib/assets/images/default_profile.png',
-                                      fit: BoxFit.cover, width: 80, height: 80),
-                                ),
-                              )
-                          )),
-                        ],
-                      ),
-                    )
-                        : Container(
-                      width: 380,
-                      height: 120,
-                      decoration: BoxDecoration(color: ColorFamily.white, borderRadius: BorderRadius.circular(20)),
-                      child: Stack(
-                        children: [
-                          Align(alignment: Alignment.centerLeft,
-                              child: Padding(padding: EdgeInsets.only(left: 30),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    child: Image.asset(
-                                        'lib/assets/images/default_profile.png',
-                                        fit: BoxFit.cover, width: 80, height: 80),
-                                  )
-                              )),
-                          Align(alignment: Alignment.center, child: Padding(padding: EdgeInsets.only(bottom: 20), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33))),
-                          Align(alignment: Alignment.center, child: Padding(padding: EdgeInsets.only(top: 40), child: Text("100일", style: TextStyleFamily.smallTitleTextStyle))),
-                          Align(alignment: Alignment.centerRight, child: Padding(padding: EdgeInsets.only(left: 30),
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 30),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.asset(
-                                      'lib/assets/images/default_profile.png',
-                                      fit: BoxFit.cover, width: 80, height: 80),
-                                ),
-                              )
-                          )),
-                        ],
-                      ),
-                    )
-                ),
-              ),
-              SizedBox(height: 20),
-              Material(
-                elevation: 1,
-                borderRadius: BorderRadius.circular(20),
-                borderOnForeground: true,
-                child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: (){
-                      setState(() {
-                        _topBarIndex = 3;
-                      });
-                    },
-                    child: _topBarIndex == 3
-                        ? Container(
-                      width: 380,
-                      height: 120,
-                      decoration: BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20)),
-                      child: Stack(
-                        children: [
-                          Align(alignment: Alignment.centerLeft, child: Padding(padding: EdgeInsets.only(left: 60), child: Text("100일", style: TextStyleFamily.smallTitleTextStyle))),
-                          Align(alignment: Alignment.centerLeft, child: Padding(padding: EdgeInsets.only(left: 110), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33))),
-                          Align(alignment: Alignment.centerRight,
-                              child: Padding(padding: EdgeInsets.only(right: 40),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.asset(
-                                    'lib/assets/images/default_profile.png',
-                                    fit: BoxFit.cover, width: 80, height: 80),
-                                ),
-                              )
-                          ),
-                          Align(alignment: Alignment.center,
-                              child: Padding(padding: EdgeInsets.only(left: 100),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    child: Image.asset(
-                                        'lib/assets/images/default_profile.png',
-                                        fit: BoxFit.cover, width: 80, height: 80),
-                                  )
-                              ))
-                        ],
-                      ),
-                    )
-                        : Container(
-                      width: 380,
-                      height: 120,
-                      decoration: BoxDecoration(color: ColorFamily.white, borderRadius: BorderRadius.circular(20)),
-                      child: Stack(
-                        children: [
-                          Align(alignment: Alignment.centerLeft, child: Padding(padding: EdgeInsets.only(left: 60), child: Text("100일", style: TextStyleFamily.smallTitleTextStyle))),
-                          Align(alignment: Alignment.centerLeft, child: Padding(padding: EdgeInsets.only(left: 110), child: Image.asset("lib/assets/images/top_bar_heart_36px.png",width: 30, height: 33))),
-                          Align(alignment: Alignment.centerRight,
-                              child: Padding(padding: EdgeInsets.only(right: 40),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.asset(
-                                      'lib/assets/images/default_profile.png',
-                                      fit: BoxFit.cover, width: 80, height: 80),
-                                ),
-                              )
-                          ),
-                          Align(alignment: Alignment.center,
-                              child: Padding(padding: EdgeInsets.only(left: 100),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    child: Image.asset(
-                                        'lib/assets/images/default_profile.png',
-                                        fit: BoxFit.cover, width: 80, height: 80),
-                                  )
-                              ))
-                        ],
-                      ),
-                    )
-                ),
-              ),
-              SizedBox(height: 30),
-              Container(
-                width: 375,
+            ),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Align(
+                alignment: Alignment.centerRight,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text("상단바 활성화", style: TextStyle(fontFamily: FontFamily.mapleStoryLight,fontSize: 12,color: ColorFamily.black)),
+                    const Text("상단바 활성화", style: TextStyle(fontFamily: FontFamily.mapleStoryLight,fontSize: 12,color: ColorFamily.black)),
                     Switch(
-                      value: _topbarActivated,
+                      value: _topBarActivated,
                       activeColor: ColorFamily.white,
                       activeTrackColor: ColorFamily.pink,
                       inactiveThumbColor: ColorFamily.gray,
                       inactiveTrackColor: ColorFamily.white,
-                      trackOutlineWidth: MaterialStatePropertyAll(0.5),
+                      trackOutlineColor:
+                      _topBarActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                      trackOutlineWidth: const MaterialStatePropertyAll(1),
                       onChanged: (bool value) {
                         // This is called when the user toggles the switch.
                         setState(() {
-                          _topbarActivated = value;
+                          _topBarActivated = value;
                         });
                       }),
                   ],
                 ),
               ),
+            ),
 
-            ],
-          ),
+          ],
         ),
       ),
     );

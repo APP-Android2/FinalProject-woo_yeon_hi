@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/screen/login/password_reset_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -17,299 +15,292 @@ class PasswordEnterScreen extends StatefulWidget {
 class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
   @override
   Widget build(BuildContext context) {
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
         body: Container(
+      width: deviceWidth,
+      height: deviceHeight,
+      padding: const EdgeInsets.all(20),
       color: ColorFamily.cream,
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Padding(padding: EdgeInsets.only(top: 175)),
-            Container(
-                child: Text("비밀번호 입력",
-                    style: TextStyleFamily.passwordTextStyle)),
-            Padding(padding: EdgeInsets.only(top: 75)),
-            Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    child:
-                    SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg"),
-                  ),
-                  Padding(padding: EdgeInsets.only(right: 20)),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    child:
-                    SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg"),
-                  ),
-                  Padding(padding: EdgeInsets.only(right: 20)),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    child:
-                    SvgPicture.asset("lib/assets/icons/password_bar_24px.svg"),
-                  ),
-                  Padding(padding: EdgeInsets.only(right: 20)),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 50,
-                    child:
-                    SvgPicture.asset("lib/assets/icons/password_bar_24px.svg"),
-                  ),
-                ],
-              ),
+      child: Column(
+        children: [
+          SizedBox(height: deviceHeight * 0.22),
+          const Text("비밀번호 입력", style: TextStyleFamily.passwordTextStyle),
+          SizedBox(height: deviceHeight * 0.08),
+          SizedBox(
+            height: 50,
+            width: deviceWidth*0.6,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg", width: 48, height: 48),
+                const SizedBox(width: 20),
+                SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg", width: 48, height: 48),
+                const SizedBox(width: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg", width: 24),
+                ),
+                const SizedBox(width: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg", width: 24),
+                )
+              ],
             ),
-            Padding(padding: EdgeInsets.only(top: 10)),
-            Container(
-              padding: EdgeInsets.only(right: 60),
-              child: TextButton(
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.only(right: deviceWidth * 0.08),
+            child: TextButton(
                 style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all<Color>(
-                        Colors.transparent)),
+                    overlayColor:
+                        MaterialStateProperty.all<Color>(Colors.transparent)),
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              PasswordResetScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const PasswordResetScreen()));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
+                    const Text(
                       "비밀번호를 모르겠어요",
                       style: TextStyle(
                           color: ColorFamily.black,
                           fontSize: 12,
                           fontFamily: FontFamily.mapleStoryLight),
                     ),
-                    Padding(padding: EdgeInsets.only(right: 5)),
-                    Text(
-                      ">",
-                      style: TextStyle(
-                          color: ColorFamily.black,
-                          fontSize: 10,
-                          fontFamily: FontFamily.mapleStoryLight),
-                    )
+                    SvgPicture.asset("lib/assets/icons/expand.svg",
+                        width: 18, height: 18)
                   ],
-                )
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 200)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: InkWell(
-                    onTap: () {},
-                    borderRadius: BorderRadius.circular(20.0),
+                )),
+          ),
+          SizedBox(height: deviceHeight * 0.18),
+          SizedBox(
+            height: deviceHeight * 0.08,
+            width: deviceWidth-40,
+            child: Row(
+              children: [
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("1번 클릭됨");
+                    },
                     child: Container(
                       alignment: Alignment.center,
-                      width: 60,
-                      height: 30,
-                      child: Text(
+                      child: const Text(
                         "1",
                         style: TextStyleFamily.passwordTextStyle,
                       ),
                     ),
-                  )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                      child: InkWell(
-                    onTap: () {},
-                    borderRadius: BorderRadius.circular(0.0),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("2번 클릭됨");
+                    },
                     child: Container(
                       alignment: Alignment.center,
-                      width: 60,
-                      height: 30,
-                      child: Text(
+                      child: const Text(
                         "2",
                         style: TextStyleFamily.passwordTextStyle,
                       ),
                     ),
-                  )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(0.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 60,
-                        height: 30,
-                        child: Text(
-                          "3",
-                          style: TextStyleFamily.passwordTextStyle,
-                        ),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("3번 클릭됨");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "3",
+                        style: TextStyleFamily.passwordTextStyle,
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
-            Padding(padding: EdgeInsets.only(bottom: 35)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "4",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "5",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(0.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 60,
-                        height: 30,
-                        child: Text(
-                          "6",
-                          style: TextStyleFamily.passwordTextStyle,
-                        ),
+          ),
+          SizedBox(
+            height: deviceHeight * 0.08,
+            width: deviceWidth-40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("4번 클릭됨");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "4",
+                        style: TextStyleFamily.passwordTextStyle,
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 35)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "7",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "8",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(0.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 60,
-                        height: 30,
-                        child: Text(
-                          "9",
-                          style: TextStyleFamily.passwordTextStyle,
-                        ),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("5번 클릭됨");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "5",
+                        style: TextStyleFamily.passwordTextStyle,
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 35)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 60,
-                          height: 30,
-                          child: Text(
-                            "0",
-                            style: TextStyleFamily.passwordTextStyle,
-                          ),
-                        ),
-                      )),
-                  Padding(padding: EdgeInsets.only(right: 50)),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(0.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 60,
-                        height: 30,
-                        child: SvgPicture.asset("lib/assets/icons/backspace.svg"),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("6번 클릭됨");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "6",
+                        style: TextStyleFamily.passwordTextStyle,
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: deviceHeight * 0.08,
+            width: deviceWidth-40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("7번 클릭됨");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "7",
+                        style: TextStyleFamily.passwordTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("8번 클릭됨");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "8",
+                        style: TextStyleFamily.passwordTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("9번 클릭됨");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "9",
+                        style: TextStyleFamily.passwordTextStyle,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: deviceHeight * 0.08,
+            width: deviceWidth-40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "",
+                        style: TextStyleFamily.passwordTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("0번 클릭됨");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "0",
+                        style: TextStyleFamily.passwordTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceHeight * 0.08,
+                  width: (deviceWidth-40)/3,
+                  child: InkWell(
+                    onTap: () {
+                      print("지우기 클릭됨");
+                    },
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: SvgPicture.asset("lib/assets/icons/backspace.svg")
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     ));
   }

@@ -26,10 +26,13 @@ class _HelpTopAppBarState extends State<HelpTopAppBar> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            FocusScope.of(context).unfocus();
+            Future.delayed(const Duration(milliseconds: 100), () {
+              Navigator.pop(context);
+            });
           },
           icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
-        )
+        ),
     );
   }
 }

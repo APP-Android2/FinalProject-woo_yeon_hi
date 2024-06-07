@@ -23,14 +23,17 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
           padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // 날짜, 쓴 사람, 날씨
-                DiaryDetailWeather(),
-                // 썸네일
-                DiaryDetailAlbum()
-              ],
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // 날짜, 쓴 사람, 날씨
+                  DiaryDetailWeather(),
+                  // 썸네일
+                  DiaryDetailAlbum()
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
