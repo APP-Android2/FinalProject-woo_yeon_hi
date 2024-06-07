@@ -24,7 +24,7 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
           itemBuilder: (context, index) {
             final item = provider.items[index];
             return Container(
-              margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+              margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
               decoration: BoxDecoration(
                 color: ColorFamily.white,
                 borderRadius: BorderRadius.circular(15),
@@ -56,8 +56,8 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                           backgroundColor: ColorFamily.green,
                           foregroundColor: ColorFamily.black,
                           label: item.isCompleted ? '완료 해제' : '완료',
-                          textStyle: TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight),
-                          borderRadius: BorderRadius.only(
+                          textStyle: const TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight),
+                          borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(15),
                               bottomLeft: Radius.circular(15)
                           ),
@@ -77,7 +77,7 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                             Slidable.of(context)?.close();
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text('삭제 되었습니다.'),
                               ),
                             );
@@ -85,8 +85,8 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                           backgroundColor: ColorFamily.pink,
                           foregroundColor: ColorFamily.black,
                           label: '삭제',
-                          textStyle: TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight),
-                          borderRadius: BorderRadius.only(
+                          textStyle: const TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight),
+                          borderRadius: const BorderRadius.only(
                               topRight: Radius.circular(15),
                               bottomRight: Radius.circular(15)
                           ),
@@ -132,8 +132,8 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                           children: [
                             // 좌측에 초록색 박스
                             SizedBox(
-                              width: 3,
-                              height: 60,
+                              width: 4,
+                              height: 75,
                               child: Container(color: ColorFamily.green),
                             ),
                             Expanded(
@@ -143,12 +143,12 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     // 제목과 부제목
-                                    Text(item.title, style: TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
-                                    SizedBox(height: 6),
-                                    Text('2024. 6. 13(수) - 2024. 6. 17(월)', style: TextStyle(fontSize: 12, fontFamily: FontFamily.mapleStoryLight)),
-                                    SizedBox(height: 4),
+                                    Text(item.title, style: const TextStyle(fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
+                                    const SizedBox(height: 6),
+                                    const Text('2024. 6. 13(수) - 2024. 6. 17(월)', style: TextStyle(fontSize: 12, fontFamily: FontFamily.mapleStoryLight)),
+                                    const SizedBox(height: 4),
                                     Container(
-                                      child: Row(
+                                      child: const Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
                                           // 작성자 표시
@@ -173,7 +173,7 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                 if (item.isCompleted) ...[
                   // 반투명 색상을 표시 할 컨테이너
                   Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -188,7 +188,7 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                   ),
                   // 이미지를 표시 할 컨테이너
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 15, 25, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 15, 25, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -196,7 +196,7 @@ class _FootprintDatePlanScreenState extends State<FootprintDatePlanScreen> {
                           // 화면 폭의 30% 크기로 설정
                           width: MediaQuery.of(context).size.width * 0.3,
                           height: 60,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('lib/assets/images/footprint_stamp.png'),
                               fit: BoxFit.fill,

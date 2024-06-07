@@ -41,12 +41,14 @@ class _FootprintDatePlanSearchBarState extends State<FootprintDatePlanSearchBar>
         print('검색어 입력 중: $query');
       },
 
+      // 검색 바를 위한 TextController 설정
+      controller: FloatingSearchBarController(),
+
+      /*
       // 검색 바가 클릭되면 왼쪽에 뒤로가기 버튼 표시
       onFocusChanged: (isFocused) {
         setState(() {});
       },
-      // 검색 바를 위한 TextController 설정
-      controller: FloatingSearchBarController(),
 
       // 검색 바의 왼쪽에 표시될 액션 버튼들
       leadingActions: [
@@ -54,6 +56,7 @@ class _FootprintDatePlanSearchBarState extends State<FootprintDatePlanSearchBar>
           showIfClosed: false,
         ),
       ],
+      */
 
       // 검색 바에 표시될 액션 버튼들
       actions: [
@@ -82,12 +85,15 @@ class _FootprintDatePlanSearchBarState extends State<FootprintDatePlanSearchBar>
                 color: Colors.white,  // 검색 결과 리스트의 배경색 설정
                 elevation: 1.0,  // 검색 결과 리스트의 그림자 높이 설정
                 child: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,  // 검색 결과 리스트의 크기를 최소화하여 설정
-                    children: List.generate(provider.items.length, (index) {  // 샘플 검색 결과 10개 생성
-                      final item = provider.items[index];
-                      return makeListView(item, index);
-                    }),
+                  height:  MediaQuery.of(context).size.height * 0.3 ,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      //mainAxisSize: MainAxisSize.min,  // 검색 결과 리스트의 크기에 맞게 최소화하여 설정
+                      children: List.generate(provider.items.length, (index) {
+                        final item = provider.items[index];
+                        return makeListView(item, index);
+                      }),
+                    ),
                   ),
                 ),
               ),
@@ -131,7 +137,10 @@ class _FootprintDatePlanSearchBarState extends State<FootprintDatePlanSearchBar>
                 // 각 아이템을 위한 설정
                 child: makeSlidable(item, index),
               ),
-              Divider(height: MediaQuery.of(context).size.height * 0),
+              const Divider(
+                height: 0.5,
+                color: ColorFamily.gray,
+              ),
             ],
           ),
         );
