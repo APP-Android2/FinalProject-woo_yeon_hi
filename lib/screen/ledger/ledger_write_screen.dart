@@ -5,11 +5,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:woo_yeon_hi/dao/ledger_dao.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/ledger/ledger_dialog.dart';
 import 'package:woo_yeon_hi/widget/ledger/ledger_top_app_bar.dart';
+
+import '../../model/ledger_model.dart';
 
 class LedgerWriteScreen extends StatefulWidget {
   const LedgerWriteScreen({super.key});
@@ -19,6 +23,9 @@ class LedgerWriteScreen extends StatefulWidget {
 }
 
 class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
+
+  LedgerDao ledgerDao = LedgerDao();
+
   // 날짜 설정
   late String _dateSetting;
 
@@ -454,9 +461,28 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   child: InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       if (validateFieldsCheck()) {
                                         Navigator.pop(context);
+
+                                        var ledgerIdx = await ledgerDao.getLedgerSequence();
+                                        await ledgerDao.updateLedgerSequence(ledgerIdx + 1);
+                                        var ledgerUserIdx = 100;
+
+                                        var newLedger = Ledger(
+                                            ledgerIdx: ledgerIdx + 1,
+                                            ledgerUserIdx: ledgerUserIdx,
+                                            ledgerDate: '2024.6.8',
+                                            ledgerAmount: priceController.text,
+                                            ledgerType: LedgerType.EXPENDITURE,
+                                            ledgerTitle: titleController.text,
+                                            ledgerCategory: LedgerCategory.FOOD_EXPENSES,
+                                            ledgerMemo: memoController.text,
+                                            ledgerState: LedgerState.STATE_NORMAL,
+                                            ledgerModifyDate: ''
+                                        );
+                                        await ledgerDao.saveLedger(newLedger);
+
                                       }else{
                                         setState(() {
                                           _showErrorMessages = true;
