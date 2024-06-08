@@ -5,6 +5,7 @@ import 'package:woo_yeon_hi/provider/diary_provider.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
+import '../../utils.dart';
 
 
 class DiaryEditWeather extends StatefulWidget {
@@ -25,11 +26,11 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "2024. 5.27.",
+                dateToString(DateTime.now()),
                 style: TextStyleFamily.normalTextStyle,
               ),
             ],

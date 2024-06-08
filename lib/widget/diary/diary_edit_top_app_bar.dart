@@ -82,7 +82,7 @@ Future<void> _onConfirm_done(BuildContext context, DiaryEditProvider provider) a
   Navigator.pop(context); // 일기 작성 페이지 팝
 
   var diary_idx = await getDiarySequence() + 1;
-  var diary_user_idx = 0; // 임시
+  var diary_user_idx = 0; // 유저 idx
   await setDiarySequence(diary_idx);
   var now = DateTime.now();
   var today_formatted = dateToString(now);
@@ -100,6 +100,7 @@ Future<void> _onConfirm_done(BuildContext context, DiaryEditProvider provider) a
       diaryState: DiaryState.STATE_NORMAL.state);
   await saveDiary(diary);
   await uploadDiaryImage(provider.image!, imageName);
+  provider.providerNotify();
 }
 
 void _onCancle_back(BuildContext context){

@@ -174,4 +174,8 @@ class DiaryEditProvider extends ChangeNotifier{
     _weatherType = type;
     notifyListeners();
   }
+
+  void providerNotify(){
+    notifyListeners();
+  }
 }

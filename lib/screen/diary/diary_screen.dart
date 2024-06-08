@@ -25,11 +25,10 @@ class DiaryScreen extends StatefulWidget {
 
 class _DiaryScreenState extends State<DiaryScreen> {
   int user_idx = 0; // 유저 테이블 연동 할 것.
+  int lover_idx = 1;
+
   @override
   Widget build(BuildContext context) {
-    print("");
-    print("build!!!");
-    print("");
 
     return ChangeNotifierProvider(
       create: (context) => DiaryProvider(),
@@ -43,9 +42,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 shape: const CircleBorder(),
                 child: SvgPicture.asset('lib/assets/icons/edit.svg'),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const DiaryEditScreen(),
-                  ));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DiaryEditScreen())).then((value) => setState(() {}));
                 },
               ),
               body: Padding(
@@ -84,7 +81,13 @@ class _DiaryScreenState extends State<DiaryScreen> {
                       future: provider.getDiary(user_idx),
                         builder: (context, snapshot){
                           if(snapshot.hasData == false){
-                            return const Center(child: CircularProgressIndicator(color: ColorFamily.pink,),);
+                            return const Expanded(
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: ColorFamily.pink,
+                                ),
+                              ),
+                            );
                           }else if(snapshot.hasError){
                             return const Text("오류 발생", style: TextStyleFamily.normalTextStyle,);
                           }else{
@@ -399,10 +402,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                     val, !provider.isSelected_editor[val]);
                                 if(val == 1){
                                   // 작성자 유형 : 나
-                                  provider.setUserIdx(0);
+                                  provider.setUserIdx(user_idx);
                                 }else if(val == 2){
                                   // 작성자 유형 : 상대방
-                                  provider.setUserIdx(1);
+                                  provider.setUserIdx(lover_idx);
                                 }else{
                                   provider.setUserIdx(null);
                                 }

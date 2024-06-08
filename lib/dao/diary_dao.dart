@@ -88,3 +88,12 @@ Future<Image> getDiaryImagePath(String path) async {
   var image = Image.network(imageURL, fit: BoxFit.cover,);
   return image;
 }
+
+Future<void> readDiary(Diary diary) async {
+  var querySnapshot = await FirebaseFirestore.instance.collection('DiaryData')
+      .where('diary_idx', isEqualTo: diary.diaryIdx).get();
+  var document = querySnapshot.docs.first;
+  document.reference.update({
+    'diary_lover_check' : true
+  });
+}

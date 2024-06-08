@@ -21,6 +21,15 @@ class DiaryGridView extends StatefulWidget {
 class _DiaryGridViewState extends State<DiaryGridView> {
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // executes after build
+      var user_idx = 0;
+      var unCheckedDiary = isReadAll(user_idx, widget.provider.diaryData);
+      if(unCheckedDiary != null){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DiaryUncheckedScreen(unCheckedDiary)));
+      }
+
+    });
     return MasonryGridView.count(
         itemCount: widget.provider.diaryData.length,
         crossAxisCount: 2,

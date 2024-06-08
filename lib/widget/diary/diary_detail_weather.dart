@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:woo_yeon_hi/model/diary_model.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
 
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 
 class DiaryDetailWeather extends StatefulWidget {
-  const DiaryDetailWeather({super.key});
+  DiaryDetailWeather(this.diary, {super.key});
+  Diary diary;
 
   @override
   State<DiaryDetailWeather> createState() => _DiaryDetailWeatherState();
@@ -19,21 +22,21 @@ class _DiaryDetailWeatherState extends State<DiaryDetailWeather> {
       children: [
         SizedBox(
           width: (MediaQuery.of(context).size.width - 40)* 0.25,
-          child: const Column(
+          child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "2024. 5.27.",
+                    widget.diary.diaryDate,
                     style: TextStyleFamily.normalTextStyle,
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // 일기 쓰는 사람
@@ -62,7 +65,7 @@ class _DiaryDetailWeatherState extends State<DiaryDetailWeather> {
                 height: 60,
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Image.asset('lib/assets/images/snowy.png'),
+                  child: Image.asset(DiaryWeather.fromType(widget.diary.diaryWeather)!.image),
                 )
             ),
           ],
