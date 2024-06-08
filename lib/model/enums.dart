@@ -41,7 +41,15 @@ enum OverlayInfo {
     }
     return null; // 해당 type 값이 없을 경우 null 반환
   }
+}
 
+enum LoginType {
+  none(0),
+  google(1),
+  kakao(2); // logout
+
+  const LoginType(this.value);
+  final int value;
 }
 
 enum DiaryWeather{

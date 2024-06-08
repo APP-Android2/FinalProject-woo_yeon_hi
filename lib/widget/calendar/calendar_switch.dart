@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 
@@ -17,7 +19,11 @@ class _CalendarSwitchState extends State<CalendarSwitch> {
   Widget build(BuildContext context) {
     return Switch(
       value: isTrue,
-      activeColor: ColorFamily.pink,
+      activeColor: ColorFamily.white,
+      activeTrackColor: ColorFamily.pink,
+      inactiveThumbColor: ColorFamily.gray,
+      inactiveTrackColor: ColorFamily.white,
+      trackOutlineWidth: const MaterialStatePropertyAll(1),
       onChanged: (value) {
         setState(() {
           isTrue = !isTrue;

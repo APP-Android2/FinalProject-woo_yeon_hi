@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/provider/user_provider.dart';
 import '../provider/diary_provider.dart';
 import '../provider/footprint_provider.dart';
 import '../provider/ledger_provider.dart';
@@ -31,8 +32,8 @@ class _MainScreenState extends State<MainScreen> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
-
-          ChangeNotifierProvider(create: (context) => DiaryEditProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+          ChangeNotifierProvider(create: (context) => DiaryProvider()),
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
           ChangeNotifierProvider(create: (context) => LedgerProvider()),
           ChangeNotifierProvider(create: (context) => FootPrintSlidableProvider()),

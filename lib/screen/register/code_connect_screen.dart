@@ -3,6 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
@@ -11,6 +14,8 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
+import '../../model/enums.dart';
+import '../../model/user_model.dart';
 import '../../style/text_style.dart';
 
 class CodeConnectScreen extends StatefulWidget {
@@ -21,9 +26,49 @@ class CodeConnectScreen extends StatefulWidget {
 }
 
 class _ConnectCodeScreenState extends State<CodeConnectScreen> {
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = LoginType.none;
+    });
+  }
+
   bool _isCodeGenerated = false;
   String _codeText = "";
   String _randomCode = getRandomString(8);
+
+  dynamic codeTextEditController;
+  dynamic userProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    codeTextEditController = TextEditingController(text: userProvider.loverNickname);
+  }
+
+  @override
+  void dispose() {
+    codeTextEditController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +260,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                   builder: (context) =>
                                                       const DdaySettingScreen(
                                                           isHost: true)), (route) => false);
+                                              //TODO loverUserIdx 저장
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -276,8 +322,9 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                         //유효하다면
                                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                                             builder: (context) =>
-                                                NickNameSettingScreen(
+                                                const NickNameSettingScreen(
                                                     isHost: false)), (route) => false);
+                                        //TODO loverUserIdx 저장
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
                                       child: Container(
@@ -298,6 +345,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
+                        signOut();
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                             builder: (context) =>
                                 const RegisterScreen()), (route) => false);

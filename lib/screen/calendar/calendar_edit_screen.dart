@@ -177,16 +177,15 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                             backgroundColor: currentColor,
                           ),
                           onPressed: () => showColorPickerDialog(context, currentColor, updateColor),
-                          child: const Icon(
-                            Icons.color_lens,
-                            color: ColorFamily.white,
-                          ),
+                          child: const Icon(null),
                         ),
                         Expanded(
                           child: TextField(
                             controller: titleController,
                             style: TextStyleFamily.appBarTitleBoldTextStyle,
                             keyboardType: TextInputType.text,
+                            cursorColor: ColorFamily.black,
+                            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
                             decoration: const InputDecoration(
                               hintText: "제목",
                               border: InputBorder.none,
@@ -237,29 +236,36 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                           const SizedBox(height: 30),
                           const Text("메모", style: TextStyleFamily.normalTextStyle),
                           const SizedBox(height: 10),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              minHeight: 320, // 위젯의 최소 크기
-                              maxHeight: double.infinity  // 최대 크기에 맞춰서 늘어나도록
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: ColorFamily.white,
-                                borderRadius: BorderRadius.circular(15),
+                          Card(
+                            color: ColorFamily.white,
+                            surfaceTintColor: ColorFamily.white,
+                            elevation: 4,
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                minHeight: 320, // 위젯의 최소 크기
+                                maxHeight: double.infinity  // 최대 크기에 맞춰서 늘어나도록
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                child: TextField(
-                                  controller: memoController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  decoration: const InputDecoration(
-                                    hintText: "메모를 입력해주세요",
-                                    hintStyle: TextStyleFamily.hintTextStyle,
-                                    border: InputBorder.none,
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: ColorFamily.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                  child: TextField(
+                                    controller: memoController,
+                                    keyboardType: TextInputType.multiline,
+                                    cursorColor: ColorFamily.black,
+                                    onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                    maxLines: null,
+                                    decoration: const InputDecoration(
+                                      hintText: "메모를 입력해주세요",
+                                      hintStyle: TextStyleFamily.hintTextStyle,
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyleFamily.normalTextStyle,
                                   ),
-                                  style: TextStyleFamily.normalTextStyle,
                                 ),
                               ),
                             ),

@@ -35,9 +35,9 @@ class _CalendarListState extends State<CalendarList> {
                     ),
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Divider(color: ColorFamily.gray,),
+                  child: Divider(color: ColorFamily.gray),
                 ),
                 InkWell(
                   onTap: () {
@@ -58,7 +58,7 @@ class _CalendarListState extends State<CalendarList> {
                               ),
                             )
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(
                           "한강 피크닉 $index",
                           style: TextStyleFamily.normalTextStyle,
@@ -72,7 +72,7 @@ class _CalendarListState extends State<CalendarList> {
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
               ],
             );
           },

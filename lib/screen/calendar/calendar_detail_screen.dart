@@ -127,23 +127,28 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                           const SizedBox(height: 45),
                           const Text("메모", style: TextStyleFamily.normalTextStyle),
                           const SizedBox(height: 10),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              minHeight: 320, // 위젯의 최소 크기
-                              maxHeight: double.infinity  // 최대 크기에 맞춰 늘어나도록
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: ColorFamily.white,
-                                borderRadius: BorderRadius.circular(15),
+                          Card(
+                            color: ColorFamily.white,
+                            surfaceTintColor: ColorFamily.white,
+                            elevation: 4,
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                minHeight: 320, // 위젯의 최소 크기
+                                maxHeight: double.infinity  // 최대 크기에 맞춰 늘어나도록
                               ),
-                              child: Padding(
-                                padding: EdgeInsets.all(15),
-                                child: SingleChildScrollView(
-                                  child: Text(
-                                    memoDetail,
-                                    style: TextStyleFamily.normalTextStyle,
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: ColorFamily.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(15),
+                                  child: SingleChildScrollView(
+                                    child: Text(
+                                      memoDetail,
+                                      style: TextStyleFamily.normalTextStyle,
+                                    ),
                                   ),
                                 ),
                               ),

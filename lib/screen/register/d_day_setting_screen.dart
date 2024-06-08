@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../model/enums.dart';
+import '../../model/user_model.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../widget/register/d_day_setting_calendar.dart';
@@ -18,6 +23,36 @@ class DdaySettingScreen extends StatefulWidget {
   }
 
 class _DdaySettingScreen extends State<DdaySettingScreen> {
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = LoginType.none;
+    });
+  }
+
+  dynamic userProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    userProvider = Provider.of<UserModel>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +152,8 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                     onTap: () {
                                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                                           builder: (context) =>
-                                              const NickNameSettingScreen(
-                                                  isHost: true)), (route) => false);
+                                              NickNameSettingScreen(
+                                                  isHost: widget.isHost)), (route) => false);
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: Container(
@@ -141,6 +176,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
+                          signOut();
                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                               builder: (context) =>
                                   const RegisterScreen()), (route) => false);

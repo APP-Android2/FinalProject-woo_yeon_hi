@@ -5,11 +5,17 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/model/user_model.dart';
+import 'package:woo_yeon_hi/provider/user_provider.dart';
 import 'package:woo_yeon_hi/routes/routes_generator.dart';
+import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
 import 'firebase_options.dart';
+import 'model/enums.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,7 +71,10 @@ class _WooYeonHiState extends State<WooYeonHi> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider(
+    create: (context) => UserModel(idx: 0, loginType: LoginType.none, userAccount: '', userNickname: '', userBirth: DateTime.now(), userProfileImage: '기본프로필이미지경로?', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: false, lockPassword: '', userState: 0, loveDday: DateTime.now()),
+    child:
+      MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "WooYeonHi",
         theme: ThemeData(
@@ -86,6 +95,6 @@ class _WooYeonHiState extends State<WooYeonHi> {
       ),
       home: const RegisterScreen(),
       onGenerateRoute: RouteGenerator.generateRoute,
-    );
+      ));
   }
 }

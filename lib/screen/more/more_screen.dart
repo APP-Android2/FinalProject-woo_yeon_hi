@@ -176,6 +176,7 @@ class _MoreScreen extends State<MoreScreen> {
                           ));
                     },
                     borderRadius: BorderRadius.circular(10.0),
+                    splashFactory: NoSplash.splashFactory,
                     child: SizedBox(
                         height: 60,
                         child: Row(

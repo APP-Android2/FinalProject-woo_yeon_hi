@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 
 Future<void> showColorPickerDialog(BuildContext context, Color currentColor, ValueChanged<Color> onColorChanged) async {
@@ -44,17 +45,25 @@ Widget _buildColorOption(BuildContext context, Color color, Color currentColor, 
       onColorChanged(color);
       Navigator.of(context).pop();
     },
-    child: Container(
-      width: 50,
-      height: 100,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: currentColor == color ? ColorFamily.black : Colors.transparent,
-          width: 1,
-        )
-      ),
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 50,
+          height: 100,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        if(currentColor == color)
+          Positioned(
+            child: SvgPicture.asset(
+              "lib/assets/icons/done.svg",
+              color: ColorFamily.white,
+            ),
+          )
+      ],
     ),
   );
 }
