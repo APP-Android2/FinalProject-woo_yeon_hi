@@ -530,8 +530,8 @@ Widget makeLedgerItem(BuildContext context, int index, String summaryDay) {
 Widget makeDiaryItem(BuildContext context, int index, String summaryDay) {
   return InkWell(
     onTap: () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const DiaryDetailScreen()));
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => const DiaryDetailScreen()));
     },
     child: Container(
       margin: EdgeInsets.only(right: 5),

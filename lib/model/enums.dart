@@ -51,3 +51,84 @@ enum LoginType {
   const LoginType(this.value);
   final int value;
 }
+
+enum DiaryWeather{
+  SUNNY(0, 'lib/assets/images/sunny.png'),
+  CLOUDY(1, 'lib/assets/images/cloudy.png'),
+  RAINY(2, 'lib/assets/images/rainy.png'),
+  SNOWY(3, 'lib/assets/images/snowy.png');
+
+  final int type; // 날씨 타입
+  final String image; // 날씨 이미지
+  const DiaryWeather(this.type, this.image);
+
+  static DiaryWeather? fromType(int type){
+    for (var value in DiaryWeather.values) {
+      if (value.type == type) {
+        return value;
+      }
+    }
+    return null; // 해당 type 값이 없을 경우 null 반환
+  }
+}
+
+enum DiaryState{
+  STATE_NORMAL(0),
+  STATE_DELETE(1);
+
+  final int state; // 상태
+  const DiaryState(this.state);
+}
+
+enum DiaryEditorState{
+  EDITOR_ALL(0, "전체"),
+  EDITOR_USER(1, "나"),
+  EDITOR_LOVER(2, "상대방");
+
+  final int type;
+  final String detail;
+  const DiaryEditorState(this.type, this.detail);
+
+  static DiaryEditorState? fromType(int type){
+    for (var value in DiaryEditorState.values) {
+      if (value.type == type) {
+        return value;
+      }
+    }
+    return null; // 해당 type 값이 없을 경우 null 반환
+  }
+
+  static List<String> getDetails(){
+    List<String> result = [];
+    for(var value in DiaryEditorState.values){
+      result.add(value.detail);
+    }
+    return result;
+  }
+}
+
+enum DiarySortState{
+  SORT_DESC(0, "최신순"),
+  SORT_ASC(1, "오래된순");
+
+  final int type;
+  final String detail;
+  const DiarySortState(this.type, this.detail);
+
+  static DiarySortState? fromType(int type){
+    for (var value in DiarySortState.values) {
+      if (value.type == type) {
+        return value;
+      }
+    }
+    return null; // 해당 type 값이 없을 경우 null 반환
+  }
+
+  static List<String> getDetails(){
+    List<String> result = [];
+    for(var value in DiarySortState.values){
+      result.add(value.detail);
+    }
+    return result;
+  }
+}

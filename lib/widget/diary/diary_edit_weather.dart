@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
+import 'package:woo_yeon_hi/provider/diary_provider.dart';
 
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
+import '../../utils.dart';
 
 
 class DiaryEditWeather extends StatefulWidget {
-  const DiaryEditWeather({super.key});
+  DiaryEditWeather(this.provider, {super.key});
+  DiaryEditProvider provider;
 
   @override
   State<DiaryEditWeather> createState() => _DiaryEditWeatherState();
@@ -22,11 +26,11 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "2024. 5.27.",
+                dateToString(DateTime.now()),
                 style: TextStyleFamily.normalTextStyle,
               ),
             ],
@@ -66,20 +70,20 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                     hoverColor: Colors.transparent,
                     focusColor: Colors.transparent,
                     onTap: () {
-                      setState(() {
-                        weatherSelected = 0;
-                      });
+                      widget.provider.setWeather(DiaryWeather.SUNNY.type);
                     },
                     child: Container(
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), // corner radius를 5로 설정
-                          border: Border.all(color: (weatherSelected == 0)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
+                          border: Border.all(color: (widget.provider.weatherType == DiaryWeather.SUNNY.type)
+                              ?ColorFamily.pink
+                              :Colors.transparent), // stroke 색상을 red로 설정
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.asset('lib/assets/images/sunny.png'),
+                          child: Image.asset(DiaryWeather.SUNNY.image),
                         ))
                 ),
                 const SizedBox(width:3,),
@@ -89,20 +93,20 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                     hoverColor: Colors.transparent,
                     focusColor: Colors.transparent,
                     onTap: () {
-                      setState(() {
-                        weatherSelected = 1;
-                      });
+                      widget.provider.setWeather(DiaryWeather.CLOUDY.type);
                     },
                     child: Container(
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), // corner radius를 5로 설정
-                          border: Border.all(color: (weatherSelected == 1)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
+                          border: Border.all(color: (widget.provider.weatherType == DiaryWeather.CLOUDY.type)
+                              ?ColorFamily.pink
+                              :Colors.transparent), // stroke 색상을 red로 설정
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.asset('lib/assets/images/cloudy.png'),
+                          child: Image.asset(DiaryWeather.CLOUDY.image),
                         ))
                 ),
                 const SizedBox(width:3,),
@@ -112,20 +116,18 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                     hoverColor: Colors.transparent,
                     focusColor: Colors.transparent,
                     onTap: () {
-                      setState(() {
-                        weatherSelected = 2;
-                      });
+                      widget.provider.setWeather(DiaryWeather.RAINY.type);
                     },
                     child: Container(
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), // corner radius를 5로 설정
-                          border: Border.all(color: (weatherSelected == 2)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
+                          border: Border.all(color: (widget.provider.weatherType == DiaryWeather.RAINY.type)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.asset('lib/assets/images/rainy.png'),
+                          child: Image.asset(DiaryWeather.RAINY.image),
                         ))
                 ),
                 const SizedBox(width:3,),
@@ -135,20 +137,18 @@ class _DiaryEditWeatherState extends State<DiaryEditWeather> {
                     hoverColor: Colors.transparent,
                     focusColor: Colors.transparent,
                     onTap: () {
-                      setState(() {
-                        weatherSelected = 3;
-                      });
+                      widget.provider.setWeather(DiaryWeather.SNOWY.type);
                     },
                     child: Container(
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), // corner radius를 5로 설정
-                          border: Border.all(color: (weatherSelected == 3)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
+                          border: Border.all(color: (widget.provider.weatherType == DiaryWeather.SNOWY.type)?ColorFamily.pink:Colors.transparent), // stroke 색상을 red로 설정
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Image.asset('lib/assets/images/snowy.png'),
+                          child: Image.asset(DiaryWeather.SNOWY.image),
                         ))
                 )
               ],

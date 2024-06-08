@@ -8,7 +8,8 @@ import '../../style/color.dart';
 import '../../style/text_style.dart';
 
 class DiaryEditTextInput extends StatefulWidget {
-  const DiaryEditTextInput({super.key});
+  DiaryEditTextInput(this.provider, {super.key});
+  DiaryEditProvider provider;
 
   @override
   State<DiaryEditTextInput> createState() => _DiaryEditTextInputState();
@@ -18,7 +19,7 @@ class _DiaryEditTextInputState extends State<DiaryEditTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    var diaryProvider = Provider.of<DiaryProvider>(context, listen:false);
+    var diaryProvider = Provider.of<DiaryEditProvider>(context, listen:false);
     return SizedBox(
       width: MediaQuery.of(context).size.width - 40,
       child: Card(
