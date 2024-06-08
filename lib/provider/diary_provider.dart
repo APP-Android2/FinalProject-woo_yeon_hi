@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:woo_yeon_hi/dao/diary_dao.dart';
 
 import '../model/diary_model.dart';
+import '../utils.dart';
 
 // 교환일기 메인 프로바이더
 class DiaryProvider extends ChangeNotifier{
@@ -16,6 +17,9 @@ class DiaryProvider extends ChangeNotifier{
   final TextEditingController _endPeriodController = TextEditingController(text: "");
   List<String> _filterList = ["전체", "최신순"];
 
+  int? _diaryUserIdx;
+  List<Diary> _diaryData = [];
+
   List<String> get editorType => _editorType;
   String get startPeriod => _startPeriod;
   String get endPeriod => _endPeriod;
@@ -25,35 +29,67 @@ class DiaryProvider extends ChangeNotifier{
   List<bool> get isSelected_editor => _isSelected_editor;
   List<bool> get isSelected_sort => _isSelected_sort;
   List<String> get filterList => _filterList;
+  List<Diary> get diaryData => _diaryData;
+  int? get diaryUserIdx => _diaryUserIdx;
+
+  Future<List<Diary>> getDiary(int user_idx) async {
+    _diaryData.clear();
+
+    int? user_idx = _diaryUserIdx;
+
+    int filter_editor = _isSelected_editor.indexWhere((element) => element);
+    int filter_sort = _isSelected_sort.indexWhere((element) => element);
+
+    String filter_start = _startPeriod;
+    String filter_end = _endPeriod;
+
+    if(filter_start.isNotEmpty && filter_end.isNotEmpty){
+      DateTime pd1 = stringToDate(_startPeriod);
+      DateTime pd2 = stringToDate(_endPeriod);
+      if (pd1.compareTo(pd2) < 0) {
+        filter_start = _startPeriod;
+        filter_end = _endPeriod;
+      }else{
+        filter_start = _endPeriod;
+        filter_end = _startPeriod;
+      }
+    }
+
+    var mapList = await getDiaryData(user_idx, filter_editor, filter_sort, filter_start, filter_end);
+
+    for(var mapData in mapList){
+      _diaryData.add(Diary.fromData(mapData));
+    }
+
+    return _diaryData;
+  }
+
+  void setUserIdx(int? idx){
+    _diaryUserIdx = idx;
+  }
 
   void setStartPeriod(String date){
     _startPeriod = date;
-    notifyListeners();
   }
 
   void setEndPeriod(String date){
     _endPeriod = date;
-    notifyListeners();
   }
 
   void setStartControllerText(String text){
     _startPeriodController.text = text;
-    notifyListeners();
   }
 
   void setEndControllerText(String text){
     _endPeriodController.text = text;
-    notifyListeners();
   }
 
   void setSelected_editor(List<bool> values){
     _isSelected_editor = values;
-    notifyListeners();
   }
 
   void setSelected_sort(List<bool> values){
     _isSelected_sort = values;
-    notifyListeners();
   }
 
   void removeFilterListByIndex(int index){
@@ -63,21 +99,21 @@ class DiaryProvider extends ChangeNotifier{
 
   void updateSelected_editor(int index, bool value){
     _isSelected_editor[index] = value;
-    notifyListeners();
   }
 
   void updateSelected_sort(int index, bool value){
     _isSelected_sort[index] = value;
-    notifyListeners();
   }
 
   void setFilterList(List<String> value){
     _filterList = value;
-    notifyListeners();
   }
 
   void addFilterListItem(String item){
     _filterList.add(item);
+  }
+
+  void providerNotify(){
     notifyListeners();
   }
 }

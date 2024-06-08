@@ -89,6 +89,14 @@ enum DiaryEditorState{
     }
     return null; // 해당 type 값이 없을 경우 null 반환
   }
+
+  static List<String> getDetails(){
+    List<String> result = [];
+    for(var value in DiaryEditorState.values){
+      result.add(value.detail);
+    }
+    return result;
+  }
 }
 
 enum DiarySortState{
@@ -106,5 +114,13 @@ enum DiarySortState{
       }
     }
     return null; // 해당 type 값이 없을 경우 null 반환
+  }
+
+  static List<String> getDetails(){
+    List<String> result = [];
+    for(var value in DiarySortState.values){
+      result.add(value.detail);
+    }
+    return result;
   }
 }

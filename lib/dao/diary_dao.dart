@@ -38,20 +38,20 @@ Future<void> saveDiary(Diary diary) async {
   });
 }
 
-Future<List<Map<String, dynamic>>> getDiaryData(int user_idx, int filter_editor, int filter_sort, String filter_start, String filter_end) async {
-  
+Future<List<Map<String, dynamic>>> getDiaryData(int? user_idx, int filter_editor, int filter_sort, String filter_start, String filter_end) async {
   List<Map<String, dynamic>> results = [];
 
   Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection('DiaryData');
-
-  // 내가 쓴 일기
-  if(filter_editor == DiaryEditorState.EDITOR_USER.type){
-    query = query.where('diary_idx', isEqualTo: user_idx);
-  }
-  // 상대방이 쓴 일기
-  else if(filter_editor == DiaryEditorState.EDITOR_LOVER.type){
-    int lover_idx = 0; // 유저 테이블 연동 할 것
-    query = query.where('diary_idx', isEqualTo: lover_idx);
+  
+  if(user_idx != null){
+    // 내가 쓴 일기
+    if(filter_editor == DiaryEditorState.EDITOR_USER.type){
+      query = query.where('diary_user_idx', isEqualTo: user_idx);
+    }
+    // 상대방이 쓴 일기
+    else if(filter_editor == DiaryEditorState.EDITOR_LOVER.type){
+      query = query.where('diary_user_idx', isEqualTo: user_idx);
+    }
   }
 
   // 기간 조회

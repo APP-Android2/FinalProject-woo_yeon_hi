@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -9,13 +10,11 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/utils.dart';
 
-import '../../model/diary_model.dart';
 import '../../style/font.dart';
 import '../../widget/diary/diary_filter_list_view.dart';
 import '../../widget/diary/diary_grid_view.dart';
 import '../../widget/diary/diary_top_app_bar.dart';
 import 'diary_edit_screen.dart';
-import 'diary_unchecked_screen.dart';
 
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
@@ -28,6 +27,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
   int user_idx = 0; // 유저 테이블 연동 할 것.
   @override
   Widget build(BuildContext context) {
+    print("");
+    print("build!!!");
+    print("");
+
     return ChangeNotifierProvider(
       create: (context) => DiaryProvider(),
       child: Consumer<DiaryProvider>(
@@ -57,9 +60,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () {
-                              setState(() {
-                                _showModalBottomSheet(provider);
-                              });
+                              _showModalBottomSheet(provider);
                             },
                             child: SvgPicture.asset(
                               'lib/assets/icons/Filter_alt_fill.svg',
@@ -72,14 +73,25 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           ),
                           Expanded(
                               child: DiaryFilterListView(
-                                  provider.filterList))
+                                  provider))
                         ],
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    Expanded(child: DiaryGridView(provider)),
+                    FutureBuilder(
+                      future: provider.getDiary(user_idx),
+                        builder: (context, snapshot){
+                          if(snapshot.hasData == false){
+                            return const Center(child: CircularProgressIndicator(color: ColorFamily.pink,),);
+                          }else if(snapshot.hasError){
+                            return const Text("오류 발생", style: TextStyleFamily.normalTextStyle,);
+                          }else{
+                            return Expanded(child: DiaryGridView(provider));
+                          }
+                        },
+                    ),
                   ],
                 ),
               )
@@ -208,8 +220,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
                             ),
                           );
                         }, markerBuilder: (context, day, events) {
-                          var _toDay =
-                              "${DateTime.now().toIso8601String().substring(0, 10)} 00:00:00.000Z";
                           return Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.only(top: 20),
@@ -229,11 +239,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         },
                         onDaySelected: (selectedDay, focusedDay) {
                           bottomState(() {
-                            setState(() {
-                              _selectedDay = selectedDay;
-                              _focusedDay =
-                                  focusedDay; // update `_focusedDay` here as well
-                            });
+                            _selectedDay = selectedDay;
+                            _focusedDay =
+                                focusedDay; // update `_focusedDay` here as well
                           });
                         },
                         onPageChanged: (focusedDay) {
@@ -258,9 +266,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                       surfaceTintColor: ColorFamily.white),
                                   onPressed: () {
                                     bottomState(() {
-                                      setState(() {
-                                        _focusedDay = DateTime.now();
-                                      });
+                                      _focusedDay = DateTime.now();
                                     });
                                   },
                                   child: const Text(
@@ -281,39 +287,37 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                       backgroundColor: ColorFamily.beige,
                                       surfaceTintColor: ColorFamily.beige),
                                   onPressed: () {
-                                    setState(() {
-                                      if (_selectedDay != null) {
-                                        String formattedDate =
-                                            dateToString(_selectedDay!);
-                                        if (flag == "start") {
-                                          provider
-                                              .setStartPeriod(formattedDate);
-                                          provider.setStartControllerText(
-                                              formattedDate);
-                                          Navigator.pop(context, "start");
-                                        } else {
-                                          provider.setEndPeriod(formattedDate);
-                                          provider.setEndControllerText(
-                                              formattedDate);
-                                          Navigator.pop(context, "end");
-                                        }
+                                    if (_selectedDay != null) {
+                                      String formattedDate =
+                                      dateToString(_selectedDay!);
+                                      if (flag == "start") {
+                                        provider
+                                            .setStartPeriod(formattedDate);
+                                        provider.setStartControllerText(
+                                            formattedDate);
+                                        Navigator.pop(context, "start");
                                       } else {
-                                        String formattedDate =
-                                            dateToString(_focusedDay);
-                                        if (flag == "start") {
-                                          provider
-                                              .setStartPeriod(formattedDate);
-                                          provider.setStartControllerText(
-                                              formattedDate);
-                                          Navigator.pop(context, "start");
-                                        } else {
-                                          provider.setEndPeriod(formattedDate);
-                                          provider.setEndControllerText(
-                                              formattedDate);
-                                          Navigator.pop(context, "end");
-                                        }
+                                        provider.setEndPeriod(formattedDate);
+                                        provider.setEndControllerText(
+                                            formattedDate);
+                                        Navigator.pop(context, "end");
                                       }
-                                    });
+                                    } else {
+                                      String formattedDate =
+                                      dateToString(_focusedDay);
+                                      if (flag == "start") {
+                                        provider
+                                            .setStartPeriod(formattedDate);
+                                        provider.setStartControllerText(
+                                            formattedDate);
+                                        Navigator.pop(context, "start");
+                                      } else {
+                                        provider.setEndPeriod(formattedDate);
+                                        provider.setEndControllerText(
+                                            formattedDate);
+                                        Navigator.pop(context, "end");
+                                      }
+                                    }
                                   },
                                   child: const Text(
                                     "확인",
@@ -393,6 +397,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                     List.generate(3, (index) => false));
                                 provider.updateSelected_editor(
                                     val, !provider.isSelected_editor[val]);
+                                if(val == 1){
+                                  // 작성자 유형 : 나
+                                  provider.setUserIdx(0);
+                                }else if(val == 2){
+                                  // 작성자 유형 : 상대방
+                                  provider.setUserIdx(1);
+                                }else{
+                                  provider.setUserIdx(null);
+                                }
                               });
                             },
                             children: [
@@ -732,9 +745,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                 provider.addFilterListItem(provider.sortType[
                                     provider.isSelected_sort
                                         .indexWhere((element) => element)]);
-                                setState(() {
-
-                                });
+                                provider.providerNotify();
                               },
                               child: const Text(
                                 "확인",
