@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
 
 import '../model/diary_model.dart';
 
@@ -14,6 +15,13 @@ Future<int> getDiarySequence() async {
       .get();
   var sequence = querySnapShot.data()!.values.first;
   return sequence;
+}
+
+Future<void> setDiarySequence(int sequence) async {
+  await FirebaseFirestore.instance
+      .collection('Sequence')
+      .doc('DiarySequence')
+      .set({'value': sequence});
 }
 
 Future<void> saveDiary(Diary diary) async {
@@ -30,13 +38,44 @@ Future<void> saveDiary(Diary diary) async {
   });
 }
 
-Future<List<Map<String, dynamic>>> getDiaryData() async {
+Future<List<Map<String, dynamic>>> getDiaryData(int user_idx, int filter_editor, int filter_sort, String filter_start, String filter_end) async {
+  
   List<Map<String, dynamic>> results = [];
 
-  var querySnapShot = await FirebaseFirestore.instance.collection('DiaryData').get();
+  Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection('DiaryData');
+
+  // 내가 쓴 일기
+  if(filter_editor == DiaryEditorState.EDITOR_USER.type){
+    query = query.where('diary_idx', isEqualTo: user_idx);
+  }
+  // 상대방이 쓴 일기
+  else if(filter_editor == DiaryEditorState.EDITOR_LOVER.type){
+    int lover_idx = 0; // 유저 테이블 연동 할 것
+    query = query.where('diary_idx', isEqualTo: lover_idx);
+  }
+
+  // 기간 조회
+  if(filter_start.isNotEmpty && filter_end.isNotEmpty){
+    query = query.where('diary_date', isGreaterThanOrEqualTo: filter_start)
+        .where('diary_date', isLessThanOrEqualTo: filter_end);
+  }else if(filter_start.isNotEmpty && filter_end.isEmpty){
+    query = query.where('diary_date', isGreaterThanOrEqualTo: filter_start);
+  }else if (filter_start.isEmpty && filter_end.isNotEmpty){
+    query = query.where('diary_date', isLessThanOrEqualTo: filter_end);
+  }
+
+  // 정렬 조건
+  if(filter_sort == DiarySortState.SORT_ASC.type){
+    query = query.orderBy('diary_date', descending: false);
+  }else{
+    query = query.orderBy('diary_date', descending: true);
+  }
+
+  var querySnapShot = await query.get();
   for(var doc in querySnapShot.docs){
     results.add(doc.data());
   }
+
   return results;
 }
 
@@ -44,8 +83,8 @@ Future<void> uploadDiaryImage(XFile imageFile, String imageName) async {
   await FirebaseStorage.instance.ref('image/diary/$imageName').putFile(File(imageFile.path));
 }
 
-Future<Image> getDiaryImage(String path) async {
-  var imageURL = await FirebaseStorage.instance.ref('image/diary/test').getDownloadURL();
-  var resultImage = Image.network(imageURL);
-  return resultImage;
+Future<Image> getDiaryImagePath(String path) async {
+  var imageURL = await FirebaseStorage.instance.ref('image/diary/$path').getDownloadURL();
+  var image = Image.network(imageURL, fit: BoxFit.cover,);
+  return image;
 }

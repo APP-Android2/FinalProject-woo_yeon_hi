@@ -9,7 +9,7 @@ import '../../style/text_style.dart';
 
 class DiaryEditWeather extends StatefulWidget {
   DiaryEditWeather(this.provider, {super.key});
-  DiaryProvider provider;
+  DiaryEditProvider provider;
 
   @override
   State<DiaryEditWeather> createState() => _DiaryEditWeatherState();

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:woo_yeon_hi/model/diary_model.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
 class DiaryUncheckedScreen extends StatefulWidget {
-  const DiaryUncheckedScreen({super.key});
+  DiaryUncheckedScreen(this.unCheckedDiary, {super.key});
+  Diary unCheckedDiary;
 
   @override
   State<DiaryUncheckedScreen> createState() => _DiaryUncheckedScreenState();

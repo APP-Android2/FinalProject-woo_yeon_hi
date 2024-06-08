@@ -13,7 +13,7 @@ import '../../style/font.dart';
 
 class DiaryEditAlbum extends StatefulWidget {
   DiaryEditAlbum(this.provider, {super.key});
-  DiaryProvider provider;
+  DiaryEditProvider provider;
 
   @override
   State<DiaryEditAlbum> createState() => _DiaryEditAlbumState();
@@ -109,7 +109,7 @@ class _DiaryEditAlbumState extends State<DiaryEditAlbum> {
     );
   }
 
-  Future getImage(DiaryProvider diaryProvider, ImageSource imagesource) async {
+  Future getImage(DiaryEditProvider diaryProvider, ImageSource imagesource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
     final XFile? pickedFile = await picker.pickImage(source: imagesource);
     if (pickedFile != null) {

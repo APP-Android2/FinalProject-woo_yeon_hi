@@ -71,3 +71,40 @@ enum DiaryState{
   final int state; // 상태
   const DiaryState(this.state);
 }
+
+enum DiaryEditorState{
+  EDITOR_ALL(0, "전체"),
+  EDITOR_USER(1, "나"),
+  EDITOR_LOVER(2, "상대방");
+
+  final int type;
+  final String detail;
+  const DiaryEditorState(this.type, this.detail);
+
+  static DiaryEditorState? fromType(int type){
+    for (var value in DiaryEditorState.values) {
+      if (value.type == type) {
+        return value;
+      }
+    }
+    return null; // 해당 type 값이 없을 경우 null 반환
+  }
+}
+
+enum DiarySortState{
+  SORT_DESC(0, "최신순"),
+  SORT_ASC(1, "오래된순");
+
+  final int type;
+  final String detail;
+  const DiarySortState(this.type, this.detail);
+
+  static DiarySortState? fromType(int type){
+    for (var value in DiarySortState.values) {
+      if (value.type == type) {
+        return value;
+      }
+    }
+    return null; // 해당 type 값이 없을 경우 null 반환
+  }
+}

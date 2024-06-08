@@ -32,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
       providers: [
         ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
 
-          ChangeNotifierProvider(create: (context) => DiaryProvider()),
+          ChangeNotifierProvider(create: (context) => DiaryEditProvider()),
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
           ChangeNotifierProvider(create: (context) => LedgerProvider()),
           ChangeNotifierProvider(create: (context) => FootPrintSlidableProvider()),

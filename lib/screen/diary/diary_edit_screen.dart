@@ -22,8 +22,8 @@ class _DiaryEditScreenState extends State<DiaryEditScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => DiaryProvider(),
-      child: Consumer<DiaryProvider>(
+      create: (context) => DiaryEditProvider(),
+      child: Consumer<DiaryEditProvider>(
         builder: (context, provider, _){
           return Scaffold(
             backgroundColor: ColorFamily.cream,

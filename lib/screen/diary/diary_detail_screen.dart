@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woo_yeon_hi/model/diary_model.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 
 import '../../widget/diary/diary_detail_album.dart';
@@ -7,7 +8,8 @@ import '../../widget/diary/diary_detail_top_app_bar.dart';
 import '../../widget/diary/diary_detail_weather.dart';
 
 class DiaryDetailScreen extends StatefulWidget {
-  const DiaryDetailScreen({super.key});
+  DiaryDetailScreen(this.diary, {super.key});
+  Diary diary;
 
   @override
   State<DiaryDetailScreen> createState() => _DiaryDetailScreenState();
