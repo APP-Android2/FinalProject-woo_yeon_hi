@@ -77,4 +77,12 @@ enum LedgerCategory{
   final String name;
 
   const LedgerCategory(this.number, this.name);
+
+  // 열거형을 정수형으로 변환
+  int get intValue => number;
+
+  // 문자열을 열거형으로 변환하는 static 메서드
+  static LedgerCategory fromString(int int) {
+    return LedgerCategory.values.firstWhere((e) => e.number == int);
+  }
 }
