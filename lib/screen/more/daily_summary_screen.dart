@@ -636,6 +636,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
   }
 
 
+
 // 캘린더 아이템
   Widget makeCalendarItem(BuildContext context, int index, String summaryDay) {
     return Padding(
@@ -650,6 +651,27 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
           color: ColorFamily.white,
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
+
+// 교환일기 아이템
+Widget makeDiaryItem(BuildContext context, int index, String summaryDay) {
+  return InkWell(
+    onTap: () {
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => const DiaryDetailScreen()));
+    },
+    child: Container(
+      margin: EdgeInsets.only(right: 5),
+      width: 130,
+      child: Card(
+        color: ColorFamily.white,
+        surfaceTintColor: ColorFamily.white,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        elevation: 1,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+          child: Column(
+
             children: [
               SizedBox(
                 width: 5,
