@@ -72,7 +72,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-    create: (context) => UserModel(idx: 0, loginType: LoginType.none, userAccount: '', userNickname: '', userBirth: DateTime.now(), userProfileImage: '기본프로필이미지경로?', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: false, lockPassword: '', userState: 0, loveDday: DateTime.now()),
+    create: (context) => UserModel(idx: 0, loginType: LoginType.none, userAccount: '', userNickname: '', userBirth: DateTime.now(), userProfileImage: '', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: 0, topBarActivate: false, lockPassword: [], userState: 2, loveDday: DateTime.now()),
     child:
       MaterialApp(
       debugShowCheckedModeBanner: false,

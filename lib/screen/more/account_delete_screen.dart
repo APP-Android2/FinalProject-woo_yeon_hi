@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
@@ -132,10 +133,35 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               ),
               child: InkWell(
                   onTap: () {
-                    signOut();
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                          (Route<dynamic> route) => false);
+                    if(isAgreed){
+                      setState(() {
+                        userProvider.userState = 1;
+                      });
+                      signOut();
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const RegisterScreen()),
+                              (Route<dynamic> route) => false);
+                      Fluttertoast.showToast(
+                          msg: "우연히 계정이 삭제 처리되었습니다.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: ColorFamily.black,
+                          textColor: ColorFamily.white,
+                          fontSize: 14.0
+                      );
+                    }else{
+                      Fluttertoast.showToast(
+                          msg: "동의 항목을 체크해주세요",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: ColorFamily.black,
+                          textColor: ColorFamily.white,
+                          fontSize: 14.0
+                      );
+                    }
                   },
                   borderRadius:
                   BorderRadius.circular(20.0),

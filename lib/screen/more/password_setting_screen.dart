@@ -10,16 +10,15 @@ import 'package:woo_yeon_hi/widget/more/app_lock_top_app_bar.dart';
 import '../../style/text_style.dart';
 
 class PasswordSettingScreen extends StatefulWidget {
-  final bool isBioAuthSupported;
+  final bool bioAuth;
 
-  const PasswordSettingScreen(this.isBioAuthSupported, {super.key});
+  const PasswordSettingScreen({required this.bioAuth, super.key});
 
   @override
   State<PasswordSettingScreen> createState() => _PasswordSettingScreenState();
 }
 
 class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
-
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
@@ -42,23 +41,11 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
               height: 50,
               width: deviceWidth*0.6,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg", width: 48, height: 48),
-                  const SizedBox(width: 20),
-                  SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg", width: 48, height: 48),
-                  const SizedBox(width: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg", width: 24),
-                  ),
-                  const SizedBox(width: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg", width: 24),
-                  )
-                ],
-              ),
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(4, (index) {
+                    return _buildPasswordIcon(
+                        index < password.length);
+                  })),
             ),
             SizedBox(height: deviceHeight*0.25),
             SizedBox(
@@ -71,7 +58,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("1번 클릭됨");
+                        _addNumber(1);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -87,7 +74,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("2번 클릭됨");
+                        _addNumber(2);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -103,7 +90,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("3번 클릭됨");
+                        _addNumber(3);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -128,7 +115,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("4번 클릭됨");
+                        _addNumber(4);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -144,7 +131,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("5번 클릭됨");
+                        _addNumber(5);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -160,7 +147,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("6번 클릭됨");
+                        _addNumber(6);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -185,7 +172,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("7번 클릭됨");
+                        _addNumber(7);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -201,7 +188,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("8번 클릭됨");
+                        _addNumber(8);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -217,7 +204,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("9번 클릭됨");
+                        _addNumber(9);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -241,9 +228,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     height: deviceHeight * 0.08,
                     width: (deviceWidth-40)/3,
                     child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => PasswordCheckScreen(widget.isBioAuthSupported)));
-                      },
+                      onTap: () {},
                       child: Container(
                         alignment: Alignment.center,
                         child: const Text(
@@ -258,7 +243,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("0번 클릭됨");
+                        _addNumber(0);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -274,7 +259,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     width: (deviceWidth-40)/3,
                     child: InkWell(
                       onTap: () {
-                        print("지우기 클릭됨");
+                        _removeNumber();
                       },
                       child: Container(
                           alignment: Alignment.center,
@@ -290,6 +275,70 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
       )
     );
   }
-}
 
-//TODO 비밀번호 4자리 입력 완료시 PasswordCheckScreen으로 이동하면서 widget.isBioAuthSupporeted 넘겨주기
+  Widget _buildPasswordIcon(bool isActive) {
+    return isActive
+        ? SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg",
+        width: 48, height: 48)
+        : Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg",
+          width: 24),
+    );
+  }
+
+  bool firstNumInput = false;
+  bool secondNumInput = false;
+  bool thirdNumInput = false;
+  bool fourthNumInput = false;
+
+  final List<int> password = [];
+  final int _maxNumbers = 4;
+
+  void _numInputCheck() {
+    setState(() {
+      firstNumInput = password.length > 0;
+      secondNumInput = password.length > 1;
+      thirdNumInput = password.length > 2;
+      fourthNumInput = password.length > 3;
+    });
+  }
+
+  void _addNumber(int number) {
+    setState(() {
+      if (password.length < _maxNumbers) {
+        password.add(number);
+      }
+      if (password.length == _maxNumbers) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PasswordCheckScreen(bioAuth: widget.bioAuth, password: password),
+          ),
+        );
+        _initiatePassword();
+      }
+    });
+    _numInputCheck();
+  }
+
+  void _removeNumber() {
+    setState(() {
+      if (password.isNotEmpty) {
+        password.removeLast();
+      }
+    });
+    _numInputCheck();
+  }
+
+  void _initiatePassword(){
+    setState(() {
+      firstNumInput = false;
+      secondNumInput = false;
+      thirdNumInput = false;
+      fourthNumInput = false;
+
+      // password.clear();
+    });
+  }
+}

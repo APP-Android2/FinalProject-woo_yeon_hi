@@ -94,10 +94,10 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                     fontFamily: FontFamily.mapleStoryLight),
                               ),
                                     const SizedBox(height: 15),
-                              const Row(
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "지금부터 ",
                                     style: TextStyle(
                                         color: ColorFamily.black,
@@ -105,12 +105,12 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                         fontFamily: FontFamily.mapleStoryLight),
                                   ),
                                   Text(
-                                    "멋쟁이사자",
-                                    style: TextStyle(
+                                    userProvider.loverNickname,
+                                    style: const TextStyle(
                                         color: ColorFamily.black,
                                         fontSize: 20,
                                         fontFamily: FontFamily.mapleStoryBold),
-                                  ),Text(
+                                  ),const Text(
                                     " 님과",
                                     style: TextStyle(
                                         color: ColorFamily.black,
@@ -145,18 +145,11 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
 
                                       // 자동로그인
                                       // write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
-                                      //{"login" : "id id_value password password_value"}
-                                      //와 같은 형식으로 저장이 된다고 생각을 하면 됩니다.
-                                      if(userProvider.loginType == LoginType.google){
-                                      await storage.write(
-                                      key: "loginData",
-                                      value: "googleUser?.id");
-                                      } else{
-                                      await storage.write(
-                                      key: "loginData",
-                                      value: "OAuthToken.accessToken");
-                                      }
-                                      runApp(const MainScreen(loginData: "loginData"));
+                                      // await storage.write(
+                                      // key: "loginData",
+                                      // value: userProvider.userAccount);
+
+                                      runApp(const MainScreen());
                                     },
                                     borderRadius:
                                     BorderRadius.circular(20.0),

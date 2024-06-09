@@ -1,13 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/screen/more/more_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-import 'package:woo_yeon_hi/widget/more/profile_edit_top_app_bar.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
 as picker;
 
+import '../../model/user_model.dart';
 import '../../style/font.dart';
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -18,21 +20,34 @@ class ProfileEditScreen extends StatefulWidget {
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   DateTime _selectedDate = DateTime.now();
-  DateTime _birthday = DateTime.now();
 
-  late String userName;
-  late String userNickName;
+  dynamic userNicknameTextEditController;
+  dynamic profileMessageTextEditController;
+  dynamic userProvider;
+  late String userNickname;
   late String profileMsg;
+  late String profileImage;
+  late DateTime userBirth;
 
   @override
   void initState() {
     super.initState();
 
-    userName = "김멋사"; // 유저 이름 가져오기
-    userNickName = "멋쟁이사자"; // 유저 닉네임 가져오기
-    profileMsg = "너와 함께할 때 가장 행복해!"; // 유저 상태 메시지 가져오기
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    userNickname = userProvider.userNickname;
+    profileMsg = userProvider.profileMessage;
+    profileImage = userProvider.userProfileImage;
+    userBirth = userProvider.userBirth;
+    userNicknameTextEditController = TextEditingController(text: userNickname);
+    profileMessageTextEditController = TextEditingController(text: profileMsg);
   }
 
+  @override
+  void dispose() {
+    userNicknameTextEditController.dispose();
+    profileMessageTextEditController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +55,62 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: const ProfileEditTopAppBar(),
+      return Scaffold(
+      appBar: AppBar(
+        surfaceTintColor: ColorFamily.cream,
+        backgroundColor: ColorFamily.cream,
+        centerTitle: true,
+        title: const Text(
+          "프로필 관리",
+          style: TextStyleFamily.appBarTitleLightTextStyle,
+        ),
+        leading: IconButton(
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            Future.delayed(const Duration(milliseconds: 100), () {
+              Navigator.pop(context);
+            });
+          },
+          icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                if(userProvider.checkProvider(userNicknameTextEditController)){
+                  FocusScope.of(context).unfocus();
+                  setState(() {
+                    userProvider.userNickname = userNickname;
+                    userProvider.userBirth = userBirth;
+                    userProvider.profileMessage = profileMsg;
+                  });
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MoreScreen()), (route) => false);
+                    Navigator.pop(context);
+                    Fluttertoast.showToast(
+                        msg: "프로필이 저장되었습니다!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP_LEFT,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: ColorFamily.pink,
+                        textColor: ColorFamily.white,
+                        fontSize: 14.0
+                    );
+                  });
+                } else {
+                  FocusScope.of(context).unfocus();
+                  Fluttertoast.showToast(
+                      msg: "닉네임을 입력해주세요!",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: ColorFamily.pink,
+                      textColor: ColorFamily.white,
+                      fontSize: 14.0);
+                }},
+              icon: SvgPicture.asset('lib/assets/icons/done.svg'))
+        ],
+      ),
+      // ProfileEditTopAppBar(birthdaySaved: _birthdaySaved, isError: _isError),
       body: Container(
         width: deviceWidth,
         height: deviceHeight,
@@ -63,10 +132,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(65),
                               child: Image.asset(
-                                'lib/assets/images/default_profile.png',
+                                profileImage,
                                 width: deviceWidth * 0.35,
                                 height: deviceWidth * 0.35,
-                              ), // Text(key['title']),
+                              ),
                             ),
                         ),
                       ),
@@ -97,7 +166,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  Text(userName, style: TextStyleFamily.smallTitleTextStyle)
                 ],
               ),
               const SizedBox(height: 40),
@@ -120,15 +188,21 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          onChanged: (value) {
+                            userNickname = value;
+                          },
+                          onFieldSubmitted: (value) {
+                            userNickname = value;
+                          },
+                          controller: userNicknameTextEditController,
                           onTapOutside: (event) {
                             FocusScope.of(context).unfocus();
                           },
                           style: TextStyleFamily.smallTitleTextStyle,
-                          initialValue: userNickName,
-                          decoration: const InputDecoration(border: InputBorder.none)),
+                          decoration: const InputDecoration(border: InputBorder.none)
                       )
                     ),
-            ),
+            )),
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.only(left: 20),
@@ -180,10 +254,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           onConfirm: (date) {
                             setState(() {
                               _selectedDate = date;
-                              _birthday = _selectedDate;
+                              userBirth = _selectedDate;
                             });
                           },
-                          // onCancel: (){},
                           currentTime: DateTime.now(),
                           locale: picker.LocaleType.ko);
                     },
@@ -193,7 +266,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           DateFormat('yyyy. M. d.')
-                              .format(_birthday),
+                              .format(userBirth),
                           style: TextStyleFamily
                               .smallTitleTextStyle,
                         ),
@@ -223,21 +296,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
+                        onChanged: (value) {
+                          setState(() {
+                            profileMsg = value;
+                          });
+                        },
+                        onFieldSubmitted: (value) {
+                          profileMsg = value;
+                        },
+                      controller: profileMessageTextEditController,
                         maxLines: 3,
                         maxLength: 60,
                         onTapOutside: (event) {
                           FocusScope.of(context).unfocus();
                         },
                         style: TextStyleFamily.smallTitleTextStyle,
-                        initialValue: profileMsg,
                         decoration: const InputDecoration(border: InputBorder.none, counter: SizedBox())),
                   )
               ),
             ),
             ],
           ),
-        ]),
-      ),
-    );
+        ])));
   }
 }

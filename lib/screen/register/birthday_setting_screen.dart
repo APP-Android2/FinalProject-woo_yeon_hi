@@ -50,16 +50,15 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
   }
 
   DateTime _selectedDate = DateTime.now();
-  late DateTime _birthday;
+  late DateTime userBirth;
 
-  dynamic birthDateTextEditController;
   dynamic userProvider;
 
   @override
   void initState() {
     super.initState();
     userProvider = Provider.of<UserModel>(context, listen: false);
-    _birthday = userProvider.userBirth;
+    userBirth = userProvider.userBirth;
   }
 
   @override
@@ -223,8 +222,8 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                             onConfirm: (date) {
                                           setState(() {
                                             _selectedDate = date;
-                                            _birthday = _selectedDate;
-                                            userProvider.userBirth = _birthday;
+                                            userBirth = _selectedDate;
+                                            userProvider.userBirth = userBirth;
                                           });
                                         },
                                             // onCancel: (){},
@@ -246,7 +245,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                                   Text(
                                                     textAlign: TextAlign.center,
                                                     DateFormat('yyyy. M. d.')
-                                                        .format(_birthday),
+                                                        .format(userBirth),
                                                     style: const TextStyle(
                                                         fontFamily: FontFamily
                                                             .mapleStoryLight,
@@ -319,6 +318,9 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
+                                      setState(() {
+                                        userProvider.userBirth = userBirth;
+                                      });
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(

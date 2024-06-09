@@ -1,9 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
+import '../../model/user_model.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 import '../../widget/more/app_lock_top_app_bar.dart';
@@ -19,9 +22,6 @@ class AppLockSettingScreen extends StatefulWidget {
 }
 
 class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
-  var _appLockActivated = false;
-  var _bioAuthActivated = false;
-
   final LocalAuthentication auth = LocalAuthentication();
   bool? _canCheckBiometrics;
   bool _isAuthenticating = false;
@@ -85,13 +85,33 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
     if (!mounted) {
       return;
     }
+  }
 
+  Future<void> _cancelAuthentication() async {
+    await auth.stopAuthentication();
+    setState(() => _isAuthenticating = false);
+  }
 
-    Future<void> _cancelAuthentication() async {
-      await auth.stopAuthentication();
-      setState(() => _isAuthenticating = false);
+  late bool _appLockActivated;
+  late bool _bioAuthActivated;
+  dynamic userProvider;
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    if(userProvider.appLockState==0){
+      _appLockActivated = false;
+      _bioAuthActivated = false;
+    }else if(userProvider.appLockState==1){
+      _appLockActivated = true;
+      _bioAuthActivated = false;
+    }else{
+      _appLockActivated = true;
+      _bioAuthActivated = true;
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
@@ -125,16 +145,18 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                 inactiveThumbColor: ColorFamily.gray,
                                 inactiveTrackColor: ColorFamily.white,
                                 trackOutlineColor:
-                                _appLockActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                _appLockActivated ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                 trackOutlineWidth: const MaterialStatePropertyAll(1),
                                 onChanged: (bool value) {
-                                  setState(() {
-                                    _appLockActivated = value;
-                                    _appLockActivated
-                                        ? Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(widget.isBioAuthSupported)))
-                                        : _bioAuthActivated = false;
-                                  });
-                                }),
+                                  if(_appLockActivated == false){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(bioAuth: widget.isBioAuthSupported)));
+                                  } else{
+                                    setState(() {
+                                      _appLockActivated = value;
+                                      userProvider.appLockState = 0;
+                                      });
+                                    }
+                                  })
                           ],
                         ),
                         const SizedBox(
@@ -166,7 +188,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                     inactiveThumbColor: ColorFamily.gray,
                                     inactiveTrackColor: ColorFamily.white,
                                     trackOutlineColor:
-                                    _bioAuthActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                    _bioAuthActivated ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                     trackOutlineWidth: const MaterialStatePropertyAll(1),
                                     onChanged: (bool value) {
                                       setState(() {
@@ -174,7 +196,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                       });
                                       _bioAuthActivated
                                           ? _authenticateWithBiometrics()
-                                          : null;
+                                          : _cancelAuthentication();
                                     }),
                               ],
                             ),

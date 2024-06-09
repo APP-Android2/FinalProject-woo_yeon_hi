@@ -16,15 +16,13 @@ import '../../style/font.dart';
 class NickNameSettingScreen extends StatefulWidget {
   final bool isHost;
 
-  const NickNameSettingScreen(
-      {super.key, required this.isHost});
+  const NickNameSettingScreen({super.key, required this.isHost});
 
   @override
   State<NickNameSettingScreen> createState() => _NickNameSettingScreenState();
 }
 
 class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
-
   void signOut() async {
     switch (userProvider.loginType) {
       case LoginType.google:
@@ -48,28 +46,28 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
 
   bool _showErrorMessages = false;
 
-  dynamic nickNameTextEditController;
+  dynamic loverNickNameTextEditController;
   dynamic userProvider;
+  late String loverNickname;
 
   @override
   void initState() {
     super.initState();
 
     userProvider = Provider.of<UserModel>(context, listen: false);
-    nickNameTextEditController = TextEditingController(text: userProvider.loverNickname);
+    loverNickname = userProvider.loverNickname;
+    loverNickNameTextEditController =
+        TextEditingController(text: loverNickname);
   }
 
   @override
   void dispose() {
-    nickNameTextEditController.dispose();
+    loverNickNameTextEditController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // var userProvider = Provider.of<UserModel>(context, listen: false);
-    // TextEditingController nickNameTextEditController =
-    //     TextEditingController(text: userProvider.loverNickname);
 
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
@@ -182,27 +180,31 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                 SizedBox(
                                   width: 250,
                                   child: TextFormField(
-                                    // initialValue: userProvider.loverNickname,
                                     onChanged: (value) {
-                                      userProvider.setInput(value);
+                                      setState(() {
+                                        loverNickname = value;
+                                      });
                                     },
                                     onFieldSubmitted: (value) {
-                                      userProvider.setInput(value);
+                                      loverNickname = value;
                                     },
-                                    controller: nickNameTextEditController,
+                                    controller: loverNickNameTextEditController,
                                     onTapOutside: (event) {
                                       FocusScope.of(context).unfocus();
                                     },
                                     decoration: const InputDecoration(
-                                        focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: ColorFamily.black)),
-                                        errorStyle: TextStyle(color: ColorFamily.black,
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: ColorFamily.black)),
+                                      errorStyle: TextStyle(
+                                        color: ColorFamily.black,
                                         fontSize: 12,
                                         fontFamily: FontFamily.mapleStoryLight,
+                                      ),
                                     ),
-                                    ),
-                                    autovalidateMode: _showErrorMessages ? AutovalidateMode.always : AutovalidateMode.disabled,
+                                    autovalidateMode: _showErrorMessages
+                                        ? AutovalidateMode.always
+                                        : AutovalidateMode.disabled,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return '별명을 입력해주세요!';
@@ -243,8 +245,8 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           DdaySettingScreen(
-                                                              isHost:
-                                                                  widget.isHost)));
+                                                              isHost: widget
+                                                                  .isHost)));
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -273,20 +275,23 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                   child: InkWell(
                                     onTap: () {
                                       if (userProvider.checkProvider(
-                                          nickNameTextEditController)) {
+                                          loverNickNameTextEditController)) {
                                         setState(() {
                                           userProvider.loverNickname =
-                                              userProvider.userInput;
+                                              loverNickname;
                                         });
-                                        Navigator.of(context).push(MaterialPageRoute(
-                                            builder: (context) =>
-                                                BirthdaySettingScreen(
-                                                    isHost: widget.isHost)));
-                                      } else{
-                                          setState(() {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    BirthdaySettingScreen(
+                                                        isHost:
+                                                            widget.isHost)));
+                                      } else {
+                                        setState(() {
                                           _showErrorMessages = true;
-                                          });
-                                        }},
+                                        });
+                                      }
+                                    },
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: SizedBox(
                                         height: deviceHeight * 0.045,

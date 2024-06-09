@@ -1,15 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/screen/more/account_delete_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/more/account_management_top_app_bar.dart';
 
+import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 
-class AccountManagementScreen extends StatelessWidget {
+class AccountManagementScreen extends StatefulWidget {
   const AccountManagementScreen({super.key});
+
+  @override
+  State<AccountManagementScreen> createState() => _AccountManagementScreenState();
+}
+
+class _AccountManagementScreenState extends State<AccountManagementScreen> {
+
+  dynamic userProvider;
+
+  @override
+  void initState(){
+    super.initState();
+
+    userProvider = Provider.of<UserModel>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +62,24 @@ class AccountManagementScreen extends StatelessWidget {
                           children: [
                             Container(
                                 padding: const EdgeInsets.fromLTRB(10, 2, 0, 0),
-                                child: const Text("구글 로그인",
+                                child:
+                                    userProvider.loginType==LoginType.google
+                                ? const Text("구글 로그인",
                                     style: TextStyle(
                                         color: ColorFamily.black,
                                         fontFamily:
                                             FontFamily.mapleStoryLight,
+                                        fontSize: 12))
+                                : const Text("카카오 로그인",
+                                    style: TextStyle(
+                                        color: ColorFamily.black,
+                                        fontFamily:
+                                        FontFamily.mapleStoryLight,
                                         fontSize: 12))),
                             const SizedBox(width: 20),
-                            const Text("googlegoogle1234@gmail.com",
+                            Text(userProvider.userAccount,
                                 style:
-                                    TextStyleFamily.normalTextStyle),
+                                    TextStyleFamily.normalTextStyle)
                           ],
                         ),
                       )),
@@ -66,6 +91,7 @@ class AccountManagementScreen extends StatelessWidget {
                     child: Material(
                       color: ColorFamily.cream,
                       child: InkWell(
+                        splashFactory: NoSplash.splashFactory,
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountDeleteScreen()));
                         },
