@@ -4,16 +4,17 @@ import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../dao/user_dao.dart';
 import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/font.dart';
 
 class RegisterDoneScreen extends StatefulWidget {
-  const RegisterDoneScreen({super.key, required this.title});
+  RegisterDoneScreen({super.key, required this.title, required this.isHost});
 
   final String title;
+  final bool isHost;
 
   @override
   State<RegisterDoneScreen> createState() => _RegisterDoneScreen();
@@ -21,8 +22,6 @@ class RegisterDoneScreen extends StatefulWidget {
 
 class _RegisterDoneScreen extends State<RegisterDoneScreen>
     with TickerProviderStateMixin {
-
-  static const storage = FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
 
   dynamic userProvider;
   @override
@@ -35,7 +34,6 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
 
   @override
   Widget build(BuildContext context) {
-
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
@@ -141,7 +139,9 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                 ),
                                 child: InkWell(
                                     onTap: () async {
-                                      //TODO user데이터모델 서버에 저장
+                                      widget.isHost
+                                      ?saveUser(UserModel(userIdx: 1, loginType: userProvider.loginType, userAccount: userProvider.userAccount, userNickname: "기본닉네임", userBirth: userProvider.userBirth, userProfileImage: "", loverUserIdx: 2, loverNickname: userProvider.loverNickname, homePresetType: userProvider.homePresetType, topBarType: 0, profileMessage: "", alarmsAllow: false,appLockState: 0, topBarActivate: false, lockPassword: [], userState: 1, loveDday: userProvider.loveDday))
+                                      :saveUser(UserModel(userIdx: 2, loginType: userProvider.loginType, userAccount: userProvider.userAccount, userNickname: "기본닉네임", userBirth: userProvider.userBirth, userProfileImage: "", loverUserIdx: 2, loverNickname: userProvider.loverNickname, homePresetType: userProvider.homePresetType, topBarType: 0, profileMessage: "", alarmsAllow: false,appLockState: 0, topBarActivate: false, lockPassword: [], userState: 1, loveDday: DateTime.now()));
 
                                       // 자동로그인
                                       // write 함수를 통하여 key에 맞는 정보를 적게 됩니다.

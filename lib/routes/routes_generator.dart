@@ -10,7 +10,7 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (_) => const RegisterDoneScreen(title: 'Flutter Animations'),
+          builder: (_) => RegisterDoneScreen(title: 'Flutter Animations', isHost: true,),
         );
 
       default:

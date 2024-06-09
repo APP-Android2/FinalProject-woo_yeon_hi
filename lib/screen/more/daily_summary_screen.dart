@@ -9,6 +9,7 @@ import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/daily_summary_top_app_bar.dart';
 
 import '../../model/dDay_model.dart';
+import '../../model/diary_model.dart';
 import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../calendar/calendar_detail_screen.dart';
@@ -251,7 +252,8 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                                     context,
                                     index,
                                     DateFormat('yyyy. M. d.')
-                                        .format(_summaryDay))),
+                                        .format(_summaryDay)
+                                )),
                       ),
                       const SizedBox(height: 20),
 
@@ -644,34 +646,12 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => const CalendarDetailScreen()));
+              MaterialPageRoute(builder: (context) => const CalendarDetailScreen()));
         },
         child: Container(
           color: ColorFamily.white,
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
-
-// 교환일기 아이템
-Widget makeDiaryItem(BuildContext context, int index, String summaryDay) {
-  return InkWell(
-    onTap: () {
-      // Navigator.push(context,
-      //     MaterialPageRoute(builder: (context) => const DiaryDetailScreen()));
-    },
-    child: Container(
-      margin: EdgeInsets.only(right: 5),
-      width: 130,
-      child: Card(
-        color: ColorFamily.white,
-        surfaceTintColor: ColorFamily.white,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        elevation: 1,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: Column(
-
             children: [
               SizedBox(
                 width: 5,
@@ -699,6 +679,7 @@ Widget makeDiaryItem(BuildContext context, int index, String summaryDay) {
       ),
     );
   }
+
 
 // 가계부 아이템
   Widget makeLedgerItem(BuildContext context, int index, String summaryDay) {
@@ -745,8 +726,8 @@ Widget makeDiaryItem(BuildContext context, int index, String summaryDay) {
   Widget makeDiaryItem(BuildContext context, int index, String summaryDay) {
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const DiaryDetailScreen()));
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (context) => DiaryDetailScreen(diary)));
       },
       child: Container(
         margin: EdgeInsets.only(right: 5),

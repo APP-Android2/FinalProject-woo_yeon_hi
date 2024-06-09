@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'enums.dart';
 
 class UserModel with ChangeNotifier{
-  int idx;
+  int userIdx;
   LoginType loginType;
   String userAccount;
   String userNickname;
@@ -22,7 +22,7 @@ class UserModel with ChangeNotifier{
   DateTime loveDday;
 
   UserModel(
-      {required this.idx,
+      {required this.userIdx,
        required this.loginType,
        required this.userAccount,
         required this.userNickname,
