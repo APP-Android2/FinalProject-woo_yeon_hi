@@ -283,17 +283,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                         ),
                                         child: InkWell(
                                             onTap: () {
-                                              // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                              //     builder: (context) =>
-                                              //     const NickNameSettingScreen(
-                                              //         isHost: true)), (route) => false);
-
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          NickNameSettingScreen(
-                                                              isHost: widget.isHost)));
+                                              Navigator.pop(context);
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -321,12 +311,10 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                       setState(() {
                                         userProvider.userBirth = userBirth;
                                       });
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  HomePresetSettingScreen(
-                                                      isHost: widget.isHost)));
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) =>
+                                              HomePresetSettingScreen(
+                                                  isHost: widget.isHost)));
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: SizedBox(

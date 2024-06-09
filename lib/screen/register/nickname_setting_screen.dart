@@ -23,26 +23,6 @@ class NickNameSettingScreen extends StatefulWidget {
 }
 
 class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
-  void signOut() async {
-    switch (userProvider.loginType) {
-      case LoginType.google:
-        await GoogleSignIn().signOut();
-        break;
-      case LoginType.kakao:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case LoginType.none:
-        break;
-    }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
-  }
 
   bool _showErrorMessages = false;
 
@@ -240,13 +220,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                         ),
                                         child: InkWell(
                                             onTap: () {
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DdaySettingScreen(
-                                                              isHost: widget
-                                                                  .isHost)));
+                                              Navigator.pop(context);
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -334,4 +308,28 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
           ]))),
     );
   }
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = LoginType.none;
+    });
+  }
+
+
+
 }

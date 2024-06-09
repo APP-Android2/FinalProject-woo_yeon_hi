@@ -63,14 +63,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                             Container(
                                 padding: const EdgeInsets.fromLTRB(10, 2, 0, 0),
                                 child:
-                                    userProvider.loginType==LoginType.google
-                                ? const Text("구글 로그인",
+                                    userProvider.loginType==LoginType.kakao
+                                ? const Text("카카오 로그인",
                                     style: TextStyle(
                                         color: ColorFamily.black,
                                         fontFamily:
                                             FontFamily.mapleStoryLight,
                                         fontSize: 12))
-                                : const Text("카카오 로그인",
+                                : const Text("구글 로그인",
                                     style: TextStyle(
                                         color: ColorFamily.black,
                                         fontFamily:

@@ -229,8 +229,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                widget.isHost
-                                    ? Material(
+                                    Material(
                                         color: ColorFamily.white,
                                         elevation: 0.5,
                                         shadowColor: Colors.black,
@@ -240,13 +239,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                         ),
                                         child: InkWell(
                                             onTap: () {
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          BirthdaySettingScreen(
-                                                              isHost: widget
-                                                                  .isHost)));
+                                              Navigator.pop(context);
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -261,10 +254,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                                         .normalTextStyle,
                                                   ),
                                                 ))),
-                                      )
-                                    : SizedBox(
-                                        height: deviceHeight * 0.045,
-                                        width: deviceWidth * 0.4),
+                                      ),
                                 Material(
                                   color: ColorFamily.beige,
                                   elevation: 0.5,
@@ -274,12 +264,12 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pushReplacement(
+                                      Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const RegisterDoneScreen(
-                                                    title: '')));
+                                                  RegisterDoneScreen(
+                                                    title: '', isHost: widget.isHost)),(route) => false);
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: SizedBox(
