@@ -26,7 +26,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
 
   final LocalAuthentication auth = LocalAuthentication();
 
-  var _appNoticeActivated = false;
   late bool _isBioAuthSupported;
   dynamic userProvider;
 
@@ -88,17 +87,17 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                             children: [
                               const Text("알림 받기",style: TextStyleFamily.smallTitleTextStyle),
                               Switch(
-                                  value: _appNoticeActivated,
+                                  value: userProvider.alarmsAllow,
                                   activeColor: ColorFamily.white,
                                   activeTrackColor: ColorFamily.pink,
                                   inactiveThumbColor: ColorFamily.gray,
                                   inactiveTrackColor: ColorFamily.white,
                                   trackOutlineColor:
-                                  _appNoticeActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                  userProvider.alarmsAllow ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                   trackOutlineWidth: const MaterialStatePropertyAll(1),
                                   onChanged: (bool value) {
                                     setState(() {
-                                      _appNoticeActivated = value;
+                                      userProvider.alarmsAllow = value;
                                     });
                                   }),
                             ],
@@ -117,6 +116,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                     child: Material(
                       color: ColorFamily.cream,
                       child: InkWell(
+                        splashFactory: NoSplash.splashFactory,
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(isBioAuthSupported: _isBioAuthSupported)));
                         },
@@ -170,6 +170,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                     child: Material(
                       color: ColorFamily.cream,
                       child: InkWell(
+                        splashFactory: NoSplash.splashFactory,
                         onTap: () async {
                           await storage.delete(
                               key: "loginData");

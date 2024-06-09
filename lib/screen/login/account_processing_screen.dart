@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/widget/more/account_processing_top_app_bar.dart';
+import 'package:woo_yeon_hi/widget/login/account_processing_top_app_bar.dart';
 
+import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
+import '../../widget/login/account_processing_dialog.dart';
 
 class AccountProcessingScreen extends StatefulWidget {
   const AccountProcessingScreen({super.key});
@@ -19,6 +22,13 @@ class _AccountProcessingScreenState extends State<AccountProcessingScreen> {
 
   final DateTime _accountDeletedDay = DateTime.now();
   final DateTime _cancelAvailableDay = DateTime.now().add(const Duration(days: 30));
+
+  dynamic userProvider;
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +76,10 @@ class _AccountProcessingScreenState extends State<AccountProcessingScreen> {
                 BorderRadius.circular(20.0),
               ),
               child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(context: context, builder: (BuildContext context) {
+                    return const AccountProcessingDialog();});
+                  },
                   borderRadius:
                   BorderRadius.circular(20.0),
                   child: SizedBox(

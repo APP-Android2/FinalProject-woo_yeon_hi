@@ -15,8 +15,9 @@ class UserModel with ChangeNotifier{
   int topBarType;
   String profileMessage;
   bool alarmsAllow;
-  bool appLockState;
-  String lockPassword;
+  int appLockState;
+  bool topBarActivate;
+  List lockPassword;
   int userState;
   DateTime loveDday;
 
@@ -34,26 +35,17 @@ class UserModel with ChangeNotifier{
         required this.profileMessage,
         required this.alarmsAllow,
         required this.appLockState,
+        required this.topBarActivate,
         required this.lockPassword,
         required this.userState,
         required this.loveDday,
       });
 
   bool checkProvider(TextEditingController textEditingController){
-    if(textEditingController.text.isNotEmpty){
-      return true;
-    }else{
+    if(textEditingController.text.isEmpty || textEditingController.text == ""){
       return false;
+    }else{
+      return true;
     }
-  }
-
-  // 사용자가 입력한 입력값을 담을 변수
-  String _userInput = "";
-  String get userInput => _userInput;
-
-  void setInput(String input){
-    _userInput = input;
-
-    notifyListeners();
   }
 }

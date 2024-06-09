@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../model/user_model.dart';
 import '../../widget/more/top_bar_ui_setting_top_app_bar.dart';
 
 class TopBarUiSettingScreen extends StatefulWidget {
@@ -16,8 +18,19 @@ class TopBarUiSettingScreen extends StatefulWidget {
 
 class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
 
-  var _topBarIndex = 1;
-  var _topBarActivated = false;
+  late int topBarIndex;
+  // late bool topBarActivated;
+
+  dynamic userProvider;
+
+  @override
+  void initState(){
+    super.initState();
+
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    topBarIndex = userProvider.topBarType;
+    // topBarActivated = userProvider.topBarActivate;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +55,14 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                 borderRadius: BorderRadius.circular(20),
                 onTap: (){
                   setState(() {
-                    _topBarIndex = 0;
+                    topBarIndex = 0;
                   });
                 },
                 child: Container(
                   width: deviceWidth-60,
                   height: deviceHeight*0.07,
                   decoration:
-                  _topBarIndex == 0
+                  topBarIndex == 0
                   ? BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20))
                   : BoxDecoration(color: ColorFamily.white, border: Border.all(color: Colors.transparent,width: 1),borderRadius: BorderRadius.circular(20)),
                   child: Row(
@@ -76,14 +89,14 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                   borderRadius: BorderRadius.circular(20),
                   onTap: (){
                     setState(() {
-                      _topBarIndex = 1;
+                      topBarIndex = 1;
                     });
                   },
                   child: Container(
                     width: deviceWidth-60,
                     height: deviceHeight*0.07,
                     decoration:
-                    _topBarIndex == 1
+                    topBarIndex == 1
                         ? BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20))
                         : BoxDecoration(color: ColorFamily.white, border: Border.all(color: Colors.transparent,width: 1),borderRadius: BorderRadius.circular(20)),
                     child: Row(
@@ -109,14 +122,14 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                   borderRadius: BorderRadius.circular(20),
                   onTap: (){
                     setState(() {
-                      _topBarIndex = 2;
+                      topBarIndex = 2;
                     });
                   },
                   child: Container(
                     width: deviceWidth-60,
                     height: deviceHeight*0.14,
                     decoration:
-                    _topBarIndex == 2
+                    topBarIndex == 2
                         ? BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20))
                         : BoxDecoration(color: ColorFamily.white, border: Border.all(color: Colors.transparent,width: 1),borderRadius: BorderRadius.circular(20)),
                     child: Row(
@@ -162,14 +175,14 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                   borderRadius: BorderRadius.circular(20),
                   onTap: (){
                     setState(() {
-                      _topBarIndex = 3;
+                      topBarIndex = 3;
                     });
                   },
                   child: Container(
                     width: deviceWidth-60,
                     height: deviceHeight*0.14,
                     decoration:
-                    _topBarIndex == 3
+                    topBarIndex == 3
                         ? BoxDecoration(color: ColorFamily.white, border: Border.all(color: ColorFamily.pink,width: 1),borderRadius: BorderRadius.circular(20))
                         : BoxDecoration(color: ColorFamily.white, border: Border.all(color: Colors.transparent,width: 1),borderRadius: BorderRadius.circular(20)),
                     child: Row(
@@ -224,18 +237,18 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                   children: [
                     const Text("상단바 활성화", style: TextStyle(fontFamily: FontFamily.mapleStoryLight,fontSize: 12,color: ColorFamily.black)),
                     Switch(
-                      value: _topBarActivated,
+                      value: userProvider.topBarActivate,
                       activeColor: ColorFamily.white,
                       activeTrackColor: ColorFamily.pink,
                       inactiveThumbColor: ColorFamily.gray,
                       inactiveTrackColor: ColorFamily.white,
                       trackOutlineColor:
-                      _topBarActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                      userProvider.topBarActivate ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                       trackOutlineWidth: const MaterialStatePropertyAll(1),
                       onChanged: (bool value) {
                         // This is called when the user toggles the switch.
                         setState(() {
-                          _topBarActivated = value;
+                          userProvider.topBarActivate = value;
                         });
                       }),
                   ],

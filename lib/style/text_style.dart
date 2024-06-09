@@ -44,7 +44,7 @@ class TextStyleFamily{
 
   /// 다이얼로그 타이틀 텍스트 스타일. size 20, black, bold
   static const TextStyle dialogTitleTextStyle = TextStyle(
-      fontFamily: FontFamily.mapleStoryBold,
+      fontFamily: FontFamily.mapleStoryLight,
       fontSize: 20,
       color: ColorFamily.black
   );
