@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -32,27 +31,6 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
     super.initState();
 
     userProvider = Provider.of<UserModel>(context, listen: false);
-  }
-
-  void signOut() async {
-    switch (userProvider.loginType) {
-      case LoginType.google:
-        await GoogleSignIn().signOut();
-        break;
-      case LoginType.kakao:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case LoginType.none:
-        break;
-    }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
   }
 
   @override
@@ -181,4 +159,26 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
       ),
     );
   }
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = LoginType.none;
+    });
+  }
+
 }

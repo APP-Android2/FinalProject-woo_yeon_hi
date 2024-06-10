@@ -5,14 +5,11 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:intl/intl.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/model/user_model.dart';
-import 'package:woo_yeon_hi/provider/user_provider.dart';
 import 'package:woo_yeon_hi/routes/routes_generator.dart';
-import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
-import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
 import 'firebase_options.dart';
 import 'model/enums.dart';
@@ -22,7 +19,6 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); // .env 환경변수 파일 로드
   KakaoSdk.init(
     nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY'],
-    javaScriptAppKey: dotenv.env['KAKAO_JAVA_SCRIPT_APP_KEY'],
   );
   await NaverMapSdk.instance.initialize(
     clientId: dotenv.env['NAVER_CLIENT_ID'],
@@ -34,6 +30,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  print(await KakaoSdk.origin);
   // ko_KR 언어 설정을 위함
   initializeDateFormatting().then((_) => runApp(const WooYeonHi()));
 }
