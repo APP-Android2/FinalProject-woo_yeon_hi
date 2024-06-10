@@ -118,7 +118,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                       child: InkWell(
                         splashFactory: NoSplash.splashFactory,
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(isBioAuthSupported: _isBioAuthSupported)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(bioAuth: _isBioAuthSupported)));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

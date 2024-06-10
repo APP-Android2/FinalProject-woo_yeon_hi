@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'enums.dart';
 
@@ -48,4 +49,12 @@ class UserModel with ChangeNotifier{
       return true;
     }
   }
+
+  XFile? _image;
+  XFile? get image => _image;
+  void setImage(XFile? image) {
+    _image = image;
+    notifyListeners();
+  }
+
 }
