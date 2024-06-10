@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woo_yeon_hi/model/diary_model.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 
 import '../../widget/diary/diary_detail_album.dart';
@@ -7,13 +8,15 @@ import '../../widget/diary/diary_detail_top_app_bar.dart';
 import '../../widget/diary/diary_detail_weather.dart';
 
 class DiaryDetailScreen extends StatefulWidget {
-  const DiaryDetailScreen({super.key});
+  DiaryDetailScreen(this.diary, {super.key});
+  Diary diary;
 
   @override
   State<DiaryDetailScreen> createState() => _DiaryDetailScreenState();
 }
 
 class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,15 +26,15 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
           padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // 날짜, 쓴 사람, 날씨
-                  DiaryDetailWeather(),
+                  DiaryDetailWeather(widget.diary),
                   // 썸네일
-                  DiaryDetailAlbum()
+                  DiaryDetailAlbum(widget.diary)
                 ],
               ),
             ),
@@ -47,8 +50,8 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                           constraints: BoxConstraints(
                               minHeight: constraints.maxHeight
                           ),
-                          child: const IntrinsicHeight(
-                            child: DiaryDetailContent(),
+                          child: IntrinsicHeight(
+                            child: DiaryDetailContent(widget.diary),
                           ),
                         ),
                       );

@@ -3,6 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
@@ -11,6 +15,8 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
+import '../../model/enums.dart';
+import '../../model/user_model.dart';
 import '../../style/text_style.dart';
 
 class CodeConnectScreen extends StatefulWidget {
@@ -22,8 +28,26 @@ class CodeConnectScreen extends StatefulWidget {
 
 class _ConnectCodeScreenState extends State<CodeConnectScreen> {
   bool _isCodeGenerated = false;
+  bool _isCodeExpired = false;
   String _codeText = "";
   String _randomCode = getRandomString(8);
+  dynamic codeTextEditController;
+
+  dynamic userProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    codeTextEditController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    codeTextEditController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,49 +156,63 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                             const EdgeInsets.only(bottom: 20),
                                         child: SizedBox(
                                           height: 25,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Text("코드 유효시간",
+                                          child: _isCodeExpired
+                                              ? const Text(
+                                                  "만료된 코드입니다. 다시 생성해주세요.",
                                                   style: TextStyle(
                                                       color: ColorFamily.pink,
                                                       fontSize: 14,
                                                       fontFamily: FontFamily
-                                                          .mapleStoryLight)),
-                                              const SizedBox(width: 10),
-                                              TimerCountdown(
-                                                  format: CountDownTimerFormat
-                                                      .minutesSeconds,
-                                                  enableDescriptions: false,
-                                                  timeTextStyle:
-                                                      const TextStyle(
-                                                          color:
-                                                              ColorFamily.pink,
-                                                          fontSize: 14,
-                                                          fontFamily: FontFamily
-                                                              .mapleStoryLight),
-                                                  colonsTextStyle:
-                                                      const TextStyle(
-                                                          color:
-                                                              ColorFamily.pink,
-                                                          fontSize: 14,
-                                                          fontFamily: FontFamily
-                                                              .mapleStoryLight),
-                                                  spacerWidth: 5,
-                                                  endTime: DateTime.now().add(
-                                                    const Duration(
-                                                        minutes: 5,
-                                                        seconds: 00),
-                                                  ),
-                                                  onEnd: () {
-                                                    setState(() {
-                                                      _randomCode =
-                                                          "$_randomCode+a";
-                                                    });
-                                                  })
-                                            ],
-                                          ),
+                                                          .mapleStoryLight))
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Text("코드 유효시간",
+                                                        style: TextStyle(
+                                                            color: ColorFamily
+                                                                .pink,
+                                                            fontSize: 14,
+                                                            fontFamily: FontFamily
+                                                                .mapleStoryLight)),
+                                                    const SizedBox(width: 10),
+                                                    TimerCountdown(
+                                                        format:
+                                                            CountDownTimerFormat
+                                                                .minutesSeconds,
+                                                        enableDescriptions:
+                                                            false,
+                                                        timeTextStyle: const TextStyle(
+                                                            color: ColorFamily
+                                                                .pink,
+                                                            fontSize: 14,
+                                                            fontFamily: FontFamily
+                                                                .mapleStoryLight),
+                                                        colonsTextStyle:
+                                                            const TextStyle(
+                                                                color:
+                                                                    ColorFamily
+                                                                        .pink,
+                                                                fontSize: 14,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .mapleStoryLight),
+                                                        spacerWidth: 5,
+                                                        endTime:
+                                                            DateTime.now().add(
+                                                          const Duration(
+                                                              minutes: 5,
+                                                              seconds: 00),
+                                                        ),
+                                                        onEnd: () {
+                                                          //TODO 생성된 코드를 서버에서 제거
+                                                          setState(() {
+                                                            _isCodeExpired =
+                                                                true;
+                                                          });
+                                                        })
+                                                  ],
+                                                ),
                                         ))
                                     : const SizedBox(height: 25),
                                 Padding(
@@ -191,14 +229,15 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                             onTap: () {
                                               setState(() {
                                                 _codeText = _randomCode;
+                                                //TODO 생성된 코드를 서버에 저장
                                                 _isCodeGenerated = true;
                                               });
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
                                             child: Container(
-                                              height: deviceHeight*0.045,
-                                              width: deviceWidth*0.4,
+                                              height: deviceHeight * 0.045,
+                                              width: deviceWidth * 0.4,
                                               alignment: Alignment.center,
                                               child: const Text(
                                                 "연결코드 생성",
@@ -208,26 +247,51 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                             ))
                                         : InkWell(
                                             onTap: () {
-                                              //TODO 해당 코드로 연결한 상대가 있는지 여부 파악
-                                              //없을 시 토스트메시지 노출("연결된 상대가 없습니다.")
-                                              //있을 시 해당 코드 만료 후,
-                                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const DdaySettingScreen(
-                                                          isHost: true)), (route) => false);
+                                              if (_isCodeExpired) {
+                                                setState(() {
+                                                  _randomCode =
+                                                      getRandomString(8);
+                                                  _codeText = _randomCode;
+                                                  //TODO 재생성된 코드를 서버에 저장
+                                                  _isCodeExpired = false;
+                                                });
+                                              } else {
+                                                //TODO 해당 코드로 연결한 상대가 있는지 여부 파악(서버데이터)
+                                                //없을 시 토스트메시지 노출
+                                                Fluttertoast.showToast(
+                                                    msg: "해당 코드로 연결된 상대가 없습니다.",
+                                                    toastLength: Toast.LENGTH_SHORT,
+                                                    gravity: ToastGravity.BOTTOM,
+                                                    timeInSecForIosWeb: 1,
+                                                    backgroundColor:
+                                                    ColorFamily.black,
+                                                    textColor: ColorFamily.white,
+                                                    fontSize: 14.0);
+
+                                                //있을 시 해당 코드 만료 후 호스트화면 이동
+                                                //TODO 생성된 코드를 서버에서 삭제
+                                                Navigator.pushAndRemoveUntil(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const DdaySettingScreen(
+                                                                isHost: true)),
+                                                    (route) => false);
+                                              }
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
                                             child: Container(
-                                              height: deviceHeight/21,
-                                              width: deviceWidth/3,
-                                              alignment: Alignment.center,
-                                              child: const Text(
-                                                "상대 연결 확인",
-                                                style: TextStyleFamily
-                                                    .normalTextStyle,
-                                              ),
-                                            )),
+                                                height: deviceHeight / 21,
+                                                width: deviceWidth / 3,
+                                                alignment: Alignment.center,
+                                                child: _isCodeExpired
+                                                    ? const Text("연결코드 재생성",
+                                                        style: TextStyleFamily
+                                                            .normalTextStyle)
+                                                    : const Text("상대 연결 확인",
+                                                        style: TextStyleFamily
+                                                            .normalTextStyle))),
                                   ),
                                 ),
                                 SizedBox(height: deviceHeight / 12),
@@ -238,7 +302,8 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                 const SizedBox(height: 20),
                                 SizedBox(
                                   width: 160,
-                                  child: TextField(
+                                  child: TextFormField(
+                                    controller: codeTextEditController,
                                     onTapOutside: (event) {
                                       FocusScope.of(context).unfocus();
                                     },
@@ -271,18 +336,33 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                   ),
                                   child: InkWell(
                                       onTap: () {
-                                        //TODO 입력값이 현재 유효한지 체크
-                                        //유효하지 않다면 토스트메시지 출력("해당 코드는 유효하지 않은 코드입니다.")
-                                        //유효하다면
-                                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                            builder: (context) =>
-                                                NickNameSettingScreen(
-                                                    isHost: false)), (route) => false);
+                                        if (codeTextEditController.text ==
+                                            "TEST") {
+                                          //TODO loverUserIdx에 해당코드를 생성한 userIdx를 저장
+                                          //게스트화면 이동
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const NickNameSettingScreen(
+                                                          isHost: false)),
+                                              (route) => false);
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg: "유효하지 않은 연결코드입니다.",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor:
+                                                  ColorFamily.black,
+                                              textColor: ColorFamily.white,
+                                              fontSize: 14.0);
+                                        }
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
                                       child: Container(
-                                        height: deviceHeight*0.045,
-                                        width: deviceWidth*0.4,
+                                        height: deviceHeight * 0.045,
+                                        width: deviceWidth * 0.4,
                                         alignment: Alignment.center,
                                         child: const Text(
                                           "연결하기",
@@ -298,9 +378,12 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                            builder: (context) =>
-                                const RegisterScreen()), (route) => false);
+                        signOut();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterScreen()),
+                            (route) => false);
                       },
                       child: const Text(
                         "로그아웃",
@@ -313,6 +396,27 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
         ],
       )),
     ));
+  }
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = LoginType.none;
+    });
   }
 }
 

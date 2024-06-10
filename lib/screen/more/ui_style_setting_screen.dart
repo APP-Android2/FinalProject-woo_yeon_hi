@@ -31,6 +31,7 @@ class UiStyleSettingScreen extends StatelessWidget {
                 child: Material(
                   color: ColorFamily.cream,
                   child: InkWell(
+                    splashFactory: NoSplash.splashFactory,
                     splashColor: ColorFamily.gray,
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeUiSettingScreen()));
@@ -61,6 +62,7 @@ class UiStyleSettingScreen extends StatelessWidget {
                   child: Material(
                     color: ColorFamily.cream,
                     child: InkWell(
+                      splashFactory: NoSplash.splashFactory,
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const TopBarUiSettingScreen(),));
                       },

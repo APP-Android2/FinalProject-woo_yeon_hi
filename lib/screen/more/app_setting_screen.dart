@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/widget/more/app_setting_top_app_bar.dart';
 
+import '../../model/enums.dart';
+import '../../model/user_model.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 import '../register/register_screen.dart';
@@ -16,11 +22,12 @@ class AppSettingScreen extends StatefulWidget {
 }
 
 class _AppSettingScreenState extends State<AppSettingScreen> {
+  static const storage = FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
 
   final LocalAuthentication auth = LocalAuthentication();
 
-  var _appNoticeActivated = false;
   late bool _isBioAuthSupported;
+  dynamic userProvider;
 
   @override
   void initState() {
@@ -28,6 +35,28 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
     auth.isDeviceSupported().then(
           (bool isSupported) => setState(() => _isBioAuthSupported = isSupported),
     );
+    userProvider = Provider.of<UserModel>(context, listen: false);
+  }
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = LoginType.none;
+    });
   }
 
   @override
@@ -58,17 +87,17 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                             children: [
                               const Text("알림 받기",style: TextStyleFamily.smallTitleTextStyle),
                               Switch(
-                                  value: _appNoticeActivated,
+                                  value: userProvider.alarmsAllow,
                                   activeColor: ColorFamily.white,
                                   activeTrackColor: ColorFamily.pink,
                                   inactiveThumbColor: ColorFamily.gray,
                                   inactiveTrackColor: ColorFamily.white,
                                   trackOutlineColor:
-                                  _appNoticeActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                  userProvider.alarmsAllow ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                   trackOutlineWidth: const MaterialStatePropertyAll(1),
                                   onChanged: (bool value) {
                                     setState(() {
-                                      _appNoticeActivated = value;
+                                      userProvider.alarmsAllow = value;
                                     });
                                   }),
                             ],
@@ -87,6 +116,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                     child: Material(
                       color: ColorFamily.cream,
                       child: InkWell(
+                        splashFactory: NoSplash.splashFactory,
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(isBioAuthSupported: _isBioAuthSupported)));
                         },
@@ -140,7 +170,11 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                     child: Material(
                       color: ColorFamily.cream,
                       child: InkWell(
-                        onTap: (){
+                        splashFactory: NoSplash.splashFactory,
+                        onTap: () async {
+                          await storage.delete(
+                              key: "loginData");
+                          signOut();
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (context) => const RegisterScreen()),
                                   (Route<dynamic> route) => false);

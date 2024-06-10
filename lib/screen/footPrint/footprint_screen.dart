@@ -23,6 +23,7 @@ class _FootprintScreenState extends State<FootprintScreen> {
   Widget build(BuildContext context) {
     var footprintProvider =
         Provider.of<FootprintProvider>(context, listen: false);
+
     var currentPageIndex = footprintProvider.currentPageIndex;
     footprintProvider.addListener(() {
       if(mounted){
