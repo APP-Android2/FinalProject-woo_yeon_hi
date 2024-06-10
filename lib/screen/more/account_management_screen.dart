@@ -7,6 +7,7 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/more/account_management_top_app_bar.dart';
 
 import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 
@@ -19,21 +20,15 @@ class AccountManagementScreen extends StatefulWidget {
 
 class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
-  dynamic userProvider;
-
-  @override
-  void initState(){
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
-
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(builder: (context, provider, _) {
+      return Scaffold(
         appBar: const AccountManagementTopAppBar(),
         body: Container(
             width: deviceWidth,
@@ -63,7 +58,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                             Container(
                                 padding: const EdgeInsets.fromLTRB(10, 2, 0, 0),
                                 child:
-                                    userProvider.loginType==LoginType.kakao
+                                    provider.userLoginType==LoginType.kakao
                                 ? const Text("카카오 로그인",
                                     style: TextStyle(
                                         color: ColorFamily.black,
@@ -77,7 +72,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                         FontFamily.mapleStoryLight,
                                         fontSize: 12))),
                             const SizedBox(width: 20),
-                            Text(userProvider.userAccount,
+                            Text(provider.userAccount,
                                 style:
                                     TextStyleFamily.normalTextStyle)
                           ],
@@ -122,6 +117,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       ),
                     ))
               ],
-            )));
+            )));}));
   }
 }

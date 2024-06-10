@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:woo_yeon_hi/provider/more_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/daily_summary_top_app_bar.dart';
 
 import '../../model/dDay_model.dart';
-import '../../model/diary_model.dart';
-import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../calendar/calendar_detail_screen.dart';
-import '../diary/diary_detail_screen.dart';
 import '../footPrint/footprint_history_detail_screen.dart';
 import '../ledger/ledger_detail_screen.dart';
 
@@ -25,16 +22,7 @@ class DailySummaryScreen extends StatefulWidget {
 }
 
 class _DailySummaryScreenState extends State<DailySummaryScreen> {
-  late DateTime _summaryDay;
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-    _summaryDay = DateTime.now();
-  }
+  DateTime _summaryDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +35,10 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
         .size
         .height;
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => DailySummaryProvider(),
+        child: Consumer<DailySummaryProvider>(builder: (context, provider, _) {
+          return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const DailySummaryTopAppBar(),
       body: Container(
@@ -321,7 +312,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
           ],
         ),
       ),
-    );
+    );}));
   }
 
 

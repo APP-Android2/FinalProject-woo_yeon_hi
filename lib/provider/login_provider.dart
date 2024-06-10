@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -23,6 +22,8 @@ class UserProvider extends ChangeNotifier{
   bool _alarmsAllow = false;
   DateTime _loveDday = DateTime.now();
   int _presetType = 0;
+  int _topBarType = 0;
+  bool _topBarActivate = false;
 
   String get userAccount => _userAccount;
   LoginType get userLoginType => _userLoginType;
@@ -38,6 +39,8 @@ class UserProvider extends ChangeNotifier{
   bool get alarmsAllow => _alarmsAllow;
   DateTime get loveDday => _loveDday;
   int get presetType => _presetType;
+  int get topBarType => _topBarType;
+  bool get topBarActivate => _topBarActivate;
 
   TextEditingController _userNicknameTextEditController = TextEditingController();
   TextEditingController _loverNickNameTextEditController = TextEditingController();
@@ -124,6 +127,16 @@ class UserProvider extends ChangeNotifier{
 
   void setPresetType(int idx){
     _presetType = idx;
+    notifyListeners();
+  }
+
+  void setTopBarType(int idx){
+    _topBarType = idx;
+    notifyListeners();
+  }
+
+  void setTopBarActivate(bool activate){
+    _topBarActivate = activate;
     notifyListeners();
   }
 

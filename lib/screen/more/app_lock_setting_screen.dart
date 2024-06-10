@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
@@ -6,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 import '../../widget/more/app_lock_top_app_bar.dart';
@@ -23,75 +22,8 @@ class AppLockSettingScreen extends StatefulWidget {
 
 class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
   final LocalAuthentication auth = LocalAuthentication();
-  bool? _canCheckBiometrics;
   bool _isAuthenticating = false;
 
-  Future<void> _checkBiometrics() async {
-    late bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      canCheckBiometrics = false;
-      print(e);
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
-    });
-  }
-
-  Future<bool> _authenticateWithBiometrics() async {
-    bool authenticated = false;
-
-    try {
-      setState(() {
-        _isAuthenticating = true;
-      });
-      authenticated = await auth.authenticate(
-        authMessages: [
-          const AndroidAuthMessages(
-            biometricHint: '',
-            biometricNotRecognized: '생체정보가 일치하지 않습니다.',
-            biometricRequiredTitle: '생체정보가 필요합니다.',
-            biometricSuccess: '스캔 완료',
-            cancelButton: '취소',
-            deviceCredentialsRequiredTitle: '생체정보가 필요합니다.',
-            deviceCredentialsSetupDescription: '기기 설정으로 이동하여 생체정보를 등록하세요.',
-            goToSettingsButton: '설정',
-            goToSettingsDescription: '기기 설정으로 이동하여 생체정보를 등록하세요.',
-            signInTitle: '생체정보 스캔',
-          )
-        ],
-        localizedReason:
-        '기기에 등록된 생체정보를 스캔해주세요.',
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: true,
-        ),
-      );
-      setState(() {
-        _isAuthenticating = false;
-      });
-    } on PlatformException catch (e) {
-      print(e);
-      setState(() {
-        _isAuthenticating = false;
-      });
-      return _isAuthenticating;
-    }
-    if (!mounted) {
-      return _isAuthenticating;
-    }
-    return authenticated;
-  }
-
-  Future<void> _cancelAuthentication() async {
-    await auth.stopAuthentication();
-    setState(() => _isAuthenticating = false);
-  }
 
   late bool _appLockActivated;
   late bool _bioAuthActivated;
@@ -99,7 +31,8 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
+    userProvider = UserProvider();
+
     if(userProvider.appLockState==0){
       _appLockActivated = false;
       _bioAuthActivated = false;
@@ -118,7 +51,10 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(builder: (context, provider, _) {
+          return Scaffold(
         appBar: const AppLockSettingTopAppBar(),
         body: Container(
             width: deviceWidth,
@@ -244,6 +180,56 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                           ],
                         )),
               ],
-            )));
+            )));}));
+  }
+
+  Future<bool> _authenticateWithBiometrics() async {
+    bool authenticated = false;
+
+    try {
+      setState(() {
+        _isAuthenticating = true;
+      });
+      authenticated = await auth.authenticate(
+        authMessages: [
+          const AndroidAuthMessages(
+            biometricHint: '',
+            biometricNotRecognized: '생체정보가 일치하지 않습니다.',
+            biometricRequiredTitle: '생체정보가 필요합니다.',
+            biometricSuccess: '스캔 완료',
+            cancelButton: '취소',
+            deviceCredentialsRequiredTitle: '생체정보가 필요합니다.',
+            deviceCredentialsSetupDescription: '기기 설정으로 이동하여 생체정보를 등록하세요.',
+            goToSettingsButton: '설정',
+            goToSettingsDescription: '기기 설정으로 이동하여 생체정보를 등록하세요.',
+            signInTitle: '생체정보 스캔',
+          )
+        ],
+        localizedReason:
+        '기기에 등록된 생체정보를 스캔해주세요.',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+      setState(() {
+        _isAuthenticating = false;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+      setState(() {
+        _isAuthenticating = false;
+      });
+      return _isAuthenticating;
+    }
+    if (!mounted) {
+      return _isAuthenticating;
+    }
+    return authenticated;
+  }
+
+  Future<void> _cancelAuthentication() async {
+    await auth.stopAuthentication();
+    setState(() => _isAuthenticating = false);
   }
 }

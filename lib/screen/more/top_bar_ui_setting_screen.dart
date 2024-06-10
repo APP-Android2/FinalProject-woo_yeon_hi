@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/provider/login_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
-import '../../model/user_model.dart';
 
 class TopBarUiSettingScreen extends StatefulWidget {
   const TopBarUiSettingScreen({super.key});
@@ -20,17 +19,14 @@ class TopBarUiSettingScreen extends StatefulWidget {
 class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
   late int topBarIndex;
 
-  // late bool topBarActivated;
-
   dynamic userProvider;
 
   @override
   void initState() {
     super.initState();
 
-    userProvider = Provider.of<UserModel>(context, listen: false);
+    userProvider = UserProvider();
     topBarIndex = userProvider.topBarType;
-    // topBarActivated = userProvider.topBarActivate;
   }
 
   @override
@@ -38,7 +34,10 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(builder: (context, provider, _) {
+      return Scaffold(
       appBar: AppBar(
         surfaceTintColor: ColorFamily.cream,
         backgroundColor: ColorFamily.cream,
@@ -331,10 +330,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                             : MaterialStateProperty.all(ColorFamily.gray),
                         trackOutlineWidth: const MaterialStatePropertyAll(1),
                         onChanged: (bool value) {
-                          // This is called when the user toggles the switch.
-                          setState(() {
-                            userProvider.topBarActivate = value;
-                          });
+                            userProvider.setTopBarActivate(value);
                         }),
                   ],
                 ),
@@ -343,6 +339,6 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
           ],
         ),
       ),
-    );
+    );}));
   }
 }

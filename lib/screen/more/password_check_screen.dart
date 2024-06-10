@@ -8,42 +8,34 @@ import 'package:local_auth_android/local_auth_android.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/more/app_lock_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/widget/more/app_lock_top_app_bar.dart';
 
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 
 class PasswordCheckScreen extends StatefulWidget {
-  final bool bioAuth;
-
-  List<int> password;
-
   PasswordCheckScreen(
       {required this.bioAuth, super.key, required this.password});
+
+  final bool bioAuth;
+  List<int> password;
 
   @override
   State<PasswordCheckScreen> createState() => _PasswordCheckScreenState();
 }
 
 class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return PopScope(
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(builder: (context, provider, _) {
+          return PopScope(
         canPop: false,
         onPopInvoked: (didPop) =>
             Navigator.pushReplacement(
@@ -317,7 +309,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
               ],
             ),
           ),
-        ));
+        ));}));
   }
 
   Widget _buildPasswordIcon(bool isActive) {
@@ -384,10 +376,8 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
         _initiatePassword();
       });
     } else {
-      setState(() {
-        userProvider.lockPassword = checkingPassword;
-        userProvider.appLockState = 1;
-      });
+        UserProvider().setLockPassword(checkingPassword);
+        UserProvider().setAppLockState(1);
       if (widget.bioAuth == true) {
         showBioAuthDialog(context);
       } else {
@@ -412,31 +402,11 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
   }
 
   final LocalAuthentication auth = LocalAuthentication();
-  bool? _canCheckBiometrics;
-  bool _isAuthenticating = false;
-
-  Future<void> _checkBiometrics() async {
-    late bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      canCheckBiometrics = false;
-      print(e);
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
-    });
-  }
 
   Future<void> _authenticateWithBiometrics() async {
     bool authenticated = false;
     try {
       setState(() {
-        _isAuthenticating = true;
       });
       authenticated = await auth.authenticate(
         authMessages: [
@@ -460,12 +430,10 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
         ),
       );
       setState(() {
-        _isAuthenticating = false;
       });
     } on PlatformException catch (e) {
       print(e);
       setState(() {
-        _isAuthenticating = false;
       });
       return;
     }
@@ -473,15 +441,8 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
       return;
     }
 
-    Future<void> _cancelAuthentication() async {
-      await auth.stopAuthentication();
-      setState(() => _isAuthenticating = false);
-    }
-
     if (authenticated) {
-      setState(() {
-        userProvider.appLockState = 2;
-      });
+        UserProvider().setAppLockState(2);
       Navigator.pop(context);
       Navigator.pushReplacement(
           context,

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,7 +9,7 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/account_delete_top_app_bar.dart';
 
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../login/login_screen.dart';
 
 class AccountDeleteScreen extends StatefulWidget {
@@ -22,22 +20,16 @@ class AccountDeleteScreen extends StatefulWidget {
 }
 
 class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
-
   bool isAgreed = false;
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+    child: Consumer<UserProvider>(builder: (context, provider, _) {
     return Scaffold(
       appBar: const AccountDeleteTopAppBar(),
       body: Container(
@@ -112,9 +104,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               child: InkWell(
                   onTap: () {
                     if(isAgreed){
-                      setState(() {
-                        userProvider.userState = 1;
-                      });
+                        provider.setUserState(1);
                       signOut();
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -157,11 +147,11 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
           ],
         ),
       ),
-    );
+    );}));
   }
 
   void signOut() async {
-    switch (userProvider.loginType) {
+    switch (UserProvider().userLoginType) {
       case LoginType.google:
         await GoogleSignIn().signOut();
         break;
@@ -176,9 +166,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
       case LoginType.none:
         break;
     }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
+    UserProvider().setUserLoginType(LoginType.none);
   }
 
 }

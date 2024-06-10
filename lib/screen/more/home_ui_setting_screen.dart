@@ -1,5 +1,4 @@
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,7 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/text_style.dart';
 
 class HomeUiSettingScreen extends StatefulWidget {
@@ -28,16 +27,15 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
   ];
 
   late int presetIndex;
-  dynamic userProvider;
 
+  dynamic userProvider;
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
-    userProvider = Provider.of<UserModel>(context, listen: false);
-    presetIndex = userProvider.homePresetType;
+    userProvider = UserProvider();
+    presetIndex = userProvider.presetType;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,10 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(builder: (context, provider, _) {
+      return Scaffold(
       appBar: AppBar(
         surfaceTintColor: ColorFamily.cream,
         backgroundColor: ColorFamily.cream,
@@ -63,9 +64,7 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                setState(() {
-                  userProvider.homePresetType = presetIndex;
-                });
+                  provider.setPresetType(presetIndex);
                 Navigator.pop(context);
                 Fluttertoast.showToast(
                     msg: "홈 화면 스타일이 변경되었습니다.",
@@ -88,7 +87,7 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
         child: Column(
           children: [
             SizedBox(height: deviceHeight*0.05),
-            presetIndex == userProvider.homePresetType
+            presetIndex == provider.presetType
             ? SizedBox(
               height: 20,
               child: Row(
@@ -146,6 +145,6 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
             )
           ]),
       ),
-    );
+    );}));
   }
 }
