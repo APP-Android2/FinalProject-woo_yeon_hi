@@ -5,13 +5,11 @@ import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
-import '../../dao/user_dao.dart';
-import '../../model/enums.dart';
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/font.dart';
 
 class RegisterDoneScreen extends StatefulWidget {
-  RegisterDoneScreen({super.key, required this.title, required this.isHost});
+  const RegisterDoneScreen({super.key, required this.title, required this.isHost});
 
   final String title;
   final bool isHost;
@@ -23,21 +21,15 @@ class RegisterDoneScreen extends StatefulWidget {
 class _RegisterDoneScreen extends State<RegisterDoneScreen>
     with TickerProviderStateMixin {
 
-  dynamic userProvider;
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
-
-
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(builder: (context, provider, _) {
+      return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
           color: ColorFamily.cream,
@@ -62,12 +54,12 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
             vsync: this,
             child: Column(
               children: [
-                Container(
+                SizedBox(
                     height: deviceHeight - 40,
                     width: deviceWidth - 40,
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                             height: deviceHeight - 90,
                             width: deviceWidth - 40,
                             child: Column(children: [
@@ -103,7 +95,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                         fontFamily: FontFamily.mapleStoryLight),
                                   ),
                                   Text(
-                                    userProvider.loverNickname,
+                                    provider.loverNickname,
                                     style: const TextStyle(
                                         color: ColorFamily.black,
                                         fontSize: 20,
@@ -139,9 +131,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                 ),
                                 child: InkWell(
                                     onTap: () async {
-                                      widget.isHost
-                                      ?saveUser(UserModel(userIdx: 1, loginType: userProvider.loginType, userAccount: userProvider.userAccount, userNickname: "기본닉네임", userBirth: userProvider.userBirth, userProfileImage: "", loverUserIdx: 2, loverNickname: userProvider.loverNickname, homePresetType: userProvider.homePresetType, topBarType: 0, profileMessage: "", alarmsAllow: false,appLockState: 0, topBarActivate: false, lockPassword: [], userState: 1, loveDday: userProvider.loveDday))
-                                      :saveUser(UserModel(userIdx: 2, loginType: userProvider.loginType, userAccount: userProvider.userAccount, userNickname: "기본닉네임", userBirth: userProvider.userBirth, userProfileImage: "", loverUserIdx: 2, loverNickname: userProvider.loverNickname, homePresetType: userProvider.homePresetType, topBarType: 0, profileMessage: "", alarmsAllow: false,appLockState: 0, topBarActivate: false, lockPassword: [], userState: 1, loveDday: DateTime.now()));
+                                      // widget.isHost
 
                                       // 자동로그인
                                       // write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
@@ -169,6 +159,6 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
               ],
             ),
           ),
-        ]))));
+        ]))));}));
   }
 }

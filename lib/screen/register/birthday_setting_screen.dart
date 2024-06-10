@@ -6,12 +6,13 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/model/user_model.dart';
 import 'package:woo_yeon_hi/screen/register/home_preset_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
 import 'package:woo_yeon_hi/widget/login/kakao_login.dart';
 
 import '../../model/enums.dart';
+import '../../provider/login_provider.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
@@ -27,45 +28,16 @@ class BirthdaySettingScreen extends StatefulWidget {
 }
 
 class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
-
-  void signOut() async {
-    switch (userProvider.loginType) {
-      case LoginType.google:
-        await GoogleSignIn().signOut();
-        break;
-      case LoginType.kakao:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case LoginType.none:
-        break;
-    }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
-  }
-
   DateTime _selectedDate = DateTime.now();
-  late DateTime userBirth;
-
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
-    userBirth = userProvider.userBirth;
-  }
 
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+    child: Consumer<UserProvider>(builder: (context, provider, _) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
@@ -215,17 +187,12 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                                     fontSize: 18,
                                                     fontFamily: FontFamily
                                                         .mapleStoryLight)),
-                                            // onChanged: (date) {
-                                            //   print('change $date in time zone ' +
-                                            //    date.timeZoneOffset.inHours.toString());
-                                            // },
                                             onConfirm: (date) {
                                           setState(() {
                                             _selectedDate = date;
-                                            userBirth = _selectedDate;
-                                            userProvider.userBirth = userBirth;
                                           });
-                                        },
+                                          provider.setUserBirth(_selectedDate);
+                                            },
                                             // onCancel: (){},
                                             currentTime: DateTime.now(),
                                             locale: picker.LocaleType.ko);
@@ -245,7 +212,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                                   Text(
                                                     textAlign: TextAlign.center,
                                                     DateFormat('yyyy. M. d.')
-                                                        .format(userBirth),
+                                                        .format(provider.userBirth),
                                                     style: const TextStyle(
                                                         fontFamily: FontFamily
                                                             .mapleStoryLight,
@@ -308,9 +275,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      setState(() {
-                                        userProvider.userBirth = userBirth;
-                                      });
+                                      provider.setUserBirth(_selectedDate);
                                       Navigator.push(context, MaterialPageRoute(
                                           builder: (context) =>
                                               HomePresetSettingScreen(
@@ -342,7 +307,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => RegisterScreen()),
+                                  builder: (context) => LoginScreen()),
                               (route) => false);
                         },
                         child: const Text(
@@ -354,6 +319,27 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                   ],
                 ),
               ),
-            ])));
+            ])));}));
+  }
+
+  void signOut() async {
+    switch (UserProvider().userLoginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      UserProvider().setUserLoginType(LoginType.none);
+    });
   }
 }

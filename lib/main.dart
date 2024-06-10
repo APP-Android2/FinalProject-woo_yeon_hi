@@ -7,12 +7,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/model/user_model.dart';
+import 'package:woo_yeon_hi/provider/login_provider.dart';
+import 'package:woo_yeon_hi/provider/password_provider.dart';
+import 'package:woo_yeon_hi/provider/register_provider.dart';
 import 'package:woo_yeon_hi/routes/routes_generator.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 
 import 'firebase_options.dart';
-import 'model/enums.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,10 +69,13 @@ class _WooYeonHiState extends State<WooYeonHi> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-    create: (context) => UserModel(userIdx: 0, loginType: LoginType.none, userAccount: '', userNickname: '', userBirth: DateTime.now(), userProfileImage: '', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: 0, topBarActivate: false, lockPassword: [0, 0, 0, 0], userState: 2, loveDday: DateTime.now()),
-    child:
-      MaterialApp(
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => UserProvider()),
+          ChangeNotifierProvider(create: (context) => CodeConnectProvider()),
+          ChangeNotifierProvider(create: (context) => PasswordEnterProvider())
+        ],
+        child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "WooYeonHi",
         theme: ThemeData(
@@ -90,7 +94,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
             ),
           useMaterial3: true
       ),
-      home: const RegisterScreen(),
+      home: const LoginScreen(),
       onGenerateRoute: RouteGenerator.generateRoute,
       ));
   }

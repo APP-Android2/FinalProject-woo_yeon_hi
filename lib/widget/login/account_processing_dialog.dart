@@ -1,11 +1,10 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/text_style.dart';
 
 class AccountProcessingDialog extends StatefulWidget {
@@ -17,17 +16,12 @@ class AccountProcessingDialog extends StatefulWidget {
 }
 
 class _AccountProcessingDialogState extends State<AccountProcessingDialog> {
-
-  dynamic userProvider;
-  @override
-  void initState() {
-    super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Dialog(
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(builder: (context, provider, _) {
+      return Dialog(
       backgroundColor: ColorFamily.white,
       child: Wrap(
         children: [
@@ -73,9 +67,7 @@ class _AccountProcessingDialogState extends State<AccountProcessingDialog> {
                             overlayColor:
                                 MaterialStateProperty.all(ColorFamily.gray)),
                         onPressed: () {
-                          setState(() {
-                            userProvider.userState = 0;
-                          });
+                            provider.setUserState(0);
                           Navigator.pop(context);
                           Navigator.pop(context);
                           Fluttertoast.showToast(
@@ -99,6 +91,6 @@ class _AccountProcessingDialogState extends State<AccountProcessingDialog> {
           ),
         ],
       ),
-    );
+    );}));
   }
 }

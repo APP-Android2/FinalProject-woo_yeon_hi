@@ -3,9 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/model/user_model.dart';
+import 'package:woo_yeon_hi/provider/login_provider.dart';
 import 'package:woo_yeon_hi/screen/register/birthday_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
 import '../../model/enums.dart';
@@ -22,36 +22,16 @@ class NickNameSettingScreen extends StatefulWidget {
 }
 
 class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
-
-  bool _showErrorMessages = false;
-
-  dynamic loverNickNameTextEditController;
-  dynamic userProvider;
-  late String loverNickname;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-    loverNickname = userProvider.loverNickname;
-    loverNickNameTextEditController =
-        TextEditingController(text: loverNickname);
-  }
-
-  @override
-  void dispose() {
-    loverNickNameTextEditController.dispose();
-    super.dispose();
-  }
-
-  @override
+   @override
   Widget build(BuildContext context) {
 
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+     child: Consumer<UserProvider>(builder: (context, provider, _) {
+     return Scaffold(
       body: Container(
           color: ColorFamily.cream,
           padding: const EdgeInsets.all(20),
@@ -161,13 +141,13 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                   child: TextFormField(
                                     onChanged: (value) {
                                       setState(() {
-                                        loverNickname = value;
+                                        provider.setLoverNickname(value);
                                       });
                                     },
                                     onFieldSubmitted: (value) {
-                                      loverNickname = value;
+                                      provider.setLoverNickname(value);
                                     },
-                                    controller: loverNickNameTextEditController,
+                                    controller: provider.loverNickNameTextEditController,
                                     onTapOutside: (event) {
                                       FocusScope.of(context).unfocus();
                                     },
@@ -181,7 +161,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                         fontFamily: FontFamily.mapleStoryLight,
                                       ),
                                     ),
-                                    autovalidateMode: _showErrorMessages
+                                    autovalidateMode: provider.showErrorMessage
                                         ? AutovalidateMode.always
                                         : AutovalidateMode.disabled,
                                     validator: (value) {
@@ -247,12 +227,9 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      if (userProvider.checkProvider(
-                                          loverNickNameTextEditController)) {
-                                        setState(() {
-                                          userProvider.loverNickname =
-                                              loverNickname;
-                                        });
+                                      if (provider.checkProvider(
+                                          provider.loverNickNameTextEditController)) {
+                                          provider.setLoverNickname(provider.loverNickNameTextEditController.text);
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
@@ -260,9 +237,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                                         isHost:
                                                             widget.isHost)));
                                       } else {
-                                        setState(() {
-                                          _showErrorMessages = true;
-                                        });
+                                          provider.setShowErrorMessage(true);
                                       }
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
@@ -292,7 +267,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RegisterScreen()),
+                                builder: (context) => const LoginScreen()),
                             (route) => false);
                       },
                       child: const Text(
@@ -305,27 +280,27 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
               ),
             ),
           ]))),
-    );
+    );}));
   }
 
-  void signOut() async {
-    switch (userProvider.loginType) {
-      case LoginType.google:
-        await GoogleSignIn().signOut();
-        break;
-      case LoginType.kakao:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case LoginType.none:
-        break;
-    }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
-  }
+   void signOut() async {
+     switch (UserProvider().userLoginType) {
+       case LoginType.google:
+         await GoogleSignIn().signOut();
+         break;
+       case LoginType.kakao:
+         try {
+           await UserApi.instance.logout();
+           print('로그아웃 성공, SDK에서 토큰 삭제');
+         } catch (error) {
+           print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+         }
+         break;
+       case LoginType.none:
+         break;
+     }
+     setState(() {
+       UserProvider().setUserLoginType(LoginType.none);
+     });
+   }
 }

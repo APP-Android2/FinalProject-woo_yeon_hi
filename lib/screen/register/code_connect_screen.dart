@@ -9,14 +9,15 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 import '../../model/enums.dart';
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
+import '../../provider/register_provider.dart';
 import '../../style/text_style.dart';
 
 class CodeConnectScreen extends StatefulWidget {
@@ -27,33 +28,16 @@ class CodeConnectScreen extends StatefulWidget {
 }
 
 class _ConnectCodeScreenState extends State<CodeConnectScreen> {
-  bool _isCodeGenerated = false;
-  bool _isCodeExpired = false;
-  String _codeText = "";
   String _randomCode = getRandomString(8);
-  dynamic codeTextEditController;
-
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-    codeTextEditController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    codeTextEditController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
+    return ChangeNotifierProvider(
+        create: (context) => CodeConnectProvider(),
+    child: Consumer<CodeConnectProvider>(builder: (context, provider, _) {
     return Scaffold(
         body: Container(
       color: ColorFamily.cream,
@@ -121,7 +105,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                   "연결코드를 생성하여 연인을 초대하세요",
                                   style: TextStyleFamily.smallTitleTextStyle,
                                 ),
-                                !_isCodeGenerated
+                                !provider.isCodeGenerated
                                     ? const SizedBox()
                                     : Padding(
                                         padding: const EdgeInsets.only(top: 30),
@@ -130,7 +114,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              Text(_codeText,
+                                              Text(provider.randomCodeText,
                                                   style: const TextStyle(
                                                       color: ColorFamily.black,
                                                       fontSize: 22,
@@ -150,13 +134,13 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                           ),
                                         ),
                                       ),
-                                _isCodeGenerated
+                                provider.isCodeGenerated
                                     ? Padding(
                                         padding:
                                             const EdgeInsets.only(bottom: 20),
                                         child: SizedBox(
                                           height: 25,
-                                          child: _isCodeExpired
+                                          child: provider.isCodeExpired
                                               ? const Text(
                                                   "만료된 코드입니다. 다시 생성해주세요.",
                                                   style: TextStyle(
@@ -207,8 +191,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                         onEnd: () {
                                                           //TODO 생성된 코드를 서버에서 제거
                                                           setState(() {
-                                                            _isCodeExpired =
-                                                                true;
+                                                            provider.setIsCodeExpired(true);
                                                           });
                                                         })
                                                   ],
@@ -224,13 +207,13 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    child: !_isCodeGenerated
+                                    child: !provider.isCodeGenerated
                                         ? InkWell(
                                             onTap: () {
                                               setState(() {
-                                                _codeText = _randomCode;
+                                                provider.setCodeText(_randomCode);
                                                 //TODO 생성된 코드를 서버에 저장
-                                                _isCodeGenerated = true;
+                                                provider.setIsCodeGenerated(true);
                                               });
                                             },
                                             borderRadius:
@@ -247,13 +230,13 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                             ))
                                         : InkWell(
                                             onTap: () {
-                                              if (_isCodeExpired) {
+                                              if (provider.isCodeExpired) {
                                                 setState(() {
                                                   _randomCode =
                                                       getRandomString(8);
-                                                  _codeText = _randomCode;
+                                                  provider.setRandomCodeText(_randomCode);
                                                   //TODO 재생성된 코드를 서버에 저장
-                                                  _isCodeExpired = false;
+                                                  provider.setIsCodeGenerated(false);
                                                 });
                                               } else {
                                                 //TODO 해당 코드로 연결한 상대가 있는지 여부 파악(서버데이터)
@@ -285,7 +268,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                 height: deviceHeight / 21,
                                                 width: deviceWidth / 3,
                                                 alignment: Alignment.center,
-                                                child: _isCodeExpired
+                                                child: provider.isCodeExpired
                                                     ? const Text("연결코드 재생성",
                                                         style: TextStyleFamily
                                                             .normalTextStyle)
@@ -303,7 +286,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                 SizedBox(
                                   width: 160,
                                   child: TextFormField(
-                                    controller: codeTextEditController,
+                                    controller: provider.codeTextEditController,
                                     onTapOutside: (event) {
                                       FocusScope.of(context).unfocus();
                                     },
@@ -336,7 +319,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                   ),
                                   child: InkWell(
                                       onTap: () {
-                                        if (codeTextEditController.text ==
+                                        if (provider.codeTextEditController.text ==
                                             "TEST") {
                                           //TODO loverUserIdx에 해당코드를 생성한 userIdx를 저장
                                           //게스트화면 이동
@@ -382,7 +365,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RegisterScreen()),
+                                builder: (context) => const LoginScreen()),
                             (route) => false);
                       },
                       child: const Text(
@@ -395,11 +378,11 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
               )),
         ],
       )),
-    ));
+    ));}));
   }
 
   void signOut() async {
-    switch (userProvider.loginType) {
+    switch (UserProvider().userLoginType) {
       case LoginType.google:
         await GoogleSignIn().signOut();
         break;
@@ -415,7 +398,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
         break;
     }
     setState(() {
-      userProvider.loginType = LoginType.none;
+      UserProvider().setUserLoginType(LoginType.none);
     });
   }
 }

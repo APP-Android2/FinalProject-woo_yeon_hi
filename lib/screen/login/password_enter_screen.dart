@@ -1,15 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_reset_screen.dart';
-import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
-import '../../model/user_model.dart';
+import '../../provider/password_provider.dart';
 
 class PasswordEnterScreen extends StatefulWidget {
   const PasswordEnterScreen({super.key});
@@ -19,22 +16,15 @@ class PasswordEnterScreen extends StatefulWidget {
 }
 
 class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
-
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
-
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
-print(userProvider.lockPassword);
-    return Scaffold(
+    return ChangeNotifierProvider(
+        create: (context) => PasswordEnterProvider(),
+        child: Consumer<PasswordEnterProvider>(
+            builder: (context, provider, _) {
+              return Scaffold(
         body: Container(
       width: deviceWidth,
       height: deviceHeight,
@@ -51,8 +41,8 @@ print(userProvider.lockPassword);
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(4, (index) {
-                  return _buildPasswordIcon(
-                      index < checkingPassword.length);
+                  return provider.buildPasswordIcon(
+                      index < provider.checkingPasswordList.length);
                 })),
           ),
           const SizedBox(height: 10),
@@ -92,7 +82,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(1);
+                      provider.addNumber(1, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -108,7 +98,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(2);
+                      provider.addNumber(2, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -124,7 +114,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(3);
+                      provider.addNumber(3, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -149,7 +139,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(4);
+                      provider.addNumber(4, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -165,7 +155,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(5);
+                      provider.addNumber(5, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -181,7 +171,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(6);
+                      provider.addNumber(6, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -206,7 +196,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(7);
+                      provider.addNumber(7, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -222,7 +212,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(8);
+                      provider.addNumber(8, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -238,7 +228,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(9);
+                      provider.addNumber(9, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -277,7 +267,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _addNumber(0);
+                      provider.addNumber(0, context);
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -293,7 +283,7 @@ print(userProvider.lockPassword);
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
                     onTap: () {
-                      _removeNumber();
+                      provider.removeNumber();
                     },
                     child: Container(
                         alignment: Alignment.center,
@@ -306,88 +296,6 @@ print(userProvider.lockPassword);
           ),
         ],
       ),
-    ));
-  }
-  Widget _buildPasswordIcon(bool isActive) {
-    return isActive
-        ? SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg",
-        width: 48, height: 48)
-        : Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg",
-          width: 24),
-    );
-  }
-
-  bool firstNumInput = false;
-  bool secondNumInput = false;
-  bool thirdNumInput = false;
-  bool fourthNumInput = false;
-
-  final List<int> checkingPassword = [];
-  final int _maxNumbers = 4;
-
-  void _numInputCheck() {
-    setState(() {
-      firstNumInput = checkingPassword.length > 0;
-      secondNumInput = checkingPassword.length > 1;
-      thirdNumInput = checkingPassword.length > 2;
-      fourthNumInput = checkingPassword.length > 3;
-    });
-  }
-
-  void _addNumber(int number) {
-    setState(() {
-      if (checkingPassword.length < _maxNumbers) {
-        checkingPassword.add(number);
-      }
-      if (checkingPassword.length == _maxNumbers) {
-        _checkPassword();
-      }
-    });
-    _numInputCheck();
-  }
-
-  void _removeNumber() {
-    setState(() {
-      if (checkingPassword.isNotEmpty) {
-        checkingPassword.removeLast();
-      }
-    });
-    _numInputCheck();
-  }
-
-  void _checkPassword() {
-    var listEquality = const ListEquality();
-    if (!listEquality.equals(checkingPassword, userProvider.lockPassword)) {
-      Fluttertoast.showToast(
-          msg: "비밀번호가 일치하지 않습니다.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: ColorFamily.black,
-          textColor: ColorFamily.white,
-          fontSize: 14.0);
-      Future.delayed(const Duration(milliseconds: 100), () {
-        _initiatePassword();
-      });
-    } else {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const MainScreen()),
-              (route) => false);
-      }
-    }
-
-  void _initiatePassword() {
-    setState(() {
-      firstNumInput = false;
-      secondNumInput = false;
-      thirdNumInput = false;
-      fourthNumInput = false;
-
-      checkingPassword.clear();
-    });
+    ));}));
   }
 }

@@ -4,11 +4,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/register/register_done_screen.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
 import '../../model/enums.dart';
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 
@@ -26,27 +26,6 @@ class HomePresetSettingScreen extends StatefulWidget {
 
 class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
 
-  void signOut() async {
-    switch (userProvider.loginType) {
-      case LoginType.google:
-        await GoogleSignIn().signOut();
-        break;
-      case LoginType.kakao:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case LoginType.none:
-        break;
-    }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
-  }
-
   var presetImages = [
     "lib/assets/images/home_preset_standard_4x.png",
     "lib/assets/images/home_preset_dateplan_4x.png",
@@ -54,21 +33,14 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
     "lib/assets/images/home_preset_dateplan_ledger_4x.png",
   ];
 
-  late int presetPosition;
-
-  dynamic userProvider;
-  @override
-  void initState() {
-    super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
-    presetPosition = userProvider.homePresetType;
-  }
-
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+    child: Consumer<UserProvider>(builder: (context, provider, _) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
@@ -185,14 +157,14 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                 SizedBox(
                                   height: deviceHeight*0.5,
                                   child: Swiper(
-                                    index: presetPosition,
+                                    index: provider.presetType,
                                     viewportFraction: 0.5,
                                     scale: 0.6,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Container(
                                         decoration:
-                                        presetPosition == index
+                                        provider.presetType == index
                                             ? BoxDecoration(border: Border.all(color: ColorFamily.pink, width: 1.5), borderRadius: BorderRadius.circular(20))
                                             : BoxDecoration(border: Border.all(color: Colors.transparent, width: 1.5), borderRadius: BorderRadius.circular(20)),
                                           child: Material(borderRadius: BorderRadius.circular(20), elevation: 1.0, child: ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.asset(presetImages[index], fit: BoxFit.contain))),
@@ -202,16 +174,13 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                     loop: false,
                                     autoplay: false,
                                     onIndexChanged: (index) {
-                                      setState(() {
-                                        presetPosition = index;
-                                        userProvider.homePresetType = presetPosition;
-                                      });
+                                      provider.setPresetType(index);
                                     },
                                   ),
                                 ),
                                 const SizedBox(height: 10),
                                 AnimatedSmoothIndicator(
-                                  activeIndex: presetPosition,
+                                  activeIndex: provider.presetType,
                                   count: presetImages.length,
                                   effect: const ScrollingDotsEffect(
                                     dotColor: ColorFamily.beige,
@@ -296,7 +265,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const RegisterScreen()),
+                                  builder: (context) => const LoginScreen()),
                               (route) => false);
                         },
                         child: const Text(
@@ -308,6 +277,27 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                   ],
                 ),
               )
-            ])));
+            ])));}));
+  }
+
+  void signOut() async {
+    switch (UserProvider().userLoginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+    setState(() {
+      UserProvider().setUserLoginType(LoginType.none);
+    });
   }
 }

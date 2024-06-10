@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/login/account_processing_top_app_bar.dart';
 
-import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 import '../../widget/login/account_processing_dialog.dart';
@@ -23,12 +22,6 @@ class _AccountProcessingScreenState extends State<AccountProcessingScreen> {
   final DateTime _accountDeletedDay = DateTime.now();
   final DateTime _cancelAvailableDay = DateTime.now().add(const Duration(days: 30));
 
-  dynamic userProvider;
-  @override
-  void initState() {
-    super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {

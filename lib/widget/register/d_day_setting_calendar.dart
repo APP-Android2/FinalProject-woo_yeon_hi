@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:woo_yeon_hi/provider/login_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 
@@ -25,7 +24,7 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
+    userProvider = UserProvider();
     _focusedDay = userProvider.loveDday;
     _selectedDay = _focusedDay;
   }
@@ -161,8 +160,8 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
-              userProvider.loveDday = _selectedDay;
             });
+            userProvider.setLoveDday(_selectedDay);
           }
         },
         onFormatChanged: (format) {

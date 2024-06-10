@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'enums.dart';
 
-class UserModel with ChangeNotifier{
+class User {
   int userIdx;
   LoginType loginType;
   String userAccount;
@@ -22,10 +19,10 @@ class UserModel with ChangeNotifier{
   int userState;
   DateTime loveDday;
 
-  UserModel(
+  User(
       {required this.userIdx,
-       required this.loginType,
-       required this.userAccount,
+        required this.loginType,
+        required this.userAccount,
         required this.userNickname,
         required this.userBirth,
         required this.userProfileImage,
@@ -42,19 +39,25 @@ class UserModel with ChangeNotifier{
         required this.loveDday,
       });
 
-  bool checkProvider(TextEditingController textEditingController){
-    if(textEditingController.text.isEmpty || textEditingController.text == ""){
-      return false;
-    }else{
-      return true;
-    }
+  factory User.fromData(Map<String, dynamic> data){
+    return User(
+        userIdx: data['user_idx'],
+        loginType: data['diary_user_idx'],
+        userAccount: data['diary_date'],
+        userNickname: data['diary_weather'],
+        userBirth: data['diary_image'],
+        userProfileImage: data['diary_title'],
+        loverUserIdx: data['diary_content'],
+        loverNickname: data['diary_lover_check'],
+        homePresetType: data['diary_state'],
+      topBarType: data['diary_state'],
+      profileMessage: data['diary_state'],
+      alarmsAllow: data['diary_state'],
+      appLockState: data['diary_state'],
+      topBarActivate: data['diary_state'],
+      lockPassword: data['diary_state'],
+      userState: data['diary_state'],
+      loveDday: data['diary_state'],
+    );
   }
-
-  XFile? _image;
-  XFile? get image => _image;
-  void setImage(XFile? image) {
-    _image = image;
-    notifyListeners();
-  }
-
 }

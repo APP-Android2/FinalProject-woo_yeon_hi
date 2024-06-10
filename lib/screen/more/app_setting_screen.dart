@@ -8,10 +8,10 @@ import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/widget/more/app_setting_top_app_bar.dart';
 
 import '../../model/enums.dart';
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
-import '../register/register_screen.dart';
+import '../login/login_screen.dart';
 import 'app_lock_setting_screen.dart';
 
 class AppSettingScreen extends StatefulWidget {
@@ -27,7 +27,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
   final LocalAuthentication auth = LocalAuthentication();
 
   late bool _isBioAuthSupported;
-  dynamic userProvider;
 
   @override
   void initState() {
@@ -35,28 +34,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
     auth.isDeviceSupported().then(
           (bool isSupported) => setState(() => _isBioAuthSupported = isSupported),
     );
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
-
-  void signOut() async {
-    switch (userProvider.loginType) {
-      case LoginType.google:
-        await GoogleSignIn().signOut();
-        break;
-      case LoginType.kakao:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case LoginType.none:
-        break;
-    }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
   }
 
   @override
@@ -64,6 +41,9 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+    child: Consumer<UserProvider>(builder: (context, provider, _) {
     return Scaffold(
         appBar: const AppSettingTopAppBar(),
         body: Container(
@@ -87,17 +67,17 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                             children: [
                               const Text("알림 받기",style: TextStyleFamily.smallTitleTextStyle),
                               Switch(
-                                  value: userProvider.alarmsAllow,
+                                  value: provider.alarmsAllow,
                                   activeColor: ColorFamily.white,
                                   activeTrackColor: ColorFamily.pink,
                                   inactiveThumbColor: ColorFamily.gray,
                                   inactiveTrackColor: ColorFamily.white,
                                   trackOutlineColor:
-                                  userProvider.alarmsAllow ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
+    provider.alarmsAllow ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                   trackOutlineWidth: const MaterialStatePropertyAll(1),
                                   onChanged: (bool value) {
                                     setState(() {
-                                      userProvider.alarmsAllow = value;
+    provider.setAlarmsAllow(value);
                                     });
                                   }),
                             ],
@@ -176,7 +156,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                               key: "loginData");
                           signOut();
                           Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                              MaterialPageRoute(builder: (context) => const LoginScreen()),
                                   (Route<dynamic> route) => false);
                         },
                         child: Column(
@@ -199,5 +179,24 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
               ],
             )
         ) );
+  }));}
+
+  void signOut() async {
+    switch (UserProvider().userLoginType) {
+      case LoginType.google:
+        await GoogleSignIn().signOut();
+        break;
+      case LoginType.kakao:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case LoginType.none:
+        break;
+    }
+      UserProvider().setUserLoginType(LoginType.none);
   }
 }

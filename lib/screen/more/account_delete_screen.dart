@@ -12,7 +12,7 @@ import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/account_delete_top_app_bar.dart';
 
 import '../../model/user_model.dart';
-import '../register/register_screen.dart';
+import '../login/login_screen.dart';
 
 class AccountDeleteScreen extends StatefulWidget {
   const AccountDeleteScreen({super.key});
@@ -118,7 +118,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
                       signOut();
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (context) => const RegisterScreen()),
+                              builder: (context) => const LoginScreen()),
                               (Route<dynamic> route) => false);
                       Fluttertoast.showToast(
                           msg: "우연히 계정이 삭제 처리되었습니다.",

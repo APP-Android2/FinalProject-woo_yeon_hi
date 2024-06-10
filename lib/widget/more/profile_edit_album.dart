@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
-import '../../model/user_model.dart';
+import '../../provider/login_provider.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 
@@ -16,13 +15,6 @@ class ProfileEditAlbum extends StatefulWidget {
 
 class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +45,12 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
     );
   }
 
-  Future<void> getImage(UserModel userProvider, ImageSource imageSource) async {
+  Future<void> getImage(UserProvider userProvider, ImageSource imageSource) async {
     final XFile? pickedFile = await picker.pickImage(source: imageSource);
     if (pickedFile != null) {
       setState(() {
         userProvider.setImage(XFile(pickedFile.path));
-        userProvider.userProfileImage = userProvider.image!.path;
+        userProvider.setProfileImage(userProvider.image!.path);
       });
     }
   }
@@ -76,7 +68,7 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
                   InkWell(
                     splashColor: ColorFamily.gray.withOpacity(0.5),
                     onTap: () {
-                      getImage(userProvider, ImageSource.gallery);
+                      getImage(UserProvider(), ImageSource.gallery);
                       Navigator.pop(context);
                       FocusScope.of(context).unfocus();
                     },
@@ -110,9 +102,8 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
                     splashColor: ColorFamily.gray.withOpacity(0.5),
                     onTap: () {
                       setState(() {
-                        userProvider.userProfileImage =
-                            "lib/assets/images/default_profile.png";
-                        userProvider.setImage(null);
+                        UserProvider().setProfileImage("lib/assets/images/default_profile.png");
+                        UserProvider().setImage(null);
                         Navigator.pop(context);
                         FocusScope.of(context).unfocus();
                       });

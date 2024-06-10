@@ -1,105 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/provider/login_provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/login/account_processing_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import '../../model/enums.dart';
-import '../../model/user_model.dart';
 import '../../style/color.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../main_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreen();
+  State<LoginScreen> createState() => _RegisterScreen();
 }
 
-class _RegisterScreen extends State<RegisterScreen> {
-  bool loginSuccess = false;
-
-  signInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if (googleUser != null) {
-      print('email = ${googleUser.email}');
-      print('id = ${googleUser.id}');
-
-      setState(() {
-        userProvider.userAccount = googleUser.email;
-        loginSuccess = true;
-      });
-    } else{
-      showToast("구글 계정 로그인에 실패하였습니다.");
-    }
-  }
-
-  signInWithKakao() async {
-    if (await isKakaoTalkInstalled()) {
-      try {
-        //카카오톡 설치됨, 카카오톡으로 로그인 시도
-        await UserApi.instance.loginWithKakaoTalk();
-        setState(() {
-          // userProvider.userAccount = 카카오계정정보
-          loginSuccess = true;
-        });
-      } catch (error) {
-        print('카카오톡으로 로그인 실패 $error');
-        showToast("카카오 계정 로그인에 실패하였습니다.");
-        if (error is PlatformException && error.code == 'CANCELED') {
-          print('사용자가 로그인 취소');
-          showToast("카카오 계정 로그인을 취소하였습니다.");
-          return;
-        }
-
-        print('카카오 계정으로 로그인 시도');
-        try {
-          await UserApi.instance.loginWithKakaoAccount();
-          setState(() {
-            // userProvider.userAccount = 카카오계정정보
-            loginSuccess = true;
-          });
-        } catch (error) {
-          print('카카오 계정으로 로그인 실패 $error');
-          showToast("카카오 계정 로그인에 실패하였습니다.");
-        }
-      }
-    } else {
-      //카카오톡 설치 안됨, 카카오계정으로 로그인 시도
-      try {
-        await UserApi.instance.loginWithKakaoAccount();
-        setState(() {
-          // userProvider.userAccount = 카카오계정정보
-          loginSuccess = true;
-        });
-      } catch (error) {
-        showToast("카카오 계정 로그인에 실패하였습니다.");
-      }
-    }
-  }
-
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
-
+class _RegisterScreen extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+    child: Consumer<UserProvider>(
+    builder: (context, provider, _) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
@@ -131,7 +61,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                                       const PasswordEnterScreen()));
                         },
                         onTap: () async {
-                          switch (userProvider.userState) {
+                          switch (provider.userState) {
                             case 0:
                               Navigator.pushReplacement(
                                   context,
@@ -144,11 +74,9 @@ class _RegisterScreen extends State<RegisterScreen> {
                                       const AccountProcessingScreen()));
 
                             case 2:
-                              await signInWithGoogle();
-                              if (loginSuccess == true) {
-                                setState(() {
-                                  userProvider.loginType = LoginType.google;
-                                });
+                              await provider.signInWithGoogle();
+                              if (provider.loginSuccess == true) {
+                                provider.setUserLoginType(LoginType.google);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -186,7 +114,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                       ),
                       child: InkWell(
                         onTap: () async {
-                          switch (userProvider.userState) {
+                          switch (provider.userState) {
                             case 0:
                               Navigator.pushReplacement(
                                   context,
@@ -199,10 +127,10 @@ class _RegisterScreen extends State<RegisterScreen> {
                                   const AccountProcessingScreen()));
 
                             case 2:
-                              await signInWithKakao();
-                              if (loginSuccess == true) {
+                              await provider.signInWithKakao();
+                              if (provider.loginSuccess == true) {
                                 setState(() {
-                                  userProvider.loginType = LoginType.kakao;
+                                  provider.setUserLoginType(LoginType.kakao);
                                 });
                                 Navigator.pushReplacement(
                                     context,
@@ -238,7 +166,7 @@ class _RegisterScreen extends State<RegisterScreen> {
               ),
             ],
           ),
-        ));
+      ));}));
   }
 
   showToast(String msg){
