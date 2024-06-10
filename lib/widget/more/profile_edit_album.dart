@@ -87,10 +87,10 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SvgPicture.asset('lib/assets/icons/gallery.svg'),
+                          SvgPicture.asset('lib/assets/icons/gallery.svg', height: 20,),
                           const Text(
                             "앨범에서 사진 선택",
-                            style: TextStyleFamily.dialogButtonTextStyle,
+                            style: TextStyleFamily.smallTitleTextStyle,
                           ),
                           const SizedBox(
                             width: 24,
@@ -124,10 +124,10 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SvgPicture.asset('lib/assets/icons/profile_icon.svg'),
+                          SvgPicture.asset('lib/assets/icons/profile_icon.svg', height: 20),
                           const Text(
                             "기본 프로필 사진으로 설정",
-                            style: TextStyleFamily.dialogButtonTextStyle,
+                            style: TextStyleFamily.smallTitleTextStyle,
                           ),
                           const SizedBox(
                             width: 24,
