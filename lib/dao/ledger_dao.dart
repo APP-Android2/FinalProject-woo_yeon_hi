@@ -23,16 +23,8 @@ class LedgerDao{
   }
 
   // 가계부 데이터를 Firestore에서 가져오기
-  Future<List<Map<String, dynamic>>> getLedger() async {
-    List<Map<String, dynamic>> results = [];
-
+  Future<List<Ledger>> getLedgerData() async {
     var querySnapShot = await FirebaseFirestore.instance.collection('Ledger').get();
-
-    // 각 문서의 데이터를 results 리스트에 추가
-    for(var doc in querySnapShot.docs){
-      results.add(doc.data());
-    }
-
-    return results;
+    return querySnapShot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
   }
 }

@@ -1,6 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:woo_yeon_hi/dao/ledger_dao.dart';
+import 'package:woo_yeon_hi/model/ledger_model.dart';
 
 class LedgerProvider extends ChangeNotifier{
+  final LedgerDao _ledgerDao = LedgerDao();
+  List<Ledger> _ledgers = [];
+
+  List<Ledger> get ledgers => _ledgers;
+
+  LedgerProvider() {
+    fetchLedgers();
+  }
+
+  // 데이터 가져오기
+  Future<void> fetchLedgers() async {
+    try {
+      _ledgers = await _ledgerDao.getLedgerData();
+      notifyListeners();
+    } catch (error) {
+      print('가계부 데이터 호출 중에 오류 $error');
+    }
+  }
+
+  // 데이터 추가
+  Future<void> addLedger(Ledger ledger) async {
+    try {
+      await _ledgerDao.saveLedger(ledger)
+        .then((value) => print('가계부 데이터 저장 성공'));
+      fetchLedgers(); // 데이터를 새로고침
+    } catch (error) {
+      print('가계부 데이터 저장 중 오류 $error');
+    }
+  }
+
+  // // 데이터 업데이트
+  // Future<void> updateLedger(Ledger ledger) async {
+  //   try {
+  //     await _ledgerDao.updateLedger(ledger);
+  //     fetchLedgers(); // 데이터를 새로고침
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+  //
+  // // 데이터 삭제
+  // Future<void> deleteLedger(int ledgerIdx) async {
+  //   try {
+  //     await _ledgerDao.deleteLedger(ledgerIdx);
+  //     fetchLedgers(); // 데이터를 새로고침
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 }
 

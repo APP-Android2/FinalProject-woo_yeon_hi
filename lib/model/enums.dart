@@ -142,6 +142,12 @@ enum LedgerType {
   final String name;
 
   const LedgerType(this.type, this.name);
+
+  int get value => type;
+
+  static LedgerType fromValue(int value) {
+    return LedgerType.values.firstWhere((e) => e.type == value);
+  }
 }
 
 // 가계부 상태
@@ -153,6 +159,12 @@ enum LedgerState{
   final String name;
 
   const LedgerState(this.state, this.name);
+
+  int get value => state;
+
+  static LedgerState fromValue(int value) {
+    return LedgerState.values.firstWhere((e) => e.state == value);
+  }
 }
 
 // 가계부 카테고리
@@ -168,10 +180,10 @@ enum LedgerCategory{
   const LedgerCategory(this.number, this.name);
 
   // 열거형을 정수형으로 변환
-  int get intValue => number;
+  int get value => number;
 
   // 문자열을 열거형으로 변환하는 static 메서드
-  static LedgerCategory fromString(int int) {
-    return LedgerCategory.values.firstWhere((e) => e.number == int);
+  static LedgerCategory fromValue(int value) {
+    return LedgerCategory.values.firstWhere((e) => e.number == value);
   }
 }

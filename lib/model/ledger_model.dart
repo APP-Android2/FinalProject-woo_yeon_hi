@@ -4,7 +4,7 @@ class Ledger{
   int ledgerIdx; // 가계부 번호
   int ledgerUserIdx; // 가계부 작성자
   String ledgerDate; // 발생 날짜
-  String ledgerAmount; // 금액
+  int ledgerAmount; // 금액
   LedgerType ledgerType; // 가계부 타입
   String ledgerTitle; // 제목(타이틀)
   LedgerCategory ledgerCategory; // 카테고리 번호
@@ -32,12 +32,13 @@ class Ledger{
       ledgerIdx: map['ledger_idx'],
       ledgerUserIdx: map['ledger_user_idx'],
       ledgerDate: map['ledger_date'],
+      //ledgerDate: DateTime.parse(map['ledger_date']),
       ledgerAmount: map['ledger_amount'],
-      ledgerType: LedgerType.values[map['ledgerType']],
+      ledgerType: LedgerType.fromValue(map['ledger_type']),  // 정수 값을 다시 열거형으로 변환합니다.
       ledgerTitle: map['ledger_title'],
-      ledgerCategory: LedgerCategory.values[map['ledgerCategory']],
+      ledgerCategory: LedgerCategory.fromValue(map['ledger_category']),
       ledgerMemo: map['ledger_memo'],
-      ledgerState: LedgerState.values[map['ledgerState']],
+      ledgerState: LedgerState.fromValue(map['ledger_state']),
       ledgerModifyDate: map['ledger_modify_date'],
     );
   }
@@ -49,11 +50,11 @@ class Ledger{
       'ledger_user_idx': ledgerUserIdx,
       'ledger_date': ledgerDate,
       'ledger_amount': ledgerAmount,
-      'ledger_Type': ledgerType.type,
+      'ledger_type': ledgerType.type, // 열거형을 정수 값으로 변환.
       'ledger_title': ledgerTitle,
-      'ledger_Category': ledgerCategory.number,
+      'ledger_category': ledgerCategory.number,
       'ledger_memo': ledgerMemo,
-      'ledger_State': ledgerState.state,
+      'ledger_state': ledgerState.state,
       'ledger_modify_date': ledgerModifyDate,
     };
   }
