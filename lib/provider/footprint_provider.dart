@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/model/place_info.dart';
+
+import '../retrofit_interface/place_search_api.dart';
 
 /// 탭 전환 상태 관리 프로바이더
 class FootprintProvider extends ChangeNotifier{
@@ -16,30 +19,6 @@ class FootprintProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-
-}
-
-/// 포토 맵 목록 상태 관리 프로바이더
-class FootprintPhotoMapProvider extends ChangeNotifier{
-  List<String> _photoMapNameList = [];
-
-  List<String> get photoMapNameList => _photoMapNameList;
-
-  FootprintPhotoMapProvider(List<String> nameList){
-    for(var name in nameList){
-      _photoMapNameList.add(name);
-    }
-  }
-
-  void setName(int index, String name){
-    _photoMapNameList[index] = name;
-    notifyListeners();
-  }
-
-  void removeItem(int index){
-    _photoMapNameList.removeAt(index);
-    notifyListeners();
-  }
 }
 
 /// 히스토리 목록 ExpansionTile 상태 관리 프로바이더
@@ -92,18 +71,53 @@ class FootPrintHistoyDetailProvider extends ChangeNotifier{
 
 /// 히스토리 작성 상태 관리 프로바이더
 class FootprintHistoryEditProvider extends ChangeNotifier{
-  String? _selectedPlace;
+  List<XFile> _albumImages = [];
+  Place? _selectedPlace;
+  List<Place> _searchPlaces = [];
   String? _date;
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
 
-  String? get selectedPlace => _selectedPlace;
+  List<XFile> get albumImages => _albumImages;
+  Place? get selectedPlace => _selectedPlace;
+  List<Place> get searchPlaces => _searchPlaces;
   String? get date => _date;
   TextEditingController get titleController => _titleController;
   TextEditingController get contentController => _contentController;
 
-  void setPlace(String? place){
+  void addAlbumImage(XFile image){
+    _albumImages.add(image);
+    notifyListeners();
+  }
+
+  void removeAlbumImage(int index){
+    _albumImages.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearAlbumImages(){
+    _albumImages.clear();
+    notifyListeners();
+  }
+
+  void setPlace(Place? place){
     _selectedPlace = place;
+    notifyListeners();
+  }
+
+  void changeSelectedPlaceInfo(String title, String addr){
+    _selectedPlace!.title = title;
+    _selectedPlace!.roadAddress = addr;
+    notifyListeners();
+  }
+
+  void addSearchPlace(Place place){
+    _searchPlaces.add(place);
+    notifyListeners();
+  }
+
+  void clearSearchPlace(){
+    _searchPlaces.clear();
     notifyListeners();
   }
 
@@ -240,36 +254,10 @@ class FootprintDraggableSheetProvider extends ChangeNotifier {
   final TextEditingController memoTitleController = TextEditingController();
   final TextEditingController memoSubController = TextEditingController();
 
-  // sheet 키
-  final GlobalKey _sheetKey = GlobalKey();
-  final DraggableScrollableController _controller = DraggableScrollableController();
-  List<String> _items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  //List<String> _items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  List<String> _items = List.generate(20, (index) => "방이역");
 
-  DraggableSheetState() {
-    _controller.addListener(_onChanged);
-  }
-
-  GlobalKey get sheetKey => _sheetKey;
-  DraggableScrollableController get controller => _controller;
   List<String> get items => _items;
-
-  void _onChanged() {
-    final currentSize = _controller.size;
-    if (currentSize <= 0.05) collapse();
-  }
-
-  void collapse() => _animateSheet(sheet.snapSizes!.first);
-  void anchor() => _animateSheet(sheet.snapSizes!.last);
-  void expand() => _animateSheet(sheet.maxChildSize);
-  void hide() => _animateSheet(sheet.minChildSize);
-
-  void _animateSheet(double size) {
-    _controller.animateTo(
-      size,
-      duration: const Duration(milliseconds: 50),
-      curve: Curves.easeInOut,
-    );
-  }
 
   void addItem(String item) {
     _items.add(item);
@@ -283,11 +271,13 @@ class FootprintDraggableSheetProvider extends ChangeNotifier {
     }
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  // 항목 아이템 순서 변경
+  void reorderItems(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final item = items.removeAt(oldIndex);
+    items.insert(newIndex, item);
+    notifyListeners();
   }
-
-  DraggableScrollableSheet get sheet => (_sheetKey.currentWidget as DraggableScrollableSheet);
 }

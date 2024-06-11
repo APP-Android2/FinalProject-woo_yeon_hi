@@ -23,6 +23,7 @@ class _FootprintScreenState extends State<FootprintScreen> {
   Widget build(BuildContext context) {
     var footprintProvider =
         Provider.of<FootprintProvider>(context, listen: false);
+
     var currentPageIndex = footprintProvider.currentPageIndex;
     footprintProvider.addListener(() {
       if(mounted){
@@ -34,6 +35,7 @@ class _FootprintScreenState extends State<FootprintScreen> {
 
     return DefaultTabController(
       length: 2,
+      initialIndex: footprintProvider.currentPageIndex,
       child: Scaffold(
         backgroundColor: ColorFamily.cream,
         appBar: const FootprintTopAppBar(),
@@ -42,7 +44,10 @@ class _FootprintScreenState extends State<FootprintScreen> {
           shape: const CircleBorder(),
           child: SvgPicture.asset('lib/assets/icons/add.svg'),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const FootprintPhotoMapAddScreen()));
+            if(footprintProvider.currentPageIndex == 0){
+              // 포토맵
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const FootprintPhotoMapAddScreen()));
+            }
           },
         ),
         body: Column(

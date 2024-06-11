@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:woo_yeon_hi/dao/diary_dao.dart';
+import 'package:woo_yeon_hi/model/diary_model.dart';
+import 'package:woo_yeon_hi/style/color.dart';
+import 'package:woo_yeon_hi/style/text_style.dart';
 
 class DiaryDetailAlbum extends StatefulWidget {
-  const DiaryDetailAlbum({super.key});
+  DiaryDetailAlbum(this.diary, {super.key});
+  Diary diary;
 
   @override
   State<DiaryDetailAlbum> createState() => _DiaryDetailAlbumState();
@@ -10,14 +15,26 @@ class DiaryDetailAlbum extends StatefulWidget {
 class _DiaryDetailAlbumState extends State<DiaryDetailAlbum> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
         width: 110,
         height: 110,
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              'lib/assets/images/test_couple.png',
-              fit: BoxFit.cover,
-            )));
+        color: ColorFamily.white,
+        child: FutureBuilder(
+          future: getDiaryImage(widget.diary.diaryImage),
+          builder: (context, snapshot) {
+            if (snapshot.hasData == false) {
+              return const SizedBox();
+            } else if (snapshot.hasError) {
+              return const Text(
+                "network error",
+                style: TextStyleFamily.normalTextStyle,
+              );
+            } else {
+              return ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: snapshot.data);
+            }
+          },
+        ));
   }
 }

@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:woo_yeon_hi/dao/diary_dao.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
+import 'package:woo_yeon_hi/provider/diary_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../model/diary_model.dart';
 import '../../screen/diary/diary_detail_screen.dart';
+import '../../screen/diary/diary_unchecked_screen.dart';
 
 class DiaryGridView extends StatefulWidget {
-  const DiaryGridView({super.key});
-
+  DiaryGridView(this.provider, {super.key});
+  DiaryProvider provider;
   @override
   State<DiaryGridView> createState() => _DiaryGridViewState();
 }
@@ -16,20 +21,43 @@ class DiaryGridView extends StatefulWidget {
 class _DiaryGridViewState extends State<DiaryGridView> {
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // executes after build
+      var user_idx = 0;
+      var unCheckedDiary = isReadAll(user_idx, widget.provider.diaryData);
+      if(unCheckedDiary != null){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DiaryUncheckedScreen(unCheckedDiary)));
+      }
+
+    });
     return MasonryGridView.count(
-        itemCount: 10,
+        itemCount: widget.provider.diaryData.length,
         crossAxisCount: 2,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
-        itemBuilder: (context, index) => makeDiary(context));
+        itemBuilder: (context, index) {
+          return FutureBuilder(
+              future: makeDiary(context, widget.provider.diaryData[index]),
+              builder: (context, widgetSnapshot){
+                if(widgetSnapshot.hasData == false){
+                  return const SizedBox();
+                }else if(widgetSnapshot.hasError){
+                  return const Center(
+                    child: Text("이미지 다운 에러", style: TextStyleFamily.normalTextStyle,),
+                  );
+                }else{
+                  return widgetSnapshot.data!;
+                }
+              });
+        });
   }
 }
 
-Widget makeDiary(BuildContext context) {
+Future<Widget> makeDiary(BuildContext context, Diary diary) async {
   return InkWell(
     onTap: (){
       Navigator.push(context, 
-      MaterialPageRoute(builder: (context) => const DiaryDetailScreen()));
+      MaterialPageRoute(builder: (context) => DiaryDetailScreen(diary)));
     },
     child: Card(
       color: ColorFamily.white,
@@ -42,18 +70,18 @@ Widget makeDiary(BuildContext context) {
           children: [
             AspectRatio(
                 aspectRatio: 1.0,
-                child: Image.asset(
-                  'lib/assets/images/test_couple.png',
-                  fit: BoxFit.fitWidth,
-                )),
+                child: await getDiaryImage(diary.diaryImage)
+                // child: await getDiaryImagePath(diary.diaryImage)
+              
+            ),
             const SizedBox(
               height: 10,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "2024. 5.17.",
+                  diary.diaryDate,
                   style: TextStyleFamily.normalTextStyle,
                 ),
               ],
@@ -72,4 +100,14 @@ Widget makeDiary(BuildContext context) {
       ),
     ),
   );
+}
+
+Diary? isReadAll(int user_index, List<Diary> diaryList) {
+  for (var diary in diaryList) {
+    // 자신이 쓴게 아니고, 읽지 않았다면
+    if (diary.diaryUserIdx != user_index && !diary.diaryLoverCheck) {
+      return diary;
+    }
+  }
+  return null;
 }

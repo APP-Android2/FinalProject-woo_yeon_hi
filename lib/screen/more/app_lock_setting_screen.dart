@@ -1,27 +1,27 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
+import '../../model/user_model.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 import '../../widget/more/app_lock_top_app_bar.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 
 class AppLockSettingScreen extends StatefulWidget {
-  final bool isBioAuthSupported;
+  final bool bioAuth;
 
-  const AppLockSettingScreen({super.key, required this.isBioAuthSupported});
+  const AppLockSettingScreen({super.key, required this.bioAuth});
 
   @override
   State<AppLockSettingScreen> createState() => _AppLockSettingScreenState();
 }
 
 class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
-  var _appLockActivated = false;
-  var _bioAuthActivated = false;
-
   final LocalAuthentication auth = LocalAuthentication();
   bool? _canCheckBiometrics;
   bool _isAuthenticating = false;
@@ -43,7 +43,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
     });
   }
 
-  Future<void> _authenticateWithBiometrics() async {
+  Future<bool> _authenticateWithBiometrics() async {
     bool authenticated = false;
 
     try {
@@ -80,18 +80,39 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
       setState(() {
         _isAuthenticating = false;
       });
-      return;
+      return _isAuthenticating;
     }
     if (!mounted) {
-      return;
+      return _isAuthenticating;
     }
+    return authenticated;
+  }
 
+  Future<void> _cancelAuthentication() async {
+    await auth.stopAuthentication();
+    setState(() => _isAuthenticating = false);
+  }
 
-    Future<void> _cancelAuthentication() async {
-      await auth.stopAuthentication();
-      setState(() => _isAuthenticating = false);
+  late bool _appLockActivated;
+  late bool _bioAuthActivated;
+  dynamic userProvider;
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    if(userProvider.appLockState==0){
+      _appLockActivated = false;
+      _bioAuthActivated = false;
+    }else if(userProvider.appLockState==1){
+      _appLockActivated = true;
+      _bioAuthActivated = false;
+    }else{
+      _appLockActivated = true;
+      _bioAuthActivated = true;
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
@@ -125,16 +146,19 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                 inactiveThumbColor: ColorFamily.gray,
                                 inactiveTrackColor: ColorFamily.white,
                                 trackOutlineColor:
-                                _appLockActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                _appLockActivated ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                 trackOutlineWidth: const MaterialStatePropertyAll(1),
                                 onChanged: (bool value) {
-                                  setState(() {
-                                    _appLockActivated = value;
-                                    _appLockActivated
-                                        ? Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(widget.isBioAuthSupported)))
-                                        : _bioAuthActivated = false;
-                                  });
-                                }),
+                                  if(_appLockActivated == false){
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(bioAuth: widget.bioAuth)));
+                                  } else{
+                                    setState(() {
+                                      _appLockActivated = value;
+                                      _bioAuthActivated = value;
+                                      userProvider.appLockState = 0;
+                                      });
+                                    }
+                                  })
                           ],
                         ),
                         const SizedBox(
@@ -144,7 +168,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                         )
                       ],
                     )),
-                widget.isBioAuthSupported
+                widget.bioAuth
                     ? SizedBox(
                         width: deviceWidth-40,
                         height: 60,
@@ -166,15 +190,17 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                     inactiveThumbColor: ColorFamily.gray,
                                     inactiveTrackColor: ColorFamily.white,
                                     trackOutlineColor:
-                                    _bioAuthActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                    _bioAuthActivated ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                     trackOutlineWidth: const MaterialStatePropertyAll(1),
-                                    onChanged: (bool value) {
+                                    onChanged: (bool value) async {
                                       setState(() {
                                         _bioAuthActivated = value;
                                       });
                                       _bioAuthActivated
-                                          ? _authenticateWithBiometrics()
-                                          : null;
+                                          ? await _authenticateWithBiometrics()
+                                            ? setState(() {_bioAuthActivated = true;})
+                                            : setState(() {_bioAuthActivated = false;})
+                                          : _cancelAuthentication();
                                     }),
                               ],
                             ),

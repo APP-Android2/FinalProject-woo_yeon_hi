@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:woo_yeon_hi/style/color.dart';
+import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 
@@ -16,12 +18,15 @@ class DdaySettingCalendar extends StatefulWidget {
 
 class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now();
+  late DateTime _focusedDay;
   DateTime? _selectedDay;
+  dynamic userProvider;
 
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    _focusedDay = userProvider.loveDday;
     _selectedDay = _focusedDay;
   }
 
@@ -53,7 +58,7 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
           rightChevronIcon: SvgPicture.asset('lib/assets/icons/arrow_right.svg'),
         ),
         daysOfWeekHeight:40,
-        daysOfWeekStyle: DaysOfWeekStyle(
+        daysOfWeekStyle: const DaysOfWeekStyle(
             weekdayStyle: TextStyleFamily.normalTextStyle,
             weekendStyle: TextStyleFamily.normalTextStyle),
         calendarBuilders: CalendarBuilders(
@@ -105,8 +110,8 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
               alignment: Alignment.topCenter,
               padding: const EdgeInsets.only(top: 10),
               child: Container(
-                width: 30,
-                height: 30,
+                width: 35,
+                height: 35,
                 decoration: const BoxDecoration(
                   color: ColorFamily.pink,
                   shape: BoxShape.circle,
@@ -156,6 +161,7 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
+              userProvider.loveDday = _selectedDay;
             });
           }
         },

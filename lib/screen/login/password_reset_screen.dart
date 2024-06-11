@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/login/password_reset_top_app_bar.dart';
 
+import '../../model/enums.dart';
+import '../../model/user_model.dart';
 import '../../style/text_style.dart';
+import '../register/code_connect_screen.dart';
 
 class PasswordResetScreen extends StatefulWidget {
   const PasswordResetScreen({super.key});
@@ -14,7 +20,22 @@ class PasswordResetScreen extends StatefulWidget {
 }
 
 class _PasswordResetScreenState extends State<PasswordResetScreen> {
-  String loginAccount = "kakao1234@google.com";
+
+  bool _showErrorMessages = false;
+  bool _isAuthCodeGenerated = false;
+  bool _isAuthCodeExpired = false;
+  String _authCodeText = "";
+  String _authCode = getRandomString(6);
+
+  dynamic userProvider;
+  dynamic authNumberTextEditController;
+
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    authNumberTextEditController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,17 +71,25 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(10, 2, 0, 0),
-                              child: Text("구글 로그인",
-                                  style: TextStyle(
-                                      color: ColorFamily.black,
-                                      fontFamily: FontFamily.mapleStoryLight,
-                                      fontSize: 12)),
-                            ),
+                            Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 2, 0, 0),
+                                child:
+                                    userProvider.loginType == 2
+                                        ? const Text("카카오 로그인",
+                                            style: TextStyle(
+                                                color: ColorFamily.black,
+                                                fontFamily:
+                                                    FontFamily.mapleStoryLight,
+                                                fontSize: 12))
+                                        : const Text("구글 로그인",
+                                            style: TextStyle(
+                                                color: ColorFamily.black,
+                                                fontFamily:
+                                                    FontFamily.mapleStoryLight,
+                                                fontSize: 12))),
                             Padding(
                               padding: const EdgeInsets.only(left: 20),
-                              child: Text(loginAccount,
+                              child: Text(userProvider.userAccount,
                                   style: TextStyleFamily.normalTextStyle),
                             ),
                           ],
@@ -71,7 +100,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                 Container(
                   padding: const EdgeInsets.only(left: 30),
                   alignment: Alignment.centerLeft,
-                  child: const Text("인증번호 입력",
+                  child: const Text("인증코드 입력",
                       style: TextStyleFamily.smallTitleTextStyle),
                 ),
                 const SizedBox(height: 20),
@@ -80,19 +109,37 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                   child: Row(children: [
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.only(left: 10),
-                        height: deviceHeight * 0.045,
-                        child: const TextField(
-                          decoration: InputDecoration(
+                        padding: const EdgeInsets.only(left: 10),
+                        height: deviceHeight * 0.05,
+                        child: TextFormField(
+                          onTapOutside: (event) {
+                            FocusScope.of(context).unfocus();
+                          },
+                          controller: authNumberTextEditController,
+                          decoration: const InputDecoration(
                               counter: SizedBox(),
                               focusedBorder: UnderlineInputBorder(
                                   borderSide:
-                                      BorderSide(color: ColorFamily.black))),
+                                      BorderSide(color: ColorFamily.black)),
+                            errorStyle: TextStyle(
+                              color: ColorFamily.black,
+                              fontSize: 12,
+                              fontFamily: FontFamily.mapleStoryLight,
+                            ),
+                          ),
+                          autovalidateMode: _showErrorMessages
+                              ? AutovalidateMode.always
+                              : AutovalidateMode.disabled,
+                          validator: (value) {
+                            if (value != "TEST") {
+                              return '인증코드가 일치하지 않습니다.';
+                            }
+                            return null;
+                          },
                           cursorColor: ColorFamily.black,
-                          keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           maxLength: 6,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: ColorFamily.black,
                               fontSize: 20,
                               fontFamily: FontFamily.mapleStoryLight),
@@ -104,31 +151,45 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                       color: ColorFamily.beige,
                       borderRadius: BorderRadius.circular(20),
                       elevation: 0.5,
-                      child: SizedBox(
-                        height: deviceHeight * 0.045,
-                        width: deviceWidth * 0.3,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "인증 요청",
-                            style: TextStyleFamily.normalTextStyle,
-                          ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: (){
+                          setState(() {
+                            _isAuthCodeGenerated = true;
+                            _isAuthCodeExpired = false;
+                            _authCode =
+                                getRandomString(8);
+                            _authCodeText = _authCode;
+                            //TODO 인증번호를 로그인 계정으로 전송.
+                          });
+                          Fluttertoast.showToast(
+                              msg: "인증코드가 전송되었습니다.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: ColorFamily.black,
+                              textColor: ColorFamily.white,
+                              fontSize: 14.0
+                          );
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: deviceHeight * 0.045,
+                          width: deviceWidth * 0.3,
+                          child: _isAuthCodeGenerated
+                              ? const Text(
+                              "재요청",
+                              style: TextStyleFamily.normalTextStyle)
+                              : const Text(
+                              "인증 요청",
+                              style: TextStyleFamily.normalTextStyle)
                         ),
-                        // TextButton(
-                        //   onPressed: () {},
-                        //   child: Text(
-                        //     "재전송",
-                        //     style: TextStyle(
-                        //         fontSize: 14,
-                        //         fontFamily: FontFamily.mapleStoryLight,
-                        //         color: ColorFamily.black),
-                        //   ),
-                        // ),
                       ),
                     )
                   ]),
                 ),
-                SizedBox(
+                _isAuthCodeGenerated
+                ? SizedBox(
                   width: deviceWidth - 80,
                   child: Row(children: [
                     Expanded(
@@ -141,7 +202,16 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                       alignment: Alignment.center,
                       height: deviceHeight * 0.045,
                       width: deviceWidth * 0.3,
-                      child: TimerCountdown(
+                      child:
+                      _isAuthCodeExpired
+                      ? const Text(
+                          "인증코드가 만료되었습니다.",
+                          style: TextStyle(
+                              color: ColorFamily.black,
+                              fontSize: 11,
+                              fontFamily: FontFamily
+                                  .mapleStoryLight))
+                      : TimerCountdown(
                           format: CountDownTimerFormat.minutesSeconds,
                           enableDescriptions: false,
                           timeTextStyle: const TextStyle(
@@ -156,20 +226,16 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                           endTime: DateTime.now().add(
                             const Duration(minutes: 5, seconds: 00),
                           ),
-                          onEnd: () {}),
-                      // TextButton(
-                      //   onPressed: () {},
-                      //   child: Text(
-                      //     "재전송",
-                      //     style: TextStyle(
-                      //         fontSize: 14,
-                      //         fontFamily: FontFamily.mapleStoryLight,
-                      //         color: ColorFamily.black),
-                      //   ),
-                      // ),
+                          onEnd: () {
+                              setState(() {
+                                _authCodeText = '${_authCodeText}a'; //생성된 인증코드를 소문자가 포함된 7자리로 만들어 유효하지 않은 인증코드로 만듦
+                                _isAuthCodeExpired =  true;
+                              });
+                          }),
                     ),
                   ]),
-                ),
+                )
+                :SizedBox(width: deviceWidth - 80, height: 40),
                 const SizedBox(height: 15),
                 SizedBox(
                   width: deviceWidth - 80,
@@ -183,8 +249,32 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                     ),
                     child: InkWell(
                       onTap: () {
-                        //인증번호 유효성 확인 후, 앱 잠금 초기화(잠금 비활성 및 비밀번호 데이터 삭제) 한 뒤,
-                        //화면 이동(메인 스크린)
+                        if (authNumberTextEditController.text ==
+                            "TEST") {
+                          setState(() {
+                            userProvider.appLockState = 0;
+                            userProvider.lockPassword = [0, 0, 0, 0];
+                          });
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const MainScreen()),
+                                  (route) => false);
+                          Fluttertoast.showToast(
+                              msg: "앱 잠금을 초기화하였습니다.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: ColorFamily.black,
+                              textColor: ColorFamily.white,
+                              fontSize: 14.0
+                          );
+                        } else {
+                          setState(() {
+                            _showErrorMessages = true;
+                          });
+                        }
                       },
                       borderRadius: BorderRadius.circular(20.0),
                       child: const Align(

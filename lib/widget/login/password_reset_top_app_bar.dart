@@ -23,7 +23,10 @@ class _PasswordResetTopAppBarState extends State<PasswordResetTopAppBar> {
       title: const Text("앱 잠금 초기화", style: TextStyleFamily.appBarTitleLightTextStyle,),
       leading: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          FocusScope.of(context).unfocus();
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Navigator.pop(context);
+          });
         },
         icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
       ),

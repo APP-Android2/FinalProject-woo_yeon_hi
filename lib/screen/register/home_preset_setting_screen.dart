@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:woo_yeon_hi/screen/register/birthday_setting_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/register/register_done_screen.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../model/enums.dart';
+import '../../model/user_model.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 
@@ -21,6 +25,28 @@ class HomePresetSettingScreen extends StatefulWidget {
 }
 
 class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case 1:
+        await GoogleSignIn().signOut();
+        break;
+      case 2:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case 0:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = 0;
+    });
+  }
+
   var presetImages = [
     "lib/assets/images/home_preset_standard_4x.png",
     "lib/assets/images/home_preset_dateplan_4x.png",
@@ -28,7 +54,15 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
     "lib/assets/images/home_preset_dateplan_ledger_4x.png",
   ];
 
-  var presetPosition = 0;
+  late int presetPosition;
+
+  dynamic userProvider;
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    presetPosition = userProvider.homePresetType;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +185,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                 SizedBox(
                                   height: deviceHeight*0.5,
                                   child: Swiper(
+                                    index: presetPosition,
                                     viewportFraction: 0.5,
                                     scale: 0.6,
                                     itemBuilder:
@@ -169,6 +204,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                     onIndexChanged: (index) {
                                       setState(() {
                                         presetPosition = index;
+                                        userProvider.homePresetType = presetPosition;
                                       });
                                     },
                                   ),
@@ -192,8 +228,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                widget.isHost
-                                    ? Material(
+                                    Material(
                                         color: ColorFamily.white,
                                         elevation: 0.5,
                                         shadowColor: Colors.black,
@@ -203,18 +238,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                         ),
                                         child: InkWell(
                                             onTap: () {
-                                              // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                              //     builder: (context) =>
-                                              //     const NickNameSettingScreen(
-                                              //         isHost: true)), (route) => false);
-
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          BirthdaySettingScreen(
-                                                              isHost: widget
-                                                                  .isHost)));
+                                              Navigator.pop(context);
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -229,10 +253,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                                         .normalTextStyle,
                                                   ),
                                                 ))),
-                                      )
-                                    : SizedBox(
-                                        height: deviceHeight * 0.045,
-                                        width: deviceWidth * 0.4),
+                                      ),
                                 Material(
                                   color: ColorFamily.beige,
                                   elevation: 0.5,
@@ -242,13 +263,12 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pushReplacement(
+                                      Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const RegisterDoneScreen(
-                                                    title: '',
-                                                  )));
+                                                  RegisterDoneScreen(
+                                                    title: '', isHost: widget.isHost)),(route) => false);
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: SizedBox(
@@ -272,10 +292,11 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
+                          signOut();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const RegisterScreen()),
+                                  builder: (context) => const LoginScreen()),
                               (route) => false);
                         },
                         child: const Text(

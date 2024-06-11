@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../model/enums.dart';
 import '../screen/register/register_done_screen.dart';
 
 class RouteGenerator {
@@ -9,7 +10,7 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (_) => const RegisterDoneScreen(title: 'Flutter Animations'),
+          builder: (_) => RegisterDoneScreen(title: 'Flutter Animations', isHost: true,),
         );
 
       default:

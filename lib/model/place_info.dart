@@ -9,3 +9,5 @@ class PlaceInfo {
     required this.korNm,
   });
 }
+
+
