@@ -8,7 +8,8 @@ import '../../provider/footprint_provider.dart';
 import '../../style/color.dart';
 
 class FootprintHistoryEditScreen extends StatefulWidget {
-  const FootprintHistoryEditScreen({super.key});
+  FootprintHistoryEditScreen(this.mapIdx, {super.key});
+  int mapIdx;
 
   @override
   State<FootprintHistoryEditScreen> createState() => _FootprintHistoryEditScreenState();
@@ -23,13 +24,13 @@ class _FootprintHistoryEditScreenState extends State<FootprintHistoryEditScreen>
         builder: (context, provider, _) {
           return Scaffold(
             backgroundColor: ColorFamily.cream,
-            appBar: FootprintHistoryEditTopAppBar(provider),
+            appBar: FootprintHistoryEditTopAppBar(provider, widget.mapIdx),
             body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const FootprintHistoryEditAlbum(),
+                    FootprintHistoryEditAlbum(provider),
                     FootprintHistoryEditInput(provider)
                   ],
                 ),

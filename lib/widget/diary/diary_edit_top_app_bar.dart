@@ -98,7 +98,7 @@ Future<void> _onConfirm_done(BuildContext context, DiaryEditProvider provider) a
       diaryContent: provider.contentTextEditController.text,
       diaryLoverCheck: false,
       diaryState: DiaryState.STATE_NORMAL.state);
-  await saveDiary(diary);
+  await addDiary(diary);
   await uploadDiaryImage(provider.image!, imageName);
   provider.providerNotify();
 }

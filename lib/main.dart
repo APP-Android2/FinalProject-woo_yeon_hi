@@ -25,7 +25,7 @@ Future<void> main() async {
     nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY'],
   );
   await NaverMapSdk.instance.initialize(
-    clientId: dotenv.env['NAVER_CLIENT_ID'],
+    clientId: dotenv.env['NAVER_MAP_CLIENT_ID'],
     onAuthFailed: (ex){
       print(ex);
     }

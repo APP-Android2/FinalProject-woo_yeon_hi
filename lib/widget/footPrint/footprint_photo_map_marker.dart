@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:woo_yeon_hi/dao/history_dao.dart';
 
 import '../../style/color.dart';
 
 class PhotoMapMarker extends StatelessWidget {
   PhotoMapMarker(this.image, {super.key});
-  String image;
+  Image image;
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +23,7 @@ class PhotoMapMarker extends StatelessWidget {
               padding: const EdgeInsets.all(3),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: Image.asset(
-                  image,
-                  fit: BoxFit.cover,
-                ),
+                child: image
               ),
             )),
         SizedBox(
