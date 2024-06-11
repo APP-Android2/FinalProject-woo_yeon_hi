@@ -25,6 +25,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
   // 참 거짓으로 상태를 나눔
   bool _isCalendar = true;
 
+  @override
+  void initState() {
+    super.initState();
+
+    // 화면 생성 시
+    getData();
+  }
+
   // 데이터를 가져옴
   Future<void> getData() async {
     var tempScheduleData = await getScheduleData();
@@ -32,14 +40,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     setState(() {
       scheduleData = tempScheduleData;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // 화면 생성 시
-    getData();
   }
 
   @override

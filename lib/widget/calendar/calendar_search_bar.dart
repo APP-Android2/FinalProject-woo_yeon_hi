@@ -148,9 +148,7 @@ class _CalendarSearchBarState extends State<CalendarSearchBar> {
         ),
         InkWell(
           onTap: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CalendarDetailScreen())
-            );
+
           },
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),

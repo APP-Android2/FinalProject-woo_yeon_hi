@@ -451,8 +451,7 @@ Widget makeCalendarItem(BuildContext context, int index, String summaryDay) {
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: InkWell(
       onTap: () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const CalendarDetailScreen()));
+
       },
       child: Container(
         color: ColorFamily.white,

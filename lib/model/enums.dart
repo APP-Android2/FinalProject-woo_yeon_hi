@@ -43,3 +43,25 @@ enum OverlayInfo {
   }
 
 }
+
+enum ScheduleState {
+  STATE_NORMAL(0),
+  STATE_DELETE(1);
+
+  final int state;  // 상태
+  const ScheduleState(this.state);
+}
+
+enum ScheduleColorType {
+  FIRST_COLOR(0),
+  SECOND_COLOR(1),
+  THIRD_COLOR(2),
+  FOURTH_COLOR(3),
+  FIFTH_COLOR(4),
+  SIXTH_COLOR(5),
+  SEVENTH_COLOR(6),
+  EIGHTH_COLOR(7);
+
+  final int state;
+  const ScheduleColorType(this.state);
+}

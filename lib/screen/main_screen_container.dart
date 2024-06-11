@@ -32,7 +32,7 @@ class _MainScreenContainerState extends State<MainScreenContainer> {
       child: [
         const DiaryScreen(),
         const LedgerScreen(),
-        const dDayScreen(),
+        const CalendarScreen(),
         const FootprintScreen(),
         const MoreScreen()
       ][currentPageIndex],
