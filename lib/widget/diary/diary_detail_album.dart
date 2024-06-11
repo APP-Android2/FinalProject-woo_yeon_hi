@@ -20,7 +20,7 @@ class _DiaryDetailAlbumState extends State<DiaryDetailAlbum> {
         height: 110,
         color: ColorFamily.white,
         child: FutureBuilder(
-          future: getDiaryImagePath(widget.diary.diaryImage),
+          future: getDiaryImage(widget.diary.diaryImage),
           builder: (context, snapshot) {
             if (snapshot.hasData == false) {
               return const SizedBox();
