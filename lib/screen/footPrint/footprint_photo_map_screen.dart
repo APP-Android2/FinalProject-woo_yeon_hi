@@ -1,16 +1,11 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/photo_map_dao.dart';
+import 'package:woo_yeon_hi/model/photo_map_model.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_photo_map_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
-import '../../provider/footprint_provider.dart';
 import '../../style/font.dart';
 
 class FootprintPhotoMapScreen extends StatefulWidget {
@@ -22,41 +17,38 @@ class FootprintPhotoMapScreen extends StatefulWidget {
 }
 
 class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
-  String? _imagePath;
-  List<String> dataList = List.generate(5, (index) => "지도 이름 $index");
+  List<PhotoMap> photoMapData = [];
+  int userIdx = 0;
 
   @override
   Widget build(BuildContext context) {
-    getFileDirectory();
-    return ChangeNotifierProvider(
-      create: (context) => FootprintPhotoMapProvider(dataList),
-      child: Consumer<FootprintPhotoMapProvider>(
-        builder: (context, provider, _){
+    return FutureBuilder(
+      future: getPhotoMap(userIdx),
+      builder: (context, snapshot){
+        if(snapshot.hasData == false){
+          return const Center(child: CircularProgressIndicator(color: ColorFamily.pink,));
+        }else if(snapshot.hasError){
+          return const Center(child: Text("error"),);
+        }else{
+          photoMapData = snapshot.data!;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ListView.builder(
-                itemCount: provider.photoMapNameList.length,
-                itemBuilder: (context, index) => makePhotoMap(context, index, provider)),
+                itemCount: photoMapData.length,
+                itemBuilder: (context, index) => makePhotoMap(context, photoMapData[index])),
           );
-        },
-      ),
+        }
+      },
     );
   }
 
-  Future<void> getFileDirectory() async {
-    final directory = (await getApplicationDocumentsDirectory()).path;
-    setState(() {
-      _imagePath = '$directory/screenshot.png';
-    });
-  }
-
-  Widget makePhotoMap(BuildContext context, int index, FootprintPhotoMapProvider provider) {
+  Widget makePhotoMap(BuildContext context, PhotoMap photoMap) {
     return InkWell(
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const FootprintPhotoMapDetailScreen()));
+                builder: (context) => FootprintPhotoMapDetailScreen(photoMap.mapIdx, photoMap.mapName)));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),
@@ -74,12 +66,21 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
                 children: [
                   Column(
                     children: [
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width - 40 - 20,
-                          height: MediaQuery.of(context).size.width - 40 - 20,
-                          child: _imagePath != null
-                          ? Image.file(File(_imagePath!), fit: BoxFit.cover,)
-                              : Image.asset('lib/assets/images/warning.png')
+                      FutureBuilder(
+                        future: getPhotoMapImage(photoMap.mapSnapshot),
+                        builder: (context, photoMapSnapshot){
+                          if(photoMapSnapshot.hasData == false){
+                            return const SizedBox();
+                          }else if(photoMapSnapshot.hasError){
+                            return const Center(child: Text("network error"),);
+                          }else{
+                            return SizedBox(
+                                width: MediaQuery.of(context).size.width - 40 - 20,
+                                height: MediaQuery.of(context).size.width - 40 - 20,
+                                child: photoMapSnapshot.data
+                            );
+                          }
+                        },
                       ),
                       const SizedBox(height: 10,),
                       SizedBox(
@@ -88,7 +89,7 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              provider.photoMapNameList[index],
+                              photoMap.mapName,
                               style: TextStyleFamily.normalTextStyle,
                             ),
                             const SizedBox(
@@ -97,7 +98,7 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
                             InkWell(
                                 splashColor: Colors.transparent,
                                 onTap: () {
-                                  _showMapSelectDialog(context, index, provider);
+                                  _showMapSelectDialog(context, photoMap);
                                 },
                                 child: SvgPicture.asset(
                                     'lib/assets/icons/edit.svg'))
@@ -113,7 +114,7 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
                       splashColor: Colors.transparent,
                       onTap: () {
                         setState(() {
-                          _showDeleteDialog(context, index, provider);
+                          _showDeleteDialog(context, photoMap);
                         });
                       },
                       child: SvgPicture.asset('lib/assets/icons/delete.svg'),
@@ -128,7 +129,7 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
     );
   }
 
-  void _showMapSelectDialog(BuildContext context, int index, FootprintPhotoMapProvider provider) {
+  void _showMapSelectDialog(BuildContext context, PhotoMap photoMap) {
     TextEditingController _controller = TextEditingController();
     String? _errorText;
 
@@ -165,13 +166,11 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
                                 cursorColor: ColorFamily.black,
                                 onChanged: (text) {
                                   dialogState(() {
-                                    setState(() {
-                                      if (text.isEmpty) {
-                                        _errorText = "제목을 입력해주세요";
-                                      } else {
-                                        _errorText = null;
-                                      }
-                                    });
+                                    if (text.isEmpty) {
+                                      _errorText = "제목을 입력해주세요";
+                                    } else {
+                                      _errorText = null;
+                                    }
                                   });
                                 },
                                 decoration: InputDecoration(
@@ -213,14 +212,14 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
                                         ColorFamily.gray)),
                                 onPressed: () {
                                   dialogState(() {
-                                    setState(() {
-                                      if(_controller.text.isNotEmpty){
-                                        provider.photoMapNameList[index] = _controller.text;
-                                        Navigator.pop(context); // 다이얼로그 팝
-                                      }else{
-                                        _errorText = "제목을 입력해주세요.";
-                                      }
-                                    });
+                                    if(_controller.text.isNotEmpty){
+                                      // 포토맵 이름 변경
+                                      changePhotoMapName(photoMap.mapIdx, _controller.text);
+                                      Navigator.pop(context); // 다이얼로그 팝
+                                      setState(() {});
+                                    }else{
+                                      _errorText = "제목을 입력해주세요.";
+                                    }
                                   });
                                 },
                                 child: const Text(
@@ -240,7 +239,7 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
         });
   }
 
-  void _showDeleteDialog(BuildContext context, int index, FootprintPhotoMapProvider provider) {
+  void _showDeleteDialog(BuildContext context, PhotoMap photoMap) {
     showDialog(
         context: context,
         builder: (context) {
@@ -280,8 +279,10 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
                                   overlayColor: MaterialStateProperty.all(
                                       ColorFamily.gray)),
                               onPressed: () {
-                                provider.removeItem(index);
+                                // 포토맵 삭제
+                                deletePhotoMap(photoMap.mapIdx);
                                 Navigator.pop(context); // 다이얼로그 팝
+                                setState(() {});
                               },
                               child: const Text(
                                 "확인",

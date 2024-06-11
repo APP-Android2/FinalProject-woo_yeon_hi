@@ -25,7 +25,7 @@ Future<void> main() async {
     nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY'],
   );
   await NaverMapSdk.instance.initialize(
-    clientId: dotenv.env['NAVER_CLIENT_ID'],
+    clientId: dotenv.env['NAVER_MAP_CLIENT_ID'],
     onAuthFailed: (ex){
       print(ex);
     }
@@ -36,7 +36,7 @@ Future<void> main() async {
 
   print(await KakaoSdk.origin);
   // ko_KR 언어 설정을 위함
-  initializeDateFormatting().then((_) => runApp(const WooYeonHi()));
+  initializeDateFormatting().then((_) => runApp(const MainScreen()));
 }
 
 class WooYeonHi extends StatefulWidget {
