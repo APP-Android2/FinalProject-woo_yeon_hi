@@ -7,6 +7,9 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/home/home_top_app_bar.dart';
 
+import '../calendar/calendar_screen.dart';
+import '../dDay/dDay_screen.dart';
+
 class HomeScreenSet4 extends StatefulWidget {
   const HomeScreenSet4({super.key});
 
@@ -52,9 +55,10 @@ class _HomeScreenState extends State<HomeScreenSet4> {
             height: 40, // 원하는 높이
             child: FittedBox(
               child: IconButton(
-                icon: SvgPicture.asset('lib/assets/icons/arrow_right_light.svg'),
+                icon: SvgPicture.asset('lib/assets/icons/expand.svg'),
                 onPressed: () {
                   // 버튼이 눌렸을 때의 액션
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => dDayScreen()));
                 },
               ),
             ),
@@ -211,9 +215,10 @@ class _HomeScreenState extends State<HomeScreenSet4> {
               height: 40, // 원하는 높이
               child: FittedBox(
                 child: IconButton(
-                  icon: SvgPicture.asset('lib/assets/icons/arrow_right_light.svg'),
+                  icon: SvgPicture.asset('lib/assets/icons/expand.svg'),
                   onPressed: () {
                     // 버튼이 눌렸을 때의 액션
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CalendarScreen()));
                   },
                 ),
               ),

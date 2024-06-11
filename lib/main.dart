@@ -36,7 +36,7 @@ Future<void> main() async {
 
   print(await KakaoSdk.origin);
   // ko_KR 언어 설정을 위함
-  initializeDateFormatting().then((_) => runApp(const WooYeonHi()));
+  initializeDateFormatting().then((_) => runApp(const MainScreen()));
 }
 
 class WooYeonHi extends StatefulWidget {
