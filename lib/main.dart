@@ -5,10 +5,8 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/model/user_model.dart';
-import 'package:woo_yeon_hi/provider/user_provider.dart';
 import 'package:woo_yeon_hi/routes/routes_generator.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
@@ -25,7 +23,7 @@ Future<void> main() async {
     javaScriptAppKey: dotenv.env['KAKAO_JAVA_SCRIPT_APP_KEY'],
   );
   await NaverMapSdk.instance.initialize(
-    clientId: dotenv.env['NAVER_CLIENT_ID'],
+    clientId: dotenv.env['NAVER_MAP_CLIENT_ID'],
     onAuthFailed: (ex){
       print(ex);
     }
@@ -35,7 +33,7 @@ Future<void> main() async {
   );
 
   // ko_KR 언어 설정을 위함
-  initializeDateFormatting().then((_) => runApp(const WooYeonHi()));
+  initializeDateFormatting().then((_) => runApp(const MainScreen(loginData: "loginData")));
 }
 
 class WooYeonHi extends StatefulWidget {

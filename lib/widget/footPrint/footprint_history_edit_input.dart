@@ -36,6 +36,8 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
               highlightColor: Colors.transparent,
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> FootprintHistoryEditPlaceScreen(widget.provider, MapType.KOREA_FULL.type)));
+                // widget.provider.setPlace(null);
+                widget.provider.clearSearchPlace();
               },
               child: Row(
                 children: [
@@ -44,7 +46,7 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                   widget.provider.selectedPlace != null
                       ? Row(
                     children: [
-                      Text(widget.provider.selectedPlace!, style: TextStyleFamily.normalTextStyle,),
+                      Text(widget.provider.selectedPlace!.title, style: TextStyleFamily.normalTextStyle,),
                       const Text(" (선택한 지역)", style: TextStyleFamily.hintTextStyle ,)
                     ],
                   )

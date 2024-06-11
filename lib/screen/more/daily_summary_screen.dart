@@ -593,7 +593,7 @@ Widget makeHistoryItem(BuildContext context, int index, String summaryDay) {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    FootprintHistoryDetailScreen(historyPlace[index], index)));
+                    FootprintHistoryDetailScreen(0, historyPlace[index], index)));
       },
       child: SizedBox(
         width: 130,
