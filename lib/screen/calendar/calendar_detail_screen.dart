@@ -7,7 +7,8 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
 class CalendarDetailScreen extends StatefulWidget {
-  const CalendarDetailScreen({super.key});
+  Map<String, dynamic> scheduleData;
+  CalendarDetailScreen(this.scheduleData, {super.key});
 
   @override
   State<CalendarDetailScreen> createState() => _CalendarDetailScreenState();
@@ -16,18 +17,6 @@ class CalendarDetailScreen extends StatefulWidget {
 class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
 
   Color currentColor = ColorFamily.green;
-
-  final String titleDetail = "한강 피크닉";
-  final DateTime startTimeDetail = DateTime(2024, 5, 31, 12, 0);
-  final DateTime finishTimeDetail = DateTime(2024, 5, 31, 18, 0);
-  final String memoDetail = "썬글라스 챙기기\n도시락 챙기기\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb";
-
-  // 색 업데이트 함수
-  void updateColor(Color color){
-    setState(() {
-      currentColor = color;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +44,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) {
-                    return CalendarEditScreen(
-                      title: titleDetail,
-                      termStart: startTimeDetail,
-                      termFinish: finishTimeDetail,
-                      memo: memoDetail,
-                    );
+                    return CalendarEditScreen(widget.scheduleData);
                   }),
                 );
               },
@@ -93,7 +77,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                         ),
                         Expanded(
                           child: Text(
-                            titleDetail,
+                            widget.scheduleData['schedule_title'],
                             style: TextStyleFamily.appBarTitleBoldTextStyle,
                           ),
                         )
@@ -107,7 +91,9 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                         children: [
                           // 일정 날짜
                           Text(
-                            DateFormat("yyyy. M. dd.(E)", "ko_KR").format(startTimeDetail),
+                            widget.scheduleData['schedule_start_date'] == widget.scheduleData['schedule_finish_date']
+                              ? "${widget.scheduleData['schedule_start_date']}"
+                              : "${widget.scheduleData['schedule_start_date']} ~ ${widget.scheduleData['schedule_finish_date']}",
                             style: TextStyleFamily.normalTextStyle,
                           ),
                           const SizedBox(height: 5),
@@ -115,11 +101,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                             children: [
                               // 일정
                               Text(
-                                DateFormat("H:mm ~").format(startTimeDetail),
-                                style: TextStyleFamily.normalTextStyle,
-                              ),
-                              Text(
-                                DateFormat(" H:mm").format(finishTimeDetail),
+                                "${widget.scheduleData['schedule_start_time']} ~ ${widget.scheduleData['schedule_finish_time']}",
                                 style: TextStyleFamily.normalTextStyle,
                               ),
                             ],
@@ -146,7 +128,7 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                                   padding: EdgeInsets.all(15),
                                   child: SingleChildScrollView(
                                     child: Text(
-                                      memoDetail,
+                                      widget.scheduleData['schedule_memo'],
                                       style: TextStyleFamily.normalTextStyle,
                                     ),
                                   ),
@@ -232,9 +214,6 @@ class _CalendarDetailScreenState extends State<CalendarDetailScreen> {
                                                 onPressed: () {
                                                   // 삭제 처리
                                                   Navigator.pop(context);
-                                                  Navigator.of(context).pop(
-                                                      MaterialPageRoute(builder: (context) => CalendarDetailScreen())
-                                                  );
                                                 },
                                                 child: const Text(
                                                   "확인",

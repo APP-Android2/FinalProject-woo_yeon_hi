@@ -551,6 +551,19 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
   }
 
 
+// 캘린더 아이템
+Widget makeCalendarItem(BuildContext context, int index, String summaryDay) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: InkWell(
+      onTap: () {
+
+      },
+      child: Container(
+        color: ColorFamily.white,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+
 // 디데이 아이템
   Widget makeDdayItem(BuildContext context, int index, String summaryDay) {
     List<dDayModel> dDayList = [
