@@ -110,8 +110,8 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
               alignment: Alignment.topCenter,
               padding: const EdgeInsets.only(top: 10),
               child: Container(
-                width: 30,
-                height: 30,
+                width: 35,
+                height: 35,
                 decoration: const BoxDecoration(
                   color: ColorFamily.pink,
                   shape: BoxShape.circle,

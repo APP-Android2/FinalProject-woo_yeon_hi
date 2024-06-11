@@ -1,16 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
+import 'package:woo_yeon_hi/screen/main_screen.dart';
+import 'package:woo_yeon_hi/style/color.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/model/user_model.dart';
 import 'package:woo_yeon_hi/routes/routes_generator.dart';
-import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/screen/register/register_screen.dart';
-import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
 import 'firebase_options.dart';
 import 'model/enums.dart';
@@ -20,7 +23,6 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); // .env 환경변수 파일 로드
   KakaoSdk.init(
     nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY'],
-    javaScriptAppKey: dotenv.env['KAKAO_JAVA_SCRIPT_APP_KEY'],
   );
   await NaverMapSdk.instance.initialize(
     clientId: dotenv.env['NAVER_MAP_CLIENT_ID'],
@@ -32,8 +34,9 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  print(await KakaoSdk.origin);
   // ko_KR 언어 설정을 위함
-  initializeDateFormatting().then((_) => runApp(const MainScreen(loginData: "loginData")));
+  initializeDateFormatting().then((_) => runApp(const MainScreen()));
 }
 
 class WooYeonHi extends StatefulWidget {
@@ -70,7 +73,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-    create: (context) => UserModel(idx: 0, loginType: LoginType.none, userAccount: '', userNickname: '', userBirth: DateTime.now(), userProfileImage: '기본프로필이미지경로?', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: false, lockPassword: '', userState: 0, loveDday: DateTime.now()),
+    create: (context) => UserModel(userIdx: 0, loginType: LoginType.none, userAccount: '', userNickname: '', userBirth: DateTime.now(), userProfileImage: '', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: 0, topBarActivate: false, lockPassword: [0, 0, 0, 0], userState: 2, loveDday: DateTime.now()),
     child:
       MaterialApp(
       debugShowCheckedModeBanner: false,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
+import 'package:woo_yeon_hi/screen/login/account_processing_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -24,7 +24,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreen extends State<RegisterScreen> {
-
   bool loginSuccess = false;
 
   signInWithGoogle() async {
@@ -38,79 +37,51 @@ class _RegisterScreen extends State<RegisterScreen> {
         userProvider.userAccount = googleUser.email;
         loginSuccess = true;
       });
-    }else{
-      loginSuccess = false;
+    } else{
+      showToast("구글 계정 로그인에 실패하였습니다.");
     }
   }
 
-  void signInWithKakao() async {
+  signInWithKakao() async {
     if (await isKakaoTalkInstalled()) {
       try {
+        //카카오톡 설치됨, 카카오톡으로 로그인 시도
         await UserApi.instance.loginWithKakaoTalk();
         setState(() {
+          // userProvider.userAccount = 카카오계정정보
           loginSuccess = true;
         });
       } catch (error) {
-        print("에러1?: $error");
-        Fluttertoast.showToast(
-            msg: "카카오톡 계정 로그인에 실패하였습니다.",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: ColorFamily.black,
-            textColor: ColorFamily.white,
-            fontSize: 14.0
-        );
-        setState(() {
-          loginSuccess = false;
-        });
-
-        // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
-        // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
-        if (error is PlatformException &&
-            error.code == 'CANCELED') {
-          print("에러2?: $error");
+        print('카카오톡으로 로그인 실패 $error');
+        showToast("카카오 계정 로그인에 실패하였습니다.");
+        if (error is PlatformException && error.code == 'CANCELED') {
+          print('사용자가 로그인 취소');
+          showToast("카카오 계정 로그인을 취소하였습니다.");
           return;
         }
-        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
+
+        print('카카오 계정으로 로그인 시도');
         try {
           await UserApi.instance.loginWithKakaoAccount();
           setState(() {
+            // userProvider.userAccount = 카카오계정정보
             loginSuccess = true;
           });
         } catch (error) {
-          print("에러3?: $error");
-          Fluttertoast.showToast(
-              msg: "카카오 계정 로그인에 실패하였습니다.",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: ColorFamily.black,
-              textColor: ColorFamily.white,
-              fontSize: 14.0
-          );
-          setState(() {
-            loginSuccess = false;
-          });
+          print('카카오 계정으로 로그인 실패 $error');
+          showToast("카카오 계정 로그인에 실패하였습니다.");
         }
       }
     } else {
+      //카카오톡 설치 안됨, 카카오계정으로 로그인 시도
       try {
         await UserApi.instance.loginWithKakaoAccount();
         setState(() {
+          // userProvider.userAccount = 카카오계정정보
           loginSuccess = true;
         });
       } catch (error) {
-        print("에러4?: $error");
-        Fluttertoast.showToast(
-            msg: "카카오 계정 로그인에 실패하였습니다.",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: ColorFamily.black,
-            textColor: ColorFamily.white,
-            fontSize: 14.0
-        );
-        setState(() {
-          loginSuccess = false;
-        });
+        showToast("카카오 계정 로그인에 실패하였습니다.");
       }
     }
   }
@@ -126,7 +97,6 @@ class _RegisterScreen extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
@@ -138,12 +108,12 @@ class _RegisterScreen extends State<RegisterScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              SizedBox(height: deviceHeight*0.2),
+              SizedBox(height: deviceHeight * 0.2),
               Image.asset(
                 'lib/assets/images/wooyeonhi_logo.png',
-                height: deviceHeight*0.35,
+                height: deviceHeight * 0.35,
               ),
-              SizedBox(height: deviceHeight*0.25),
+              SizedBox(height: deviceHeight * 0.18),
               Column(
                 children: [
                   Material(
@@ -153,37 +123,45 @@ class _RegisterScreen extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       child: InkWell(
-                        onLongPress: (){
+                        onLongPress: () {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const PasswordEnterScreen()));
+                                  builder: (context) =>
+                                      const PasswordEnterScreen()));
                         },
                         onTap: () async {
-                          await signInWithGoogle();
-                          if(loginSuccess == true) {
-                            setState(() {
-                              userProvider.loginType = LoginType.google;
-                            });
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (
-                                        context) => const CodeConnectScreen()));
-                            Fluttertoast.showToast(
-                                msg: "구글 계정으로 로그인 되었습니다.",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                backgroundColor: ColorFamily.black,
-                                textColor: ColorFamily.white,
-                                fontSize: 14.0
-                            );
+                          switch (userProvider.userState) {
+                            case 0:
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const MainScreen()));
+                            case 1:
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AccountProcessingScreen()));
+
+                            case 2:
+                              await signInWithGoogle();
+                              if (loginSuccess == true) {
+                                setState(() {
+                                  userProvider.loginType = LoginType.google;
+                                });
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const CodeConnectScreen()));
+                                showToast("구글 계정으로 로그인 되었습니다.");
+                              }
                           }
                         },
                         borderRadius: BorderRadius.circular(20.0),
                         child: SizedBox(
-                            height: deviceHeight*0.06,
-                            width: deviceWidth*0.75,
+                            height: deviceHeight * 0.06,
+                            width: deviceWidth * 0.75,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -193,68 +171,83 @@ class _RegisterScreen extends State<RegisterScreen> {
                                         "lib/assets/icons/google_logo.svg",
                                         height: 24,
                                         width: 24)),
-                                const Text(
-                                  "구글 계정으로 등록하기",
-                                  style: TextStyleFamily.smallTitleTextStyle),
+                                const Text("구글 계정으로 등록하기",
+                                    style: TextStyleFamily.smallTitleTextStyle),
                                 const SizedBox(height: 24, width: 24)
                               ],
                             )),
                       )),
-                            const SizedBox(height: 10),
-                            Material(
-                color: const Color(0xFFFEE500),
-                elevation: 0.5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    signInWithKakao();
-                    if(loginSuccess == true) {
-                      setState(() {
-                        userProvider.loginType = LoginType.kakao;
-                      });
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CodeConnectScreen()));
-                      Fluttertoast.showToast(
-                          msg: "카카오 계정으로 로그인 되었습니다.",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: ColorFamily.black,
-                          textColor: ColorFamily.white,
-                          fontSize: 14.0
-                      );
-                    }
-                  },
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: SizedBox(
-                      height: deviceHeight*0.06,
-                      width: deviceWidth*0.75,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: SvgPicture.asset(
-                                  "lib/assets/icons/kakao_logo.svg",
-                                  height: 24,
-                                  width: 24)),
-                          const Text(
-                              "카카오 계정으로 등록하기",
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontFamily: FontFamily.mapleStoryLight,
-                                color: Color(0xD9000000))),
-                          const SizedBox(height: 24, width: 24)
-                        ],
+                  const SizedBox(height: 10),
+                  Material(
+                      color: const Color(0xFFFEE500),
+                      elevation: 0.5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: InkWell(
+                        onTap: () async {
+                          switch (userProvider.userState) {
+                            case 0:
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const MainScreen()));
+                            case 1:
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                  const AccountProcessingScreen()));
+
+                            case 2:
+                              await signInWithKakao();
+                              if (loginSuccess == true) {
+                                setState(() {
+                                  userProvider.loginType = LoginType.kakao;
+                                });
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const CodeConnectScreen()));
+                                showToast("카카오 계정으로 로그인 되었습니다.");
+                              }
+                          }
+                        },
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: SizedBox(
+                            height: deviceHeight * 0.06,
+                            width: deviceWidth * 0.75,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: SvgPicture.asset(
+                                        "lib/assets/icons/kakao_logo.svg",
+                                        height: 24,
+                                        width: 24)),
+                                const Text("카카오 계정으로 등록하기",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: FontFamily.mapleStoryLight,
+                                        color: Color(0xD9000000))),
+                                const SizedBox(height: 24, width: 24)
+                              ],
+                            )),
                       )),
-                )),
                 ],
               ),
             ],
           ),
         ));
+  }
+
+  showToast(String msg){
+     Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: ColorFamily.black,
+        textColor: ColorFamily.white,
+        fontSize: 14.0);
   }
 }

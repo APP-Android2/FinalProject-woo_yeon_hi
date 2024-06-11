@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/model/user_model.dart';
 import 'package:woo_yeon_hi/screen/register/home_preset_setting_screen.dart';
@@ -50,16 +50,15 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
   }
 
   DateTime _selectedDate = DateTime.now();
-  late DateTime _birthday;
+  late DateTime userBirth;
 
-  dynamic birthDateTextEditController;
   dynamic userProvider;
 
   @override
   void initState() {
     super.initState();
     userProvider = Provider.of<UserModel>(context, listen: false);
-    _birthday = userProvider.userBirth;
+    userBirth = userProvider.userBirth;
   }
 
   @override
@@ -223,8 +222,8 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                             onConfirm: (date) {
                                           setState(() {
                                             _selectedDate = date;
-                                            _birthday = _selectedDate;
-                                            userProvider.userBirth = _birthday;
+                                            userBirth = _selectedDate;
+                                            userProvider.userBirth = userBirth;
                                           });
                                         },
                                             // onCancel: (){},
@@ -246,7 +245,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                                   Text(
                                                     textAlign: TextAlign.center,
                                                     DateFormat('yyyy. M. d.')
-                                                        .format(_birthday),
+                                                        .format(userBirth),
                                                     style: const TextStyle(
                                                         fontFamily: FontFamily
                                                             .mapleStoryLight,
@@ -284,17 +283,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                         ),
                                         child: InkWell(
                                             onTap: () {
-                                              // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                              //     builder: (context) =>
-                                              //     const NickNameSettingScreen(
-                                              //         isHost: true)), (route) => false);
-
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          NickNameSettingScreen(
-                                                              isHost: widget.isHost)));
+                                              Navigator.pop(context);
                                             },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
@@ -319,12 +308,13 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  HomePresetSettingScreen(
-                                                      isHost: widget.isHost)));
+                                      setState(() {
+                                        userProvider.userBirth = userBirth;
+                                      });
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) =>
+                                              HomePresetSettingScreen(
+                                                  isHost: widget.isHost)));
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: SizedBox(

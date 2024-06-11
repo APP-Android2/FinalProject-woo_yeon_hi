@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/provider/user_provider.dart';
+import 'package:woo_yeon_hi/screen/home/home_screen_set1.dart';
+import 'package:woo_yeon_hi/screen/home/home_screen_set2.dart';
+import 'package:woo_yeon_hi/screen/home/home_screen_set4.dart';
+import 'home/home_screen_set3.dart';
+import '../model/enums.dart';
+import '../model/user_model.dart';
 import '../provider/diary_provider.dart';
 import '../provider/footprint_provider.dart';
 import '../provider/ledger_provider.dart';
@@ -9,9 +14,9 @@ import 'package:woo_yeon_hi/screen/main_screen_container.dart';
 import '../style/color.dart';
 import '../widget/main_bottom_navigation_bar.dart';
 
+
 class MainScreen extends StatefulWidget {
-  const MainScreen({required this.loginData, super.key});
-  final String loginData;
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -19,27 +24,19 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-  late String loginData;
-
-  @override
-  void initState() {
-    super.initState();
-    loginData = widget.loginData;
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => DiaryProvider()),
-        ChangeNotifierProvider(create: (context) => FootprintProvider()),
-        ChangeNotifierProvider(create: (context) => LedgerProvider()),
-        ChangeNotifierProvider(create: (context) => FootPrintSlidableProvider()),
-        ChangeNotifierProvider(create: (context) => FootPrintDatePlanSlidableProvider()),
-        ChangeNotifierProvider(create: (context) => FootprintDraggableSheetProvider()),
-        ChangeNotifierProvider(create: (_) => TabPageIndexProvider()),
+        ChangeNotifierProvider(create: (context) => UserModel(userIdx: 0, loginType: LoginType.none, userAccount: '', userNickname: '기본닉네임', userBirth: DateTime.now(), userProfileImage: 'lib/assets/images/default_profile.png', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: 0, topBarActivate: false, lockPassword: [], userState: 0, loveDday: DateTime.now())),
+          ChangeNotifierProvider(create: (context) => DiaryProvider()),
+          ChangeNotifierProvider(create: (context) => FootprintProvider()),
+          ChangeNotifierProvider(create: (context) => LedgerProvider()),
+          ChangeNotifierProvider(create: (context) => FootPrintSlidableProvider()),
+          ChangeNotifierProvider(create: (context) => FootPrintDatePlanSlidableProvider()),
+          ChangeNotifierProvider(create: (context) => FootprintDraggableSheetProvider()),
+          ChangeNotifierProvider(create: (_) => TabPageIndexProvider()),
       ],
       child: MaterialApp(
         title: "WooYeonHi",

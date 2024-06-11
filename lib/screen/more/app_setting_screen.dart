@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/widget/more/app_setting_top_app_bar.dart';
@@ -26,7 +26,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
 
   final LocalAuthentication auth = LocalAuthentication();
 
-  var _appNoticeActivated = false;
   late bool _isBioAuthSupported;
   dynamic userProvider;
 
@@ -88,17 +87,17 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                             children: [
                               const Text("알림 받기",style: TextStyleFamily.smallTitleTextStyle),
                               Switch(
-                                  value: _appNoticeActivated,
+                                  value: userProvider.alarmsAllow,
                                   activeColor: ColorFamily.white,
                                   activeTrackColor: ColorFamily.pink,
                                   inactiveThumbColor: ColorFamily.gray,
                                   inactiveTrackColor: ColorFamily.white,
                                   trackOutlineColor:
-                                  _appNoticeActivated ? null : MaterialStateProperty.all(ColorFamily.gray),
+                                  userProvider.alarmsAllow ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                   trackOutlineWidth: const MaterialStatePropertyAll(1),
                                   onChanged: (bool value) {
                                     setState(() {
-                                      _appNoticeActivated = value;
+                                      userProvider.alarmsAllow = value;
                                     });
                                   }),
                             ],
@@ -117,8 +116,9 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                     child: Material(
                       color: ColorFamily.cream,
                       child: InkWell(
+                        splashFactory: NoSplash.splashFactory,
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(isBioAuthSupported: _isBioAuthSupported)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(bioAuth: _isBioAuthSupported)));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -170,6 +170,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                     child: Material(
                       color: ColorFamily.cream,
                       child: InkWell(
+                        splashFactory: NoSplash.splashFactory,
                         onTap: () async {
                           await storage.delete(
                               key: "loginData");
