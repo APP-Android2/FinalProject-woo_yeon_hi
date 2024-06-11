@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../model/user_model.dart';
 
 
-Future<void> saveUser(UserModel user) async {
+Future<void> saveUserData(UserModel user) async {
   await FirebaseFirestore.instance.collection('userData').add({
     "user_idx": user.userIdx,
     "login_type": user.loginType,
@@ -29,6 +29,42 @@ Future<void> saveUser(UserModel user) async {
     "love_dDay": user.loveDday,
   });
 }
+
+Future<List<Map<String, dynamic>>> getUserData(
+    int userIdx,
+    int loginType,
+    String userAccount,
+    String userNickname,
+    DateTime userBirth,
+    String userProfileImage,
+    int loverUserIdx,
+    String loverNickname,
+    int homePresetType,
+    int topBarType,
+    String profileMessage,
+    bool alarmsAllow,
+    int appLockState,
+    bool topBarActivate,
+    List lockPassword,
+    int userState,
+    DateTime loveDday)
+    async {
+      List<Map<String, dynamic>> results = [];
+
+      Query<Map<String, dynamic>> query =
+      FirebaseFirestore.instance.collection('UserData');
+
+  var querySnapShot = await query.get();
+  for (var doc in querySnapShot.docs) {
+    results.add(doc.data());
+  }
+
+  return results;
+}
+
+
+
+
 
 Future<int> getUserSequence() async {
   var querySnapShot = await FirebaseFirestore.instance

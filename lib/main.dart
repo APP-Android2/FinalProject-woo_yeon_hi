@@ -94,7 +94,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
             ),
           useMaterial3: true
       ),
-      home: const LoginScreen(),
+      home: const MainScreen(),
       onGenerateRoute: RouteGenerator.generateRoute,
       ));
   }

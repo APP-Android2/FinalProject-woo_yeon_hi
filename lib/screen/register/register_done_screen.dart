@@ -210,6 +210,6 @@ Future<void> _saveUserData(BuildContext context, UserModel provider) async {
       loveDday: love_d_day
   );
 
-  await saveUser(user);
+  await saveUserData(user);
   provider.providerNotify();
 }
