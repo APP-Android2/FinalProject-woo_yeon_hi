@@ -9,7 +9,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:share_plus/share_plus.dart';
@@ -382,7 +382,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RegisterScreen()),
+                                builder: (context) => const LoginScreen()),
                             (route) => false);
                       },
                       child: const Text(
@@ -400,10 +400,10 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
 
   void signOut() async {
     switch (userProvider.loginType) {
-      case LoginType.google:
+      case 1:
         await GoogleSignIn().signOut();
         break;
-      case LoginType.kakao:
+      case 2:
         try {
           await UserApi.instance.logout();
           print('로그아웃 성공, SDK에서 토큰 삭제');
@@ -411,11 +411,11 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
           print('로그아웃 실패, SDK에서 토큰 삭제 $error');
         }
         break;
-      case LoginType.none:
+      case 0:
         break;
     }
     setState(() {
-      userProvider.loginType = LoginType.none;
+      userProvider.loginType = 0;
     });
   }
 }

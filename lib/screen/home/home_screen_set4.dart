@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreenSet4> {
             height: 40, // 원하는 높이
             child: FittedBox(
               child: IconButton(
-                icon: SvgPicture.asset('lib/assets/icons/arrow_right_light.svg'),
+                icon: SvgPicture.asset('lib/assets/icons/expand.svg'),
                 onPressed: () {
                   // 버튼이 눌렸을 때의 액션
                 },
@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreenSet4> {
               height: 40, // 원하는 높이
               child: FittedBox(
                 child: IconButton(
-                  icon: SvgPicture.asset('lib/assets/icons/arrow_right_light.svg'),
+                  icon: SvgPicture.asset('lib/assets/icons/expand.svg'),
                   onPressed: () {
                     // 버튼이 눌렸을 때의 액션
                   },

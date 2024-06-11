@@ -13,7 +13,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/model/user_model.dart';
 import 'package:woo_yeon_hi/routes/routes_generator.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 
 import 'firebase_options.dart';
 import 'model/enums.dart';
@@ -73,7 +73,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-    create: (context) => UserModel(userIdx: 0, loginType: LoginType.none, userAccount: '', userNickname: '', userBirth: DateTime.now(), userProfileImage: '', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: 0, topBarActivate: false, lockPassword: [0, 0, 0, 0], userState: 2, loveDday: DateTime.now()),
+    create: (context) => UserModel(userIdx: 0, loginType: 0, userAccount: '', userNickname: '', userBirth: DateTime.now(), userProfileImage: '', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: 0, topBarActivate: false, lockPassword: [0, 0, 0, 0], userState: 2, loveDday: DateTime.now()),
     child:
       MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -94,7 +94,7 @@ class _WooYeonHiState extends State<WooYeonHi> {
             ),
           useMaterial3: true
       ),
-      home: const RegisterScreen(),
+      home: const LoginScreen(),
       onGenerateRoute: RouteGenerator.generateRoute,
       ));
   }

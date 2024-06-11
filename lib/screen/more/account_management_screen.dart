@@ -63,7 +63,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                             Container(
                                 padding: const EdgeInsets.fromLTRB(10, 2, 0, 0),
                                 child:
-                                    userProvider.loginType==LoginType.kakao
+                                    userProvider.loginType==2
                                 ? const Text("카카오 로그인",
                                     style: TextStyle(
                                         color: ColorFamily.black,

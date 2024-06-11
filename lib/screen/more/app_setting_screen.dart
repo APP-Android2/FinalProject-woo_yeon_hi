@@ -11,7 +11,7 @@ import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
-import '../register/register_screen.dart';
+import '../login/login_screen.dart';
 import 'app_lock_setting_screen.dart';
 
 class AppSettingScreen extends StatefulWidget {
@@ -40,10 +40,10 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
 
   void signOut() async {
     switch (userProvider.loginType) {
-      case LoginType.google:
+      case 1:
         await GoogleSignIn().signOut();
         break;
-      case LoginType.kakao:
+      case 2:
         try {
           await UserApi.instance.logout();
           print('로그아웃 성공, SDK에서 토큰 삭제');
@@ -51,11 +51,11 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
           print('로그아웃 실패, SDK에서 토큰 삭제 $error');
         }
         break;
-      case LoginType.none:
+      case 0:
         break;
     }
     setState(() {
-      userProvider.loginType = LoginType.none;
+      userProvider.loginType = 0;
     });
   }
 
@@ -176,7 +176,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                               key: "loginData");
                           signOut();
                           Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                              MaterialPageRoute(builder: (context) => const LoginScreen()),
                                   (Route<dynamic> route) => false);
                         },
                         child: Column(

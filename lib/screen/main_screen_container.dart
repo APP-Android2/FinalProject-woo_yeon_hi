@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/tab_page_index_provider.dart';
-import 'calendar/calendar_screen.dart';
-import 'dDay/dDay_screen.dart';
 import 'diary/diary_screen.dart';
 import 'footPrint/footprint_screen.dart';
+import 'home/home_screen_set1.dart';
 import 'ledger/ledger_screen.dart';
 import 'more/more_screen.dart';
 
@@ -32,7 +31,7 @@ class _MainScreenContainerState extends State<MainScreenContainer> {
       child: [
         const DiaryScreen(),
         const LedgerScreen(),
-        const dDayScreen(),
+        const HomeScreenSet1(),
         const FootprintScreen(),
         const MoreScreen()
       ][currentPageIndex],

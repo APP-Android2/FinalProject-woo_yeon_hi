@@ -29,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
-        ChangeNotifierProvider(create: (context) => UserModel(userIdx: 0, loginType: LoginType.none, userAccount: '', userNickname: '기본닉네임', userBirth: DateTime.now(), userProfileImage: 'lib/assets/images/default_profile.png', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: 0, topBarActivate: false, lockPassword: [], userState: 0, loveDday: DateTime.now())),
+        ChangeNotifierProvider(create: (context) => UserModel(userIdx: 0, loginType: 0, userAccount: '', userNickname: '기본닉네임', userBirth: DateTime.now(), userProfileImage: 'lib/assets/images/default_profile.png', loverUserIdx: 0, loverNickname: '', homePresetType: 0, topBarType: 0, profileMessage: '', alarmsAllow: false, appLockState: 0, topBarActivate: false, lockPassword: [], userState: 0, loveDday: DateTime.now())),
           ChangeNotifierProvider(create: (context) => DiaryProvider()),
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
           ChangeNotifierProvider(create: (context) => LedgerProvider()),
