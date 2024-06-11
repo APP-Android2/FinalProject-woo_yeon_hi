@@ -13,9 +13,9 @@ import '../../widget/more/app_lock_top_app_bar.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 
 class AppLockSettingScreen extends StatefulWidget {
-  final bool isBioAuthSupported;
+  final bool bioAuth;
 
-  const AppLockSettingScreen({super.key, required this.isBioAuthSupported});
+  const AppLockSettingScreen({super.key, required this.bioAuth});
 
   @override
   State<AppLockSettingScreen> createState() => _AppLockSettingScreenState();
@@ -43,7 +43,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
     });
   }
 
-  Future<void> _authenticateWithBiometrics() async {
+  Future<bool> _authenticateWithBiometrics() async {
     bool authenticated = false;
 
     try {
@@ -80,11 +80,12 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
       setState(() {
         _isAuthenticating = false;
       });
-      return;
+      return _isAuthenticating;
     }
     if (!mounted) {
-      return;
+      return _isAuthenticating;
     }
+    return authenticated;
   }
 
   Future<void> _cancelAuthentication() async {
@@ -149,10 +150,11 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                 trackOutlineWidth: const MaterialStatePropertyAll(1),
                                 onChanged: (bool value) {
                                   if(_appLockActivated == false){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(bioAuth: widget.isBioAuthSupported)));
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PasswordSettingScreen(bioAuth: widget.bioAuth)));
                                   } else{
                                     setState(() {
                                       _appLockActivated = value;
+                                      _bioAuthActivated = value;
                                       userProvider.appLockState = 0;
                                       });
                                     }
@@ -166,7 +168,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                         )
                       ],
                     )),
-                widget.isBioAuthSupported
+                widget.bioAuth
                     ? SizedBox(
                         width: deviceWidth-40,
                         height: 60,
@@ -190,12 +192,14 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                     trackOutlineColor:
                                     _bioAuthActivated ? MaterialStateProperty.all(Colors.transparent) : MaterialStateProperty.all(ColorFamily.gray),
                                     trackOutlineWidth: const MaterialStatePropertyAll(1),
-                                    onChanged: (bool value) {
+                                    onChanged: (bool value) async {
                                       setState(() {
                                         _bioAuthActivated = value;
                                       });
                                       _bioAuthActivated
-                                          ? _authenticateWithBiometrics()
+                                          ? await _authenticateWithBiometrics()
+                                            ? setState(() {_bioAuthActivated = true;})
+                                            : setState(() {_bioAuthActivated = false;})
                                           : _cancelAuthentication();
                                     }),
                               ],

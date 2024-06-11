@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../model/user_model.dart';
 
 
-Future<void> saveUser(UserModel user) async {
+Future<void> saveUserData(UserModel user) async {
   await FirebaseFirestore.instance.collection('userData').add({
     "user_idx": user.userIdx,
     "login_type": user.loginType,
@@ -20,24 +25,75 @@ Future<void> saveUser(UserModel user) async {
     "app_lock_state": user.appLockState,
     "top_bar_activate": user.topBarActivate,
     "lock_password": user.lockPassword,
-    "user_state": user.lockPassword,
+    "user_state": user.userState,
     "love_dDay": user.loveDday,
   });
 }
 
-Future<void> setUserIndexx(int idx) async {
-  await FirebaseFirestore.instance
-      .collection('Sequence')
-      .doc('DiarySequence')
-      .set({'value': idx});
+Future<List<Map<String, dynamic>>> getUserData(
+    int userIdx,
+    int loginType,
+    String userAccount,
+    String userNickname,
+    DateTime userBirth,
+    String userProfileImage,
+    int loverUserIdx,
+    String loverNickname,
+    int homePresetType,
+    int topBarType,
+    String profileMessage,
+    bool alarmsAllow,
+    int appLockState,
+    bool topBarActivate,
+    List lockPassword,
+    int userState,
+    DateTime loveDday)
+    async {
+      List<Map<String, dynamic>> results = [];
+
+      Query<Map<String, dynamic>> query =
+      FirebaseFirestore.instance.collection('UserData');
+
+  var querySnapShot = await query.get();
+  for (var doc in querySnapShot.docs) {
+    results.add(doc.data());
+  }
+
+  return results;
 }
 
-// // 지금 뜨는 콘텐츠 정보를 가져온다.
-// Future<int> getUserIndex() async {
-//
-//   var querySnapshot = await FirebaseFirestore.instance.collection('userData').where("user_idx").get();
-//
-//   List<int> results = List<int>.from(querySnapshot.docs[0].data()['hot_movie_idx']);
-//
-//   return results;
-// }
+
+
+
+
+Future<int> getUserSequence() async {
+  var querySnapShot = await FirebaseFirestore.instance
+      .collection('Sequence')
+      .doc('UserSequence')
+      .get();
+  var sequence = querySnapShot.data()!.values.first;
+  return sequence;
+}
+
+Future<void> setUserSequence(int sequence) async {
+  await FirebaseFirestore.instance
+      .collection('Sequence')
+      .doc('UserSequence')
+      .set({'value': sequence});
+}
+
+Future<void> uploadUserProfileImage(XFile imageFile, String imageName) async {
+  await FirebaseStorage.instance
+      .ref('image/userProfile/$imageName')
+      .putFile(File(imageFile.path));
+}
+
+Future<Image> getDiaryImagePath(String path) async {
+  var imageURL =
+  await FirebaseStorage.instance.ref('image/userProfile/$path').getDownloadURL();
+  var image = Image.network(
+    imageURL,
+    fit: BoxFit.cover,
+  );
+  return image;
+}

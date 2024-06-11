@@ -2,6 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -66,6 +67,15 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
                   userProvider.homePresetType = presetIndex;
                 });
                 Navigator.pop(context);
+                Fluttertoast.showToast(
+                    msg: "홈 화면 스타일이 변경되었습니다.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: ColorFamily.black,
+                    textColor: ColorFamily.white,
+                    fontSize: 14.0
+                );
               },
               icon: SvgPicture.asset('lib/assets/icons/done.svg'))
         ],
