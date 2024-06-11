@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:woo_yeon_hi/dao/diary_dao.dart';
 import 'package:woo_yeon_hi/dao/schedule_dao.dart';
 import 'package:woo_yeon_hi/model/schedule_model.dart';
 import 'package:woo_yeon_hi/provider/schedule_provider.dart';
@@ -177,19 +179,33 @@ class _CalendarDateState extends State<CalendarDate> {
                       },
                       // 마커
                       markerBuilder: (context, day, events) {
-                        var today = "${DateTime.now().toIso8601String().substring(0, 10)} 00:00:00.000Z";
-                        return Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.only(top: 20),
-                          child: Container(
-                            width: 6, height: 6,
-                            decoration: BoxDecoration(
-                              color: (day == _selectedDay || day.toString() == today)
-                                  ? ColorFamily.white
-                                  : ColorFamily.pink,
-                              shape: BoxShape.circle
-                            ),
-                          ),
+                        return FutureBuilder<bool>(
+                          future: isExistOnSchedule(day),
+                          builder: (context, snapshot) {
+                            if(snapshot.hasData == false){
+                              return const SizedBox();
+                            } else if(snapshot.hasError){
+                              return const SizedBox();
+                            } else {
+                              if(snapshot.data == true){
+                                return Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: Container(
+                                    width: 6, height: 6,
+                                    decoration: BoxDecoration(
+                                        color: (day == _selectedDay)
+                                            ? ColorFamily.white
+                                            : ColorFamily.pink,
+                                        shape: BoxShape.circle
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return const SizedBox();
+                              }
+                            }
+                          },
                         );
                       },
                     ),
@@ -224,54 +240,54 @@ class _CalendarDateState extends State<CalendarDate> {
                         child: Text("일정이 없습니다", style: TextStyleFamily.hintTextStyle),
                       )
                     : ListView.separated(
-                      itemCount: widget.scheduleData.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: index == 0
-                              ? const EdgeInsets.fromLTRB(20, 10, 20, 0)
-                              : const EdgeInsets.symmetric(horizontal: 20),
-                          child: InkWell(
-                            onTap: () {
-                              // 항목 클릭
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => CalendarDetailScreen(widget.scheduleData[index]))
-                              );
-                            },
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8),
-                                  child: SizedBox(
-                                    width: 5, height: 35,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: ColorFamily.green,
-                                        borderRadius: BorderRadius.circular(20),
+                        itemCount: widget.scheduleData.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: index == 0
+                                ? const EdgeInsets.fromLTRB(20, 10, 20, 0)
+                                : const EdgeInsets.symmetric(horizontal: 20),
+                            child: InkWell(
+                              onTap: () {
+                                // 항목 클릭
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => CalendarDetailScreen(widget.scheduleData[index]))
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 8),
+                                    child: SizedBox(
+                                      width: 5, height: 35,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: ColorFamily.green,
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  scheduleTitle[index],
-                                  style: TextStyleFamily.normalTextStyle,
-                                ),
-                                const Spacer(),
-                                Text(
-                                  "${scheduleStartTime[index]} ~ ${scheduleFinishTime[index]}",
-                                  style: TextStyleFamily.normalTextStyle,
-                                )
-                              ],
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    scheduleTitle[index],
+                                    style: TextStyleFamily.normalTextStyle,
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    "${scheduleStartTime[index]} ~ ${scheduleFinishTime[index]}",
+                                    style: TextStyleFamily.normalTextStyle,
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Divider(color: ColorFamily.gray),
-                        );
-                      },
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Divider(color: ColorFamily.gray),
+                          );
+                        },
                     ),
               ),
             ),

@@ -1,23 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:woo_yeon_hi/model/schedule_model.dart';
+import 'package:woo_yeon_hi/utils.dart';
 
-Future<void> addTest() async {
-  await FirebaseFirestore.instance.collection('test').add({
-    'data1' : 100,
-    'data2' : 11.11,
-    'data3' : '안녕하세요'
-  });
-}
 
-Future<void> printTest() async {
-  var result = await FirebaseFirestore.instance.collection('test').get();
-
-  for(var doc in result.docs){
-    var map = doc.data();
-    print("firebase test : $map");
-  }
-}
-
+// ScheduleSequence 로 부터 값을 받아옴
 Future<int> getScheduleSequence() async {
   var querySnapShot = await FirebaseFirestore.instance
       .collection('Sequence')
@@ -28,6 +14,7 @@ Future<int> getScheduleSequence() async {
   return sequence;
 }
 
+// Firebase - ScheduleSequence 에 저장
 Future<void> setScheduleSequence(int sequence) async {
   await FirebaseFirestore.instance
       .collection('Sequence')
@@ -35,6 +22,7 @@ Future<void> setScheduleSequence(int sequence) async {
       .set({'value' : sequence});
 }
 
+// Firebase - ScheduleData 에 저장
 Future<void> saveSchedule(Schedule schedule) async {
   await FirebaseFirestore.instance.collection("ScheduleData").add({
     "schedule_idx" : schedule.scheduleIdx,
@@ -50,6 +38,7 @@ Future<void> saveSchedule(Schedule schedule) async {
   });
 }
 
+// Firebase - ScheduleDate 로 부터 List<Map<St, d>> 형태의 값을 받아옴
 Future<List<Map<String, dynamic>>> getScheduleData() async {
   List<Map<String, dynamic>> results = [];
 
@@ -60,4 +49,20 @@ Future<List<Map<String, dynamic>>> getScheduleData() async {
   }
 
   return results;
+}
+
+// 요일에 값이 있는지 - 참거짓
+Future<bool> isExistOnSchedule(DateTime date) async {
+  // Datetime 객체를 날짜 저장 형식으로 변환
+  var stringDate = dateToStringWithDay(date);
+  var querySnapshot = await FirebaseFirestore.instance
+      .collection('ScheduleData')
+      .where('schedule_start_date', isEqualTo: stringDate)
+      .get();
+
+  if (querySnapshot.docs.isNotEmpty) {
+    return true;
+  } else {
+    return false;
+  }
 }
