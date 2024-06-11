@@ -232,10 +232,9 @@ class _FootprintHistoryEditPlaceScreenState
         // 마커 찍기
         var coordinate = await _addMarkerOverlay(provider, null);
         // 카메라 이동
-        _mapController.updateCamera(NCameraUpdate.scrollAndZoomTo(
+        await _mapController.updateCamera(NCameraUpdate.scrollAndZoomTo(
             target: coordinate, // 서울
             zoom: 16));
-        setState(() {});
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),

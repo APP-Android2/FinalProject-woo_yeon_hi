@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:woo_yeon_hi/dao/history_dao.dart';
 import 'package:woo_yeon_hi/dialogs.dart';
 import 'package:woo_yeon_hi/provider/footprint_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -117,7 +118,7 @@ class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: (){
-                  widget.provider.albumImages.removeAt(index);
+                  widget.provider.removeAlbumImage(index);
                 },
                 child:SvgPicture.asset(
                     'lib/assets/icons/close_circle_white.svg'),

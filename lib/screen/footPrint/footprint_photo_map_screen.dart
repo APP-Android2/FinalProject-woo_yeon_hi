@@ -48,7 +48,7 @@ class _FootprintPhotoMapScreenState extends State<FootprintPhotoMapScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => FootprintPhotoMapDetailScreen(photoMap.mapIdx, photoMap.mapName)));
+                builder: (context) => FootprintPhotoMapDetailScreen(photoMap)));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),

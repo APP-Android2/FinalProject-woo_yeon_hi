@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/model/place_info.dart';
 
+import '../model/history_model.dart';
 import '../retrofit_interface/place_search_api.dart';
 
 /// 탭 전환 상태 관리 프로바이더
@@ -65,13 +66,17 @@ class FootPrintHistoyDetailProvider extends ChangeNotifier{
 
   void setMoreState(int index, bool isMore){
     _isMoreList[index] = isMore;
+  }
+
+  void notify(){
     notifyListeners();
   }
 }
 
-/// 히스토리 작성 상태 관리 프로바이더
+/// 히스토리 작성, 수정 상태 관리 프로바이더
 class FootprintHistoryEditProvider extends ChangeNotifier{
   List<XFile> _albumImages = [];
+  List<Image> _albumModifyImages = [];
   Place? _selectedPlace;
   List<Place> _searchPlaces = [];
   String? _date;
@@ -79,6 +84,7 @@ class FootprintHistoryEditProvider extends ChangeNotifier{
   TextEditingController _contentController = TextEditingController();
 
   List<XFile> get albumImages => _albumImages;
+  List<Image> get albumModifyImages => _albumModifyImages;
   Place? get selectedPlace => _selectedPlace;
   List<Place> get searchPlaces => _searchPlaces;
   String? get date => _date;
@@ -90,13 +96,28 @@ class FootprintHistoryEditProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void addAlbumModifyImage(Image image){
+    _albumModifyImages.add(image);
+    notifyListeners();
+  }
+
   void removeAlbumImage(int index){
     _albumImages.removeAt(index);
     notifyListeners();
   }
 
+  void removeAlbumModifyImage(int index){
+    _albumModifyImages.removeAt(index);
+    notifyListeners();
+  }
+
   void clearAlbumImages(){
     _albumImages.clear();
+    notifyListeners();
+  }
+
+  void clearAlbumModifyImages(){
+    _albumModifyImages.clear();
     notifyListeners();
   }
 
@@ -134,6 +155,12 @@ class FootprintHistoryEditProvider extends ChangeNotifier{
   void setContent(String content){
     _contentController.text = content;
     notifyListeners();
+  }
+
+  void modifySetting(History history){
+    _titleController.text = history.historyTitle;
+    _contentController.text = history.historyContent;
+    _date = history.historyDate;
   }
 }
 

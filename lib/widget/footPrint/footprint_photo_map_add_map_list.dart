@@ -174,7 +174,7 @@ class _FootprintPhotoMapAddMapListState
                                       _errorText = null;
                                       _controller.clear();
                                       Navigator.pop(context); // 다이얼로그 팝
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => FootprintPhotoMapDetailScreen(photoMap.mapIdx, photoMap.mapName)));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => FootprintPhotoMapDetailScreen(photoMap)));
                                     }
 
                                   });

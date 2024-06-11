@@ -61,7 +61,7 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
           _focusedDay = date;
 
           // 선택된 날짜의 이벤트 조회
-          _selectedShowEvents.value = _getEventsShowForDay(_selectedDay!);
+          // _selectedShowEvents.value = _getEventsShowForDay(_selectedDay!);
         });
       },
       currentTime: _selectedDay,

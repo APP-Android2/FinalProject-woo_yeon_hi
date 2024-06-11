@@ -551,6 +551,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
   }
 
 
+
 // 디데이 아이템
   Widget makeDdayItem(BuildContext context, int index, String summaryDay) {
     List<dDayModel> dDayList = [
@@ -645,8 +646,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const CalendarDetailScreen()));
+
         },
         child: Container(
           color: ColorFamily.white,
@@ -785,12 +785,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
 
     return InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      FootprintHistoryDetailScreen(
-                          historyPlace[index], index)));
+
         },
         child: SizedBox(
           width: 130,
