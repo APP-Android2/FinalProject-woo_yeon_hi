@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -5,7 +6,7 @@ import 'enums.dart';
 
 class UserModel with ChangeNotifier{
   int userIdx;
-  LoginType loginType;
+  int loginType;
   String userAccount;
   String userNickname;
   DateTime userBirth;
@@ -42,6 +43,28 @@ class UserModel with ChangeNotifier{
         required this.loveDday,
       });
 
+  factory UserModel.fromData(Map<String, dynamic> data){
+    return UserModel(
+        userIdx: data['user_idx'],
+        loginType: data['login_type'],
+        userAccount: data['user_account'],
+        userNickname: data['user_nickname'],
+        userBirth: data['user_birth'],
+        userProfileImage: data['user_profile_image'],
+        loverUserIdx: data['lover_user_idx'],
+        loverNickname: data['lover_nickname'],
+        homePresetType: data['home_Preset_type'],
+        topBarType: data['top_bar_type'],
+        profileMessage: data['profile_message'],
+        alarmsAllow: data['alarms_allow'],
+      appLockState: data['app_lock_state'],
+      topBarActivate: data['top_bar_activate'],
+      lockPassword: data['lock_password'],
+      userState: data['user_state'],
+      loveDday: data['love_d_day'],
+    );
+  }
+
   bool checkProvider(TextEditingController textEditingController){
     if(textEditingController.text.isEmpty || textEditingController.text == ""){
       return false;
@@ -57,4 +80,7 @@ class UserModel with ChangeNotifier{
     notifyListeners();
   }
 
+  void providerNotify(){
+    notifyListeners();
+  }
 }
