@@ -12,11 +12,36 @@ class LedgerProvider extends ChangeNotifier{
     fetchLedgers();
   }
 
+  // table_calendar 파일 에서 사용.
+  DateTime _selectedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
+
+  DateTime get selectedDay => _selectedDay;
+  DateTime get focusedDay => _focusedDay;
+
+  // 포커스 업데이트
+  void setSelectedAndFocusedDay(DateTime focusedDay) {
+    _selectedDay = focusedDay;
+    _focusedDay = focusedDay;
+    notifyListeners();
+  }
+
+  void setSelectedDay(DateTime day) {
+    _selectedDay = day;
+    notifyListeners();
+  }
+
+  void setFocusedDay(DateTime day) {
+    _focusedDay = day;
+    notifyListeners();
+  }
+
   // 데이터 가져오기
   Future<void> fetchLedgers() async {
     try {
       _ledgers = await _ledgerDao.getLedgerData();
       notifyListeners();
+      print('가져오기 확인: $_ledgers');
     } catch (error) {
       print('가계부 데이터 호출 중에 오류 $error');
     }
@@ -26,7 +51,7 @@ class LedgerProvider extends ChangeNotifier{
   Future<void> addLedger(Ledger ledger) async {
     try {
       await _ledgerDao.saveLedger(ledger)
-        .then((value) => print('가계부 데이터 저장 성공'));
+        .then((value) => print('가계부 데이터 저장 성공 ${ledger}'));
       fetchLedgers(); // 데이터를 새로고침
     } catch (error) {
       print('가계부 데이터 저장 중 오류 $error');
