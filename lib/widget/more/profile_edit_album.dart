@@ -78,7 +78,7 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
                     onTap: () {
                       getImage(userProvider, ImageSource.gallery);
                       Navigator.pop(context);
-                      FocusScope.of(context).unfocus();
+                      // FocusScope.of(context).unfocus();
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -115,6 +115,7 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
                         userProvider.setImage(null);
                         Navigator.pop(context);
                         FocusScope.of(context).unfocus();
+                        setState(() {});
                       });
                     },
                     child: Container(

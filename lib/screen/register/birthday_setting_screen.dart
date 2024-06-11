@@ -9,13 +9,10 @@ import 'package:woo_yeon_hi/screen/register/home_preset_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
-import 'package:woo_yeon_hi/widget/login/kakao_login.dart';
 
-import '../../model/enums.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
-import 'nickname_setting_screen.dart';
 
 class BirthdaySettingScreen extends StatefulWidget {
   final bool isHost;

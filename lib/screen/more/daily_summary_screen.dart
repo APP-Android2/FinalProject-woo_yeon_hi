@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:woo_yeon_hi/dao/more_dao.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
+import 'package:woo_yeon_hi/utils.dart';
 import 'package:woo_yeon_hi/widget/more/daily_summary_top_app_bar.dart';
 
+import '../../dao/user_dao.dart';
 import '../../model/dDay_model.dart';
-import '../../model/diary_model.dart';
 import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../calendar/calendar_detail_screen.dart';
-import '../diary/diary_detail_screen.dart';
-import '../footPrint/footprint_history_detail_screen.dart';
 import '../ledger/ledger_detail_screen.dart';
 
 class DailySummaryScreen extends StatefulWidget {
@@ -25,15 +25,30 @@ class DailySummaryScreen extends StatefulWidget {
 }
 
 class _DailySummaryScreenState extends State<DailySummaryScreen> {
+  static const storage = FlutterSecureStorage();
+  late String userAccount = "";
+  late String loveDday = "";
+
   late DateTime _summaryDay;
   dynamic userProvider;
+  bool _isLoading = true; // Loading 상태를 나타내는 변수
 
   @override
   void initState() {
     super.initState();
 
     userProvider = Provider.of<UserModel>(context, listen: false);
+    _asyncMethod();
     _summaryDay = DateTime.now();
+  }
+
+  _asyncMethod() async {
+    userAccount = (await storage.read(key: "loginAccount"))!;
+    loveDday = await getSpecificUserData(userAccount, 'love_dDay');
+
+    setState(() {
+      _isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정
+    });
   }
 
   @override
@@ -178,8 +193,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                                   makeCalendarItem(
                                       context,
                                       index,
-                                      DateFormat('yyyy. M. d.')
-                                          .format(_summaryDay)),
+                                      dateToString(_summaryDay)),
                               separatorBuilder: (context, index) {
                                 return const Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -219,8 +233,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                               makeLedgerItem(
                                   context,
                                   index,
-                                  DateFormat('yyyy. M. d.')
-                                      .format(_summaryDay))),
+                                  dateToString(_summaryDay))),
                       const SizedBox(height: 20),
                       Row(
                         children: [
@@ -251,8 +264,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                                 makeDiaryItem(
                                     context,
                                     index,
-                                    DateFormat('yyyy. M. d.')
-                                        .format(_summaryDay)
+                                    dateToString(_summaryDay)
                                 )),
                       ),
                       const SizedBox(height: 20),
@@ -286,8 +298,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                                 makeHistoryItem(
                                     context,
                                     index,
-                                    DateFormat('yyyy. M. d.')
-                                        .format(_summaryDay))),
+                                    dateToString(_summaryDay))),
                       ),
                       const SizedBox(height: 20),
 
@@ -360,7 +371,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                       child: Stack(
                         children: [
                           TableCalendar(
-                            firstDay: DateTime.utc(2024, 3, 1), //TODO userProvider.loveDday,
+                            firstDay: stringToDate(loveDday),
                             lastDay: DateTime.now(),
                             focusedDay: _focusedDay,
                             locale: 'ko_kr',
@@ -468,22 +479,34 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                                   );
                                 },
                                 markerBuilder: (context, day, events) {
-                                  return Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.only(top: 30),
-                                    child: Container(
-                                      width: 6,
-                                      height: 6,
-                                      decoration: BoxDecoration(
-                                          color:
-                                          (events == null) //TODO 서버에서 데이터를 가져온 후 활동이벤트가 하나도 없으면 마커X, 그 외 경우에 마커 표시
-                                              ? Colors.transparent
-                                              : (day == _selectedDay)
-                                              ? ColorFamily.white
-                                              : ColorFamily.pink,
-                                          shape: BoxShape.circle
-                                      ),
-                                    ),
+                                  return FutureBuilder(
+                                      future: isExistOnSummaryDate(day),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData == false) {
+                                          return const SizedBox();
+                                        } else if (snapshot.hasError) {
+                                          return const SizedBox();
+                                        } else {
+                                          if (snapshot.data == true) {
+                                            return Container(
+                                              alignment: Alignment.center,
+                                              padding: const EdgeInsets.only(
+                                                  top: 30),
+                                              child: Container(
+                                                width: 6,
+                                                height: 6,
+                                                decoration: BoxDecoration(
+                                                    color: (day == _selectedDay)
+                                                        ? ColorFamily.white
+                                                        : ColorFamily.pink,
+                                                    shape: BoxShape.circle),
+                                              ),
+                                            );
+                                          } else {
+                                            return const SizedBox();
+                                          }
+                                        }
+                                      }
                                   );
                                 }
                             ),
@@ -549,7 +572,6 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
         }
     );
   }
-
 
 // 디데이 아이템
   Widget makeDdayItem(BuildContext context, int index, String summaryDay) {
@@ -785,12 +807,12 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
 
     return InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      FootprintHistoryDetailScreen(
-                          historyPlace[index], index)));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) =>
+          //             FootprintHistoryDetailScreen(
+          //                 historyPlace[index], index)));
         },
         child: SizedBox(
           width: 130,

@@ -143,7 +143,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
 
                                       // 자동로그인, write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
                                       await storage.write(
-                                      key: "loginData",
+                                      key: "loginAccount",
                                       value: userProvider.userAccount);
 
                                       runApp(const MainScreen());
@@ -203,7 +203,6 @@ Future<void> _saveUserData(BuildContext context, UserModel provider) async {
       topBarType: top_bar_type,
       profileMessage: profile_message,
       alarmsAllow: alarms_allow,
-      appLockState: app_lock_state,
       topBarActivate: top_bar_activate,
       lockPassword: lock_password,
       userState: user_state,
