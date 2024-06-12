@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woo_yeon_hi/dao/schedule_dao.dart';
 import 'package:woo_yeon_hi/screen/calendar/calendar_add_screen.dart';
-import 'package:woo_yeon_hi/screen/calendar/calendar_search_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_date.dart';
@@ -79,16 +78,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ? SvgPicture.asset("lib/assets/icons/list.svg")
                     : SvgPicture.asset("lib/assets/icons/calendar.svg"),
                 ),
-                const SizedBox(width: 10),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CalendarSearchScreen())
-                    );
-                  },
-                  child: SvgPicture.asset("lib/assets/icons/search.svg"),
-                ),
-                const SizedBox(width: 5),
+                const SizedBox(width: 7),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
