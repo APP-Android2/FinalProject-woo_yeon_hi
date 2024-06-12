@@ -18,4 +18,20 @@ DateTime stringToDate(String date){
   return DateTime(int.parse(year), int.parse(month), int.parse(day));
 }
 
+String listToString(List<int> list) {
+  return list.join(',');
+}
+
+List<int> stringToList(String input) {
+  List<int> result = [];
+
+  List<String> parts = input.split(',');
+  for (String part in parts) {
+    result.add(int.parse(part.trim()));
+  }
+
+  return result;
+}
+
+
 

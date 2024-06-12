@@ -4,9 +4,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../dao/user_dao.dart';
 import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/color.dart';
@@ -31,6 +32,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
 
     userProvider = Provider.of<UserModel>(context, listen: false);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -136,14 +138,6 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                                 NickNameSettingScreen(
                                                                  isHost:
                                                                      widget.isHost)));
-                                            // Navigator.pushAndRemoveUntil(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //         builder: (context) =>
-                                            //             NickNameSettingScreen(
-                                            //                 isHost:
-                                            //                     widget.isHost)),
-                                            //     (route) => false);
                                           },
                                           borderRadius:
                                               BorderRadius.circular(20.0),
@@ -172,7 +166,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const RegisterScreen()),
+                                        const LoginScreen()),
                                 (route) => false);
                           },
                           child: const Text(
@@ -188,10 +182,10 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
 
   void signOut() async {
     switch (userProvider.loginType) {
-      case LoginType.google:
+      case 1:
         await GoogleSignIn().signOut();
         break;
-      case LoginType.kakao:
+      case 2:
         try {
           await UserApi.instance.logout();
           print('로그아웃 성공, SDK에서 토큰 삭제');
@@ -199,11 +193,12 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
           print('로그아웃 실패, SDK에서 토큰 삭제 $error');
         }
         break;
-      case LoginType.none:
+      case 0:
         break;
     }
+    deleteUserData(userProvider.userAccount);
     setState(() {
-      userProvider.loginType = LoginType.none;
+      userProvider.loginType = 0;
     });
   }
 

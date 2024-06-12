@@ -1,12 +1,13 @@
 import 'package:animated_background/animated_background.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../dao/login_register_dao.dart';
 import '../../dao/user_dao.dart';
-import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/font.dart';
 
@@ -22,6 +23,7 @@ class RegisterDoneScreen extends StatefulWidget {
 
 class _RegisterDoneScreen extends State<RegisterDoneScreen>
     with TickerProviderStateMixin {
+  static const storage = FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
 
   dynamic userProvider;
   @override
@@ -30,7 +32,6 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
 
     userProvider = Provider.of<UserModel>(context, listen: false);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +63,12 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
             vsync: this,
             child: Column(
               children: [
-                Container(
+                SizedBox(
                     height: deviceHeight - 40,
                     width: deviceWidth - 40,
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                             height: deviceHeight - 90,
                             width: deviceWidth - 40,
                             child: Column(children: [
@@ -139,17 +140,18 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                 ),
                                 child: InkWell(
                                     onTap: () async {
-                                      widget.isHost
-                                      ?saveUser(UserModel(userIdx: 1, loginType: userProvider.loginType, userAccount: userProvider.userAccount, userNickname: "기본닉네임", userBirth: userProvider.userBirth, userProfileImage: "", loverUserIdx: 2, loverNickname: userProvider.loverNickname, homePresetType: userProvider.homePresetType, topBarType: 0, profileMessage: "", alarmsAllow: false,appLockState: 0, topBarActivate: false, lockPassword: [], userState: 1, loveDday: userProvider.loveDday))
-                                      :saveUser(UserModel(userIdx: 2, loginType: userProvider.loginType, userAccount: userProvider.userAccount, userNickname: "기본닉네임", userBirth: userProvider.userBirth, userProfileImage: "", loverUserIdx: 2, loverNickname: userProvider.loverNickname, homePresetType: userProvider.homePresetType, topBarType: 0, profileMessage: "", alarmsAllow: false,appLockState: 0, topBarActivate: false, lockPassword: [], userState: 1, loveDday: DateTime.now()));
+                                      _saveUserData(context, userProvider);
 
-                                      // 자동로그인
-                                      // write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
-                                      // await storage.write(
-                                      // key: "loginData",
-                                      // value: userProvider.userAccount);
-
-                                      runApp(const MainScreen());
+                                      // 자동로그인, write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
+                                      await storage.write(
+                                      key: "loginAccount",
+                                      value: userProvider.userAccount);
+                                      await storage.write(
+                                          key: "appLockState",
+                                          value: "0");
+                                      Future.delayed(const Duration(milliseconds: 500), () {
+                                        runApp(const MainScreen());
+                                      });
                                     },
                                     borderRadius:
                                     BorderRadius.circular(20.0),
@@ -171,4 +173,43 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
           ),
         ]))));
   }
+}
+
+Future<void> _saveUserData(BuildContext context, UserModel provider) async {
+  var user_idx = await getSpecificUserData(provider.userAccount, 'user_idx');
+  var login_type = provider.loginType;
+  var user_account = provider.userAccount;
+  var user_nickname = await getMyNickname(await getSpecificUserData(provider.userAccount, 'lover_idx'))??"기본닉네임";
+  var user_birth = provider.userBirth;
+  var user_profile_image = "lib/assets/images/default_profile.png";
+  var lover_user_idx = 2;
+  var lover_nickname = provider.loverNickname;
+  var home_preset_type = provider.homePresetType;
+  var top_bar_type = 0;
+  var profile_message = "";
+  var alarms_allow = false;
+  var top_bar_activate = false;
+  var user_state = 1;
+  var love_d_day = provider.loveDday;
+
+  var user = UserModel(
+      userIdx: user_idx,
+      userNickname: user_nickname,
+      loginType: login_type,
+      userAccount: user_account,
+      userBirth: user_birth,
+      userProfileImage: user_profile_image,
+      loverUserIdx: lover_user_idx,
+      loverNickname: lover_nickname,
+      homePresetType: home_preset_type,
+      topBarType: top_bar_type,
+      profileMessage: profile_message,
+      alarmsAllow: alarms_allow,
+      topBarActivate: top_bar_activate,
+      userState: user_state,
+      loveDday: love_d_day
+  );
+
+  await saveUserData(user);
+  provider.providerNotify();
 }

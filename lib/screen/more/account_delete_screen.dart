@@ -1,10 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/user_dao.dart';
+import 'package:woo_yeon_hi/main.dart';
 import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
@@ -12,7 +16,7 @@ import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/account_delete_top_app_bar.dart';
 
 import '../../model/user_model.dart';
-import '../register/register_screen.dart';
+import '../login/login_screen.dart';
 
 class AccountDeleteScreen extends StatefulWidget {
   const AccountDeleteScreen({super.key});
@@ -22,17 +26,22 @@ class AccountDeleteScreen extends StatefulWidget {
 }
 
 class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
-
+  static const storage = FlutterSecureStorage();
+  late String userAccount = "";
+  late int loginType = 0;
   bool isAgreed = false;
-  dynamic userProvider;
 
   @override
   void initState() {
     super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
+    _asyncMethod();
   }
-
+  
+  Future<void> _asyncMethod() async {
+    userAccount = (await storage.read(key: "loginAccount"))!;
+    loginType = await getSpecificUserData(userAccount, 'login_type');
+  }
+  
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
@@ -48,9 +57,21 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
         child: Column(
           children: [
             SizedBox(height: deviceHeight*0.05),
-            Image.asset(
-              'lib/assets/images/warning.png',
-              height: 80,
+            InkWell(
+              onTap: (){
+                signOut();
+                // deleteUserData(userAccount);
+                updateSpecificUserData(userAccount, 'user_state', 2);
+                storage.deleteAll();
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: Image.asset(
+                'lib/assets/images/warning.png',
+                height: 80,
+              ),
             ),
             const SizedBox(height: 30),
             const Text("계정을 삭제하면", style: TextStyleFamily.smallTitleTextStyle),
@@ -112,13 +133,11 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               child: InkWell(
                   onTap: () {
                     if(isAgreed){
-                      setState(() {
-                        userProvider.userState = 1;
-                      });
+                      updateSpecificUserData(userAccount, 'user_state', 1);
                       signOut();
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (context) => const RegisterScreen()),
+                              builder: (context) => const LoginScreen()),
                               (Route<dynamic> route) => false);
                       Fluttertoast.showToast(
                           msg: "우연히 계정이 삭제 처리되었습니다.",
@@ -161,11 +180,11 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
   }
 
   void signOut() async {
-    switch (userProvider.loginType) {
-      case LoginType.google:
+    switch (loginType) {
+      case 1:
         await GoogleSignIn().signOut();
         break;
-      case LoginType.kakao:
+      case 2:
         try {
           await UserApi.instance.logout();
           print('로그아웃 성공, SDK에서 토큰 삭제');
@@ -173,12 +192,13 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
           print('로그아웃 실패, SDK에서 토큰 삭제 $error');
         }
         break;
-      case LoginType.none:
+      case 0:
         break;
     }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
+    updateSpecificUserData(userAccount, 'login_type', 0);
   }
 
+  void exitApp() {
+    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  }
 }

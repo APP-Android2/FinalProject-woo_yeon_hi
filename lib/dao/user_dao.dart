@@ -1,9 +1,14 @@
+import 'dart:core';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../model/user_model.dart';
 
-
-Future<void> saveUser(UserModel user) async {
+Future<void> saveUserData(UserModel user) async {
   await FirebaseFirestore.instance.collection('userData').add({
     "user_idx": user.userIdx,
     "login_type": user.loginType,
@@ -17,27 +22,115 @@ Future<void> saveUser(UserModel user) async {
     "top_bar_type": user.topBarType,
     "profile_message": user.profileMessage,
     "alarms_allow": user.alarmsAllow,
-    "app_lock_state": user.appLockState,
     "top_bar_activate": user.topBarActivate,
-    "lock_password": user.lockPassword,
-    "user_state": user.lockPassword,
+    "user_state": user.userState,
     "love_dDay": user.loveDday,
   });
 }
 
-Future<void> setUserIndexx(int idx) async {
-  await FirebaseFirestore.instance
-      .collection('Sequence')
-      .doc('DiarySequence')
-      .set({'value': idx});
+Future<Map<String, dynamic>> getUserData(String userAccount) async {
+  Map<String, dynamic> results = {};
+
+  Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_account', isEqualTo: userAccount);
+
+  var querySnapShot = await query.get();
+  for (var doc in querySnapShot.docs) {
+    results = doc.data();
+  }
+
+  return results;
 }
 
-// // 지금 뜨는 콘텐츠 정보를 가져온다.
-// Future<int> getUserIndex() async {
+dynamic getSpecificUserData(String userAccount, String data) async {
+  Map<String, dynamic> results = {};
+  dynamic result;
+
+  Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_account', isEqualTo: userAccount);
+
+  var querySnapShot = await query.get();
+  for (var doc in querySnapShot.docs) {
+    results = doc.data();
+  }
+
+  result = results[data];
+
+  return result;
+}
+
+// Future<void> updateUserData(String userAccount) async {
+//   var querySnapshot = await FirebaseFirestore.instance
+//       .collection('userData')
+//       .where('user_account', isEqualTo: userAccount)
+//       .get();
+//   var document = querySnapshot.docs.first;
 //
-//   var querySnapshot = await FirebaseFirestore.instance.collection('userData').where("user_idx").get();
+//   if (querySnapshot.docs.isNotEmpty) {
+//     document.reference.update({
+//       updateItem: updateContent
+//     });
 //
-//   List<int> results = List<int>.from(querySnapshot.docs[0].data()['hot_movie_idx']);
-//
-//   return results;
+//     }
 // }
+// }
+
+
+
+Future<void> updateSpecificUserData(String userAccount, String updateItem, var updateContent) async {
+  var querySnapshot = await FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_account', isEqualTo: userAccount)
+      .get();
+
+  var document = querySnapshot.docs.first;
+  document.reference.update({updateItem: updateContent});
+}
+
+Future<void> deleteUserData(String userAccount) async {
+  QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_account', isEqualTo: userAccount)
+      .get();
+
+  for (DocumentSnapshot<Map<String, dynamic>> docSnapshot in querySnapshot.docs) {
+    await docSnapshot.reference.delete();
+  }
+}
+
+
+
+Future<int> getUserSequence() async {
+  var querySnapShot = await FirebaseFirestore.instance
+      .collection('Sequence')
+      .doc('UserSequence')
+      .get();
+  var sequence = querySnapShot.data()!.values.first;
+  return sequence;
+}
+
+Future<void> setUserSequence(int sequence) async {
+  await FirebaseFirestore.instance
+      .collection('Sequence')
+      .doc('UserSequence')
+      .set({'value': sequence});
+}
+
+Future<void> uploadUserProfileImage(XFile imageFile, String imageName) async {
+  await FirebaseStorage.instance
+      .ref('image/userProfile/$imageName')
+      .putFile(File(imageFile.path));
+}
+
+Future<Image> getProfileImagePath(String path) async {
+  var imageURL = await FirebaseStorage.instance
+      .ref('image/userProfile/$path')
+      .getDownloadURL();
+  var image = Image.network(
+    imageURL,
+    fit: BoxFit.cover,
+  );
+  return image;
+}

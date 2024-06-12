@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/login_register_dao.dart';
+import 'package:woo_yeon_hi/dao/user_dao.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/login/account_processing_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
@@ -16,23 +18,20 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../main_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreen();
+  State<LoginScreen> createState() => _RegisterScreen();
 }
 
-class _RegisterScreen extends State<RegisterScreen> {
+class _RegisterScreen extends State<LoginScreen> {
   bool loginSuccess = false;
 
   signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     if (googleUser != null) {
-      print('email = ${googleUser.email}');
-      print('id = ${googleUser.id}');
-
       setState(() {
         userProvider.userAccount = googleUser.email;
         loginSuccess = true;
@@ -45,12 +44,9 @@ class _RegisterScreen extends State<RegisterScreen> {
   signInWithKakao() async {
     if (await isKakaoTalkInstalled()) {
       try {
-        //카카오톡 설치됨, 카카오톡으로 로그인 시도
+        // 카카오톡 설치됨, 카카오톡으로 로그인 시도
         await UserApi.instance.loginWithKakaoTalk();
-        setState(() {
-          // userProvider.userAccount = 카카오계정정보
-          loginSuccess = true;
-        });
+        await _fetchKakaoUserInfo();
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
         showToast("카카오 계정 로그인에 실패하였습니다.");
@@ -63,26 +59,33 @@ class _RegisterScreen extends State<RegisterScreen> {
         print('카카오 계정으로 로그인 시도');
         try {
           await UserApi.instance.loginWithKakaoAccount();
-          setState(() {
-            // userProvider.userAccount = 카카오계정정보
-            loginSuccess = true;
-          });
+          await _fetchKakaoUserInfo();
         } catch (error) {
           print('카카오 계정으로 로그인 실패 $error');
           showToast("카카오 계정 로그인에 실패하였습니다.");
         }
       }
     } else {
-      //카카오톡 설치 안됨, 카카오계정으로 로그인 시도
+      // 카카오톡 설치 안됨, 카카오계정으로 로그인 시도
       try {
         await UserApi.instance.loginWithKakaoAccount();
-        setState(() {
-          // userProvider.userAccount = 카카오계정정보
-          loginSuccess = true;
-        });
+        await _fetchKakaoUserInfo();
       } catch (error) {
         showToast("카카오 계정 로그인에 실패하였습니다.");
       }
+    }
+  }
+
+  _fetchKakaoUserInfo() async {
+    try {
+      User user = await UserApi.instance.me();
+      setState(() {
+        userProvider.userAccount = user.id.toString();
+        loginSuccess = true;
+      });
+    } catch (error) {
+      print('사용자 정보 요청 실패 $error');
+      showToast("사용자 정보 요청에 실패하였습니다.");
     }
   }
 
@@ -131,7 +134,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                                       const PasswordEnterScreen()));
                         },
                         onTap: () async {
-                          switch (userProvider.userState) {
+                          switch (await getSpecificUserData(userProvider.userAccount, "user_state")??2) {
                             case 0:
                               Navigator.pushReplacement(
                                   context,
@@ -147,8 +150,9 @@ class _RegisterScreen extends State<RegisterScreen> {
                               await signInWithGoogle();
                               if (loginSuccess == true) {
                                 setState(() {
-                                  userProvider.loginType = LoginType.google;
+                                  userProvider.loginType = 1;
                                 });
+                                await saveUserIdx(userProvider.userAccount);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -202,8 +206,9 @@ class _RegisterScreen extends State<RegisterScreen> {
                               await signInWithKakao();
                               if (loginSuccess == true) {
                                 setState(() {
-                                  userProvider.loginType = LoginType.kakao;
+                                  userProvider.loginType = 2;
                                 });
+                                await saveUserIdx(userProvider.userAccount);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
