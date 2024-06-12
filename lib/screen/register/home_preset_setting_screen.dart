@@ -7,6 +7,7 @@ import 'package:woo_yeon_hi/screen/register/register_done_screen.dart';
 import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../dao/user_dao.dart';
 import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/color.dart';
@@ -242,6 +243,9 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
+                                      setState(() {
+                                        userProvider.homePresetType = presetPosition;
+                                      });
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
@@ -306,6 +310,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
       case 0:
         break;
     }
+    deleteUserData(userProvider.userAccount);
     setState(() {
       userProvider.loginType = 0;
     });

@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/login_register_dao.dart';
+import 'package:woo_yeon_hi/dao/user_dao.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/login/account_processing_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
@@ -48,7 +50,7 @@ class _RegisterScreen extends State<LoginScreen> {
         //카카오톡 설치됨, 카카오톡으로 로그인 시도
         await UserApi.instance.loginWithKakaoTalk();
         setState(() {
-          // userProvider.userAccount = 카카오계정정보
+          userProvider.userAccount = "카카오톡 로그인";
           loginSuccess = true;
         });
       } catch (error) {
@@ -64,7 +66,7 @@ class _RegisterScreen extends State<LoginScreen> {
         try {
           await UserApi.instance.loginWithKakaoAccount();
           setState(() {
-            // userProvider.userAccount = 카카오계정정보
+            userProvider.userAccount = "카카오 계정 로그인";
             loginSuccess = true;
           });
         } catch (error) {
@@ -77,7 +79,7 @@ class _RegisterScreen extends State<LoginScreen> {
       try {
         await UserApi.instance.loginWithKakaoAccount();
         setState(() {
-          // userProvider.userAccount = 카카오계정정보
+          userProvider.userAccount = "카카오 계정 로그인";
           loginSuccess = true;
         });
       } catch (error) {
@@ -131,7 +133,7 @@ class _RegisterScreen extends State<LoginScreen> {
                                       const PasswordEnterScreen()));
                         },
                         onTap: () async {
-                          switch (userProvider.userState) {
+                          switch (await getSpecificUserData(userProvider.userAccount, "user_state")??2) {
                             case 0:
                               Navigator.pushReplacement(
                                   context,
@@ -149,6 +151,7 @@ class _RegisterScreen extends State<LoginScreen> {
                                 setState(() {
                                   userProvider.loginType = 1;
                                 });
+                                await saveUserIdx(userProvider.userAccount);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -204,6 +207,7 @@ class _RegisterScreen extends State<LoginScreen> {
                                 setState(() {
                                   userProvider.loginType = 2;
                                 });
+                                await saveUserIdx(userProvider.userAccount);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

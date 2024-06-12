@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/dao/user_dao.dart';
+import 'package:woo_yeon_hi/main.dart';
 import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
@@ -58,12 +60,13 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
             InkWell(
               onTap: (){
                 signOut();
-                deleteUserData(userAccount);
+                // deleteUserData(userAccount);
+                updateSpecificUserData(userAccount, 'user_state', 2);
                 storage.deleteAll();
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
-                        (Route<dynamic> route) => false);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Image.asset(
                 'lib/assets/images/warning.png',
@@ -130,7 +133,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               child: InkWell(
                   onTap: () {
                     if(isAgreed){
-                      updateUserData(userAccount, 'user_state', 1);
+                      updateSpecificUserData(userAccount, 'user_state', 1);
                       signOut();
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -192,7 +195,10 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
       case 0:
         break;
     }
-    updateUserData(userAccount, 'login_type', 0);
+    updateSpecificUserData(userAccount, 'login_type', 0);
   }
 
+  void exitApp() {
+    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  }
 }

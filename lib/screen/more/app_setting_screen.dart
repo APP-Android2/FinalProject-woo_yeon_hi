@@ -109,7 +109,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                                       setState(() {
                                         switchValue = value;
                                       });
-                                      await updateUserData(userAccount, 'alarms_allow', switchValue);
+                                      await updateSpecificUserData(userAccount, 'alarms_allow', switchValue);
                                     }),
                               ],
                             ),
@@ -239,6 +239,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
       case 0:
         break;
     }
-    updateUserData(userAccount, 'login_type', 0);
+    updateSpecificUserData(userAccount, 'login_type', 0);
   }
 }

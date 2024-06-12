@@ -46,7 +46,6 @@ class _MainScreenState extends State<MainScreen> {
                   profileMessage: '',
                   alarmsAllow: false,
                   topBarActivate: false,
-                  lockPassword: [],
                   userState: 0,
                   loveDday: dateToString(DateTime.now()))),
           ChangeNotifierProvider(create: (context) => DiaryProvider()),

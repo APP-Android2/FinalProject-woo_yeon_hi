@@ -87,7 +87,7 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
           actions: [
             IconButton(
                 onPressed: () async {
-                  await updateUserData(userAccount, 'home_preset_type', presetIndex);
+                  await updateSpecificUserData(userAccount, 'home_preset_type', presetIndex);
                   Navigator.pop(context);
                   Fluttertoast.showToast(
                       msg: "홈 화면 스타일이 변경되었습니다.",

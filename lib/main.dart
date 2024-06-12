@@ -40,16 +40,19 @@ Future<void> main() async {
       (await const FlutterSecureStorage().read(key: "loginAccount")) ?? "";
   String appLockState =
       (await const FlutterSecureStorage().read(key: "appLockState")) ?? "0";
+ int userState = await getSpecificUserData(userAccount, 'user_state')?? 2;
 
   initializeDateFormatting().then((_) async =>
-      runApp(WooYeonHi(userAccount: userAccount, appLockState: appLockState)));
+      runApp(WooYeonHi(userAccount: userAccount, appLockState: appLockState, userState: userState)));
 }
 
 class WooYeonHi extends StatefulWidget {
-  WooYeonHi({super.key, required this.userAccount, required this.appLockState});
+
+  WooYeonHi({super.key, required this.userAccount, required this.appLockState, required this.userState});
 
   String userAccount;
   String appLockState;
+  int userState;
 
   @override
   State<WooYeonHi> createState() => _WooYeonHiState();
@@ -57,7 +60,7 @@ class WooYeonHi extends StatefulWidget {
 
 class _WooYeonHiState extends State<WooYeonHi> {
   @override
-  Widget build(BuildContext context) {
+ build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => UserModel(
             userIdx: 0,
@@ -73,9 +76,8 @@ class _WooYeonHiState extends State<WooYeonHi> {
             profileMessage: '',
             alarmsAllow: false,
             topBarActivate: false,
-            lockPassword: [0, 0, 0, 0],
             userState: 2,
-        loveDday: dateToString(DateTime.now())),
+            loveDday: dateToString(DateTime.now())),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: "WooYeonHi",
@@ -96,9 +98,11 @@ class _WooYeonHiState extends State<WooYeonHi> {
               useMaterial3: true),
           home: widget.userAccount == ""
               ? const LoginScreen()
-              : widget.appLockState == "0"
-                  ? const MainScreen()
-                  : const PasswordEnterScreen(),
+              : widget.userState == 1
+                  ? const LoginScreen()
+                  : widget.appLockState == "0"
+                      ? const MainScreen()
+                      : const PasswordEnterScreen(),
           onGenerateRoute: RouteGenerator.generateRoute,
         ));
   }

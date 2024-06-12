@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/login_register_dao.dart';
 import 'package:woo_yeon_hi/screen/register/d_day_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/login/login_screen.dart';
@@ -15,6 +17,7 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
+import '../../dao/user_dao.dart';
 import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/text_style.dart';
@@ -31,21 +34,30 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
   bool _isCodeExpired = false;
   String _codeText = "";
   String _randomCode = getRandomString(8);
+  int _userIdx = 0;
   dynamic codeTextEditController;
 
+
   dynamic userProvider;
+  DateTime? _timerStartTime;
 
   @override
   void initState() {
     super.initState();
 
     userProvider = Provider.of<UserModel>(context, listen: false);
+    _asyncMethod();
     codeTextEditController = TextEditingController();
+  }
+
+  _asyncMethod() async {
+    _userIdx = await getSpecificUserData(userProvider.userAccount, 'user_idx');
   }
 
   @override
   void dispose() {
     codeTextEditController.dispose();
+
     super.dispose();
   }
 
@@ -199,13 +211,23 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                                         .mapleStoryLight),
                                                         spacerWidth: 5,
                                                         endTime:
-                                                            DateTime.now().add(
-                                                          const Duration(
-                                                              minutes: 5,
-                                                              seconds: 00),
-                                                        ),
-                                                        onEnd: () {
-                                                          //TODO 생성된 코드를 서버에서 제거
+                                                            _timerStartTime !=
+                                                                    null
+                                                                ? _timerStartTime!
+                                                                    .add(
+                                                                    const Duration(
+                                                                        minutes:
+                                                                            5),
+                                                                  )
+                                                                : DateTime.now()
+                                                                    .add(
+                                                                    const Duration(
+                                                                        minutes:
+                                                                            5),
+                                                                  ),
+                                                        onEnd: () async {
+                                                          await deleteCodeData(
+                                                              _codeText);
                                                           setState(() {
                                                             _isCodeExpired =
                                                                 true;
@@ -226,13 +248,36 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                     ),
                                     child: !_isCodeGenerated
                                         ? InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                _codeText = _randomCode;
-                                                //TODO 생성된 코드를 서버에 저장
-                                                _isCodeGenerated = true;
+                                            onTap: () async {
+                                              setState((){
+                                              _codeText = _randomCode;
                                               });
-                                            },
+
+                                              if(await saveCodeData(_codeText,'connect_code', _userIdx)){
+                                                setState((){
+                                                  _isCodeGenerated = true;
+                                                  _isCodeExpired = false;
+                                                  _timerStartTime = DateTime.now();
+                                                });
+                                              }
+                                              else {
+                                                setState((){
+                                                  _isCodeGenerated = false;
+                                                  _isCodeExpired = false;
+                                                });
+                                                  Fluttertoast.showToast(
+                                                      msg: "다시 시도해주세요.",
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor:
+                                                          ColorFamily.black,
+                                                      textColor:
+                                                          ColorFamily.white,
+                                                      fontSize: 14.0);
+                                              }},
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
                                             child: Container(
@@ -246,37 +291,41 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                               ),
                                             ))
                                         : InkWell(
-                                            onTap: () {
+                                            onTap: () async {
                                               if (_isCodeExpired) {
                                                 setState(() {
-                                                  _randomCode =
-                                                      getRandomString(8);
+                                                  _randomCode = getRandomString(8);
                                                   _codeText = _randomCode;
-                                                  //TODO 재생성된 코드를 서버에 저장
-                                                  _isCodeExpired = false;
+                                                  _timerStartTime = DateTime.now();
                                                 });
+                                                  await saveCodeData(_codeText, 'connect_code', _userIdx);
                                               } else {
-                                                //TODO 해당 코드로 연결한 상대가 있는지 여부 파악(서버데이터)
-                                                //없을 시 토스트메시지 노출
-                                                Fluttertoast.showToast(
-                                                    msg: "해당 코드로 연결된 상대가 없습니다.",
-                                                    toastLength: Toast.LENGTH_SHORT,
-                                                    gravity: ToastGravity.BOTTOM,
-                                                    timeInSecForIosWeb: 1,
-                                                    backgroundColor:
-                                                    ColorFamily.black,
-                                                    textColor: ColorFamily.white,
-                                                    fontSize: 14.0);
-
-                                                //있을 시 해당 코드 만료 후 호스트화면 이동
-                                                //TODO 생성된 코드를 서버에서 삭제
-                                                Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const DdaySettingScreen(
-                                                                isHost: true)),
-                                                    (route) => false);
+                                                if(await isValidCodeData(_codeText)) {
+                                                  var guestIdx = await getSpecificCodeData(_codeText, 'guest_idx');
+                                                  await saveLoverIdx(userProvider.userAccount, guestIdx);
+                                                  await deleteCodeData(_codeText);
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                          const DdaySettingScreen(
+                                                              isHost:
+                                                              true)),
+                                                          (route) => false);
+                                                }else {
+                                                  Fluttertoast.showToast(
+                                                      msg: "해당 코드로 연결된 상대가 없습니다.",
+                                                      toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                      ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor:
+                                                      ColorFamily.black,
+                                                      textColor:
+                                                      ColorFamily.white,
+                                                      fontSize: 14.0);
+                                                }
                                               }
                                             },
                                             borderRadius:
@@ -335,28 +384,31 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   child: InkWell(
-                                      onTap: () {
-                                        if (codeTextEditController.text ==
-                                            "TEST") {
-                                          //TODO loverUserIdx에 해당코드를 생성한 userIdx를 저장
-                                          //게스트화면 이동
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const NickNameSettingScreen(
-                                                          isHost: false)),
-                                              (route) => false);
-                                        } else {
+                                      onTap: () async {
+                                        if (await isValidCodeData(
+                                            codeTextEditController.text)) {
                                           Fluttertoast.showToast(
                                               msg: "유효하지 않은 연결코드입니다.",
                                               toastLength: Toast.LENGTH_SHORT,
                                               gravity: ToastGravity.BOTTOM,
                                               timeInSecForIosWeb: 1,
                                               backgroundColor:
-                                                  ColorFamily.black,
+                                              ColorFamily.black,
                                               textColor: ColorFamily.white,
                                               fontSize: 14.0);
+                                        } else {
+                                          var loverIdx = await getSpecificCodeData(codeTextEditController.text, 'host_idx');
+                                          await deleteCodeData(_codeText);
+                                          await saveLoverIdx(userProvider.userAccount, loverIdx);
+                                          await updateCode(codeTextEditController.text, _userIdx);
+                                          //게스트화면 이동
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                  const NickNameSettingScreen(
+                                                      isHost: false)),
+                                                  (route) => false);
                                         }
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
@@ -414,13 +466,15 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
       case 0:
         break;
     }
+    await deleteUserData(userProvider.userAccount);
+    await deleteCodeData(_codeText);
     setState(() {
       userProvider.loginType = 0;
     });
   }
 }
 
-const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567890';
 Random _rnd = Random();
 
 String getRandomString(int length) => String.fromCharCodes(Iterable.generate(

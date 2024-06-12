@@ -110,12 +110,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 if (userProvider.checkProvider(userNicknameTextEditController)) {
                   FocusScope.of(context).unfocus();
                   Future.delayed(const Duration(milliseconds: 100), () async {
-                    await updateUserData(
+                    await updateSpecificUserData(
                         userAccount, 'user_nickname', tempUserNickname);
-                    await updateUserData(userAccount, 'user_birth', tempUserBirth);
-                    await updateUserData(
+                    await updateSpecificUserData(userAccount, 'user_birth', tempUserBirth);
+                    await updateSpecificUserData(
                         userAccount, 'profile_message', tempProfileMsg);
-                    await updateUserData(
+                    await updateSpecificUserData(
                         userAccount, 'user_profileImage', tempProfileImage);
                   });
 

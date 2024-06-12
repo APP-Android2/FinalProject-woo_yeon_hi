@@ -35,22 +35,21 @@ class _MoreScreenState extends State<MoreScreen> {
   late String profileImage = "lib/assets/images/default_profile.png";
   late String userBirth = dateToString(DateTime.now());
 
-
   @override
   void initState() {
     super.initState();
 
     userProvider = Provider.of<UserModel>(context, listen: false);
-    _asyncMethod();
+    // _asyncMethod();
   }
 
-  _asyncMethod() async {
+  Future<int> _asyncMethod() async {
     userAccount = (await storage.read(key: "loginAccount"))!;
     userNickname = await getSpecificUserData(userAccount, 'user_nickname');
     profileMsg = await getSpecificUserData(userAccount, 'profile_message');
     profileImage = await getSpecificUserData(userAccount, 'user_profileImage');
     userBirth = await getSpecificUserData(userAccount, 'user_birth');
-
+    return 1;
   }
 
   @override
@@ -58,26 +57,22 @@ class _MoreScreenState extends State<MoreScreen> {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return FutureBuilder(
-        future: _asyncMethod(),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Scaffold(
-              body: Center(
-                child: Text('Error: ${snapshot.error}'),
-              ),
-            );
-          } else {
-            return Scaffold(
-                resizeToAvoidBottomInset: false,
-                appBar: const MoreTopAppBar(),
-                body: Container(
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: const MoreTopAppBar(),
+        body: FutureBuilder(
+            future: _asyncMethod(),
+            builder: (BuildContext context, snapshot) {
+              if (snapshot.hasData == false) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              } else {
+                return Container(
                   height: deviceHeight,
                   width: deviceWidth,
                   padding: const EdgeInsets.all(20),
@@ -152,7 +147,13 @@ class _MoreScreenState extends State<MoreScreen> {
                                                   FontFamily.mapleStoryBold)),
                                       InkWell(
                                           onTap: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileEditScreen())).then((value) => setState(() {}));
+                                            Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const ProfileEditScreen()))
+                                                .then(
+                                                    (value) => setState(() {}));
                                           },
                                           child: SizedBox(
                                               width: 40,
@@ -211,46 +212,46 @@ class _MoreScreenState extends State<MoreScreen> {
                           const AppSettingScreen()),
                     ],
                   ),
-                ));
-          }
-        });
+                );
+              }
+            }));
   }
+}
 
-  Widget _buildMenuItem(
-      BuildContext context, String title, String iconPath, Widget screen) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Material(
-          color: ColorFamily.white,
-          elevation: 1,
-          shadowColor: Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: InkWell(
-            splashFactory: NoSplash.splashFactory,
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => screen));
-            },
-            borderRadius: BorderRadius.circular(10.0),
-            child: SizedBox(
-                height: 60,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: SvgPicture.asset(iconPath, width: 24, height: 24),
-                    ),
-                    Text(title, style: TextStyleFamily.normalTextStyle),
-                    Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        height: 24,
-                        width: 24)
-                  ],
-                )),
-          )),
-    );
-  }
+Widget _buildMenuItem(
+    BuildContext context, String title, String iconPath, Widget screen) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    child: Material(
+        color: ColorFamily.white,
+        elevation: 1,
+        shadowColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: InkWell(
+          splashFactory: NoSplash.splashFactory,
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => screen));
+          },
+          borderRadius: BorderRadius.circular(10.0),
+          child: SizedBox(
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: SvgPicture.asset(iconPath, width: 24, height: 24),
+                  ),
+                  Text(title, style: TextStyleFamily.normalTextStyle),
+                  Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      height: 24,
+                      width: 24)
+                ],
+              )),
+        )),
+  );
 }

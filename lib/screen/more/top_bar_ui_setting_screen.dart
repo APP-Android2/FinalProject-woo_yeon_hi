@@ -87,7 +87,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
           actions: [
             IconButton(
               onPressed: () async {
-                await updateUserData(userAccount, 'top_bar_type', topBarIndex);
+                await updateSpecificUserData(userAccount, 'top_bar_type', topBarIndex);
                 Navigator.pop(context);
                 Fluttertoast.showToast(
                     msg: "상단바 스타일이 변경되었습니다.",
@@ -363,7 +363,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                             setState(() {
                               switchValue = value;
                             });
-                            await updateUserData(userAccount, 'top_bar_activate', switchValue);
+                            await updateSpecificUserData(userAccount, 'top_bar_activate', switchValue);
                           }),
                     ],
                   ),

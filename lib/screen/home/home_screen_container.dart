@@ -32,6 +32,8 @@ class _HomeScreenContainerState extends State<HomeScreenContainer> {
 
   @override
   Widget build(BuildContext context) {
+    print('$userAccount');
+    print('$homePresetType');
     return FutureBuilder(
         future: _asyncMethod(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
