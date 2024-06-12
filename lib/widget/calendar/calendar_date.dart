@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:woo_yeon_hi/dao/diary_dao.dart';
 import 'package:woo_yeon_hi/dao/schedule_dao.dart';
-import 'package:woo_yeon_hi/model/schedule_model.dart';
-import 'package:woo_yeon_hi/provider/schedule_provider.dart';
 import 'package:woo_yeon_hi/screen/calendar/calendar_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
+import 'package:woo_yeon_hi/utils.dart';
 
 class CalendarDate extends StatefulWidget {
   List<Map<String, dynamic>> scheduleData;
@@ -23,12 +21,10 @@ class CalendarDate extends StatefulWidget {
 
 class _CalendarDateState extends State<CalendarDate> {
 
-  List<String> scheduleTitle = [];  // 일정 제목
-  List<String> scheduleStartTime = [];  // 일정 시작 시간
-  List<String> scheduleFinishTime = []; // 일정 종료 시간
+  List<Map<String, dynamic>> _scheduleData = [];  // 일정 데이터를 담을 변수
 
   DateTime _focusedDay = DateTime.now();  // 오늘 날짜
-  DateTime? _selectedDay;
+  DateTime? _selectedDay = DateTime.now();
 
   // 주말인지
   bool isWeekend(DateTime day){
@@ -40,19 +36,30 @@ class _CalendarDateState extends State<CalendarDate> {
     return day.weekday == DateTime.saturday;
   }
 
+  // 날짜의 데이터를 받아오는 함수
+  Future<void> _fetchScheduleData(DateTime date) async {
+    var stringDate = dateToStringWithDay(date);
+    var querySnapshot = await FirebaseFirestore.instance
+      .collection('ScheduleData')
+      .where('schedule_start_date', isEqualTo: stringDate)
+      .get();
+
+    // 받아온 데이터를 리스트 형태로 변환한다
+    _scheduleData = querySnapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scheduleData = widget.scheduleData;
+
+    _fetchScheduleData(_selectedDay!);
+  }
+
+
   @override
   Widget build(BuildContext context) {
-
-    scheduleTitle.clear();
-    scheduleStartTime.clear();
-    scheduleFinishTime.clear();
-
-    for(var map in widget.scheduleData){
-      scheduleTitle.add(map['schedule_title']);
-      scheduleStartTime.add(map['schedule_start_time']);
-      scheduleFinishTime.add(map['schedule_finish_time']);
-    }
-
     return Expanded(
       child: Column(
         children: [
@@ -89,7 +96,6 @@ class _CalendarDateState extends State<CalendarDate> {
                       // 기본 월의 빌더
                       defaultBuilder: (context, day, focusedDay) {
                         return Container(
-                          //color: Colors.blue,
                           alignment: Alignment.center,
                           child: Text(
                             DateFormat('d').format(day),
@@ -180,6 +186,7 @@ class _CalendarDateState extends State<CalendarDate> {
                       // 마커
                       markerBuilder: (context, day, events) {
                         return FutureBuilder<bool>(
+                          // 날짜에 값이 있는지. 참거짓
                           future: isExistOnSchedule(day),
                           builder: (context, snapshot) {
                             if(snapshot.hasData == false){
@@ -187,6 +194,7 @@ class _CalendarDateState extends State<CalendarDate> {
                             } else if(snapshot.hasError){
                               return const SizedBox();
                             } else {
+                              // 날짜의 데이터가 있을 경우
                               if(snapshot.data == true){
                                 return Container(
                                   alignment: Alignment.center,
@@ -219,6 +227,8 @@ class _CalendarDateState extends State<CalendarDate> {
                         _selectedDay = selectedDay;
                         _focusedDay = focusedDay;
                       });
+                      // 선택한 날짜의 데이터를 받아온다
+                      _fetchScheduleData(selectedDay);
                     },
                     // 화면이 바뀔때
                     onPageChanged: (focusedDay) {
@@ -235,13 +245,14 @@ class _CalendarDateState extends State<CalendarDate> {
               padding: EdgeInsets.only(top: 15),
               child: Container(
                 color: Colors.white,
-                child: widget.scheduleData.isEmpty
+                child: _scheduleData.isEmpty
                     ? const Center(
                         child: Text("일정이 없습니다", style: TextStyleFamily.hintTextStyle),
                       )
                     : ListView.separated(
-                        itemCount: widget.scheduleData.length,
+                        itemCount: _scheduleData.length,
                         itemBuilder: (context, index) {
+                          var schedule = _scheduleData[index];  // 순서값을 담은 변수
                           return Padding(
                             padding: index == 0
                                 ? const EdgeInsets.fromLTRB(20, 10, 20, 0)
@@ -250,7 +261,7 @@ class _CalendarDateState extends State<CalendarDate> {
                               onTap: () {
                                 // 항목 클릭
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => CalendarDetailScreen(widget.scheduleData[index]))
+                                  MaterialPageRoute(builder: (context) => CalendarDetailScreen(schedule))
                                 );
                               },
                               child: Row(
@@ -269,12 +280,12 @@ class _CalendarDateState extends State<CalendarDate> {
                                   ),
                                   const SizedBox(width: 10),
                                   Text(
-                                    scheduleTitle[index],
+                                    schedule['schedule_title'],
                                     style: TextStyleFamily.normalTextStyle,
                                   ),
                                   const Spacer(),
                                   Text(
-                                    "${scheduleStartTime[index]} ~ ${scheduleFinishTime[index]}",
+                                    "${schedule['schedule_start_time']} ~ ${schedule['schedule_finish_time']}",
                                     style: TextStyleFamily.normalTextStyle,
                                   )
                                 ],
