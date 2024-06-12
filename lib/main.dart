@@ -42,13 +42,22 @@ Future<void> main() async {
       (await const FlutterSecureStorage().read(key: "appLockState")) ?? "0";
  int userState = await getSpecificUserData(userAccount, 'user_state')?? 2;
 
-  initializeDateFormatting().then((_) async =>
-      runApp(WooYeonHi(userAccount: userAccount, appLockState: appLockState, userState: userState)));
+  initializeDateFormatting().then((_) async {
+
+    if(appLockState == "0"){
+      runApp(const MainScreen());
+    }else{
+      runApp(WooYeonHi(userAccount: userAccount, appLockState: appLockState, userState: userState));
+    }
+  });
 }
 
 class WooYeonHi extends StatefulWidget {
-
-  WooYeonHi({super.key, required this.userAccount, required this.appLockState, required this.userState});
+  WooYeonHi(
+      {super.key,
+      required this.userAccount,
+      required this.appLockState,
+      required this.userState});
 
   String userAccount;
   String appLockState;
@@ -60,7 +69,7 @@ class WooYeonHi extends StatefulWidget {
 
 class _WooYeonHiState extends State<WooYeonHi> {
   @override
- build(BuildContext context) {
+  build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => UserModel(
             userIdx: 0,
