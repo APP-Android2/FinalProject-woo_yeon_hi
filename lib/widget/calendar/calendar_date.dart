@@ -36,7 +36,7 @@ class _CalendarDateState extends State<CalendarDate> {
     return day.weekday == DateTime.saturday;
   }
 
-  // 날짜의 데이터를 받아오는 함수
+  // 일별 데이터를 받아오는 함수
   Future<void> _fetchScheduleData(DateTime date) async {
     var stringDate = dateToStringWithDay(date);
     var querySnapshot = await FirebaseFirestore.instance
