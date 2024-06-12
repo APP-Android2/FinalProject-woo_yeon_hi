@@ -179,7 +179,7 @@ Future<void> _saveUserData(BuildContext context, UserModel provider) async {
   var user_idx = await getSpecificUserData(provider.userAccount, 'user_idx');
   var login_type = provider.loginType;
   var user_account = provider.userAccount;
-  var user_nickname = await getMyNickname(await getSpecificUserData(provider.userAccount, 'lover_idx'));
+  var user_nickname = await getMyNickname(await getSpecificUserData(provider.userAccount, 'lover_idx'))??"기본닉네임";
   var user_birth = provider.userBirth;
   var user_profile_image = "lib/assets/images/default_profile.png";
   var lover_user_idx = 2;

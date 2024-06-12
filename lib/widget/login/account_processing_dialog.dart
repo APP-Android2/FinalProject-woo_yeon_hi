@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/user_dao.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 
 import '../../model/user_model.dart';
@@ -72,10 +73,9 @@ class _AccountProcessingDialogState extends State<AccountProcessingDialog> {
                         style: ButtonStyle(
                             overlayColor:
                                 MaterialStateProperty.all(ColorFamily.gray)),
-                        onPressed: () {
-                          setState(() {
-                            userProvider.userState = 0;
-                          });
+                        onPressed: () async {
+                          await updateSpecificUserData(userProvider.userAccount, 'user_state', 0);
+                          print("${userProvider.userAccount}");
                           Navigator.pop(context);
                           Navigator.pop(context);
                           Fluttertoast.showToast(

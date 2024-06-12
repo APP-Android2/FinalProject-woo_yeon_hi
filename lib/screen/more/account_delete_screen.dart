@@ -63,7 +63,10 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
                 // deleteUserData(userAccount);
                 updateSpecificUserData(userAccount, 'user_state', 2);
                 storage.deleteAll();
-                runApp(WooYeonHi(userAccount: userAccount, appLockState: '0'));
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Image.asset(
                 'lib/assets/images/warning.png',

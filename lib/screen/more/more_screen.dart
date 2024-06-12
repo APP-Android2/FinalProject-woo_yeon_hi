@@ -72,15 +72,6 @@ class _MoreScreenState extends State<MoreScreen> {
                   child: Text('Error: ${snapshot.error}'),
                 );
               } else {
-
-                print("0: ${snapshot.data}");
-                print("1: $userAccount");
-                print("2: $userNickname");
-                print("3: $profileMsg");
-                print("4: $profileImage");
-                print("5: $userBirth");
-
-
                 return Container(
                   height: deviceHeight,
                   width: deviceWidth,
