@@ -90,12 +90,9 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
             DateTime.parse(ledger.ledgerDate).toLocal().day == ledgerProvider.selectedDay.day &&
             DateTime.parse(ledger.ledgerDate).toLocal().month == ledgerProvider.selectedDay.month &&
             DateTime.parse(ledger.ledgerDate).toLocal().year == ledgerProvider.selectedDay.year).toList();
-        // DateTime.parse(ledger.ledgerDate).toLocal().day == _selectedDay?.day &&
-        //     DateTime.parse(ledger.ledgerDate).toLocal().month == _selectedDay?.month &&
-        //     DateTime.parse(ledger.ledgerDate).toLocal().year == _selectedDay?.year).toList();
 
+        // 지출, 수입의 계산 결과
         Map<String, int> totalMoney = calculateTotalMoney(selectedDayLedgers);
-
 
         return Column(
           children: [
@@ -124,7 +121,6 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                 headerVisible: false,
 
                 // 선택된 날짜 확인 (selectedBuilder)
-                 //selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
                 selectedDayPredicate: (day) => isSameDay(ledgerProvider.selectedDay, day),
 
                 // 날짜 선택 시 호출되는 함수
@@ -141,6 +137,9 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                 onPageChanged: (focusedDay) {
                   setState(() {
                     ledgerProvider.setSelectedAndFocusedDay(focusedDay);
+
+                    // 상단 베너 데이터 업데이트
+                    ledgerProvider.updateTextsOnMonthChange(focusedDay);
                   });
                 },
 

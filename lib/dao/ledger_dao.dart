@@ -27,4 +27,25 @@ class LedgerDao{
     var querySnapShot = await FirebaseFirestore.instance.collection('Ledger').get();
     return querySnapShot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
   }
+
+  // 연도와 월 조건으로 현재 월 데이터 가져오기
+  Future<List<Ledger>> getMonthlyLedgerData(DateTime focusedDay) async {
+    String yearMonth = '${focusedDay.year.toString().padLeft(4, '0')}-${focusedDay.month.toString().padLeft(2, '0')}';
+    var querySnapshot = await FirebaseFirestore.instance.collection('Ledger')
+        .where('ledger_date', isGreaterThanOrEqualTo: '$yearMonth-01T00:00:00.000')
+        .where('ledger_date', isLessThan: '$yearMonth-32T00:00:00.000')
+        .get();
+    return querySnapshot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
+
+  // 연도와 월 조건으로 지난달 데이터 가져오기
+  Future<List<Ledger>> getPreviousMonthLedgerData(DateTime focusedDay) async {
+    DateTime previousMonth = DateTime(focusedDay.year, focusedDay.month - 1, 1);
+    String yearMonth = '${previousMonth.year.toString().padLeft(4, '0')}-${previousMonth.month.toString().padLeft(2, '0')}';
+    var querySnapshot = await FirebaseFirestore.instance.collection('Ledger')
+        .where('ledger_date', isGreaterThanOrEqualTo: '$yearMonth-01T00:00:00.000')
+        .where('ledger_date', isLessThan: '$yearMonth-32T00:00:00.000')
+        .get();
+    return querySnapshot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
 }
