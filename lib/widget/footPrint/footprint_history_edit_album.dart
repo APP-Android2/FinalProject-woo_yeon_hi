@@ -6,12 +6,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:woo_yeon_hi/dialogs.dart';
+import 'package:woo_yeon_hi/provider/footprint_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
 class FootprintHistoryEditAlbum extends StatefulWidget {
-  const FootprintHistoryEditAlbum({super.key});
+  FootprintHistoryEditAlbum(this.provider, {super.key});
+  FootprintHistoryEditProvider provider;
 
   @override
   State<FootprintHistoryEditAlbum> createState() => _FootprintHistoryEditAlbumState();
@@ -19,7 +22,6 @@ class FootprintHistoryEditAlbum extends StatefulWidget {
 
 class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
-  List<XFile> _albumImages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text("${_albumImages.length} / 10", style: _albumImages.length > 10?TextStyle(fontFamily: FontFamily.mapleStoryLight, fontSize: 14, color: Colors.redAccent):TextStyleFamily.normalTextStyle,),
+              Text("${widget.provider.albumImages.length} / 10", style: TextStyleFamily.normalTextStyle),
 
             ],
           ),
@@ -49,7 +51,7 @@ class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
-                  _albumImages.length < 10
+                  widget.provider.albumImages.length < 10
                       ? Row(
                     children: [
                       Container(
@@ -82,7 +84,7 @@ class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
                   Expanded(
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: _albumImages.length,
+                      itemCount: widget.provider.albumImages.length,
                         itemBuilder: (context, index) => makeImageCard(context, index)
                     ),
                   )
@@ -96,7 +98,7 @@ class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
   }
   Widget makeImageCard(BuildContext context, int index){
     return Padding(
-      padding: index != _albumImages.length-1
+      padding: index != widget.provider.albumImages.length-1
           ?const EdgeInsets.only(right: 5)
       :const EdgeInsets.only(right: 0),
       child: SizedBox(
@@ -106,7 +108,7 @@ class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.file(File(_albumImages[index].path), fit: BoxFit.cover,),
+              child: Image.file(File(widget.provider.albumImages[index].path), fit: BoxFit.cover,),
             ),
             Positioned(
               top: 0,
@@ -115,9 +117,7 @@ class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: (){
-                  setState(() {
-                    _albumImages.removeAt(index);
-                  });
+                  widget.provider.albumImages.removeAt(index);
                 },
                 child:SvgPicture.asset(
                     'lib/assets/icons/close_circle_white.svg'),
@@ -133,57 +133,36 @@ class _FootprintHistoryEditAlbumState extends State<FootprintHistoryEditAlbum> {
   Future getImages() async {
     final List<XFile?>images = await picker.pickMultiImage();
     if(images.isNotEmpty){
-      if(_albumImages.isNotEmpty){
+      if(widget.provider.albumImages.isNotEmpty){
         // 기존 리스트에 이미지가 있는 상황
-        var _possibleCount = 10-_albumImages.length;
+        var _possibleCount = 10-widget.provider.albumImages.length;
         if(_possibleCount < images.length){
-          _showToast();
-          setState(() {
-            for(var i = 0; i < _possibleCount; i++){
-              _albumImages.add(images[i]!);
-            }
-          });
+          showToast("사진 등록은 최대 10장까지 가능합니다.");
+          for(var i = 0; i < _possibleCount; i++){
+            widget.provider.addAlbumImage(images[i]!);
+          }
 
         }else{
-          setState(() {
-            for(var i = 0; i < images.length; i++){
-              _albumImages.add(images[i]!);
-            }
-          });
+          for(var i = 0; i < images.length; i++){
+            widget.provider.addAlbumImage(images[i]!);
+          }
         }
       }else{
         if(images.length > 10){
-          _showToast();
-          setState(() {
-            _albumImages.clear();
-            for(var i = 0; i < 10; i++){
-              _albumImages.add(images[i]!);
-            }
-          });
+          showToast("사진 등록은 최대 10장까지 가능합니다.");
+          widget.provider.clearAlbumImages();
+          for(var i = 0; i < 10; i++){
+            widget.provider.addAlbumImage(images[i]!);
+          }
         }
         else{
-          setState(() {
-            _albumImages.clear();
-            for(var image in images){
-              _albumImages.add(image!);
-            }
-          });
+          widget.provider.clearAlbumImages();
+          for(var image in images){
+            widget.provider.addAlbumImage(image!);
+          }
         }
       }
 
     }
   }
-}
-
-
-void _showToast() {
-  Fluttertoast.showToast(
-      msg: "사진 등록은 최대 10장까지 가능합니다.", //메세지입력
-      toastLength: Toast.LENGTH_SHORT, //메세지를 보여주는 시간(길이)
-      gravity: ToastGravity.BOTTOM, //위치지정
-      timeInSecForIosWeb: 1, //ios및웹용 시간
-      backgroundColor: ColorFamily.gray,
-      textColor: ColorFamily.white, //글자색
-      fontSize: 14.0 //폰트사이즈
-  );
 }

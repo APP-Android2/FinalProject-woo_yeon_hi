@@ -70,7 +70,7 @@ Future<Widget> makeDiary(BuildContext context, Diary diary) async {
           children: [
             AspectRatio(
                 aspectRatio: 1.0,
-                child: await getDiaryImagePath(diary.diaryImage)
+                child: await getDiaryImage(diary.diaryImage)
                 // child: await getDiaryImagePath(diary.diaryImage)
               
             ),

@@ -45,11 +45,12 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
 
     return PopScope(
         canPop: false,
-        onPopInvoked: (didPop) => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    PasswordSettingScreen(bioAuth: widget.bioAuth))),
+        onPopInvoked: (didPop) =>
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        AppLockSettingScreen(bioAuth: widget.bioAuth))),
         child: Scaffold(
           appBar: AppBar(
             surfaceTintColor: ColorFamily.cream,
@@ -65,7 +66,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            PasswordSettingScreen(bioAuth: widget.bioAuth)));
+                            AppLockSettingScreen(bioAuth: widget.bioAuth)));
               },
               icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
             ),
@@ -394,7 +395,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    AppLockSettingScreen(isBioAuthSupported: widget.bioAuth)));
+                    AppLockSettingScreen(bioAuth: widget.bioAuth)));
       }
     }
   }
@@ -481,11 +482,12 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
       setState(() {
         userProvider.appLockState = 2;
       });
+      Navigator.pop(context);
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  AppLockSettingScreen(isBioAuthSupported: widget.bioAuth)));
+                  AppLockSettingScreen(bioAuth: widget.bioAuth)));
     }
   }
 
@@ -565,16 +567,16 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
                         ),
                         child: InkWell(
                             onTap: () {
-                              setState(() {
-                                userProvider.appLockState = 1;
-                              });
+                              // setState(() {
+                              //   userProvider.appLockState = 1;
+                              // });
                               Navigator.pop(context);
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           AppLockSettingScreen(
-                                              isBioAuthSupported:
+                                              bioAuth:
                                                   widget.bioAuth)));
                             },
                             borderRadius: BorderRadius.circular(20.0),
@@ -620,8 +622,12 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
                   ],
                 ),
               ),
-            ])));
+            ]))).then((value) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AppLockSettingScreen(bioAuth: widget.bioAuth)));
+    });
   }
 }
-
-//TODO 비밀번호 4자리 입력 완료시 widget.isBioAuthSupporeted = true 이면 생체인증 다이얼로그 띄우기

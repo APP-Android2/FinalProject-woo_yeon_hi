@@ -1,8 +1,8 @@
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 enum MapType {
-  KOREA_SEOUL(0, "서울", 'lib/assets/geojsons/korea_seoul.geojson'),
-  KOREA_FULL(1, "대한민국", 'lib/assets/geojsons/korea_full.geojson');
+  KOREA_SEOUL(0, "서울", 'lib/assets/images/korea_seoul.png',),
+  KOREA_FULL(1, "대한민국", 'lib/assets/images/korea_full.png');
 
   final int type;
   final String name;
@@ -17,6 +17,14 @@ enum MapType {
     }
     return null; // 해당 type 값이 없을 경우 null 반환
   }
+}
+
+enum PhotoMapState{
+  STATE_NORMAL(0),
+  STATE_DELETE(1);
+
+  final int state; // 상태
+  const PhotoMapState(this.state);
 }
 
 enum OverlayInfo {
@@ -187,3 +195,12 @@ enum LedgerCategory{
     return LedgerCategory.values.firstWhere((e) => e.number == value);
   }
 }
+
+enum HistoryState{
+  STATE_NORMAL(0),
+  STATE_DELETE(1);
+
+  final int state; // 상태
+  const HistoryState(this.state);
+}
+

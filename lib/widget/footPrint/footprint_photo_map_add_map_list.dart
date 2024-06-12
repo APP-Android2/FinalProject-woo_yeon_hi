@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:woo_yeon_hi/dao/photo_map_dao.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
+import 'package:woo_yeon_hi/model/photo_map_model.dart';
+import 'package:woo_yeon_hi/screen/footPrint/footprint_photo_map_detail_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -13,14 +17,10 @@ class FootprintPhotoMapAddMapList extends StatefulWidget {
 
 class _FootprintPhotoMapAddMapListState
     extends State<FootprintPhotoMapAddMapList> {
-  List<String> mapImageList = [
-    'lib/assets/images/korea_seoul.png',
-    'lib/assets/images/korea_full.png'
-  ];
-  List<String> mapNameList = ["서울", "대한민국"];
-
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   String? _errorText;
+
+  int user_idx = 0;
 
   @override
   void dispose() {
@@ -31,17 +31,17 @@ class _FootprintPhotoMapAddMapListState
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: mapNameList.length,
+        itemCount: MapType.values.length,
         itemBuilder: (context, index) =>
-            makeMap(context, mapImageList[index], mapNameList[index]));
+            makeMap(context, MapType.fromType(index)!));
   }
 
-  Widget makeMap(BuildContext context, String mapImage, String mapName) {
+  Widget makeMap(BuildContext context, MapType mapType) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         onTap: () {
-          _showMapSelectDialog(context, mapName);
+          _showMapSelectDialog(context, mapType);
         },
         child: SizedBox(
           width: MediaQuery.of(context).size.width - 40,
@@ -58,11 +58,11 @@ class _FootprintPhotoMapAddMapListState
                   SizedBox(
                       width: MediaQuery.of(context).size.width - 40 - 30,
                       child: Image.asset(
-                        mapImage,
-                        fit: BoxFit.fitWidth,
+                        mapType.path,
+                        fit: BoxFit.cover,
                       )),
                   Text(
-                    mapName,
+                    mapType.name,
                     style: TextStyleFamily.normalTextStyle,
                   )
                 ],
@@ -74,7 +74,7 @@ class _FootprintPhotoMapAddMapListState
     );
   }
 
-  void _showMapSelectDialog(BuildContext context, String mapName) {
+  void _showMapSelectDialog(BuildContext context, MapType mapType) {
     showDialog(
         context: context,
         builder: (context) {
@@ -92,7 +92,7 @@ class _FootprintPhotoMapAddMapListState
                         Column(
                           children: [
                             Text(
-                              mapName,
+                              mapType.name,
                               style: TextStyleFamily.dialogTitleTextStyle,
                             ),
                             const SizedBox(
@@ -108,13 +108,11 @@ class _FootprintPhotoMapAddMapListState
                                 cursorColor: ColorFamily.black,
                                 onChanged: (text) {
                                   dialogState(() {
-                                    setState(() {
-                                      if (text.isEmpty) {
-                                        _errorText = "제목을 입력해주세요";
-                                      } else {
-                                        _errorText = null;
-                                      }
-                                    });
+                                    if (text.isEmpty) {
+                                      _errorText = "제목을 입력해주세요";
+                                    } else {
+                                      _errorText = null;
+                                    }
                                   });
                                 },
                                 decoration: InputDecoration(
@@ -144,6 +142,8 @@ class _FootprintPhotoMapAddMapListState
                                     overlayColor: MaterialStateProperty.all(
                                         ColorFamily.gray)),
                                 onPressed: () {
+                                  _errorText = null;
+                                  _controller.clear();
                                   Navigator.pop(context);
                                 },
                                 child: const Text(
@@ -155,8 +155,29 @@ class _FootprintPhotoMapAddMapListState
                                     overlayColor: MaterialStateProperty.all(
                                         ColorFamily.gray)),
                                 onPressed: () {
-                                  Navigator.pop(context); // 다이얼로그 팝
-                                  Navigator.pop(context); // 지도 추가 페이지 팝
+                                  dialogState(() async {
+                                    if(_controller.text.isEmpty) {
+                                      _errorText = "제목을 입력해주세요";
+                                    } else {
+                                      // 포토맵 추가
+                                      var mapIdx = await getPhotoMapSequence() + 1;
+                                      setPhotoMapSequence(mapIdx);
+                                      var photoMap = PhotoMap(
+                                          mapIdx: mapIdx,
+                                          mapUserIdx: user_idx,
+                                          mapType: mapType.type,
+                                          mapName: _controller.text,
+                                          mapSnapshot: "snapshot_${user_idx}_$mapIdx",
+                                          mapState: PhotoMapState.STATE_NORMAL.state
+                                      );
+                                      addPhotoMap(photoMap);
+                                      _errorText = null;
+                                      _controller.clear();
+                                      Navigator.pop(context); // 다이얼로그 팝
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => FootprintPhotoMapDetailScreen(photoMap.mapIdx, photoMap.mapName)));
+                                    }
+
+                                  });
                                 },
                                 child: const Text(
                                   "지도 생성",

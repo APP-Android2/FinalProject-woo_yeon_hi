@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -63,16 +64,41 @@ class _MoreScreenState extends State<MoreScreen> {
                       elevation: 1,
                       borderRadius: BorderRadius.circular(65),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          userProvider.image != null
+                              ? showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      child: Container(
+                                        width: deviceWidth * 0.8,
+                                        height: deviceHeight * 0.6,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: FileImage(
+                                                File(userProvider.image!.path)),
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  })
+                              : null;
+                        },
                         borderRadius: BorderRadius.circular(65),
                         splashColor: Colors.transparent,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(65),
-                          child: Image.asset(
-                            profileImage,
-                            width: deviceWidth * 0.35,
-                            height: deviceWidth * 0.35,
-                          ),
+                          child: userProvider.image != null
+                              ? Image.file(File(userProvider.image!.path),
+                                  width: deviceWidth * 0.35,
+                                  height: deviceWidth * 0.35,
+                                  fit: BoxFit.cover)
+                              : Image.asset(
+                                  profileImage,
+                                  width: deviceWidth * 0.35,
+                                  height: deviceWidth * 0.35,
+                                ),
                         ),
                       ),
                     ),
@@ -97,7 +123,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                        const ProfileEditScreen(),
+                                            const ProfileEditScreen(),
                                       ),
                                     );
                                     setState(() {});
@@ -111,7 +137,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                       )))
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           SizedBox(
                               width: deviceWidth * 0.4,
                               child: Text(profileMsg,
@@ -119,7 +145,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                       color: ColorFamily.black,
                                       fontSize: 12,
                                       fontFamily: FontFamily.mapleStoryLight),
-                                  maxLines: 3))
+                                  maxLines: 4))
                         ],
                       ),
                     ),

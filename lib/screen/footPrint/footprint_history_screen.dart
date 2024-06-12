@@ -1,8 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/history_dao.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_history_detail_screen.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_history_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -10,10 +13,14 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_history_top_app_bar.dart';
 
 import '../../provider/footprint_provider.dart';
+import '../../retrofit_interface/reverse_geo_coding_api.dart';
 import '../../style/text_style.dart';
 
 class FootprintHistoryScreen extends StatefulWidget {
-  const FootprintHistoryScreen({super.key});
+  FootprintHistoryScreen(this.userIdx, this.mapIdx, this.mapName, {super.key});
+  int userIdx;
+  int mapIdx;
+  String mapName;
 
   @override
   State<FootprintHistoryScreen> createState() => _FootprintHistoryScreenState();
@@ -23,69 +30,84 @@ class _FootprintHistoryScreenState extends State<FootprintHistoryScreen> {
   List<String> historyPlace = ["서교동", "역삼동", "이태원동", "명동", "한남동"];
   List<Widget> historyItems = [];
 
+  final Dio _reverseGCDio = Dio();
+  late ReverseGeoCodingApi _reverseGCApi;
+
   @override
   Widget build(BuildContext context) {
-    historyItems = List.generate(5, (index) => makeHistoryItem(context, index));
+    setHttp();
+    historyItems = List.generate(5, (index) => makeHistoryItem(context, index, widget.mapIdx));
     return ChangeNotifierProvider(
       create: (context) => FootprintHistoryProvider(historyItems.length),
       child:
           Consumer<FootprintHistoryProvider>(builder: (context, provider, _) {
-        return Scaffold(
-          backgroundColor: ColorFamily.cream,
-          appBar: const FootprintHistoryTopAppBar(),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: ColorFamily.beige,
-            shape: const CircleBorder(),
-            child: SvgPicture.asset('lib/assets/icons/edit.svg'),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const FootprintHistoryEditScreen()));
-            },
-          ),
-          body: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width - 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+        return FutureBuilder(
+          future: getHisotryCategorization(widget.userIdx, widget.mapIdx),
+          builder: (context, snapshot){
+            if(snapshot.hasData == false){
+              return const SizedBox();
+            }else if(snapshot.hasError){
+              return Center(child: const Text("network error", style: TextStyleFamily.normalTextStyle,));
+            }else{
+              return Scaffold(
+                backgroundColor: ColorFamily.cream,
+                appBar: FootprintHistoryTopAppBar(widget.mapIdx, widget.mapName),
+                floatingActionButton: FloatingActionButton(
+                  backgroundColor: ColorFamily.beige,
+                  shape: const CircleBorder(),
+                  child: SvgPicture.asset('lib/assets/icons/edit.svg'),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => FootprintHistoryEditScreen(widget.mapIdx)));
+                  },
+                ),
+                body: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                    child: Column(
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            provider.expandAll();
-                          },
-                          style: ButtonStyle(
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                          ),
-                          child: Text(
-                            "모두펼치기",
-                            style: textStyle,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 40,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  provider.expandAll();
+                                },
+                                style: ButtonStyle(
+                                  overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                                ),
+                                child: Text(
+                                  "모두펼치기",
+                                  style: textStyle,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  provider.collapseAll();
+                                },
+                                style: ButtonStyle(
+                                  overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                                ),
+                                child: Text(
+                                  "모두접기",
+                                  style: textStyle,
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            provider.collapseAll();
-                          },
-                          style: ButtonStyle(
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                          ),
-                          child: Text(
-                            "모두접기",
-                            style: textStyle,
-                          ),
-                        )
+                        Expanded(
+                            child: ListView.builder(
+                                itemCount: historyPlace.length,
+                                itemBuilder: (context, index) =>
+                                    makeHistory(context, index, provider))),
                       ],
-                    ),
-                  ),
-                  Expanded(
-                      child: ListView.builder(
-                          itemCount: historyPlace.length,
-                          itemBuilder: (context, index) =>
-                              makeHistory(context, index, provider))),
-                ],
-              )),
+                    )),
+              );
+            }
+          },
         );
       }),
     );
@@ -119,10 +141,11 @@ class _FootprintHistoryScreenState extends State<FootprintHistoryScreen> {
       ],
     );
   }
-  Widget makeHistoryItem(BuildContext context, int index) {
+
+  Widget makeHistoryItem(BuildContext context, int index, int mapIdx) {
     return InkWell(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => FootprintHistoryDetailScreen(historyPlace[index], index)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => FootprintHistoryDetailScreen(mapIdx, historyPlace[index], index)));
       },
       child: SizedBox(
         width: 120,
@@ -192,6 +215,48 @@ class _FootprintHistoryScreenState extends State<FootprintHistoryScreen> {
       ),
     );
   }
+
+  Future<void> setHttp() async {
+    await dotenv.load(fileName: ".env");
+    _reverseGCDio.options.headers = {
+      'X-NCP-APIGW-API-KEY-ID' : dotenv.env['X-NCP-APIGW-API-KEY-ID'],
+      'X-NCP-APIGW-API-KEY': dotenv.env['X-NCP-APIGW-API-KEY'],
+    };
+    _reverseGCApi = ReverseGeoCodingApi(_reverseGCDio);
+  }
+
+  Future<Map> getHisotryCategorization(int userIdx, int mapIdx) async {
+    var historyCategory = {};
+    var historyList = await getHistory(userIdx, mapIdx);
+
+    for(var history in historyList){
+      reverseGeoCoding(history.historyLocation);
+    }
+
+    return historyCategory;
+  }
+
+  Future<String?> reverseGeoCoding(GeoPoint coords) async {
+    try{
+      final response = await _reverseGCApi.reverseGeocode("${coords.longitude},${coords.latitude}", "legalcode", "json");
+
+      var result = response.results.first;
+
+      print("");
+      print(result.region.area1.name);
+      print(result.region.area2.name);
+      print(result.region.area3.name);
+      print(result.region.area4.name);
+      print("");
+
+      return null;
+    } catch (e) {
+      print("");
+      print("Error: $e");
+      print("");
+    }
+    return null;
+  }
 }
 
 
@@ -206,3 +271,7 @@ TextStyle textStyle = const TextStyle(
     fontFamily: FontFamily.mapleStoryLight,
     fontSize: 12,
     color: ColorFamily.black);
+
+
+
+

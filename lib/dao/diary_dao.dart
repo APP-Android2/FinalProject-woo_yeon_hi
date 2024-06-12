@@ -25,7 +25,7 @@ Future<void> setDiarySequence(int sequence) async {
       .set({'value': sequence});
 }
 
-Future<void> saveDiary(Diary diary) async {
+Future<void> addDiary(Diary diary) async {
   await FirebaseFirestore.instance.collection('DiaryData').add({
     "diary_idx": diary.diaryIdx,
     "diary_user_idx": diary.diaryUserIdx,
@@ -93,7 +93,7 @@ Future<void> uploadDiaryImage(XFile imageFile, String imageName) async {
       .putFile(File(imageFile.path));
 }
 
-Future<Image> getDiaryImagePath(String path) async {
+Future<Image> getDiaryImage(String path) async {
   var imageURL =
       await FirebaseStorage.instance.ref('image/diary/$path').getDownloadURL();
   var image = Image.network(
@@ -118,7 +118,7 @@ Future<bool> isExistOnDate(DateTime date) async {
       .collection('DiaryData')
       .where('diary_date', isEqualTo: stringDate)
       .get();
-  if (querySnapshot.docs.length > 0) {
+  if (querySnapshot.docs.isNotEmpty) {
     return true;
   } else {
     return false;
