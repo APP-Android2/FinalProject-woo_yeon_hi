@@ -32,9 +32,6 @@ class _RegisterScreen extends State<LoginScreen> {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     if (googleUser != null) {
-      print('email = ${googleUser.email}');
-      print('id = ${googleUser.id}');
-
       setState(() {
         userProvider.userAccount = googleUser.email;
         loginSuccess = true;
@@ -47,12 +44,9 @@ class _RegisterScreen extends State<LoginScreen> {
   signInWithKakao() async {
     if (await isKakaoTalkInstalled()) {
       try {
-        //카카오톡 설치됨, 카카오톡으로 로그인 시도
+        // 카카오톡 설치됨, 카카오톡으로 로그인 시도
         await UserApi.instance.loginWithKakaoTalk();
-        setState(() {
-          userProvider.userAccount = "카카오톡 로그인";
-          loginSuccess = true;
-        });
+        await _fetchKakaoUserInfo();
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
         showToast("카카오 계정 로그인에 실패하였습니다.");
@@ -65,26 +59,33 @@ class _RegisterScreen extends State<LoginScreen> {
         print('카카오 계정으로 로그인 시도');
         try {
           await UserApi.instance.loginWithKakaoAccount();
-          setState(() {
-            userProvider.userAccount = "카카오 계정 로그인";
-            loginSuccess = true;
-          });
+          await _fetchKakaoUserInfo();
         } catch (error) {
           print('카카오 계정으로 로그인 실패 $error');
           showToast("카카오 계정 로그인에 실패하였습니다.");
         }
       }
     } else {
-      //카카오톡 설치 안됨, 카카오계정으로 로그인 시도
+      // 카카오톡 설치 안됨, 카카오계정으로 로그인 시도
       try {
         await UserApi.instance.loginWithKakaoAccount();
-        setState(() {
-          userProvider.userAccount = "카카오 계정 로그인";
-          loginSuccess = true;
-        });
+        await _fetchKakaoUserInfo();
       } catch (error) {
         showToast("카카오 계정 로그인에 실패하였습니다.");
       }
+    }
+  }
+
+  _fetchKakaoUserInfo() async {
+    try {
+      User user = await UserApi.instance.me();
+      setState(() {
+        userProvider.userAccount = user.id.toString();
+        loginSuccess = true;
+      });
+    } catch (error) {
+      print('사용자 정보 요청 실패 $error');
+      showToast("사용자 정보 요청에 실패하였습니다.");
     }
   }
 
