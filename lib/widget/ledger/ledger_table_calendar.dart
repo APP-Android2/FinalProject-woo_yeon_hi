@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/model/ledger_model.dart';
 import 'package:woo_yeon_hi/provider/ledger_provider.dart';
 import 'package:woo_yeon_hi/screen/ledger/ledger_detail_screen.dart';
@@ -75,6 +76,30 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
       }
     }
     return total;
+  }
+
+  // 이벤트 리스트의 카테고리 아이콘 정의
+  String getIconPath(LedgerCategory category) {
+    const categoryIconMap = {
+      LedgerCategory.FOOD_EXPENSES: 'lib/assets/icons/spoon_fork.svg',
+      LedgerCategory.CAFFE: 'lib/assets/icons/coffee_cup.svg',
+      LedgerCategory.PUBLIC_TRANSPORT: 'lib/assets/icons/bus.svg',
+      LedgerCategory.SHOPPING: 'lib/assets/icons/shopping_cart.svg',
+      LedgerCategory.CULTURE: 'lib/assets/icons/culture_popcorn.svg',
+      LedgerCategory.HOBBY: 'lib/assets/icons/hobby_puzzle.svg',
+      LedgerCategory.DATE_WITH: 'lib/assets/icons/lover.svg',
+      LedgerCategory.GAME: 'lib/assets/icons/game.svg',
+      LedgerCategory.TRAVEL: 'lib/assets/icons/travel.svg',
+      LedgerCategory.DWELLING: 'lib/assets/icons/maintain_home.svg',
+      LedgerCategory.LIFE: 'lib/assets/icons/life_leaf.svg',
+      LedgerCategory.ETC: 'lib/assets/icons/etc_more.svg',
+      LedgerCategory.DEPOSIT: 'lib/assets/icons/money_deposit.svg',
+      LedgerCategory.INCOME_ADD: 'lib/assets/icons/income_add.svg',
+      LedgerCategory.INCOME_BONUS: 'lib/assets/icons/income_bonus.svg',
+      LedgerCategory.INCOME_ETC: 'lib/assets/icons/etc_more.svg',
+    };
+
+    return categoryIconMap[category] ?? 'lib/assets/icons/etc_more.svg';
   }
 
   @override
@@ -461,15 +486,15 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                       child: Container(
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: ColorFamily.white),
                         child: ListTile(
-                          leading: SvgPicture.asset('lib/assets/icons/spoon_fork.svg', width: 24, height: 24),
-                          title: Text(ledger.ledgerTitle, style: const TextStyle(color: ColorFamily.black, fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
-                          trailing: Text('${formatNumber(ledger.ledgerAmount)!}원', style: const TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight)),
+                          leading: SvgPicture.asset(getIconPath(ledger.ledgerCategory), width: 24, height: 24),
+                          title: Text('${ledger.ledgerTitle}', style: const TextStyle(color: ColorFamily.black, fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
+                          trailing: Text('${ledger.ledgerType.type == 0 ? '-' : '+'}${formatNumber(ledger.ledgerAmount)!}원', style: const TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight)),
                           onTap: () {
                             // 화면 전환
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 // 보여질 다음 화면을 설정한다.
-                                builder: (context) => const LedgerDetailScreen(),
+                                builder: (context) => LedgerDetailScreen(),
                               ),
                             );
                           },
