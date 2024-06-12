@@ -6,6 +6,7 @@ import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../dao/login_register_dao.dart';
 import '../../dao/user_dao.dart';
 import '../../model/user_model.dart';
 import '../../style/font.dart';
@@ -145,8 +146,12 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                       await storage.write(
                                       key: "loginAccount",
                                       value: userProvider.userAccount);
-
-                                      runApp(const MainScreen());
+                                      await storage.write(
+                                          key: "appLockState",
+                                          value: "0");
+                                      Future.delayed(const Duration(milliseconds: 500), () {
+                                        runApp(const MainScreen());
+                                      });
                                     },
                                     borderRadius:
                                     BorderRadius.circular(20.0),
@@ -171,30 +176,27 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
 }
 
 Future<void> _saveUserData(BuildContext context, UserModel provider) async {
-  var user_idx = await getUserSequence() + 1;
-  await setUserSequence(user_idx);
+  var user_idx = await getSpecificUserData(provider.userAccount, 'user_idx');
   var login_type = provider.loginType;
   var user_account = provider.userAccount;
-  var user_nickname = "기본닉네임";
+  var user_nickname = await getMyNickname(await getSpecificUserData(provider.userAccount, 'lover_idx'));
   var user_birth = provider.userBirth;
-  var user_profile_image = "";
+  var user_profile_image = "lib/assets/images/default_profile.png";
   var lover_user_idx = 2;
   var lover_nickname = provider.loverNickname;
   var home_preset_type = provider.homePresetType;
   var top_bar_type = 0;
   var profile_message = "";
   var alarms_allow = false;
-  var app_lock_state = 0;
   var top_bar_activate = false;
-  var lock_password = [];
   var user_state = 1;
   var love_d_day = provider.loveDday;
 
   var user = UserModel(
       userIdx: user_idx,
+      userNickname: user_nickname,
       loginType: login_type,
       userAccount: user_account,
-      userNickname: user_nickname,
       userBirth: user_birth,
       userProfileImage: user_profile_image,
       loverUserIdx: lover_user_idx,
@@ -204,7 +206,6 @@ Future<void> _saveUserData(BuildContext context, UserModel provider) async {
       profileMessage: profile_message,
       alarmsAllow: alarms_allow,
       topBarActivate: top_bar_activate,
-      lockPassword: lock_password,
       userState: user_state,
       loveDday: love_d_day
   );

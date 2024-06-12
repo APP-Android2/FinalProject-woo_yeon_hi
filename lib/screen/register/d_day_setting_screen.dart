@@ -7,6 +7,7 @@ import 'package:woo_yeon_hi/screen/register/nickname_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../dao/user_dao.dart';
 import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/color.dart';
@@ -31,6 +32,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
 
     userProvider = Provider.of<UserModel>(context, listen: false);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -136,14 +138,6 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                                 NickNameSettingScreen(
                                                                  isHost:
                                                                      widget.isHost)));
-                                            // Navigator.pushAndRemoveUntil(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //         builder: (context) =>
-                                            //             NickNameSettingScreen(
-                                            //                 isHost:
-                                            //                     widget.isHost)),
-                                            //     (route) => false);
                                           },
                                           borderRadius:
                                               BorderRadius.circular(20.0),
@@ -202,6 +196,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
       case 0:
         break;
     }
+    deleteUserData(userProvider.userAccount);
     setState(() {
       userProvider.loginType = 0;
     });

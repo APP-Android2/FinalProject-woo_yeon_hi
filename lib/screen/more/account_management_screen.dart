@@ -170,7 +170,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       case 0:
         break;
     }
-    updateUserData(userAccount, 'login_type', 0);
+    updateSpecificUserData(userAccount, 'login_type', 0);
     runApp(WooYeonHi(userAccount: userAccount, appLockState: appLockState));
   }
 }

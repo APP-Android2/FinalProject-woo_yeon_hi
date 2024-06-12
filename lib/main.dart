@@ -73,7 +73,6 @@ class _WooYeonHiState extends State<WooYeonHi> {
             profileMessage: '',
             alarmsAllow: false,
             topBarActivate: false,
-            lockPassword: [0, 0, 0, 0],
             userState: 2,
         loveDday: dateToString(DateTime.now())),
         child: MaterialApp(

@@ -18,7 +18,6 @@ class UserModel with ChangeNotifier{
   String profileMessage;
   bool alarmsAllow;
   bool topBarActivate;
-  List lockPassword;
   int userState;
   String loveDday;
 
@@ -36,7 +35,6 @@ class UserModel with ChangeNotifier{
         required this.profileMessage,
         required this.alarmsAllow,
         required this.topBarActivate,
-        required this.lockPassword,
         required this.userState,
         required this.loveDday,
       });
@@ -56,7 +54,6 @@ class UserModel with ChangeNotifier{
         profileMessage: data['profile_message'],
         alarmsAllow: data['alarms_allow'],
       topBarActivate: data['top_bar_activate'],
-      lockPassword: data['lock_password'],
       userState: data['user_state'],
       loveDday: data['love_d_day'],
     );

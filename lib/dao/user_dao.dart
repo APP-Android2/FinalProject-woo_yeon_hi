@@ -23,7 +23,6 @@ Future<void> saveUserData(UserModel user) async {
     "profile_message": user.profileMessage,
     "alarms_allow": user.alarmsAllow,
     "top_bar_activate": user.topBarActivate,
-    "lock_password": user.lockPassword,
     "user_state": user.userState,
     "love_dDay": user.loveDday,
   });
@@ -62,7 +61,25 @@ dynamic getSpecificUserData(String userAccount, String data) async {
   return result;
 }
 
-Future<void> updateUserData(String userAccount, String updateItem, var updateContent) async {
+// Future<void> updateUserData(String userAccount) async {
+//   var querySnapshot = await FirebaseFirestore.instance
+//       .collection('userData')
+//       .where('user_account', isEqualTo: userAccount)
+//       .get();
+//   var document = querySnapshot.docs.first;
+//
+//   if (querySnapshot.docs.isNotEmpty) {
+//     document.reference.update({
+//       updateItem: updateContent
+//     });
+//
+//     }
+// }
+// }
+
+
+
+Future<void> updateSpecificUserData(String userAccount, String updateItem, var updateContent) async {
   var querySnapshot = await FirebaseFirestore.instance
       .collection('userData')
       .where('user_account', isEqualTo: userAccount)

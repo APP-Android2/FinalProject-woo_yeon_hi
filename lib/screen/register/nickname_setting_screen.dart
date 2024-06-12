@@ -8,6 +8,7 @@ import 'package:woo_yeon_hi/screen/register/birthday_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../dao/user_dao.dart';
 import '../../model/enums.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
@@ -324,6 +325,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
       case 0:
         break;
     }
+    deleteUserData(userProvider.userAccount);
     setState(() {
       userProvider.loginType = 0;
     });
