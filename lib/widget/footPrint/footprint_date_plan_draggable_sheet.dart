@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/model/plan_model.dart';
 import 'package:woo_yeon_hi/provider/footprint_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
+import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_date_plan_sheet_header.dart';
 
 class FootprintDatePlanDraggableSheet extends StatefulWidget {
-  const FootprintDatePlanDraggableSheet({super.key});
+  FootprintDatePlanDraggableSheet(this.provider, {super.key});
+  FootPrintDatePlanSlidableProvider provider;
 
   @override
   State<FootprintDatePlanDraggableSheet> createState() => _FootprintDatePlanDraggableSheetState();
@@ -90,28 +93,46 @@ class _FootprintDatePlanDraggableSheetState extends State<FootprintDatePlanDragg
                       // 슬라이더 내용
                       SliverReorderableList(
                         onReorder: (int oldIndex, int newIndex) {
-                          provider.reorderItems(oldIndex, newIndex);
+                          widget.provider.reorderPlans(oldIndex, newIndex);
                         },
-                        itemCount: provider.items.length,
+                        itemCount: widget.provider.planList.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final item = provider.items[index];
+                          late var item;
+                          var isEditMode = false;
+                          if(widget.provider.planedList == null){
+                            item = widget.provider.planList[index];
+                          }else{
+                            isEditMode = true;
+                            item = widget.provider.planedList!.planedArray[index];
+                          }
                           return Container(
                             key: ValueKey(item),
                             child: Column(
                               children: [
                                 Container(
-                                  padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+                                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text('$index'),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(item),
-                                          SizedBox(height: 10),
-                                          Text('맛집 메모: https://naver.googlecom.comcmo'),
-                                        ],
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                                          child:
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(!isEditMode
+                                                  ?item['planed_place_name']
+                                                :(item as Map<String, dynamic>)['planed_place_name'], style: TextStyleFamily.normalTextStyle,),
+                                              const SizedBox(height: 10),
+                                              Text(!isEditMode
+                                                  ?item['planed_place_memo']
+                                                  :(item as Map<String, dynamic>)['planed_place_memo']
+                                                , style: TextStyleFamily.normalTextStyle,),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                       // 버튼 클릭 시 항목 이동.
                                       ReorderableDelayedDragStartListener(

@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:woo_yeon_hi/dao/plan_dao.dart';
 import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/model/place_info.dart';
 
 import '../model/history_model.dart';
+import '../model/plan_model.dart';
 import '../retrofit_interface/place_search_api.dart';
 
 /// 탭 전환 상태 관리 프로바이더
@@ -219,8 +221,7 @@ class FootprintPhotoMapOverlayProvider extends ChangeNotifier{
 
 // 데이트 플랜 메인 화면 상태관리
 class FootPrintSlidableProvider extends ChangeNotifier {
-  final List<Item> _items = List<Item>.generate(5, (index) => Item(title: "제주도 여행 ${index + 1}"));
-
+  List<Plan> _items = [];
   // List<Item> _items = [
   //   Item(title: 'Item 1'),
   //   Item(title: 'Item 2'),
@@ -231,20 +232,31 @@ class FootPrintSlidableProvider extends ChangeNotifier {
   //   Item(title: 'Item 7'),
   // ];
 
-  List<Item> get items => _items;
-
-  void addItem(String title) {
-    _items.add(Item(title: title));
+  List<Plan> get items => _items;
+  void addPlanList(List<Plan> list){
+    _items = list;
     notifyListeners();
   }
 
-  void removeItem(int index) {
+  void addPlan(Plan plan) {
+    _items.add(plan);
+    notifyListeners();
+  }
+
+  void removeItem(int index, Plan plan) {
     _items.removeAt(index);
+    deletePlan(plan);
     notifyListeners();
   }
 
-  void toggleCompleteItem(int index) {
-    _items[index].isCompleted = !_items[index].isCompleted;
+  void toggleCompleteItem(int index, Plan plan) {
+    if(_items[index].planState == PlanState.STATE_NORMAL.state){
+      normalPlan(plan);
+      _items[index].planState = PlanState.STATE_NORMAL.state;
+    }else{
+      successPlan(plan);
+      _items[index].planState = PlanState.STATE_SUCCESS.state;
+    }
     notifyListeners();
   }
 }
@@ -260,8 +272,46 @@ class Item {
 // 데이트 플랜 작성 화면 슬라이드 상태관리
 class FootPrintDatePlanSlidableProvider extends ChangeNotifier {
   final List<Item> _items = List<Item>.generate(5, (index) => Item(title: "방이역 ${index + 1}"));
+  List<Place> _searchPlaces = [];
+  Place? _selectedPlace;
+  List<Map<String, dynamic>> _planList = [];
+  Plan? _planedList;
+  final TextEditingController _memoController = TextEditingController();
+  final TextEditingController _planTitleController = TextEditingController();
+  final TextEditingController _planDateStartController = TextEditingController();
+  final TextEditingController _planDateEndController = TextEditingController();
+
 
   List<Item> get items => _items;
+  List<Place> get searchPlaces => _searchPlaces;
+  Place? get selectedPlace => _selectedPlace;
+  List<Map<String, dynamic>> get planList => _planList;
+  Plan? get planedList => _planedList;
+  TextEditingController get memoController => _memoController;
+  TextEditingController get planTitleController => _planTitleController;
+  TextEditingController get planDateStartController => _planDateStartController;
+  TextEditingController get planDateEndController => _planDateEndController;
+
+  void setPlanedList(Plan plan){
+    _planedList = plan;
+  }
+
+  void clearTitleController(){
+    _planTitleController.clear();
+    _planDateStartController.clear();
+    _planDateEndController.clear();
+    notifyListeners();
+  }
+
+  void setPlanDateStart(String date){
+    _planDateStartController.text = date;
+    notifyListeners();
+  }
+
+  void setPlanDateEnd(String date){
+    _planDateEndController.text = date;
+    notifyListeners();
+  }
 
   void addItem(String title) {
     _items.add(Item(title: title));
@@ -270,6 +320,41 @@ class FootPrintDatePlanSlidableProvider extends ChangeNotifier {
 
   void removeItem(int index) {
     _items.removeAt(index);
+    notifyListeners();
+  }
+
+  void addSearchPlace(Place place){
+    _searchPlaces.add(place);
+    notifyListeners();
+  }
+
+  void clearSearchPlace(){
+    _searchPlaces.clear();
+    notifyListeners();
+  }
+
+  void setPlace(Place? place){
+    _selectedPlace = place;
+    notifyListeners();
+  }
+
+  void addPlan(Map<String, dynamic> plan){
+    _planList.add(plan);
+    notifyListeners();
+  }
+
+  void removePlan(int index) {
+    _planList.removeAt(index);
+    notifyListeners();
+  }
+
+  // 항목 아이템 순서 변경
+  void reorderPlans(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final plan = _planList.removeAt(oldIndex);
+    _planList.insert(newIndex, plan);
     notifyListeners();
   }
 }

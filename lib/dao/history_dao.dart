@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/model/history_model.dart';
+import 'package:woo_yeon_hi/provider/footprint_provider.dart';
 
 Future<int> getHistorySequence() async {
   var querySnapShot = await FirebaseFirestore.instance
@@ -50,6 +51,8 @@ Future<List<History>> getHistory(int userIdx, int mapIdx) async {
   for (var doc in querySnapshot.docs) {
     results.add(History.fromData(doc.data()));
   }
+
+
   return results;
 }
 

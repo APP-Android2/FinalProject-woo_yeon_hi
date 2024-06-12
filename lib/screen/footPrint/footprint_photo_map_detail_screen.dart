@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -9,7 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/dao/history_dao.dart';
 import 'package:woo_yeon_hi/dao/photo_map_dao.dart';
@@ -18,6 +16,7 @@ import 'package:woo_yeon_hi/model/photo_map_model.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_history_detail_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_photo_map_detail_top_app_bar.dart';
+
 
 import '../../model/enums.dart';
 import '../../provider/footprint_provider.dart';
@@ -78,7 +77,7 @@ class FootprintPhotoMapDetailScreenState
       ),
       body: ChangeNotifierProvider(
         create: (context) =>
-            FootprintPhotoMapOverlayProvider(MapType.KOREA_SEOUL.type),
+            FootprintPhotoMapOverlayProvider(MapType.fromType(widget.photoMap.mapType)!.type),
         child: Consumer<FootprintPhotoMapOverlayProvider>(
           builder: (context, provider, _) {
             return FutureBuilder(
@@ -120,7 +119,7 @@ class FootprintPhotoMapDetailScreenState
   Future<void> _addMarkerOverlay(
       FootprintPhotoMapOverlayProvider provider, List<History> historyList) async {
     await _addMarker(provider, historyList);
-    _mapController.addOverlayAll(provider.markers.toSet());
+    await _mapController.addOverlayAll(provider.markers.toSet());
   }
 
   Future<void> _addMarker(FootprintPhotoMapOverlayProvider provider, List<History> historyList) async {
