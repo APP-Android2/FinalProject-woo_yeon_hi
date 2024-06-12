@@ -149,6 +149,15 @@ enum HistoryState{
   const HistoryState(this.state);
 }
 
+enum PlanState{
+  STATE_NORMAL(0),
+  STATE_SUCCESS(1),
+  STATE_DELETE(2);
+
+  final int state; // 상태
+  const PlanState(this.state);
+}
+
 
 
 

@@ -11,6 +11,8 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_tab_bar.dart';
 import 'package:woo_yeon_hi/widget/footPrint/footprint_top_app_bar.dart';
 
+import 'footprint_date_plan_write_screen.dart';
+
 class FootprintScreen extends StatefulWidget {
   const FootprintScreen({super.key});
 
@@ -47,6 +49,9 @@ class _FootprintScreenState extends State<FootprintScreen> {
             if(footprintProvider.currentPageIndex == 0){
               // 포토맵
               Navigator.push(context, MaterialPageRoute(builder: (context) => const FootprintPhotoMapAddScreen()));
+            }else{
+              // 데이트 플랜
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const FootprintDatePlanWriteScreen()));
             }
           },
         ),

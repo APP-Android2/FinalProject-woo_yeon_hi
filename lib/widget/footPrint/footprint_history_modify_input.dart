@@ -1,28 +1,27 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:woo_yeon_hi/provider/footprint_provider.dart';
-import 'package:woo_yeon_hi/screen/footPrint/footprint_history_edit_place_screen.dart';
-import 'package:woo_yeon_hi/style/text_style.dart';
+import 'package:woo_yeon_hi/model/history_model.dart';
 
 import '../../model/enums.dart';
+import '../../provider/footprint_provider.dart';
+import '../../screen/footPrint/footprint_history_edit_place_screen.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
+import '../../style/text_style.dart';
+import '../../utils.dart';
 
-class FootprintHistoryEditInput extends StatefulWidget {
-  FootprintHistoryEditInput(this.provider, {super.key});
+class FootprintHistoryModifyInput extends StatefulWidget {
+  FootprintHistoryModifyInput(this.provider, this.history, {super.key});
   FootprintHistoryEditProvider provider;
+  History history;
 
   @override
-  State<FootprintHistoryEditInput> createState() =>
-      _FootprintHistoryEditInputState();
+  State<FootprintHistoryModifyInput> createState() => _FootprintHistoryModifyInputState();
 }
 
-class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
+class _FootprintHistoryModifyInputState extends State<FootprintHistoryModifyInput> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -52,21 +51,29 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                   ),
                   widget.provider.selectedPlace != null
                       ? Row(
-                          children: [
-                            Text(
-                              widget.provider.selectedPlace!.title,
-                              style: TextStyleFamily.normalTextStyle,
-                            ),
-                            const Text(
-                              " (선택한 지역)",
-                              style: TextStyleFamily.hintTextStyle,
-                            )
-                          ],
-                        )
-                      : const Text(
-                          "(선택한 지역)",
-                          style: TextStyleFamily.hintTextStyle,
-                        )
+                    children: [
+                      Text(
+                        widget.provider.selectedPlace!.title,
+                        style: TextStyleFamily.normalTextStyle,
+                      ),
+                      const Text(
+                        " (선택한 지역)",
+                        style: TextStyleFamily.hintTextStyle,
+                      )
+                    ],
+                  )
+                      : Row(
+                    children: [
+                      Text(
+                        widget.history.historyPlaceName,
+                        style: TextStyleFamily.normalTextStyle,
+                      ),
+                      const Text(
+                        " (선택한 지역)",
+                        style: TextStyleFamily.hintTextStyle,
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
@@ -89,17 +96,17 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                   ),
                   widget.provider.date != null
                       ? Row(
-                          children: [
-                            Text(
-                              widget.provider.date!,
-                              style: TextStyleFamily.normalTextStyle,
-                            ),
-                          ],
-                        )
-                      : const Text(
-                          "날짜 입력",
-                          style: TextStyleFamily.hintTextStyle,
-                        )
+                    children: [
+                      Text(
+                        widget.provider.date!,
+                        style: TextStyleFamily.normalTextStyle,
+                      ),
+                    ],
+                  )
+                      : Text(
+                    widget.history.historyDate,
+                    style: TextStyleFamily.normalTextStyle,
+                  )
                 ],
               ),
             ),
@@ -207,7 +214,7 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                         headerStyle: const HeaderStyle(
                           titleCentered: true,
                           titleTextStyle:
-                              TextStyleFamily.appBarTitleBoldTextStyle,
+                          TextStyleFamily.appBarTitleBoldTextStyle,
                           formatButtonVisible: false,
                         ),
                         daysOfWeekStyle: const DaysOfWeekStyle(
@@ -225,8 +232,8 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                                     color: isWeekend(day)
                                         ? Colors.red
                                         : isSaturday(day)
-                                            ? Colors.blueAccent
-                                            : ColorFamily.black,
+                                        ? Colors.blueAccent
+                                        : ColorFamily.black,
                                     fontFamily: FontFamily.mapleStoryLight),
                               ),
                             );
@@ -276,8 +283,8 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                                         color: isWeekend(day)
                                             ? ColorFamily.white
                                             : isSaturday(day)
-                                                ? ColorFamily.white
-                                                : ColorFamily.black,
+                                            ? ColorFamily.white
+                                            : ColorFamily.black,
                                         fontFamily: FontFamily.mapleStoryLight),
                                   ),
                                 ),
@@ -303,11 +310,9 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                         },
                         onDaySelected: (selectedDay, focusedDay) {
                           bottomState(() {
-                            setState(() {
-                              _selectedDay = selectedDay;
-                              _focusedDay =
-                                  focusedDay; // update `_focusedDay` here as well
-                            });
+                            _selectedDay = selectedDay;
+                            _focusedDay =
+                                focusedDay; // update `_focusedDay` here as well
                           });
                         },
                         onPageChanged: (focusedDay) {
@@ -323,7 +328,7 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                           children: [
                             SizedBox(
                               width: ((MediaQuery.of(context).size.width - 40) /
-                                      2) -
+                                  2) -
                                   10,
                               height: 40,
                               child: ElevatedButton(
@@ -332,9 +337,7 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                                       surfaceTintColor: ColorFamily.white),
                                   onPressed: () {
                                     bottomState(() {
-                                      setState(() {
-                                        _focusedDay = DateTime.now();
-                                      });
+                                      _focusedDay = DateTime.now();
                                     });
                                   },
                                   child: const Text(
@@ -347,7 +350,7 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                             ),
                             SizedBox(
                               width: ((MediaQuery.of(context).size.width - 40) /
-                                      2) -
+                                  2) -
                                   10,
                               height: 40,
                               child: ElevatedButton(
@@ -356,12 +359,11 @@ class _FootprintHistoryEditInputState extends State<FootprintHistoryEditInput> {
                                       surfaceTintColor: ColorFamily.beige),
                                   onPressed: () {
                                     if (_selectedDay != null) {
-                                      var date = DateFormat('yyyy. M.dd.')
-                                          .format(_selectedDay!);
+
+                                      var date = dateToString(_selectedDay!);
                                       provider.setDate(date);
                                     } else {
-                                      var date = DateFormat('yyyy. M.dd.')
-                                          .format(_focusedDay);
+                                      var date = dateToString(_focusedDay!);
                                       provider.setDate(date);
                                     }
 
