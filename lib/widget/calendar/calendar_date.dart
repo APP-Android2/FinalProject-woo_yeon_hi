@@ -44,8 +44,10 @@ class _CalendarDateState extends State<CalendarDate> {
       .where('schedule_start_date', isEqualTo: stringDate)
       .get();
 
-    // 받아온 데이터를 리스트 형태로 변환한다
-    _scheduleData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    setState(() {
+      // 받아온 데이터를 리스트 형태로 변환한다
+      _scheduleData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    });
   }
 
   @override
