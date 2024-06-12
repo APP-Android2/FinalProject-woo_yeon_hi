@@ -492,7 +492,7 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
                                         );
                                       }
                                       else {
-                                        Navigator.pop(context);
+                                        Navigator.popUntil(context, (route) => route.isFirst);
                                       }
                                     },
                                     borderRadius: BorderRadius.circular(20.0),
@@ -548,7 +548,7 @@ class _LedgerWriteScreenState extends State<LedgerWriteScreen> {
                                               ledgerModifyDate: ''
                                           );
                                           ledgerProvider.addLedger(newLedger);
-                                          Navigator.of(context).pop();
+                                          Navigator.popUntil(context, (route) => route.isFirst);
 
                                         }else{
                                           if(priceController.text.isEmpty){

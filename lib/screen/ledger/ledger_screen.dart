@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/provider/ledger_provider.dart';
-import 'package:woo_yeon_hi/screen/ledger/ledger_unregistered_detail_screen.dart';
-import 'package:woo_yeon_hi/screen/ledger/ledger_write_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/ledger/ledger_carousel_slider.dart';
+import 'package:woo_yeon_hi/widget/ledger/ledger_dialog.dart';
 import 'package:woo_yeon_hi/widget/ledger/ledger_table_calendar.dart';
 import 'package:woo_yeon_hi/widget/ledger/ledger_top_app_bar.dart';
 
@@ -65,32 +64,6 @@ class _LedgerScreenState extends State<LedgerScreen> {
                   ),
               ),
             ),
-
-            // 하단 왼쪽에 FloatingActionButton 배치
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 0, 16),
-                child: Container(
-                  color: Colors.transparent,
-                  width: 80,
-                  height: 40,
-                  child: FloatingActionButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                    backgroundColor: ColorFamily.beige,
-                    heroTag: "actionButton2",
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => LedgerUnregisteredDetailScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('미등록 내역', style: TextStyle(fontSize: 14,fontFamily: FontFamily.mapleStoryLight)),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -101,17 +74,12 @@ class _LedgerScreenState extends State<LedgerScreen> {
         backgroundColor: ColorFamily.beige,
         child: SvgPicture.asset('lib/assets/icons/edit.svg'),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => LedgerWriteScreen(),
-            ),
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return LedgerDialog('LedgerScreen', '미등록 거래내역이 있습니다.', '이동하시겠습니까?');
+            },
           );
-          // showDialog(
-          //   context: context,
-          //   builder: (BuildContext context) {
-          //     return LedgerDialog('LedgerScreen', '미등록 거래내역이 있습니다.', '이동하시겠습니까?');
-          //   },
-          // );
         },
       ),
     );
