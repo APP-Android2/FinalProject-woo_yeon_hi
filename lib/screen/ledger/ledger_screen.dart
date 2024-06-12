@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/provider/ledger_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/widget/ledger/ledger_carousel_slider.dart';
@@ -19,7 +21,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // 앱바
-      appBar: LedgerTopAppBar(
+      appBar: const LedgerTopAppBar(
         title: '가계부',
       ),
       // 전체 배경색
@@ -53,7 +55,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
                       heroTag: "actionButton1",
                       onPressed: () {
                         // FAB의 액션
-                        print('Center123');
+                        DateTime today = DateTime.now();
+                        Provider.of<LedgerProvider>(context, listen: false).setSelectedAndFocusedDay(today);
+
                       },
                       child: const Text('오늘', style: TextStyle(fontSize: 15,fontFamily: FontFamily.mapleStoryLight)),
                     ),

@@ -17,9 +17,7 @@ class _LedgerUnregisteredDetailListViewState extends State<LedgerUnregisteredDet
   @override
   Widget build(BuildContext context) {
 
-    return ChangeNotifierProvider(
-      create: (context) => LedgerCheckBoxProvider(),
-      child: Consumer<LedgerCheckBoxProvider>(
+    return Consumer<LedgerCheckBoxProvider>(
         builder: (context, provider, child) {
           return Column(
             children: [
@@ -37,18 +35,18 @@ class _LedgerUnregisteredDetailListViewState extends State<LedgerUnregisteredDet
                         side: const BorderSide(color: ColorFamily.gray),
                         activeColor: ColorFamily.pink,
                         checkColor: ColorFamily.white,
-                        // 전체 항목의 체크박스 상태
+                        // 전체 체크박스 상태
                         value: provider.allChecked,
                         // 전체 체크박스 상태 변경 시
                         onChanged: (bool? value) {
-                          provider.toggleAll(!provider.allChecked);
+                          provider.toggleSelectAll(!provider.allChecked);
                         },
                       ),
                       InkWell(
                         onTap: () {
                           bool allChecked = provider.checkedItems.every((item) => item);
-                          // 체크박스 전체 선택/해제
-                          provider.toggleAll(!allChecked);
+                          // 전체 체크박스 상태 변경 시
+                          provider.toggleSelectAll(!allChecked);
                         },
                         child: Text(provider.checkedItems.every((item) => item) ? '전체 해제' : '전체 선택', style: const TextStyle(color: ColorFamily.black, fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
                       ),
@@ -140,7 +138,6 @@ class _LedgerUnregisteredDetailListViewState extends State<LedgerUnregisteredDet
             ],
           );
         },
-      ),
-    );
+      );
   }
 }
