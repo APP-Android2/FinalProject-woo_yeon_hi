@@ -12,7 +12,8 @@ import 'package:woo_yeon_hi/widget/footPrint/footprint_history_detail_top_app_ba
 import '../../style/font.dart';
 
 class FootprintHistoryDetailScreen extends StatefulWidget {
-  FootprintHistoryDetailScreen(this.title, this.index, {super.key});
+  FootprintHistoryDetailScreen(this.mapIdx, this.title, this.index, {super.key});
+  int mapIdx;
   String title;
   int index;
 
@@ -53,7 +54,7 @@ class _FootprintHistoryDetailScreenState
                           key: ValueKey(index),
                           controller: _controller,
                           index: index,
-                          child: makeHistoryDeatil(context, index, provider));
+                          child: makeHistoryDeatil(context, index, widget.mapIdx, provider));
                     }),
               ));
         },
@@ -63,7 +64,7 @@ class _FootprintHistoryDetailScreenState
 }
 
 Widget makeHistoryDeatil(
-    BuildContext context, int index, FootPrintHistoyDetailProvider provider) {
+    BuildContext context, int index, int mapIdx, FootPrintHistoyDetailProvider provider) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: Column(
@@ -120,7 +121,7 @@ Widget makeHistoryDeatil(
               // 수정, 삭제
               IconButton(
                   onPressed: () {
-                    _showModalBottomSheet(context);
+                    _showModalBottomSheet(context, mapIdx);
                   },
                   icon: SvgPicture.asset('lib/assets/icons/menu_vertical.svg'))
             ],
@@ -223,7 +224,7 @@ TextStyle contentMoreTextStyle = const TextStyle(
 String tmpContent =
     "비오는 날 한강 데이트는 로맨틱하고 아름다웠다. 우산을 나란히 쓰고 강변을 걷던 순간, 빗소리와 강물 소리가 행복한 기억으로 남았다. 카페에서는 따뜻한 커피를 마시며 서로를 더 깊게 알아갔고, 한강 위에서의 배 타기는 색다른 즐거움을 주었다. 마지막으로 함께 한 벤치에서 한강의 야경을 감상하며 소중한 순간을 공유했다. 오늘의 데이트는 우리에게 잊지 못할 특별한 경험이었다.";
 
-void _showModalBottomSheet(BuildContext context) {
+void _showModalBottomSheet(BuildContext context, int mapIdx) {
   showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -240,7 +241,7 @@ void _showModalBottomSheet(BuildContext context) {
                     // 바텀 시트 다이얼로그 팝
                     Navigator.pop(context);
                     // 수정 페이지로
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FootprintHistoryEditScreen()));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FootprintHistoryEditScreen(mapIdx)));
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(30, 5, 30, 15),

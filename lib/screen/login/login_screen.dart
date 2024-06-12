@@ -16,14 +16,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../main_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreen();
+  State<LoginScreen> createState() => _RegisterScreen();
 }
 
-class _RegisterScreen extends State<RegisterScreen> {
+class _RegisterScreen extends State<LoginScreen> {
   bool loginSuccess = false;
 
   signInWithGoogle() async {
@@ -147,7 +147,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                               await signInWithGoogle();
                               if (loginSuccess == true) {
                                 setState(() {
-                                  userProvider.loginType = LoginType.google;
+                                  userProvider.loginType = 1;
                                 });
                                 Navigator.pushReplacement(
                                     context,
@@ -202,7 +202,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                               await signInWithKakao();
                               if (loginSuccess == true) {
                                 setState(() {
-                                  userProvider.loginType = LoginType.kakao;
+                                  userProvider.loginType = 2;
                                 });
                                 Navigator.pushReplacement(
                                     context,

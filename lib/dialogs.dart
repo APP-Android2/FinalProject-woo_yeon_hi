@@ -81,6 +81,56 @@ void dialogTitleWithContent(BuildContext context, String title, String content, 
   );
 }
 
-void dialogOnlyTitle(){
-
+void dialogOnlyTitle(BuildContext context, String title,VoidCallback onCancle, VoidCallback onConfirm){
+  showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          surfaceTintColor: ColorFamily.white,
+          backgroundColor: ColorFamily.white,
+          child: Wrap(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyleFamily.dialogButtonTextStyle,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton(
+                            style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all(
+                                    ColorFamily.gray)),
+                            onPressed: onCancle,
+                            child: const Text(
+                              "취소",
+                              style: TextStyleFamily.dialogButtonTextStyle,
+                            )),
+                        TextButton(
+                            style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all(
+                                    ColorFamily.gray)),
+                            onPressed: onConfirm,
+                            child: const Text(
+                              "확인",
+                              style:
+                              TextStyleFamily.dialogButtonTextStyle_pink,
+                            ))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      });
 }

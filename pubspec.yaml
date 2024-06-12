@@ -70,10 +70,20 @@ dependencies:
   widgets_to_image: ^1.0.0
   path_provider: ^2.1.3
   scroll_to_index: ^3.0.1
+  dio: ^5.4.3+1
+  retrofit: ^4.1.0
+  json_annotation: ^4.8.1
+  proj4dart: ^2.1.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  retrofit_generator: ^8.1.0
+  build_runner: ^2.4.9
+  json_serializable: ^6.8.0
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

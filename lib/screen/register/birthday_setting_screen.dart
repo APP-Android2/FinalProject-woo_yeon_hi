@@ -6,16 +6,13 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/model/user_model.dart';
 import 'package:woo_yeon_hi/screen/register/home_preset_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/register/register_screen.dart';
+import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
-import 'package:woo_yeon_hi/widget/login/kakao_login.dart';
 
-import '../../model/enums.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
-import 'nickname_setting_screen.dart';
 
 class BirthdaySettingScreen extends StatefulWidget {
   final bool isHost;
@@ -27,27 +24,6 @@ class BirthdaySettingScreen extends StatefulWidget {
 }
 
 class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
-
-  void signOut() async {
-    switch (userProvider.loginType) {
-      case LoginType.google:
-        await GoogleSignIn().signOut();
-        break;
-      case LoginType.kakao:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case LoginType.none:
-        break;
-    }
-    setState(() {
-      userProvider.loginType = LoginType.none;
-    });
-  }
 
   DateTime _selectedDate = DateTime.now();
   late DateTime userBirth;
@@ -342,7 +318,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => RegisterScreen()),
+                                  builder: (context) => LoginScreen()),
                               (route) => false);
                         },
                         child: const Text(
@@ -355,5 +331,26 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                 ),
               ),
             ])));
+  }
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case 1:
+        await GoogleSignIn().signOut();
+        break;
+      case 2:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case 0:
+        break;
+    }
+    setState(() {
+      userProvider.loginType = 0;
+    });
   }
 }
