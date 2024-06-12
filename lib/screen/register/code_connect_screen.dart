@@ -18,7 +18,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 import '../../dao/user_dao.dart';
-import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/text_style.dart';
 
@@ -304,6 +303,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                   var guestIdx = await getSpecificCodeData(_codeText, 'guest_idx');
                                                   await saveLoverIdx(userProvider.userAccount, guestIdx);
                                                   await deleteCodeData(_codeText);
+                                                  //호스트화면 이동
                                                   Navigator.pushAndRemoveUntil(
                                                       context,
                                                       MaterialPageRoute(
@@ -312,6 +312,18 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                               isHost:
                                                               true)),
                                                           (route) => false);
+                                                  Fluttertoast.showToast(
+                                                      msg: "연결되었습니다!",
+                                                      toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                      ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor:
+                                                      ColorFamily.pink,
+                                                      textColor:
+                                                      ColorFamily.white,
+                                                      fontSize: 14.0);
                                                 }else {
                                                   Fluttertoast.showToast(
                                                       msg: "해당 코드로 연결된 상대가 없습니다.",
@@ -409,6 +421,18 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                   const NickNameSettingScreen(
                                                       isHost: false)),
                                                   (route) => false);
+                                          Fluttertoast.showToast(
+                                              msg: "연결되었습니다!",
+                                              toastLength:
+                                              Toast.LENGTH_SHORT,
+                                              gravity:
+                                              ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor:
+                                              ColorFamily.pink,
+                                              textColor:
+                                              ColorFamily.white,
+                                              fontSize: 14.0);
                                         }
                                       },
                                       borderRadius: BorderRadius.circular(20.0),
