@@ -7,6 +7,7 @@ import 'package:woo_yeon_hi/screen/register/register_done_screen.dart';
 import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
+import '../../dao/user_dao.dart';
 import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/color.dart';
@@ -25,27 +26,6 @@ class HomePresetSettingScreen extends StatefulWidget {
 }
 
 class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
-
-  void signOut() async {
-    switch (userProvider.loginType) {
-      case 1:
-        await GoogleSignIn().signOut();
-        break;
-      case 2:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case 0:
-        break;
-    }
-    setState(() {
-      userProvider.loginType = 0;
-    });
-  }
 
   var presetImages = [
     "lib/assets/images/home_preset_standard_4x.png",
@@ -263,6 +243,9 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
+                                      setState(() {
+                                        userProvider.homePresetType = presetPosition;
+                                      });
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
@@ -310,4 +293,27 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
               )
             ])));
   }
+
+  void signOut() async {
+    switch (userProvider.loginType) {
+      case 1:
+        await GoogleSignIn().signOut();
+        break;
+      case 2:
+        try {
+          await UserApi.instance.logout();
+          print('로그아웃 성공, SDK에서 토큰 삭제');
+        } catch (error) {
+          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+        }
+        break;
+      case 0:
+        break;
+    }
+    deleteUserData(userProvider.userAccount);
+    setState(() {
+      userProvider.loginType = 0;
+    });
+  }
+
 }

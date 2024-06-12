@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:woo_yeon_hi/style/color.dart';
+import 'package:woo_yeon_hi/utils.dart';
 import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
@@ -26,7 +27,7 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
   void initState() {
     super.initState();
     userProvider = Provider.of<UserModel>(context, listen: false);
-    _focusedDay = userProvider.loveDday;
+    _focusedDay = stringToDate(userProvider.loveDday);
     _selectedDay = _focusedDay;
   }
 
@@ -161,7 +162,7 @@ class _DdaySettingCalendarState extends State<DdaySettingCalendar> {
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
-              userProvider.loveDday = _selectedDay;
+              userProvider.loveDday = dateToString(_selectedDay!);
             });
           }
         },

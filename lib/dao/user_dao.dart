@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../model/user_model.dart';
-
 
 Future<void> saveUserData(UserModel user) async {
   await FirebaseFirestore.instance.collection('userData').add({
@@ -22,47 +22,83 @@ Future<void> saveUserData(UserModel user) async {
     "top_bar_type": user.topBarType,
     "profile_message": user.profileMessage,
     "alarms_allow": user.alarmsAllow,
-    "app_lock_state": user.appLockState,
     "top_bar_activate": user.topBarActivate,
-    "lock_password": user.lockPassword,
     "user_state": user.userState,
     "love_dDay": user.loveDday,
   });
 }
 
-Future<List<Map<String, dynamic>>> getUserData(
-    int userIdx,
-    int loginType,
-    String userAccount,
-    String userNickname,
-    DateTime userBirth,
-    String userProfileImage,
-    int loverUserIdx,
-    String loverNickname,
-    int homePresetType,
-    int topBarType,
-    String profileMessage,
-    bool alarmsAllow,
-    int appLockState,
-    bool topBarActivate,
-    List lockPassword,
-    int userState,
-    DateTime loveDday)
-    async {
-      List<Map<String, dynamic>> results = [];
+Future<Map<String, dynamic>> getUserData(String userAccount) async {
+  Map<String, dynamic> results = {};
 
-      Query<Map<String, dynamic>> query =
-      FirebaseFirestore.instance.collection('UserData');
+  Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_account', isEqualTo: userAccount);
 
   var querySnapShot = await query.get();
   for (var doc in querySnapShot.docs) {
-    results.add(doc.data());
+    results = doc.data();
   }
 
   return results;
 }
 
+dynamic getSpecificUserData(String userAccount, String data) async {
+  Map<String, dynamic> results = {};
+  dynamic result;
 
+  Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_account', isEqualTo: userAccount);
+
+  var querySnapShot = await query.get();
+  for (var doc in querySnapShot.docs) {
+    results = doc.data();
+  }
+
+  result = results[data];
+
+  return result;
+}
+
+// Future<void> updateUserData(String userAccount) async {
+//   var querySnapshot = await FirebaseFirestore.instance
+//       .collection('userData')
+//       .where('user_account', isEqualTo: userAccount)
+//       .get();
+//   var document = querySnapshot.docs.first;
+//
+//   if (querySnapshot.docs.isNotEmpty) {
+//     document.reference.update({
+//       updateItem: updateContent
+//     });
+//
+//     }
+// }
+// }
+
+
+
+Future<void> updateSpecificUserData(String userAccount, String updateItem, var updateContent) async {
+  var querySnapshot = await FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_account', isEqualTo: userAccount)
+      .get();
+
+  var document = querySnapshot.docs.first;
+  document.reference.update({updateItem: updateContent});
+}
+
+Future<void> deleteUserData(String userAccount) async {
+  QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_account', isEqualTo: userAccount)
+      .get();
+
+  for (DocumentSnapshot<Map<String, dynamic>> docSnapshot in querySnapshot.docs) {
+    await docSnapshot.reference.delete();
+  }
+}
 
 
 
@@ -88,9 +124,10 @@ Future<void> uploadUserProfileImage(XFile imageFile, String imageName) async {
       .putFile(File(imageFile.path));
 }
 
-Future<Image> getDiaryImagePath(String path) async {
-  var imageURL =
-  await FirebaseStorage.instance.ref('image/userProfile/$path').getDownloadURL();
+Future<Image> getProfileImagePath(String path) async {
+  var imageURL = await FirebaseStorage.instance
+      .ref('image/userProfile/$path')
+      .getDownloadURL();
   var image = Image.network(
     imageURL,
     fit: BoxFit.cover,

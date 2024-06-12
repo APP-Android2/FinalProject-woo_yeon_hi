@@ -9,7 +9,7 @@ class UserModel with ChangeNotifier{
   int loginType;
   String userAccount;
   String userNickname;
-  DateTime userBirth;
+  String userBirth;
   String userProfileImage;
   int loverUserIdx;
   String loverNickname;
@@ -17,11 +17,9 @@ class UserModel with ChangeNotifier{
   int topBarType;
   String profileMessage;
   bool alarmsAllow;
-  int appLockState;
   bool topBarActivate;
-  List lockPassword;
   int userState;
-  DateTime loveDday;
+  String loveDday;
 
   UserModel(
       {required this.userIdx,
@@ -36,9 +34,7 @@ class UserModel with ChangeNotifier{
         required this.topBarType,
         required this.profileMessage,
         required this.alarmsAllow,
-        required this.appLockState,
         required this.topBarActivate,
-        required this.lockPassword,
         required this.userState,
         required this.loveDday,
       });
@@ -53,13 +49,11 @@ class UserModel with ChangeNotifier{
         userProfileImage: data['user_profile_image'],
         loverUserIdx: data['lover_user_idx'],
         loverNickname: data['lover_nickname'],
-        homePresetType: data['home_Preset_type'],
+        homePresetType: data['home_preset_type'],
         topBarType: data['top_bar_type'],
         profileMessage: data['profile_message'],
         alarmsAllow: data['alarms_allow'],
-      appLockState: data['app_lock_state'],
       topBarActivate: data['top_bar_activate'],
-      lockPassword: data['lock_password'],
       userState: data['user_state'],
       loveDday: data['love_d_day'],
     );
