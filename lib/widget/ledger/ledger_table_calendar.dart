@@ -20,6 +20,9 @@ class LedgerTableCalendar extends StatefulWidget {
 }
 
 class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
+  // format 상태 저장할 변수
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
 
   // 캘린더에 보여주는 지출, 수입 총액
   Map<DateTime, List<Ledger>> _groupEvents(List<Ledger> ledgers) {
