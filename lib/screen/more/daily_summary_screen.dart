@@ -550,20 +550,6 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
     );
   }
 
-
-// 캘린더 아이템
-Widget makeCalendarItem(BuildContext context, int index, String summaryDay) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    child: InkWell(
-      onTap: () {
-
-      },
-      child: Container(
-        color: ColorFamily.white,
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-
 // 디데이 아이템
   Widget makeDdayItem(BuildContext context, int index, String summaryDay) {
     List<dDayModel> dDayList = [
@@ -658,8 +644,7 @@ Widget makeCalendarItem(BuildContext context, int index, String summaryDay) {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const CalendarDetailScreen()));
+
         },
         child: Container(
           color: ColorFamily.white,
@@ -798,12 +783,7 @@ Widget makeCalendarItem(BuildContext context, int index, String summaryDay) {
 
     return InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      FootprintHistoryDetailScreen(
-                          historyPlace[index], index)));
+
         },
         child: SizedBox(
           width: 130,

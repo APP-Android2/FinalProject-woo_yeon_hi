@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/provider/schedule_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -20,13 +19,10 @@ class CalendarEditScreen extends StatefulWidget {
 
 class _CalendarEditScreenState extends State<CalendarEditScreen> {
 
+  Map<String, dynamic> _scheduleData = {};
+
   // 현재 선택된 색상
   Color currentColor = ColorFamily.green;
-
-  // 제목
-  TextEditingController _titleController = TextEditingController();
-  // 메모 내용
-  TextEditingController _memoController = TextEditingController();
 
   // 하루 종일 체크여부
   bool checkAllDay = false;
@@ -115,23 +111,59 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
 
     updateFinishDecoration();
 
-    var test = stringToDate(widget.scheduleData['schedule_finish_date']);
+    _scheduleData = widget.scheduleData;
 
-    print("받아온 데이터 - ${test}");
-    print("데이터 타입 : ${test.runtimeType}");
+    // 시작일
+    termStart = stringToDateForStart(_scheduleData['schedule_start_date']);
+    // 종료일
+    termFinish = stringToDateForFinish(_scheduleData['schedule_finish_date']);
   }
 
-  DateTime stringToDate(String date){
-    List<String> splitDate = date.split('.');
-    String year = splitDate[0];
-    String month = splitDate[1].replaceAll(" ", "");
-    String day = splitDate[2].replaceAll(" ", "");
+  // 시작일을 DateTime 타입으로 변경
+  DateTime stringToDateForStart(String strDateTime) {
+    var date = _scheduleData['schedule_start_date'];
+    var time = _scheduleData['schedule_start_time'];
 
-    return DateTime(int.parse(year), int.parse(month), int.parse(day));
+    strDateTime = "$date $time";
+
+    var dateFormat = DateFormat('yyyy. M. dd.(E) HH:mm', 'ko_KR');
+    DateTime dateTime = dateFormat.parse(strDateTime);
+
+    return dateTime;
   }
+
+  // 종료일을 DateTime 타입으로 변경
+  DateTime stringToDateForFinish(String strDateTime) {
+    var date = _scheduleData['schedule_finish_date'];
+    var time = _scheduleData['schedule_finish_time'];
+
+    strDateTime = "$date $time";
+
+    var dateFormat = DateFormat('yyyy. M. dd.(E) HH:mm', 'ko_KR');
+    DateTime dateTime = dateFormat.parse(strDateTime);
+
+    return dateTime;
+  }
+
+
+  /*
+
+
+      수정 완료 처리
+
+
+   */
+
+
 
   @override
   Widget build(BuildContext context) {
+
+    // 제목
+    TextEditingController titleController = TextEditingController(text: "${_scheduleData['schedule_title']}");
+    // 메모 내용
+    TextEditingController memoController = TextEditingController(text: "${_scheduleData['schedule_memo']}");
+
     return Scaffold(
       backgroundColor: ColorFamily.cream,
       appBar: AppBar(
@@ -183,7 +215,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                         ),
                         Expanded(
                           child: TextField(
-                            controller: _titleController,
+                            controller: titleController,
                             style: TextStyleFamily.appBarTitleBoldTextStyle,
                             keyboardType: TextInputType.text,
                             cursorColor: ColorFamily.black,
@@ -256,7 +288,7 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 15),
                                   child: TextField(
-                                    controller: _memoController,
+                                    controller: memoController,
                                     keyboardType: TextInputType.multiline,
                                     cursorColor: ColorFamily.black,
                                     onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
