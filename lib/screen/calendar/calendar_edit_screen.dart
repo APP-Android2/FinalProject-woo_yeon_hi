@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
@@ -9,19 +10,8 @@ import 'package:woo_yeon_hi/widget/calendar/calendar_term_finish.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_term_start.dart';
 
 class CalendarEditScreen extends StatefulWidget {
-
-  final String title;
-  final DateTime termStart;
-  final DateTime termFinish;
-  final String memo;
-
-  const CalendarEditScreen({
-    required this.title,
-    required this.termStart,
-    required this.termFinish,
-    required this.memo,
-    super.key
-  });
+  Map<String, dynamic> scheduleData;
+  CalendarEditScreen(this.scheduleData, {super.key});
 
   @override
   State<CalendarEditScreen> createState() => _CalendarEditScreenState();
@@ -29,21 +19,18 @@ class CalendarEditScreen extends StatefulWidget {
 
 class _CalendarEditScreenState extends State<CalendarEditScreen> {
 
+  Map<String, dynamic> _scheduleData = {};
+
   // 현재 선택된 색상
   Color currentColor = ColorFamily.green;
-
-  // 제목
-  late TextEditingController titleController = TextEditingController();
-  // 메모 내용
-  late TextEditingController memoController = TextEditingController();
 
   // 하루 종일 체크여부
   bool checkAllDay = false;
 
   // 시작일 날짜
-  late DateTime termStart;
+  DateTime termStart = DateTime.now();
   // 종료일 날짜
-  late DateTime termFinish;
+  DateTime termFinish = DateTime.now();
   // 종료일 텍스트 데코
   TextDecoration finishTextDecoration = TextDecoration.none;
   // 종료일 체크 참거짓
@@ -122,14 +109,61 @@ class _CalendarEditScreenState extends State<CalendarEditScreen> {
   void initState() {
     super.initState();
 
-    titleController = TextEditingController(text: widget.title);
-    termStart = widget.termStart;
-    termFinish = widget.termFinish;
-    memoController = TextEditingController(text: widget.memo);
+    updateFinishDecoration();
+
+    _scheduleData = widget.scheduleData;
+
+    // 시작일
+    termStart = stringToDateForStart(_scheduleData['schedule_start_date']);
+    // 종료일
+    termFinish = stringToDateForFinish(_scheduleData['schedule_finish_date']);
   }
+
+  // 시작일을 DateTime 타입으로 변경
+  DateTime stringToDateForStart(String strDateTime) {
+    var date = _scheduleData['schedule_start_date'];
+    var time = _scheduleData['schedule_start_time'];
+
+    strDateTime = "$date $time";
+
+    var dateFormat = DateFormat('yyyy. M. dd.(E) HH:mm', 'ko_KR');
+    DateTime dateTime = dateFormat.parse(strDateTime);
+
+    return dateTime;
+  }
+
+  // 종료일을 DateTime 타입으로 변경
+  DateTime stringToDateForFinish(String strDateTime) {
+    var date = _scheduleData['schedule_finish_date'];
+    var time = _scheduleData['schedule_finish_time'];
+
+    strDateTime = "$date $time";
+
+    var dateFormat = DateFormat('yyyy. M. dd.(E) HH:mm', 'ko_KR');
+    DateTime dateTime = dateFormat.parse(strDateTime);
+
+    return dateTime;
+  }
+
+
+  /*
+
+
+      수정 완료 처리
+
+
+   */
+
+
 
   @override
   Widget build(BuildContext context) {
+
+    // 제목
+    TextEditingController titleController = TextEditingController(text: "${_scheduleData['schedule_title']}");
+    // 메모 내용
+    TextEditingController memoController = TextEditingController(text: "${_scheduleData['schedule_memo']}");
+
     return Scaffold(
       backgroundColor: ColorFamily.cream,
       appBar: AppBar(
