@@ -9,13 +9,12 @@ import 'package:woo_yeon_hi/screen/register/home_preset_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
-import 'package:woo_yeon_hi/widget/login/kakao_login.dart';
+import 'package:woo_yeon_hi/utils.dart';
 
-import '../../model/enums.dart';
+import '../../dao/user_dao.dart';
 import '../../style/color.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
-import 'nickname_setting_screen.dart';
 
 class BirthdaySettingScreen extends StatefulWidget {
   final bool isHost;
@@ -37,7 +36,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
   void initState() {
     super.initState();
     userProvider = Provider.of<UserModel>(context, listen: false);
-    userBirth = userProvider.userBirth;
+    userBirth = stringToDate(userProvider.userBirth);
   }
 
   @override
@@ -202,7 +201,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                           setState(() {
                                             _selectedDate = date;
                                             userBirth = _selectedDate;
-                                            userProvider.userBirth = userBirth;
+                                            userProvider.userBirth = dateToString(userBirth);
                                           });
                                         },
                                             // onCancel: (){},
@@ -223,8 +222,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                                       height: 20, width: 20),
                                                   Text(
                                                     textAlign: TextAlign.center,
-                                                    DateFormat('yyyy. M. d.')
-                                                        .format(userBirth),
+                                                    dateToString(userBirth),
                                                     style: const TextStyle(
                                                         fontFamily: FontFamily
                                                             .mapleStoryLight,
@@ -288,7 +286,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                                   child: InkWell(
                                     onTap: () {
                                       setState(() {
-                                        userProvider.userBirth = userBirth;
+                                        userProvider.userBirth = dateToString(userBirth);
                                       });
                                       Navigator.push(context, MaterialPageRoute(
                                           builder: (context) =>
@@ -352,6 +350,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
       case 0:
         break;
     }
+    deleteUserData(userProvider.userAccount);
     setState(() {
       userProvider.loginType = 0;
     });

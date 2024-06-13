@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:woo_yeon_hi/model/photo_map_model.dart';
 import 'package:woo_yeon_hi/screen/footPrint/footprint_history_screen.dart';
 
 import '../../screen/footPrint/footprint_photo_map_detail_screen.dart';
@@ -7,10 +8,9 @@ import '../../style/color.dart';
 import '../../style/text_style.dart';
 
 class FootprintPhotoMapDetailTopappBar extends StatefulWidget implements PreferredSizeWidget{
-  FootprintPhotoMapDetailTopappBar(this.globalkey, this.mapIdx, this.mapName, {super.key});
+  FootprintPhotoMapDetailTopappBar(this.globalkey, this.photoMap, {super.key});
   GlobalKey globalkey;
-  int mapIdx;
-  String mapName;
+  PhotoMap photoMap;
   int userIdx = 0;
 
   @override
@@ -28,13 +28,13 @@ class _FootprintPhotoMapDetailTopappBarState extends State<FootprintPhotoMapDeta
       backgroundColor: ColorFamily.cream,
       centerTitle: true,
       title: Text(
-        widget.mapName,
+        widget.photoMap.mapName,
         style: TextStyleFamily.appBarTitleLightTextStyle,
       ),
       leading: IconButton(
         onPressed: () {
           // 스냅샷 저장
-          FootprintPhotoMapDetailScreen.capture(widget.globalkey, widget.userIdx, widget.mapIdx);
+          FootprintPhotoMapDetailScreen.capture(widget.globalkey, widget.userIdx, widget.photoMap.mapIdx);
           Navigator.pop(context);
         },
         icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
@@ -43,8 +43,8 @@ class _FootprintPhotoMapDetailTopappBarState extends State<FootprintPhotoMapDeta
         IconButton(
           onPressed: () {
             // 스냅샷 저장
-            FootprintPhotoMapDetailScreen.capture(widget.globalkey, widget.userIdx, widget.mapIdx);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FootprintHistoryScreen(widget.userIdx, widget.mapIdx, widget.mapName)));
+            FootprintPhotoMapDetailScreen.capture(widget.globalkey, widget.userIdx, widget.photoMap.mapIdx);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FootprintHistoryScreen(widget.userIdx, widget.photoMap)));
           },
           icon: SvgPicture.asset('lib/assets/icons/list.svg'),
         ),

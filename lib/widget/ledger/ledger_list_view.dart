@@ -46,6 +46,9 @@ class _LedgerListViewState extends State<LedgerListView> {
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
+                        // 핸들 바
+                        showDragHandle: true,
+                        backgroundColor: ColorFamily.white,
                         builder: (BuildContext context) {
                           return LedgerModalBottomSheet();
                         },

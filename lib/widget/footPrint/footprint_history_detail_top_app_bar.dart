@@ -5,8 +5,7 @@ import '../../style/color.dart';
 import '../../style/text_style.dart';
 
 class FootprintHistoryDetailTopAppBar extends StatefulWidget implements PreferredSizeWidget{
-  const FootprintHistoryDetailTopAppBar(this.title, {super.key});
-  final String title;
+  const FootprintHistoryDetailTopAppBar({super.key});
 
   @override
   State<FootprintHistoryDetailTopAppBar> createState() => _FootprintHistoryDetailTopAppBarState();
@@ -22,8 +21,8 @@ class _FootprintHistoryDetailTopAppBarState extends State<FootprintHistoryDetail
       surfaceTintColor: ColorFamily.cream,
       backgroundColor: ColorFamily.cream,
       centerTitle: true,
-      title: Text(
-        widget.title,
+      title: const Text(
+        "히스토리",
         style: TextStyleFamily.appBarTitleLightTextStyle,
       ),
       leading: IconButton(

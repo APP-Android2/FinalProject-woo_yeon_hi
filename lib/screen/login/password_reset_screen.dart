@@ -29,6 +29,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
 
   dynamic userProvider;
   dynamic authNumberTextEditController;
+  DateTime? _timerStartTime;
 
   @override
   void initState() {
@@ -155,6 +156,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                         borderRadius: BorderRadius.circular(20),
                         onTap: (){
                           setState(() {
+                            _timerStartTime = DateTime.now();
                             _isAuthCodeGenerated = true;
                             _isAuthCodeExpired = false;
                             _authCode =
@@ -223,8 +225,19 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                               fontSize: 12,
                               fontFamily: FontFamily.mapleStoryLight),
                           spacerWidth: 2,
-                          endTime: DateTime.now().add(
-                            const Duration(minutes: 5, seconds: 00),
+                          endTime: _timerStartTime !=
+                              null
+                              ? _timerStartTime!
+                              .add(
+                            const Duration(
+                                minutes:
+                                5),
+                          )
+                              : DateTime.now()
+                              .add(
+                            const Duration(
+                                minutes:
+                                5),
                           ),
                           onEnd: () {
                               setState(() {

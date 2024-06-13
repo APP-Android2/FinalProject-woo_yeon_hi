@@ -1,10 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/user_dao.dart';
+import 'package:woo_yeon_hi/main.dart';
 import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
@@ -22,17 +26,22 @@ class AccountDeleteScreen extends StatefulWidget {
 }
 
 class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
-
+  static const storage = FlutterSecureStorage();
+  late String userAccount = "";
+  late int loginType = 0;
   bool isAgreed = false;
-  dynamic userProvider;
 
   @override
   void initState() {
     super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
+    _asyncMethod();
   }
-
+  
+  Future<void> _asyncMethod() async {
+    userAccount = (await storage.read(key: "loginAccount"))!;
+    loginType = await getSpecificUserData(userAccount, 'login_type');
+  }
+  
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
@@ -48,9 +57,21 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
         child: Column(
           children: [
             SizedBox(height: deviceHeight*0.05),
-            Image.asset(
-              'lib/assets/images/warning.png',
-              height: 80,
+            InkWell(
+              onTap: (){
+                signOut();
+                // deleteUserData(userAccount);
+                updateSpecificUserData(userAccount, 'user_state', 2);
+                storage.deleteAll();
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: Image.asset(
+                'lib/assets/images/warning.png',
+                height: 80,
+              ),
             ),
             const SizedBox(height: 30),
             const Text("계정을 삭제하면", style: TextStyleFamily.smallTitleTextStyle),
@@ -112,9 +133,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               child: InkWell(
                   onTap: () {
                     if(isAgreed){
-                      setState(() {
-                        userProvider.userState = 1;
-                      });
+                      updateSpecificUserData(userAccount, 'user_state', 1);
                       signOut();
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -161,7 +180,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
   }
 
   void signOut() async {
-    switch (userProvider.loginType) {
+    switch (loginType) {
       case 1:
         await GoogleSignIn().signOut();
         break;
@@ -176,9 +195,10 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
       case 0:
         break;
     }
-    setState(() {
-      userProvider.loginType = 0;
-    });
+    updateSpecificUserData(userAccount, 'login_type', 0);
   }
 
+  void exitApp() {
+    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  }
 }

@@ -56,8 +56,17 @@ class _LedgerUnregisteredDetailScreenState extends State<LedgerUnregisteredDetai
                       ),
                       child: InkWell(
                         onTap: () {
+                          print('등록 버튼 클릭: ${provider.allChecked}');
                           // 체크되지 않은 항목이 있는지 확인
-                          if (provider.checkedItems.contains(false)) {
+                          if (provider.allChecked) {
+                            // 모든 아이템이 체크되어 있는 경우.
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return LedgerDialog('DoneLedgerUnregisteredDetailScreen', '거래내역이 등록 되었습니다.', '가계부를 작성 하러 가보세요.');
+                                }
+                            );
+                          } else {
                             // 체크되지 않은 항목이 있으면 다이얼로그 표시
                             showDialog(
                               context: context,
@@ -65,12 +74,7 @@ class _LedgerUnregisteredDetailScreenState extends State<LedgerUnregisteredDetai
                                 return LedgerDialog('LedgerUnregisteredDetailScreen', '이대로 등록 하시겠습니까?', '선택 되지 않은 항목은 삭제 됩니다.');
                               },
                             );
-                          }else {
-                            // 모든 아이템이 체크되어 있는 경우.
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return LedgerDialog('DoneLedgerUnregisteredDetailScreen', '거래내역이 등록 되었습니다.', '가계부를 작성 하러 가보세요.');});}
+                          }
                         },
                         //Navigator.pop(context);
                         borderRadius: BorderRadius.circular(20.0),

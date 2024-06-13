@@ -20,9 +20,7 @@ class _LedgerCarouselSliderState extends State<LedgerCarouselSlider> {
   @override
   Widget build(BuildContext context) {
 
-    return ChangeNotifierProvider(
-      create: (context) => LedgerCarouselProvider(),
-      child: Consumer<LedgerCarouselProvider>(
+    return Consumer<LedgerProvider>(
         builder: (context, provider, child) {
           return Stack(
             children: [
@@ -38,9 +36,9 @@ class _LedgerCarouselSliderState extends State<LedgerCarouselSlider> {
                       provider.setCurrentIndex(index);
                     },
                   ),
-                  itemCount: provider.items.length,
+                  itemCount: provider.isLoading ? 1 : provider.items.length,
                   itemBuilder: (context, index, realIndex) {
-                    final item = provider.items[index];
+                    final item = provider.isLoading ? provider.itemsSetting[index] : provider.items[index];
                     return Material(
                       color: ColorFamily.cream,
                       child: Container(
@@ -56,7 +54,7 @@ class _LedgerCarouselSliderState extends State<LedgerCarouselSlider> {
                               )
                             ]
                         ),
-                        child: Row(
+                        child: provider.isLoading ? Center(child: CircularProgressIndicator()) : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             if(item.containsKey('texts1'))
@@ -130,7 +128,6 @@ class _LedgerCarouselSliderState extends State<LedgerCarouselSlider> {
             ],
           );
         },
-      ),
-    );
+      );
   }
 }

@@ -60,7 +60,7 @@ class _LedgerDialogState extends State<LedgerDialog> {
                           Navigator.of(context).pop();
                           performActionCancel();
                         },
-                        child: Text('취소', style: TextStyle(color: ColorFamily.black, fontSize: 20, fontFamily: FontFamily.mapleStoryLight))
+                        child: Text(widget.fileName == 'DoneLedgerUnregisteredDetailScreen' ? '홈으로' : '취소', style: TextStyle(color: ColorFamily.black, fontSize: 20, fontFamily: FontFamily.mapleStoryLight))
                     ),
                     SizedBox(width: 75),
                     TextButton(
@@ -105,6 +105,13 @@ class _LedgerDialogState extends State<LedgerDialog> {
           ),
         );
         break;
+      case 'DoneLedgerUnregisteredDetailScreen':
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => LedgerWriteScreen(),
+          ),
+        );
+        break;
       case 'LedgerWriteScreen':
         Navigator.pop(context);
         break;
@@ -120,6 +127,9 @@ class _LedgerDialogState extends State<LedgerDialog> {
             builder: (context) => LedgerWriteScreen(),
           ),
         );
+        break;
+      case 'DoneLedgerUnregisteredDetailScreen':
+        Navigator.pop(context);
         break;
     }
   }

@@ -1,14 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_reset_screen.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-
+import 'package:woo_yeon_hi/utils.dart';
 import '../../model/user_model.dart';
 
 class PasswordEnterScreen extends StatefulWidget {
@@ -19,21 +25,32 @@ class PasswordEnterScreen extends StatefulWidget {
 }
 
 class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
-
+  static const storage = FlutterSecureStorage();
+  String appLockState = "";
+  String lockPassword = "";
   dynamic userProvider;
 
   @override
   void initState() {
     super.initState();
-
     userProvider = Provider.of<UserModel>(context, listen: false);
+    _asyncMethod();
+  }
+
+  _asyncMethod() async {
+    appLockState = (await storage.read(key: "appLockState"))??"1";
+    lockPassword = (await storage.read(key: "lockPassword"))??"0,0,0,0";
+
+    if(appLockState=="2")
+    {Future.delayed(const Duration(milliseconds: 500), () async {
+      _authenticateWithBiometrics();
+    });}
   }
 
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
-print(userProvider.lockPassword);
     return Scaffold(
         body: Container(
       width: deviceWidth,
@@ -51,35 +68,36 @@ print(userProvider.lockPassword);
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(4, (index) {
-                  return _buildPasswordIcon(
-                      index < checkingPassword.length);
+                  return _buildPasswordIcon(index < checkingPassword.length);
                 })),
           ),
           const SizedBox(height: 10),
-          Padding(
-            padding: EdgeInsets.only(right: deviceWidth * 0.08),
-            child: TextButton(
-                style: ButtonStyle(
-                    overlayColor:
-                        MaterialStateProperty.all<Color>(Colors.transparent)),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const PasswordResetScreen()));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text(
-                      "비밀번호를 모르겠어요",
-                      style: TextStyle(
-                          color: ColorFamily.black,
-                          fontSize: 12,
-                          fontFamily: FontFamily.mapleStoryLight),
-                    ),
-                    SvgPicture.asset("lib/assets/icons/expand.svg",
-                        width: 18, height: 18)
-                  ],
-                )),
+          Align(
+            alignment: Alignment.centerRight,
+            child: SizedBox(
+              width: 160,
+              child: TextButton(
+                  style: ButtonStyle(
+                      overlayColor:
+                          MaterialStateProperty.all<Color>(Colors.transparent)),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const PasswordResetScreen()));
+                  },
+                  child: Row(
+                    children: [
+                      const Text(
+                        "비밀번호를 모르겠어요",
+                        style: TextStyle(
+                            color: ColorFamily.black,
+                            fontSize: 12,
+                            fontFamily: FontFamily.mapleStoryLight),
+                      ),
+                      SvgPicture.asset("lib/assets/icons/expand.svg",
+                          width: 18, height: 18)
+                    ],
+                  )),
+            ),
           ),
           SizedBox(height: deviceHeight * 0.18),
           SizedBox(
@@ -297,8 +315,8 @@ print(userProvider.lockPassword);
                     },
                     child: Container(
                         alignment: Alignment.center,
-                        child: SvgPicture.asset(
-                            "lib/assets/icons/backspace.svg")),
+                        child:
+                            SvgPicture.asset("lib/assets/icons/backspace.svg")),
                   ),
                 )
               ],
@@ -308,15 +326,16 @@ print(userProvider.lockPassword);
       ),
     ));
   }
+
   Widget _buildPasswordIcon(bool isActive) {
     return isActive
         ? SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg",
-        width: 48, height: 48)
+            width: 48, height: 48)
         : Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg",
-          width: 24),
-    );
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg",
+                width: 24),
+          );
   }
 
   bool firstNumInput = false;
@@ -359,7 +378,8 @@ print(userProvider.lockPassword);
 
   void _checkPassword() {
     var listEquality = const ListEquality();
-    if (!listEquality.equals(checkingPassword, userProvider.lockPassword)) {
+    if (!listEquality.equals(checkingPassword,
+        stringToList(lockPassword))) {
       Fluttertoast.showToast(
           msg: "비밀번호가 일치하지 않습니다.",
           toastLength: Toast.LENGTH_SHORT,
@@ -372,13 +392,9 @@ print(userProvider.lockPassword);
         _initiatePassword();
       });
     } else {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const MainScreen()),
-              (route) => false);
-      }
+      runApp(const MainScreen());
     }
+  }
 
   void _initiatePassword() {
     setState(() {
@@ -390,4 +406,53 @@ print(userProvider.lockPassword);
       checkingPassword.clear();
     });
   }
+
+  final LocalAuthentication auth = LocalAuthentication();
+
+  Future<void> _authenticateWithBiometrics() async {
+    bool authenticated = false;
+    try {
+      setState(() {});
+      authenticated = await auth.authenticate(
+        authMessages: [
+          const AndroidAuthMessages(
+            biometricHint: '',
+            biometricNotRecognized: '생체정보가 일치하지 않습니다.',
+            biometricRequiredTitle: '생체정보가 필요합니다.',
+            biometricSuccess: '스캔 완료',
+            cancelButton: '취소',
+            deviceCredentialsRequiredTitle: '생체정보가 필요합니다.',
+            deviceCredentialsSetupDescription: '기기 설정으로 이동하여 생체정보를 등록하세요.',
+            goToSettingsButton: '설정',
+            goToSettingsDescription: '기기 설정으로 이동하여 생체정보를 등록하세요.',
+            signInTitle: '생체정보 스캔',
+          )
+        ],
+        localizedReason: '기기에 등록된 생체정보를 스캔해주세요.',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+      setState(() {});
+    } on PlatformException catch (e) {
+      print(e);
+      setState(() {});
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+
+    if (authenticated) {
+      Navigator.pop(context);
+      runApp(const MainScreen());
+    }
+  }
+
+
+
+
+
+
 }

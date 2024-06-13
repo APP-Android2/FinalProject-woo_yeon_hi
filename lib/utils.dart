@@ -22,6 +22,20 @@ DateTime stringToDate(String date){
 /// 날짜 뒤 요일이 추가된 형식입니다. (E)
 String dateToStringWithDay(DateTime date) {
   String selectedDay = DateFormat('yyyy. M. dd.(E)', 'ko_KR').format(date);
-
   return '$selectedDay';
+}
+
+String listToString(List<int> list) {
+  return list.join(',');
+}
+
+List<int> stringToList(String input) {
+  List<int> result = [];
+
+  List<String> parts = input.split(',');
+  for (String part in parts) {
+    result.add(int.parse(part.trim()));
+  }
+
+  return result;
 }
