@@ -43,8 +43,7 @@ Future<void> main() async {
  int userState = await getSpecificUserData(userAccount, 'user_state')?? 2;
 
   initializeDateFormatting().then((_) async {
-
-    if(appLockState == "0"){
+    if(userAccount != ""){
       runApp(const MainScreen());
     }else{
       runApp(WooYeonHi(userAccount: userAccount, appLockState: appLockState, userState: userState));
