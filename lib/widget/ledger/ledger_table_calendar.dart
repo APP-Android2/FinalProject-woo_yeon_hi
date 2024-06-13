@@ -20,9 +20,6 @@ class LedgerTableCalendar extends StatefulWidget {
 }
 
 class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
-  // format 상태 저장할 변수
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
 
   // 캘린더에 보여주는 지출, 수입 총액
   Map<DateTime, List<Ledger>> _groupEvents(List<Ledger> ledgers) {
@@ -81,33 +78,6 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
     return total;
   }
 
-  // DatePicker 기능
-  void _showDateTimePicker() {
-    DatePicker.showDatePicker(
-      context,
-      showTitleActions: true,
-      minTime: DateTime(2020, 1, 1),
-      maxTime: DateTime(2030, 12, 31),
-      onChanged: (date) {
-        print('change $date');
-      },
-      onConfirm: (date) {
-        setState(() {
-          // 선택된 날짜 업데이트
-          _selectedDay = date;
-
-          // 포커스된 날짜 업데이트
-          _focusedDay = date;
-
-          // 선택된 날짜의 이벤트 조회
-          //_selectedShowEvents.value = _getEventsShowForDay(_selectedDay!);
-        });
-      },
-      currentTime: _selectedDay,
-      locale: LocaleType.ko,
-    );
-  }
-  
   // 이벤트 리스트의 카테고리 아이콘 정의
   String getIconPath(LedgerCategory category) {
     const categoryIconMap = {
@@ -130,15 +100,6 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
     };
 
     return categoryIconMap[category] ?? 'lib/assets/icons/etc_more.svg';
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // 초기 선택된 날짜를 현재 포커스된 날짜로 설정
-    _selectedDay = _focusedDay;
-    // 초기 선택된 날짜의 이벤트 설정
-    //_selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
 
   @override
