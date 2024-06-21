@@ -115,6 +115,8 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
             DateTime.parse(ledger.ledgerDate).toLocal().day == ledgerProvider.selectedDay.day &&
             DateTime.parse(ledger.ledgerDate).toLocal().month == ledgerProvider.selectedDay.month &&
             DateTime.parse(ledger.ledgerDate).toLocal().year == ledgerProvider.selectedDay.year).toList();
+        // 캘린더 이벤트에 보이는 데이터를 오름차순(ASC)으로 정렬
+        selectedDayLedgers.sort((a, b) => DateTime.parse(a.ledgerDate).compareTo(DateTime.parse(b.ledgerDate)));
 
         // 지출, 수입의 계산 결과
         Map<String, int> totalMoney = calculateTotalMoney(selectedDayLedgers);
@@ -490,6 +492,10 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
                           title: Text('${ledger.ledgerTitle}', style: const TextStyle(color: ColorFamily.black, fontSize: 14, fontFamily: FontFamily.mapleStoryLight)),
                           trailing: Text('${ledger.ledgerType.type == 0 ? '-' : '+'}${formatNumber(ledger.ledgerAmount)!}원', style: const TextStyle(color: ColorFamily.black, fontSize: 10, fontFamily: FontFamily.mapleStoryLight)),
                           onTap: () {
+                            // 날짜만 추출 (예시: "2024-06-11T15:16:00.000" -> "2024-06-11")
+                            String dateOnly = ledger.ledgerDate.split('T')[0];
+                            // 날짜에 맞는 데이터로 갱신
+                            ledgerProvider.readLedger(dateOnly);
                             // 화면 전환
                             Navigator.of(context).push(
                               MaterialPageRoute(

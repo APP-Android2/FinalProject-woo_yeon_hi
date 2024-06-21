@@ -28,6 +28,15 @@ class LedgerDao{
     return querySnapShot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
   }
 
+  // 가계부 상세 데이터 가져오기
+  Future<List<Ledger>> readLedger(String ledgerDate) async {
+    var querySnapShot = await FirebaseFirestore.instance
+        .collection('Ledger')
+        .where('ledger_date', isGreaterThanOrEqualTo: ledgerDate, isLessThan: '${ledgerDate}T23:59:59.999')
+        .get();
+    return querySnapShot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
+
   // 연도와 월 조건으로 현재 월 데이터 가져오기
   Future<List<Ledger>> getMonthlyLedgerData(DateTime focusedDay) async {
     String yearMonth = '${focusedDay.year.toString().padLeft(4, '0')}-${focusedDay.month.toString().padLeft(2, '0')}';

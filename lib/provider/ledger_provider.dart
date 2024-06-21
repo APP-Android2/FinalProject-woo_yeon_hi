@@ -180,6 +180,19 @@ class LedgerProvider extends ChangeNotifier{
     }
   }
 
+  // 데이터 상세 보기
+  List<Ledger> _selectedLedgerDate = [];
+  List<Ledger> get selectedLedgerDate => _selectedLedgerDate;
+
+  Future<void> readLedger(String ledgerDate) async {
+    try{
+      _selectedLedgerDate = await _ledgerDao.readLedger(ledgerDate);
+      notifyListeners();
+    } catch (error){
+      print('가계부 데이터 상세 보기 중 오류 $error');
+    }
+  }
+
   // // 데이터 업데이트
   // Future<void> updateLedger(Ledger ledger) async {
   //   try {
