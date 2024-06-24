@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woo_yeon_hi/model/ledger_model.dart';
 import 'package:woo_yeon_hi/screen/ledger/ledger_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
@@ -7,7 +8,10 @@ import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/ledger/ledger_dialog.dart';
 
 class LedgerModalBottomSheet extends StatefulWidget {
-  const LedgerModalBottomSheet({super.key});
+  //const LedgerModalBottomSheet({super.key});
+  Ledger ledger;
+
+  LedgerModalBottomSheet(this.ledger, {super.key});
 
   @override
   State<LedgerModalBottomSheet> createState() => _LedgerModalBottomSheetState();
@@ -33,7 +37,7 @@ class _LedgerModalBottomSheetState extends State<LedgerModalBottomSheet> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LedgerEditScreen(),
+                      builder: (context) => LedgerEditScreen(widget.ledger),
                     )
                 );
                 FocusScope.of(context).unfocus();
