@@ -401,6 +401,7 @@ class _LedgerEditScreenState extends State<LedgerEditScreen> {
                                   controller: titleController,
                                   maxLength: 20,
                                   maxLines: 1,
+                                  focusNode: _titleFocusNode,
                                   textInputAction: TextInputAction.next,
                                   style: const TextStyle(
                                       color: ColorFamily.black,
