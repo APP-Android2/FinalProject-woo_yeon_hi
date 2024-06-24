@@ -73,8 +73,8 @@ class _LedgerDetailScreenState extends State<LedgerDetailScreen> {
 
                           const SizedBox(height: 30),
 
-                          // 아이템 항목
-                          LedgerListView(selectedLedgerDate, ledgerProvider),
+                          // 아이템 항목 (snapshot.data! : 항목 삭제 시 데이터가 화면에 갱신)
+                          LedgerListView(snapshot.data!, ledgerProvider),
 
                           // 확인 버튼
                           Container(

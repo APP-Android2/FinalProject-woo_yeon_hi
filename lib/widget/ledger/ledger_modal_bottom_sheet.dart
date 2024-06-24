@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woo_yeon_hi/model/ledger_model.dart';
+import 'package:woo_yeon_hi/provider/ledger_provider.dart';
 import 'package:woo_yeon_hi/screen/ledger/ledger_edit_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-import 'package:woo_yeon_hi/widget/ledger/ledger_dialog.dart';
 
 class LedgerModalBottomSheet extends StatefulWidget {
   //const LedgerModalBottomSheet({super.key});
   Ledger ledger;
+  LedgerProvider provider;
 
-  LedgerModalBottomSheet(this.ledger, {super.key});
+  LedgerModalBottomSheet(this.ledger, this.provider, {super.key});
 
   @override
   State<LedgerModalBottomSheet> createState() => _LedgerModalBottomSheetState();
 }
 
 class _LedgerModalBottomSheetState extends State<LedgerModalBottomSheet> {
+
+  // 가계부 데이터 삭제 (상태 값 업데이트)
+  void _deleteLedger(BuildContext context) async {
+    await widget.provider.deleteLedger(widget.ledger);
+  }
+
   @override
   Widget build(BuildContext context) {
     // 현재 화면의 높이를 가져옵니다.
@@ -72,6 +78,7 @@ class _LedgerModalBottomSheetState extends State<LedgerModalBottomSheet> {
               splashColor: ColorFamily.gray.withOpacity(0.5),
               onTap: () {
                 setState(() {
+                  _deleteLedger(context);
                   Navigator.pop(context);
                   FocusScope.of(context).unfocus();
                 });
@@ -83,7 +90,7 @@ class _LedgerModalBottomSheetState extends State<LedgerModalBottomSheet> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SvgPicture.asset('lib/assets/icons/delete.svg', color: ColorFamily.pink, width: 24, height: 24),
+                    SvgPicture.asset('lib/assets/icons/delete.svg', colorFilter: const ColorFilter.mode(ColorFamily.pink, BlendMode.srcIn), width: 24, height: 24),
                     const Text(
                       "삭제",
                       style: TextStyleFamily.smallTitleTextStyle_pink,

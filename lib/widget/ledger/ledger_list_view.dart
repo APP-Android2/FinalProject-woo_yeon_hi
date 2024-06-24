@@ -100,7 +100,7 @@ class _LedgerListViewState extends State<LedgerListView> {
                         showDragHandle: true,
                         backgroundColor: ColorFamily.white,
                         builder: (BuildContext context) {
-                          return LedgerModalBottomSheet(ledger);
+                          return LedgerModalBottomSheet(ledger, widget.provider);
                         },
                       );
                     },

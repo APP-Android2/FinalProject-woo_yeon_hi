@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/model/ledger_model.dart';
 
 class LedgerDao{
@@ -33,6 +34,7 @@ class LedgerDao{
     var querySnapShot = await FirebaseFirestore.instance
         .collection('Ledger')
         .where('ledger_date', isGreaterThanOrEqualTo: ledgerDate, isLessThan: '${ledgerDate}T23:59:59.999')
+        .where('ledger_state', isEqualTo: LedgerState.STATE_NORMAL.state)
         .get();
     return querySnapShot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
   }
@@ -49,6 +51,18 @@ class LedgerDao{
         .collection('Ledger')
         .doc(document)
         .update(ledger.toMap());
+    return querySnapShot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
+
+  // 가계부 데이터 삭제 (상태 값 업데이트)
+  Future<List<Ledger>> updateLedgerState(Ledger ledger) async{
+    var querySnapShot = await FirebaseFirestore.instance
+        .collection('Ledger')
+        .where('ledger_idx', isEqualTo: ledger.ledgerIdx)
+        .get();
+    var document = querySnapShot.docs.first;
+    document.reference.update({'ledger_state': LedgerState.STATE_DELETE.state});
+
     return querySnapShot.docs.map((doc) => Ledger.fromMap(doc.data() as Map<String, dynamic>)).toList();
   }
 

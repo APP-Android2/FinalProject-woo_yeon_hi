@@ -25,12 +25,15 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
   Map<DateTime, List<Ledger>> _groupEvents(List<Ledger> ledgers) {
     Map<DateTime, List<Ledger>> _showMainEvents = {};
     for (var ledger in ledgers) {
-      DateTime date = DateTime.parse(ledger.ledgerDate).toLocal();
-      DateTime day = DateTime(date.year, date.month, date.day);
-      if (_showMainEvents[day] == null) {
-        _showMainEvents[day] = [];
+      // ledger_state가 0인 데이터만 조회하여 보여준다
+      if(ledger.ledgerState.state == LedgerState.STATE_NORMAL.state){
+        DateTime date = DateTime.parse(ledger.ledgerDate).toLocal();
+        DateTime day = DateTime(date.year, date.month, date.day);
+        if (_showMainEvents[day] == null) {
+          _showMainEvents[day] = [];
+        }
+        _showMainEvents[day]!.add(ledger);
       }
-      _showMainEvents[day]!.add(ledger);
     }
     return _showMainEvents;
   }
@@ -111,6 +114,7 @@ class _LedgerTableCalendarState extends State<LedgerTableCalendar> {
 
         // 선택된 날짜의 이벤트를 필터링 (상세 이벤트 리스트)
         List<Ledger> selectedDayLedgers = ledgerProvider.ledgers
+            .where((ledger) => ledger.ledgerState.state == LedgerState.STATE_NORMAL.state)
             .where((ledger) =>
             DateTime.parse(ledger.ledgerDate).toLocal().day == ledgerProvider.selectedDay.day &&
             DateTime.parse(ledger.ledgerDate).toLocal().month == ledgerProvider.selectedDay.month &&

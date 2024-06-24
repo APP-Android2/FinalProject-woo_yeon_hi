@@ -203,15 +203,15 @@ class LedgerProvider extends ChangeNotifier{
     }
   }
 
-  // // 데이터 삭제
-  // Future<void> deleteLedger(int ledgerIdx) async {
-  //   try {
-  //     await _ledgerDao.deleteLedger(ledgerIdx);
-  //     fetchLedgers(); // 데이터를 새로고침
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  // 데이터 삭제 (상태 값 업데이트)
+  Future<void> deleteLedger(Ledger ledger) async {
+    try {
+      await _ledgerDao.updateLedgerState(ledger);
+      fetchLedgers(); // 데이터를 새로고침
+    } catch (error) {
+      print('가계부 데이터 삭제 중 오류 $error');
+    }
+  }
 
 }
 
