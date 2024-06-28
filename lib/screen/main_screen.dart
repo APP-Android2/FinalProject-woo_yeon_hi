@@ -47,7 +47,9 @@ class _MainScreenState extends State<MainScreen> {
                   alarmsAllow: false,
                   topBarActivate: false,
                   userState: 0,
-                  loveDday: dateToString(DateTime.now()))),
+                  loveDday: dateToString(DateTime.now()),
+                  appLockState: 0
+              )),
           ChangeNotifierProvider(create: (context) => DiaryProvider()),
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
           ChangeNotifierProvider(create: (context) => LedgerProvider()),

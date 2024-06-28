@@ -150,9 +150,6 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                       await storage.write(
                                           key: "userIdx",
                                           value: "${userProvider.userIdx}");
-                                      await storage.write(
-                                          key: "appLockState",
-                                          value: "0");
                                       Future.delayed(const Duration(milliseconds: 500), () {
                                         runApp(const MainScreen());
                                       });
@@ -188,27 +185,18 @@ Future<void> _registerUserData(BuildContext context, UserModel provider) async {
       .get();
   var myDocument = myQuerySnapshot.docs.first;
 
-  // var loverQuerySnapshot = await FirebaseFirestore.instance
-  //     .collection('userData')
-  //     .where('user_idx', isEqualTo: lover_idx)
-  //     .get();
-  // var loverDocument = loverQuerySnapshot.docs.first;
-
   if (myQuerySnapshot.docs.isNotEmpty) {
       myDocument.reference.update({
-        // 'user_nickname': await getMyNickname(
-        //     await getSpecificUserData(provider.userAccount, 'lover_idx')) ??
-        //     "기본닉네임",
         'user_birth': provider.userBirth,
-        // 'lover_nickname': provider.loverNickname,
         'home_preset_type': provider.homePresetType,
-        'user_state': 1,
+        'user_state': 0,
         'login_type': provider.loginType,
         'user_profile_image': "lib/assets/images/default_profile.png",
         'top_bar_type': 0,
         'profile_message': "",
         'alarms_allow': false,
         'top_bar_activate': false,
+        'app_lock_state': 0,
       });
 
   }

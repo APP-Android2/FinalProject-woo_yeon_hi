@@ -36,10 +36,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  int userIdx =
-      stringToInt((await const FlutterSecureStorage().read(key: "userIdx"))??"");
-  int appLockState =
-      stringToInt((await const FlutterSecureStorage().read(key: "appLockState"))??"");
+  int userIdx = stringToInt((await const FlutterSecureStorage().read(key: "userIdx"))??"");
+  int appLockState =  await getSpecificUserData(userIdx, 'app_lock_state')?? 0;
   int userState = await getSpecificUserData(userIdx, 'user_state')?? 2;
 
   initializeDateFormatting().then((_) async =>
@@ -61,6 +59,10 @@ class WooYeonHi extends StatefulWidget {
 class _WooYeonHiState extends State<WooYeonHi> {
   @override
  build(BuildContext context) {
+    print("4: ${widget.userIdx}");
+    print("5: ${widget.appLockState}");
+    print("6: ${widget.userState}");
+
     return ChangeNotifierProvider(
         create: (context) => UserModel(
             userIdx: 0,
@@ -77,7 +79,9 @@ class _WooYeonHiState extends State<WooYeonHi> {
             alarmsAllow: false,
             topBarActivate: false,
             userState: 2,
-            loveDday: dateToString(DateTime.now())),
+            loveDday: dateToString(DateTime.now()),
+            appLockState: 0
+        ),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: "WooYeonHi",

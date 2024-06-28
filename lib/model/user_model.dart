@@ -20,6 +20,7 @@ class UserModel with ChangeNotifier{
   bool topBarActivate;
   int userState;
   String loveDday;
+  int appLockState;
 
   UserModel(
       {required this.userIdx,
@@ -37,6 +38,7 @@ class UserModel with ChangeNotifier{
         required this.topBarActivate,
         required this.userState,
         required this.loveDday,
+        required this.appLockState
       });
 
   factory UserModel.fromData(Map<String, dynamic> data){
@@ -53,9 +55,10 @@ class UserModel with ChangeNotifier{
         topBarType: data['top_bar_type'],
         profileMessage: data['profile_message'],
         alarmsAllow: data['alarms_allow'],
-      topBarActivate: data['top_bar_activate'],
-      userState: data['user_state'],
-      loveDday: data['love_d_day'],
+        topBarActivate: data['top_bar_activate'],
+        userState: data['user_state'],
+        loveDday: data['love_d_day'],
+        appLockState: data['app_lock_state']
     );
   }
 

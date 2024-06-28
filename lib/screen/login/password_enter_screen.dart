@@ -15,6 +15,7 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/utils.dart';
+import '../../dao/user_dao.dart';
 import '../../model/user_model.dart';
 
 class PasswordEnterScreen extends StatefulWidget {
@@ -26,8 +27,9 @@ class PasswordEnterScreen extends StatefulWidget {
 
 class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
   static const storage = FlutterSecureStorage();
-  String appLockState = "";
-  String lockPassword = "";
+  late int userIdx;
+  late String appLockState;
+  late String lockPassword;
   dynamic userProvider;
 
   @override
@@ -38,7 +40,8 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
   }
 
   _asyncMethod() async {
-    appLockState = (await storage.read(key: "appLockState"))??"1";
+    userIdx = stringToInt((await storage.read(key: "lockPassword"))??"");
+    appLockState = await getSpecificUserData(userIdx, 'app_lock_state')?? 1;
     lockPassword = (await storage.read(key: "lockPassword"))??"0,0,0,0";
 
     if(appLockState=="2")
