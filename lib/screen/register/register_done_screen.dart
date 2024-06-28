@@ -149,7 +149,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                       value: userProvider.userAccount);
                                       await storage.write(
                                           key: "userIdx",
-                                          value: userProvider.userIdx);
+                                          value: "${userProvider.userIdx}");
                                       await storage.write(
                                           key: "appLockState",
                                           value: "0");

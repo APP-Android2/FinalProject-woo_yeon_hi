@@ -127,7 +127,7 @@ class _RegisterScreen extends State<LoginScreen> {
                       ),
                       child: InkWell(
                         onTap: () async {
-                          switch (await getSpecificUserData(userProvider.userAccount, "user_state")??2) {
+                          switch (await getSpecificUserData(userProvider.userIdx, "user_state")??2) {
                             case 0:
                               Navigator.pushReplacement(
                                   context,
@@ -146,8 +146,9 @@ class _RegisterScreen extends State<LoginScreen> {
                                   userProvider.loginType = 1;
                                 });
                                 await saveUserInfo(userProvider.userAccount);
-                                setState(() async {
-                                  userProvider.userIdx = await getUserSequence();
+                                var userIdx = await getUserSequence();
+                                setState(() {
+                                  userProvider.userIdx = userIdx;
                                 });
                                 Navigator.pushReplacement(
                                     context,
@@ -205,8 +206,9 @@ class _RegisterScreen extends State<LoginScreen> {
                                   userProvider.loginType = 2;
                                 });
                                 await saveUserInfo(userProvider.userAccount);
-                                setState(() async {
-                                  userProvider.userIdx = await getUserSequence();
+                                var userIdx = await getUserSequence();
+                                setState(() {
+                                  userProvider.userIdx = userIdx;
                                 });
                                 Navigator.pushReplacement(
                                     context,

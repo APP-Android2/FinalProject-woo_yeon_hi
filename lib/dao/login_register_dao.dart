@@ -14,7 +14,7 @@ Future<bool> saveCodeData(String code, String codeType, int idx) async {
     await FirebaseFirestore.instance.collection('CodeData').add({
       'code': code,
       'host_idx': idx,
-      'code_state': false
+      'code_connect_state': false
     });
     return true;
   }
@@ -40,18 +40,32 @@ Future<void> deleteCodeData(String code) async {
   }
 }
 
-Future<bool> isValidCodeData(String code) async {
+Future<bool> isCodeDataExist(String code) async {
   var querySnapshot = await FirebaseFirestore.instance
       .collection('CodeData')
       .where('code', isEqualTo: code)
       .get();
 
-// 문서가 존재하고, code_state가 false인지 확인
+// 해당 코드의 문서가 존재하는지 확인
+  if (querySnapshot.docs.isNotEmpty) {
+    return true;
+  }
+
+  return false;
+}
+
+Future<bool> isCodeConnected(String code) async {
+  var querySnapshot = await FirebaseFirestore.instance
+      .collection('CodeData')
+      .where('code', isEqualTo: code)
+      .get();
+
+// 해당 코드의 code_connect_state를 확인
   if (querySnapshot.docs.isNotEmpty) {
     print("존재하는 문서");
 
     for (var doc in querySnapshot.docs) {
-      if (doc.data()['code_state'] == true) {
+      if (doc.data()['code_connect_state'] == true) {
         print("true리턴");
 
         return true;
@@ -62,6 +76,8 @@ Future<bool> isValidCodeData(String code) async {
 
   return false;
 }
+
+
 
 Future<void> saveUserInfo(String userAccount) async {
   try {
@@ -78,11 +94,11 @@ Future<void> saveUserInfo(String userAccount) async {
 }
 
 
-Future<void> saveLoverIdx(int userIdx, int loverIdx) async {
+Future<void> saveLoverUserIdx(int userIdx, int loverUserIdx) async {
   try {
     // userAccount 필드와 일치하는 문서 검색
     var querySnapshot = await FirebaseFirestore.instance.collection('userData')
-        .where('user_account', isEqualTo: userIdx)
+        .where('user_idx', isEqualTo: userIdx)
         .get();
 
     // 문서가 존재하는 경우 업데이트
@@ -92,11 +108,11 @@ Future<void> saveLoverIdx(int userIdx, int loverIdx) async {
         String docId = doc.id;
 
         // 새로운 필드를 추가하여 문서 업데이트
-        await FirebaseFirestore.instance.collection('userData').doc(docId).update({'lover_idx': loverIdx});
+        await FirebaseFirestore.instance.collection('userData').doc(docId).update({'lover_idx': loverUserIdx});
       }
       print('문서 업데이트 완료');
     } else {
-      print('해당 user_account를 가진 문서가 없습니다');
+      print('해당 user_idx를 가진 문서가 없습니다');
     }
   } catch (e) {
     print('문서 업데이트 중 오류 발생: $e');
@@ -124,7 +140,7 @@ dynamic getSpecificCodeData(String code, String dataField) async {
 
 Future<void> updateCode(String code, int userIdx) async {
   try {
-    // userAccount 필드와 일치하는 문서 검색
+    // userIdx 필드와 일치하는 문서 검색
     var querySnapshot = await FirebaseFirestore.instance.collection('CodeData')
         .where('code', isEqualTo: code)
         .get();
@@ -136,12 +152,12 @@ Future<void> updateCode(String code, int userIdx) async {
         String docId = doc.id;
 
         // 새로운 필드를 추가하여 문서 업데이트
-        await FirebaseFirestore.instance.collection('CodeData').doc(docId).update({'code_state': true});
+        await FirebaseFirestore.instance.collection('CodeData').doc(docId).update({'code_connect_state': true});
         await FirebaseFirestore.instance.collection('CodeData').doc(docId).update({'guest_idx': userIdx});
       }
       print('문서 업데이트 완료');
     } else {
-      print('해당 userAccount를 가진 문서가 없습니다');
+      print('해당 코드가 포함된 문서가 없습니다');
     }
   } catch (e) {
     print('문서 업데이트 중 오류 발생: $e');
@@ -149,13 +165,13 @@ Future<void> updateCode(String code, int userIdx) async {
 }
 
 
-// dynamic getMyNickname(int loverIdx) async {
+// dynamic getMyNickname(int loverUserIdx) async {
 //   Map<String, dynamic> results = {};
 //   dynamic result;
 //
 //   Query<Map<String, dynamic>> query = FirebaseFirestore.instance
 //       .collection('userData')
-//       .where('user_idx', isEqualTo: loverIdx);
+//       .where('user_idx', isEqualTo: loverUserIdx);
 //
 //   var querySnapShot = await query.get();
 //   for (var doc in querySnapShot.docs) {

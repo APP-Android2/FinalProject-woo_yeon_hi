@@ -28,12 +28,12 @@ Future<void> saveUserData(UserModel user) async {
   });
 }
 
-Future<Map<String, dynamic>> getUserData(String userAccount) async {
+Future<Map<String, dynamic>> getUserData(int userIdx) async {
   Map<String, dynamic> results = {};
 
   Query<Map<String, dynamic>> query = FirebaseFirestore.instance
       .collection('userData')
-      .where('user_account', isEqualTo: userAccount);
+      .where('user_idx', isEqualTo: userIdx);
 
   var querySnapShot = await query.get();
   for (var doc in querySnapShot.docs) {
@@ -74,7 +74,7 @@ Future<void> updateSpecificUserData(int userIdx, String updateItem, var updateCo
 Future<void> deleteUserData(int userIdx) async {
   QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
       .collection('userData')
-      .where('user_account', isEqualTo: userIdx)
+      .where('user_idx', isEqualTo: userIdx)
       .get();
 
   for (DocumentSnapshot<Map<String, dynamic>> docSnapshot in querySnapshot.docs) {

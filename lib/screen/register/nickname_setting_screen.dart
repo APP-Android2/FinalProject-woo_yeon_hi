@@ -250,7 +250,7 @@ class _NickNameSettingScreenState extends State<NickNameSettingScreen> {
                                     onTap: () {
                                       if (userProvider.checkProvider(
                                           loverNickNameTextEditController)) {
-                                        updateSpecificUserData(userProvider.loverIdx, 'user_nickname', loverNickname);
+                                        updateSpecificUserData(userProvider.loverUserIdx, 'user_nickname', loverNickname);
                                         setState(() {
                                           userProvider.loverNickname =
                                               loverNickname;

@@ -37,9 +37,9 @@ Future<void> main() async {
   );
 
   int userIdx =
-      stringToInt((await const FlutterSecureStorage().read(key: "userIdx"))!);
+      stringToInt((await const FlutterSecureStorage().read(key: "userIdx"))??"");
   int appLockState =
-      stringToInt((await const FlutterSecureStorage().read(key: "appLockState"))!);
+      stringToInt((await const FlutterSecureStorage().read(key: "appLockState"))??"");
   int userState = await getSpecificUserData(userIdx, 'user_state')?? 2;
 
   initializeDateFormatting().then((_) async =>

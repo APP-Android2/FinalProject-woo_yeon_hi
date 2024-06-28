@@ -137,7 +137,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                                 'love_dDay',
                                                 userProvider.loveDday);
                                             await updateSpecificUserData(
-                                                userProvider.loverIdx,
+                                                userProvider.loverUserIdx,
                                                 'love_dDay',
                                                 userProvider.loveDday);
                                             if (context.mounted) {

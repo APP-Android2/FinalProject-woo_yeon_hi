@@ -35,7 +35,6 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
   String _randomCode = getRandomString(8);
   dynamic codeTextEditController;
 
-
   dynamic userProvider;
   DateTime? _timerStartTime;
 
@@ -46,7 +45,6 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
     userProvider = Provider.of<UserModel>(context, listen: false);
     codeTextEditController = TextEditingController();
   }
-
 
   @override
   void dispose() {
@@ -243,35 +241,39 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                     child: !_isCodeGenerated
                                         ? InkWell(
                                             onTap: () async {
-                                              setState((){
-                                              _codeText = _randomCode;
+                                              setState(() {
+                                                _codeText = _randomCode;
                                               });
 
-                                              if(await saveCodeData(_codeText,'connect_code', userProvider.userIdx)){
-                                                setState((){
+                                              if (await saveCodeData(
+                                                  _codeText,
+                                                  'connect_code',
+                                                  userProvider.userIdx)) {
+                                                setState(() {
                                                   _isCodeGenerated = true;
                                                   _isCodeExpired = false;
-                                                  _timerStartTime = DateTime.now();
+                                                  _timerStartTime =
+                                                      DateTime.now();
                                                 });
-                                              }
-                                              else {
-                                                setState((){
+                                              } else {
+                                                setState(() {
                                                   _isCodeGenerated = false;
                                                   _isCodeExpired = false;
                                                 });
-                                                  Fluttertoast.showToast(
-                                                      msg: "다시 시도해주세요.",
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 1,
-                                                      backgroundColor:
-                                                          ColorFamily.black,
-                                                      textColor:
-                                                          ColorFamily.white,
-                                                      fontSize: 14.0);
-                                              }},
+                                                Fluttertoast.showToast(
+                                                    msg: "다시 시도해주세요.",
+                                                    toastLength:
+                                                        Toast.LENGTH_SHORT,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    timeInSecForIosWeb: 1,
+                                                    backgroundColor:
+                                                        ColorFamily.black,
+                                                    textColor:
+                                                        ColorFamily.white,
+                                                    fontSize: 14.0);
+                                              }
+                                            },
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
                                             child: Container(
@@ -288,52 +290,71 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                             onTap: () async {
                                               if (_isCodeExpired) {
                                                 setState(() {
-                                                  _randomCode = getRandomString(8);
+                                                  _randomCode =
+                                                      getRandomString(8);
                                                   _codeText = _randomCode;
-                                                  _timerStartTime = DateTime.now();
+                                                  _timerStartTime =
+                                                      DateTime.now();
+                                                  _isCodeExpired = false;
                                                 });
-                                                  await saveCodeData(_codeText, 'connect_code', userProvider.userIdx);
+                                                await saveCodeData(
+                                                    _codeText,
+                                                    'connect_code',
+                                                    userProvider.userIdx);
                                               } else {
-                                                if(await isValidCodeData(_codeText)) {
-                                                  var guestIdx = await getSpecificCodeData(_codeText, 'guest_idx');
-                                                  await saveLoverIdx(userProvider.userIdx, guestIdx);
-                                                  await deleteCodeData(_codeText);
+                                                if (await isCodeDataExist(
+                                                            _codeText) ==
+                                                        true &&
+                                                    await isCodeConnected(
+                                                            _codeText) ==
+                                                        true) {
+                                                  var guestIdx =
+                                                      await getSpecificCodeData(
+                                                          _codeText,
+                                                          'guest_idx');
+                                                  await saveLoverUserIdx(
+                                                      userProvider.userIdx,
+                                                      guestIdx);
+                                                  await deleteCodeData(
+                                                      _codeText);
                                                   setState(() {
-                                                    userProvider.loverIdx = guestIdx;
+                                                    userProvider.loverUserIdx =
+                                                        guestIdx;
                                                   });
                                                   //호스트화면 이동
                                                   Navigator.pushAndRemoveUntil(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                          const DdaySettingScreen(
-                                                              isHost:
-                                                              true)),
-                                                          (route) => false);
+                                                              const DdaySettingScreen(
+                                                                  isHost:
+                                                                      true)),
+                                                      (route) => false);
                                                   Fluttertoast.showToast(
                                                       msg: "연결되었습니다!",
                                                       toastLength:
-                                                      Toast.LENGTH_SHORT,
+                                                          Toast.LENGTH_SHORT,
                                                       gravity:
-                                                      ToastGravity.BOTTOM,
+                                                          ToastGravity.BOTTOM,
                                                       timeInSecForIosWeb: 1,
                                                       backgroundColor:
-                                                      ColorFamily.pink,
+                                                          ColorFamily.pink,
                                                       textColor:
-                                                      ColorFamily.white,
+                                                          ColorFamily.white,
                                                       fontSize: 14.0);
-                                                }else {
+                                                } else {
                                                   Fluttertoast.showToast(
-                                                      msg: "해당 코드로 연결된 상대가 없습니다.",
+                                                      msg:
+                                                          "해당 코드로 연결된 상대가 없습니다.",
                                                       toastLength:
-                                                      Toast.LENGTH_SHORT,
+                                                          Toast.LENGTH_SHORT,
                                                       gravity:
-                                                      ToastGravity.BOTTOM,
+                                                          ToastGravity.BOTTOM,
                                                       timeInSecForIosWeb: 1,
                                                       backgroundColor:
-                                                      ColorFamily.black,
+                                                          ColorFamily.black,
                                                       textColor:
-                                                      ColorFamily.white,
+                                                          ColorFamily.white,
                                                       fontSize: 14.0);
                                                 }
                                               }
@@ -395,44 +416,65 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                   ),
                                   child: InkWell(
                                       onTap: () async {
-                                        if (await isValidCodeData(
-                                            codeTextEditController.text)) {
+                                        if (await getSpecificCodeData(
+                                                codeTextEditController.text,
+                                                'host_idx') ==
+                                            userProvider.userIdx) {
                                           Fluttertoast.showToast(
-                                              msg: "유효하지 않은 연결코드입니다.",
+                                              msg: "본인의 코드로 연결할 수 없습니다.",
                                               toastLength: Toast.LENGTH_SHORT,
                                               gravity: ToastGravity.BOTTOM,
                                               timeInSecForIosWeb: 1,
                                               backgroundColor:
-                                              ColorFamily.black,
+                                                  ColorFamily.black,
                                               textColor: ColorFamily.white,
                                               fontSize: 14.0);
-                                        } else {
-                                          var hostIdx = await getSpecificCodeData(codeTextEditController.text, 'host_idx');
+                                        } else if (await isCodeDataExist(
+                                                    codeTextEditController
+                                                        .text) ==
+                                                true &&
+                                            await isCodeConnected(
+                                                    codeTextEditController
+                                                        .text) ==
+                                                false) {
+                                          var hostIdx =
+                                              await getSpecificCodeData(
+                                                  codeTextEditController.text,
+                                                  'host_idx');
                                           await deleteCodeData(_codeText);
-                                          await saveLoverIdx(userProvider.userIdx, hostIdx);
-                                          await updateCode(codeTextEditController.text, userProvider.userIdx);
+                                          await saveLoverUserIdx(
+                                              userProvider.userIdx, hostIdx);
+                                          await updateCode(
+                                              codeTextEditController.text,
+                                              userProvider.userIdx);
                                           setState(() {
-                                            userProvider.loverIdx = hostIdx;
+                                            userProvider.loverUserIdx = hostIdx;
                                           });
                                           //게스트화면 이동
                                           Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                  const NickNameSettingScreen(
-                                                      isHost: false)),
-                                                  (route) => false);
+                                                      const NickNameSettingScreen(
+                                                          isHost: false)),
+                                              (route) => false);
                                           Fluttertoast.showToast(
                                               msg: "연결되었습니다!",
-                                              toastLength:
-                                              Toast.LENGTH_SHORT,
-                                              gravity:
-                                              ToastGravity.BOTTOM,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: ColorFamily.pink,
+                                              textColor: ColorFamily.white,
+                                              fontSize: 14.0);
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg: "유효하지 않은 연결코드입니다.",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
                                               timeInSecForIosWeb: 1,
                                               backgroundColor:
-                                              ColorFamily.pink,
-                                              textColor:
-                                              ColorFamily.white,
+                                                  ColorFamily.black,
+                                              textColor: ColorFamily.white,
                                               fontSize: 14.0);
                                         }
                                       },

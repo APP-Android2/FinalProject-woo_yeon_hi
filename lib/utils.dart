@@ -33,6 +33,7 @@ List<int> stringToList(String input) {
   return result;
 }
 
+
 /// FlutterSecureStorage에 저장된 value객체(String)를 int타입으로 변환합니다.
 int stringToInt(String value){
   int number = 0;
