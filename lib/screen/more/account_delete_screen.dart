@@ -16,6 +16,7 @@ import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/account_delete_top_app_bar.dart';
 
 import '../../model/user_model.dart';
+import '../../utils.dart';
 import '../login/login_screen.dart';
 
 class AccountDeleteScreen extends StatefulWidget {
@@ -27,8 +28,8 @@ class AccountDeleteScreen extends StatefulWidget {
 
 class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
   static const storage = FlutterSecureStorage();
-  late String userAccount = "";
-  late int loginType = 0;
+  late int userIdx;
+  late int loginType;
   bool isAgreed = false;
 
   @override
@@ -38,8 +39,8 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
   }
   
   Future<void> _asyncMethod() async {
-    userAccount = (await storage.read(key: "loginAccount"))!;
-    loginType = await getSpecificUserData(userAccount, 'login_type');
+    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
+    loginType = await getSpecificUserData(userIdx, 'login_type');
   }
   
   @override
@@ -61,11 +62,8 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               onTap: (){
                 signOut();
                 // deleteUserData(userAccount);
-                updateSpecificUserData(userAccount, 'user_state', 2);
+                updateSpecificUserData(userIdx, 'user_state', 2);
                 storage.deleteAll();
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
                 Navigator.pop(context);
               },
               child: Image.asset(
@@ -133,7 +131,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               child: InkWell(
                   onTap: () {
                     if(isAgreed){
-                      updateSpecificUserData(userAccount, 'user_state', 1);
+                      updateSpecificUserData(userIdx, 'user_state', 1);
                       signOut();
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -195,7 +193,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
       case 0:
         break;
     }
-    updateSpecificUserData(userAccount, 'login_type', 0);
+    updateSpecificUserData(userIdx, 'login_type', 0);
   }
 
   void exitApp() {

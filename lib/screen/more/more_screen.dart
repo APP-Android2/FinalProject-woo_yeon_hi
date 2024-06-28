@@ -29,11 +29,11 @@ class MoreScreen extends StatefulWidget {
 class _MoreScreenState extends State<MoreScreen> {
   dynamic userProvider;
   static const storage = FlutterSecureStorage();
-  late String userAccount = "";
-  late String userNickname = "";
-  late String profileMsg = "";
-  late String profileImage = "lib/assets/images/default_profile.png";
-  late String userBirth = dateToString(DateTime.now());
+  late int userIdx;
+  late String userNickname;
+  late String profileMsg;
+  late String profileImage;
+  late String userBirth;
 
   @override
   void initState() {
@@ -44,11 +44,11 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Future<int> _asyncMethod() async {
-    userAccount = (await storage.read(key: "loginAccount"))!;
-    userNickname = await getSpecificUserData(userAccount, 'user_nickname');
-    profileMsg = await getSpecificUserData(userAccount, 'profile_message');
-    profileImage = await getSpecificUserData(userAccount, 'user_profileImage');
-    userBirth = await getSpecificUserData(userAccount, 'user_birth');
+    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
+    userNickname = await getSpecificUserData(userIdx, 'user_nickname');
+    profileMsg = await getSpecificUserData(userIdx, 'profile_message');
+    profileImage = await getSpecificUserData(userIdx, 'user_profileImage');
+    userBirth = await getSpecificUserData(userIdx, 'user_birth');
     return 1;
   }
 

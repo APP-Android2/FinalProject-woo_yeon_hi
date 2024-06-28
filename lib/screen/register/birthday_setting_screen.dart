@@ -65,26 +65,22 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
                               child: Column(children: [
                                 SizedBox(height: deviceHeight * 0.1),
                                 widget.isHost
-                                    ? Container(
-                                        child: const Text(
-                                          "4 / 5",
-                                          style: TextStyle(
-                                              fontFamily:
-                                                  FontFamily.mapleStoryBold,
-                                              fontSize: 15,
-                                              color: ColorFamily.pink),
-                                        ),
-                                      )
-                                    : Container(
-                                        child: const Text(
-                                          "3 / 4",
-                                          style: TextStyle(
-                                              fontFamily:
-                                                  FontFamily.mapleStoryBold,
-                                              fontSize: 15,
-                                              color: ColorFamily.pink),
-                                        ),
-                                      ),
+                                    ? const Text(
+                                      "4 / 5",
+                                      style: TextStyle(
+                                          fontFamily:
+                                              FontFamily.mapleStoryBold,
+                                          fontSize: 15,
+                                          color: ColorFamily.pink),
+                                    )
+                                    : const Text(
+                                      "3 / 4",
+                                      style: TextStyle(
+                                          fontFamily:
+                                              FontFamily.mapleStoryBold,
+                                          fontSize: 15,
+                                          color: ColorFamily.pink),
+                                    ),
                                 const SizedBox(height: 20),
                                 widget.isHost
                                     ? Row(
@@ -350,7 +346,7 @@ class _BirthdaySettingScreenState extends State<BirthdaySettingScreen> {
       case 0:
         break;
     }
-    deleteUserData(userProvider.userAccount);
+    deleteUserData(userProvider.userIdx);
     setState(() {
       userProvider.loginType = 0;
     });

@@ -33,7 +33,6 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
     userProvider = Provider.of<UserModel>(context, listen: false);
   }
 
-
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
@@ -132,12 +131,23 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                                             BorderRadius.circular(20.0),
                                       ),
                                       child: InkWell(
-                                          onTap: () {
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) =>
-                                                NickNameSettingScreen(
-                                                                 isHost:
-                                                                     widget.isHost)));
+                                          onTap: () async {
+                                            await updateSpecificUserData(
+                                                userProvider.userIdx,
+                                                'love_dDay',
+                                                userProvider.loveDday);
+                                            await updateSpecificUserData(
+                                                userProvider.loverIdx,
+                                                'love_dDay',
+                                                userProvider.loveDday);
+                                            if (context.mounted) {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          NickNameSettingScreen(
+                                                              isHost: widget
+                                                                  .isHost)));
+                                            }
                                           },
                                           borderRadius:
                                               BorderRadius.circular(20.0),
@@ -165,8 +175,7 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const LoginScreen()),
+                                    builder: (context) => const LoginScreen()),
                                 (route) => false);
                           },
                           child: const Text(
@@ -196,11 +205,9 @@ class _DdaySettingScreen extends State<DdaySettingScreen> {
       case 0:
         break;
     }
-    deleteUserData(userProvider.userAccount);
+    deleteUserData(userProvider.userIdx);
     setState(() {
       userProvider.loginType = 0;
     });
   }
-
-
 }

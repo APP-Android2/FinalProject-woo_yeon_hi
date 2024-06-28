@@ -310,7 +310,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
       case 0:
         break;
     }
-    deleteUserData(userProvider.userAccount);
+    deleteUserData(userProvider.userIdx);
     setState(() {
       userProvider.loginType = 0;
     });

@@ -26,8 +26,8 @@ class DailySummaryScreen extends StatefulWidget {
 
 class _DailySummaryScreenState extends State<DailySummaryScreen> {
   static const storage = FlutterSecureStorage();
-  late String userAccount = "";
-  late String loveDday = "";
+  late int userIdx;
+  late String loveDday;
 
   late DateTime _summaryDay;
   dynamic userProvider;
@@ -43,8 +43,8 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
   }
 
   _asyncMethod() async {
-    userAccount = (await storage.read(key: "loginAccount"))!;
-    loveDday = await getSpecificUserData(userAccount, 'love_dDay');
+    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
+    loveDday = await getSpecificUserData(userIdx, 'love_dDay');
 
     setState(() {
       _isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정

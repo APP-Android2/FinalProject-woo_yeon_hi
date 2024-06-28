@@ -119,7 +119,7 @@ class _HomeScreenState2 extends State<HomeScreenSet2> {
         ],
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 16, left: 20, right: 20, bottom: 5),
+        padding: const EdgeInsets.only(top: 16, left: 20, right: 20, bottom: 0),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -270,8 +270,8 @@ class _HomeScreenState2 extends State<HomeScreenSet2> {
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.25),
-                blurRadius: 4,
-                offset: const Offset(0, 4),
+                blurRadius: 1,
+                offset: const Offset(0, 1),
               ),
             ],
           ),

@@ -32,7 +32,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   TextEditingController? userNicknameTextEditController;
   TextEditingController? profileMessageTextEditController;
   dynamic userProvider;
-  late String userAccount = "";
+  late int userIdx;
   late String tempUserNickname = "";
   late String tempProfileMsg = "";
   late String tempProfileImage = "lib/assets/images/default_profile.png";
@@ -48,12 +48,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
 
   _asyncMethod() async {
-    userAccount = (await storage.read(key: "loginAccount"))!;
-    tempUserNickname = await getSpecificUserData(userAccount, 'user_nickname');
-    tempProfileMsg = await getSpecificUserData(userAccount, 'profile_message');
+    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
+    tempUserNickname = await getSpecificUserData(userIdx, 'user_nickname');
+    tempProfileMsg = await getSpecificUserData(userIdx, 'profile_message');
     tempProfileImage =
-    await getSpecificUserData(userAccount, 'user_profileImage');
-    tempUserBirth = await getSpecificUserData(userAccount, 'user_birth');
+    await getSpecificUserData(userIdx, 'user_profileImage');
+    tempUserBirth = await getSpecificUserData(userIdx, 'user_birth');
     userNicknameTextEditController =
         TextEditingController(text: tempUserNickname);
     profileMessageTextEditController =
@@ -78,7 +78,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
     if (_isLoading) {
       // 로딩 중인 상태를 표시
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
@@ -111,12 +111,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   FocusScope.of(context).unfocus();
                   Future.delayed(const Duration(milliseconds: 100), () async {
                     await updateSpecificUserData(
-                        userAccount, 'user_nickname', tempUserNickname);
-                    await updateSpecificUserData(userAccount, 'user_birth', tempUserBirth);
+                        userIdx, 'user_nickname', tempUserNickname);
+                    await updateSpecificUserData(userIdx, 'user_birth', tempUserBirth);
                     await updateSpecificUserData(
-                        userAccount, 'profile_message', tempProfileMsg);
+                        userIdx, 'profile_message', tempProfileMsg);
                     await updateSpecificUserData(
-                        userAccount, 'user_profileImage', tempProfileImage);
+                        userIdx, 'user_profileImage', tempProfileImage);
                   });
 
                   Future.delayed(const Duration(milliseconds: 100), () {

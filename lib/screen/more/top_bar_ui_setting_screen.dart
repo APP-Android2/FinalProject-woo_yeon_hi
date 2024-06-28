@@ -11,6 +11,7 @@ import 'package:woo_yeon_hi/style/text_style.dart';
 
 import '../../dao/user_dao.dart';
 import '../../model/user_model.dart';
+import '../../utils.dart';
 
 class TopBarUiSettingScreen extends StatefulWidget {
   const TopBarUiSettingScreen({super.key});
@@ -22,12 +23,12 @@ class TopBarUiSettingScreen extends StatefulWidget {
 class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
   static const storage = FlutterSecureStorage();
 
-  late String userAccount = "";
-  late int topBarType = 0;
-  late bool topBarActivate = false;
+  late int userIdx;
+  late int topBarType;
+  late bool topBarActivate;
 
-  late int topBarIndex = 0;
-  late bool switchValue = false;
+  late int topBarIndex;
+  late bool switchValue;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
 
   @override
@@ -39,9 +40,9 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
   }
 
   Future<void> _asyncMethod() async {
-    userAccount = (await storage.read(key: "loginAccount"))!;
-    topBarType = await getSpecificUserData(userAccount, 'top_bar_type');
-    topBarActivate = await getSpecificUserData(userAccount, 'top_bar_activate');
+    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
+    topBarType = await getSpecificUserData(userIdx, 'top_bar_type');
+    topBarActivate = await getSpecificUserData(userIdx, 'top_bar_activate');
 
     setState(() {
       topBarIndex = topBarType; // homePresetType을 가져온 후에 presetIndex 설정
@@ -87,7 +88,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
           actions: [
             IconButton(
               onPressed: () async {
-                await updateSpecificUserData(userAccount, 'top_bar_type', topBarIndex);
+                await updateSpecificUserData(userIdx, 'top_bar_type', topBarIndex);
                 Navigator.pop(context);
                 Fluttertoast.showToast(
                     msg: "상단바 스타일이 변경되었습니다.",
@@ -363,7 +364,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                             setState(() {
                               switchValue = value;
                             });
-                            await updateSpecificUserData(userAccount, 'top_bar_activate', switchValue);
+                            await updateSpecificUserData(userIdx, 'top_bar_activate', switchValue);
                           }),
                     ],
                   ),

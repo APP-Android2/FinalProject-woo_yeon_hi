@@ -10,6 +10,7 @@ import 'package:woo_yeon_hi/style/font.dart';
 
 import '../../dao/user_dao.dart';
 import '../../style/text_style.dart';
+import '../../utils.dart';
 
 class HomeUiSettingScreen extends StatefulWidget {
   const HomeUiSettingScreen({super.key});
@@ -28,9 +29,9 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
     "lib/assets/images/home_preset_dateplan_ledger_4x.png",
   ];
 
-  late int presetIndex = 0;
-  late String userAccount = "";
-  late int homePresetType = 0;
+  late int presetIndex;
+  late int userIdx;
+  late int homePresetType;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
 
   @override
@@ -42,8 +43,8 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
   }
 
   Future<void> _asyncMethod() async {
-    userAccount = (await storage.read(key: "loginAccount"))!;
-    homePresetType = await getSpecificUserData(userAccount, 'home_preset_type');
+    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
+    homePresetType = await getSpecificUserData(userIdx, 'home_preset_type');
 
     setState(() {
       presetIndex = homePresetType; // homePresetType을 가져온 후에 presetIndex 설정
@@ -87,7 +88,7 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
           actions: [
             IconButton(
                 onPressed: () async {
-                  await updateSpecificUserData(userAccount, 'home_preset_type', presetIndex);
+                  await updateSpecificUserData(userIdx, 'home_preset_type', presetIndex);
                   Navigator.pop(context);
                   Fluttertoast.showToast(
                       msg: "홈 화면 스타일이 변경되었습니다.",

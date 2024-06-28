@@ -33,7 +33,6 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
   bool _isCodeExpired = false;
   String _codeText = "";
   String _randomCode = getRandomString(8);
-  int _userIdx = 0;
   dynamic codeTextEditController;
 
 
@@ -45,13 +44,9 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
     super.initState();
 
     userProvider = Provider.of<UserModel>(context, listen: false);
-    _asyncMethod();
     codeTextEditController = TextEditingController();
   }
 
-  _asyncMethod() async {
-    _userIdx = await getSpecificUserData(userProvider.userAccount, 'user_idx');
-  }
 
   @override
   void dispose() {
@@ -252,7 +247,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                               _codeText = _randomCode;
                                               });
 
-                                              if(await saveCodeData(_codeText,'connect_code', _userIdx)){
+                                              if(await saveCodeData(_codeText,'connect_code', userProvider.userIdx)){
                                                 setState((){
                                                   _isCodeGenerated = true;
                                                   _isCodeExpired = false;
@@ -297,12 +292,15 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                   _codeText = _randomCode;
                                                   _timerStartTime = DateTime.now();
                                                 });
-                                                  await saveCodeData(_codeText, 'connect_code', _userIdx);
+                                                  await saveCodeData(_codeText, 'connect_code', userProvider.userIdx);
                                               } else {
                                                 if(await isValidCodeData(_codeText)) {
                                                   var guestIdx = await getSpecificCodeData(_codeText, 'guest_idx');
-                                                  await saveLoverIdx(userProvider.userAccount, guestIdx);
+                                                  await saveLoverIdx(userProvider.userIdx, guestIdx);
                                                   await deleteCodeData(_codeText);
+                                                  setState(() {
+                                                    userProvider.loverIdx = guestIdx;
+                                                  });
                                                   //호스트화면 이동
                                                   Navigator.pushAndRemoveUntil(
                                                       context,
@@ -409,10 +407,13 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                               textColor: ColorFamily.white,
                                               fontSize: 14.0);
                                         } else {
-                                          var loverIdx = await getSpecificCodeData(codeTextEditController.text, 'host_idx');
+                                          var hostIdx = await getSpecificCodeData(codeTextEditController.text, 'host_idx');
                                           await deleteCodeData(_codeText);
-                                          await saveLoverIdx(userProvider.userAccount, loverIdx);
-                                          await updateCode(codeTextEditController.text, _userIdx);
+                                          await saveLoverIdx(userProvider.userIdx, hostIdx);
+                                          await updateCode(codeTextEditController.text, userProvider.userIdx);
+                                          setState(() {
+                                            userProvider.loverIdx = hostIdx;
+                                          });
                                           //게스트화면 이동
                                           Navigator.pushAndRemoveUntil(
                                               context,
@@ -490,7 +491,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
       case 0:
         break;
     }
-    await deleteUserData(userProvider.userAccount);
+    await deleteUserData(userProvider.userIdx);
     await deleteCodeData(_codeText);
     setState(() {
       userProvider.loginType = 0;

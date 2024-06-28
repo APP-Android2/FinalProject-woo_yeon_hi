@@ -11,6 +11,7 @@ import 'package:woo_yeon_hi/widget/more/account_management_top_app_bar.dart';
 import '../../dao/user_dao.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
+import '../../utils.dart';
 
 class AccountManagementScreen extends StatefulWidget {
   const AccountManagementScreen({super.key});
@@ -21,9 +22,10 @@ class AccountManagementScreen extends StatefulWidget {
 
 class _AccountManagementScreenState extends State<AccountManagementScreen> {
   static const storage = FlutterSecureStorage();
-  late String userAccount = "";
-  late int loginType = 0;
-  late String appLockState = "";
+  late String userAccount;
+  late int userIdx;
+  late int loginType;
+  late String appLockState;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
 
   @override
@@ -33,9 +35,10 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   Future<void> _asyncMethod() async {
-    userAccount = (await storage.read(key: "loginAccount"))!;
+    userAccount = (await storage.read(key: "userAccount"))!;
+    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
     appLockState = (await storage.read(key: "appLockState"))!;
-    loginType = await getSpecificUserData(userAccount, 'login_type');
+    loginType = await getSpecificUserData(userIdx, 'login_type');
     setState(() {
       _isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정
     });
@@ -170,7 +173,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       case 0:
         break;
     }
-    updateSpecificUserData(userAccount, 'login_type', 0);
+    updateSpecificUserData(userIdx, 'login_type', 0);
     Navigator.pop(context);
     Navigator.pop(context);
     Navigator.pop(context);

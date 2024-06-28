@@ -63,33 +63,26 @@ Future<bool> isValidCodeData(String code) async {
   return false;
 }
 
-Future<void> saveUserIdx(String userAccount) async {
+Future<void> saveUserInfo(String userAccount) async {
   try {
-    var user_idx = await getUserSequence() + 1;
-    await setUserSequence(user_idx);
+    var userIdx = await getUserSequence() + 1;
+    await setUserSequence(userIdx);
     await FirebaseFirestore.instance.collection('userData').add({
-      'user_idx': user_idx,
-      'user_account': userAccount
+      'user_idx': userIdx,
+      'user_account': userAccount,
+      'user_nickname': "기본닉네임"
     });
   } catch (e) {
     print("Error writing document: $e");
   }
 }
 
-Future<void> saveLodverIdx(int loverIdx, String userAccount) async {
-  var user_idx = await getUserSequence() + 1;
-  await setUserSequence(user_idx);
-  await FirebaseFirestore.instance.collection('UserData').add({
-    'user_account': loverIdx
-  });
-}
 
-
-Future<void> saveLoverIdx(String userAccount, int loverIdx) async {
+Future<void> saveLoverIdx(int userIdx, int loverIdx) async {
   try {
     // userAccount 필드와 일치하는 문서 검색
     var querySnapshot = await FirebaseFirestore.instance.collection('userData')
-        .where('user_account', isEqualTo: userAccount)
+        .where('user_account', isEqualTo: userIdx)
         .get();
 
     // 문서가 존재하는 경우 업데이트
@@ -156,20 +149,20 @@ Future<void> updateCode(String code, int userIdx) async {
 }
 
 
-dynamic getMyNickname(int loverIdx) async {
-  Map<String, dynamic> results = {};
-  dynamic result;
-
-  Query<Map<String, dynamic>> query = FirebaseFirestore.instance
-      .collection('userData')
-      .where('user_idx', isEqualTo: loverIdx);
-
-  var querySnapShot = await query.get();
-  for (var doc in querySnapShot.docs) {
-    results = doc.data();
-  }
-
-  result = results['lover_nickname'];
-
-  return result;
-}
+// dynamic getMyNickname(int loverIdx) async {
+//   Map<String, dynamic> results = {};
+//   dynamic result;
+//
+//   Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+//       .collection('userData')
+//       .where('user_idx', isEqualTo: loverIdx);
+//
+//   var querySnapShot = await query.get();
+//   for (var doc in querySnapShot.docs) {
+//     results = doc.data();
+//   }
+//
+//   result = results['lover_nickname'];
+//
+//   return result;
+// }

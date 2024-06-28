@@ -12,6 +12,7 @@ import '../../model/enums.dart';
 import '../../model/user_model.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
+import '../../utils.dart';
 import '../login/login_screen.dart';
 import 'app_lock_setting_screen.dart';
 
@@ -25,9 +26,9 @@ class AppSettingScreen extends StatefulWidget {
 class _AppSettingScreenState extends State<AppSettingScreen> {
   static const storage =
       FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
-  late String userAccount = "";
-  late bool alarmsAllow = false;
-  late int loginType = 0;
+  late int userIdx;
+  late bool alarmsAllow;
+  late int loginType;
 
   final LocalAuthentication auth = LocalAuthentication();
 
@@ -46,9 +47,9 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
   }
 
   Future<void> _asyncMethod() async {
-    userAccount = (await storage.read(key: "loginAccount"))!;
-    alarmsAllow = await getSpecificUserData(userAccount, 'alarms_allow');
-    loginType = await getSpecificUserData(userAccount, 'login_type');
+    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
+    alarmsAllow = await getSpecificUserData(userIdx, 'alarms_allow');
+    loginType = await getSpecificUserData(userIdx, 'login_type');
 
     setState(() {
       switchValue = alarmsAllow; // homePresetType을 가져온 후에 presetIndex 설정
@@ -109,7 +110,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                                       setState(() {
                                         switchValue = value;
                                       });
-                                      await updateSpecificUserData(userAccount, 'alarms_allow', switchValue);
+                                      await updateSpecificUserData(userIdx, 'alarms_allow', switchValue);
                                     }),
                               ],
                             ),
@@ -239,6 +240,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
       case 0:
         break;
     }
-    updateSpecificUserData(userAccount, 'login_type', 0);
+    updateSpecificUserData(userIdx, 'login_type', 0);
   }
 }

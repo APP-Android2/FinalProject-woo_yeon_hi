@@ -36,22 +36,22 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  String userAccount =
-      (await const FlutterSecureStorage().read(key: "loginAccount")) ?? "";
-  String appLockState =
-      (await const FlutterSecureStorage().read(key: "appLockState")) ?? "0";
- int userState = await getSpecificUserData(userAccount, 'user_state')?? 2;
+  int userIdx =
+      stringToInt((await const FlutterSecureStorage().read(key: "userIdx"))!);
+  int appLockState =
+      stringToInt((await const FlutterSecureStorage().read(key: "appLockState"))!);
+  int userState = await getSpecificUserData(userIdx, 'user_state')?? 2;
 
   initializeDateFormatting().then((_) async =>
-      runApp(WooYeonHi(userAccount: userAccount, appLockState: appLockState, userState: userState)));
+      runApp(WooYeonHi(userIdx: userIdx, appLockState: appLockState, userState: userState)));
 }
 
 class WooYeonHi extends StatefulWidget {
 
-  WooYeonHi({super.key, required this.userAccount, required this.appLockState, required this.userState});
+  WooYeonHi({super.key, required this.userIdx, required this.appLockState, required this.userState});
 
-  String userAccount;
-  String appLockState;
+  int userIdx;
+  int appLockState;
   int userState;
 
   @override
@@ -96,11 +96,11 @@ class _WooYeonHiState extends State<WooYeonHi> {
                 onSurface: Colors.black,
               ),
               useMaterial3: true),
-          home: widget.userAccount == ""
+          home: widget.userIdx == 0
               ? const LoginScreen()
               : widget.userState == 1
                   ? const LoginScreen()
-                  : widget.appLockState == "0"
+                  : widget.appLockState == 0
                       ? const MainScreen()
                       : const PasswordEnterScreen(),
           onGenerateRoute: RouteGenerator.generateRoute,

@@ -126,13 +126,6 @@ class _RegisterScreen extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       child: InkWell(
-                        onLongPress: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const PasswordEnterScreen()));
-                        },
                         onTap: () async {
                           switch (await getSpecificUserData(userProvider.userAccount, "user_state")??2) {
                             case 0:
@@ -152,7 +145,10 @@ class _RegisterScreen extends State<LoginScreen> {
                                 setState(() {
                                   userProvider.loginType = 1;
                                 });
-                                await saveUserIdx(userProvider.userAccount);
+                                await saveUserInfo(userProvider.userAccount);
+                                setState(() async {
+                                  userProvider.userIdx = await getUserSequence();
+                                });
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -208,7 +204,10 @@ class _RegisterScreen extends State<LoginScreen> {
                                 setState(() {
                                   userProvider.loginType = 2;
                                 });
-                                await saveUserIdx(userProvider.userAccount);
+                                await saveUserInfo(userProvider.userAccount);
+                                setState(() async {
+                                  userProvider.userIdx = await getUserSequence();
+                                });
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

@@ -1,4 +1,5 @@
 import 'package:animated_background/animated_background.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,7 @@ import '../../model/user_model.dart';
 import '../../style/font.dart';
 
 class RegisterDoneScreen extends StatefulWidget {
-  RegisterDoneScreen({super.key, required this.title, required this.isHost});
+  const RegisterDoneScreen({super.key, required this.title, required this.isHost});
 
   final String title;
   final bool isHost;
@@ -37,6 +38,8 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
+
+    _registerUserData(context, userProvider);
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -140,12 +143,13 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                 ),
                                 child: InkWell(
                                     onTap: () async {
-                                      _saveUserData(context, userProvider);
-
                                       // 자동로그인, write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
                                       await storage.write(
                                       key: "loginAccount",
                                       value: userProvider.userAccount);
+                                      await storage.write(
+                                          key: "userIdx",
+                                          value: userProvider.userIdx);
                                       await storage.write(
                                           key: "appLockState",
                                           value: "0");
@@ -175,41 +179,38 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
   }
 }
 
-Future<void> _saveUserData(BuildContext context, UserModel provider) async {
-  var user_idx = await getSpecificUserData(provider.userAccount, 'user_idx');
-  var login_type = provider.loginType;
-  var user_account = provider.userAccount;
-  var user_nickname = await getMyNickname(await getSpecificUserData(provider.userAccount, 'lover_idx'))??"기본닉네임";
-  var user_birth = provider.userBirth;
-  var user_profile_image = "lib/assets/images/default_profile.png";
-  var lover_user_idx = 2;
-  var lover_nickname = provider.loverNickname;
-  var home_preset_type = provider.homePresetType;
-  var top_bar_type = 0;
-  var profile_message = "";
-  var alarms_allow = false;
-  var top_bar_activate = false;
-  var user_state = 1;
-  var love_d_day = provider.loveDday;
+Future<void> _registerUserData(BuildContext context, UserModel provider) async {
+  var userIdx = provider.userIdx;
 
-  var user = UserModel(
-      userIdx: user_idx,
-      userNickname: user_nickname,
-      loginType: login_type,
-      userAccount: user_account,
-      userBirth: user_birth,
-      userProfileImage: user_profile_image,
-      loverUserIdx: lover_user_idx,
-      loverNickname: lover_nickname,
-      homePresetType: home_preset_type,
-      topBarType: top_bar_type,
-      profileMessage: profile_message,
-      alarmsAllow: alarms_allow,
-      topBarActivate: top_bar_activate,
-      userState: user_state,
-      loveDday: love_d_day
-  );
+  var myQuerySnapshot = await FirebaseFirestore.instance
+      .collection('userData')
+      .where('user_idx', isEqualTo: userIdx)
+      .get();
+  var myDocument = myQuerySnapshot.docs.first;
 
-  await saveUserData(user);
+  // var loverQuerySnapshot = await FirebaseFirestore.instance
+  //     .collection('userData')
+  //     .where('user_idx', isEqualTo: lover_idx)
+  //     .get();
+  // var loverDocument = loverQuerySnapshot.docs.first;
+
+  if (myQuerySnapshot.docs.isNotEmpty) {
+      myDocument.reference.update({
+        // 'user_nickname': await getMyNickname(
+        //     await getSpecificUserData(provider.userAccount, 'lover_idx')) ??
+        //     "기본닉네임",
+        'user_birth': provider.userBirth,
+        // 'lover_nickname': provider.loverNickname,
+        'home_preset_type': provider.homePresetType,
+        'user_state': 1,
+        'login_type': provider.loginType,
+        'user_profile_image': "lib/assets/images/default_profile.png",
+        'top_bar_type': 0,
+        'profile_message': "",
+        'alarms_allow': false,
+        'top_bar_activate': false,
+      });
+
+  }
   provider.providerNotify();
 }
