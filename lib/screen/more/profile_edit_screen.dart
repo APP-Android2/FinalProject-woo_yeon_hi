@@ -27,16 +27,16 @@ class ProfileEditScreen extends StatefulWidget {
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   DateTime _selectedDate = DateTime.now();
-  static const storage = FlutterSecureStorage();
 
   TextEditingController? userNicknameTextEditController;
   TextEditingController? profileMessageTextEditController;
+
   dynamic userProvider;
   late int userIdx;
-  late String tempUserNickname = "";
-  late String tempProfileMsg = "";
-  late String tempProfileImage = "lib/assets/images/default_profile.png";
-  late String tempUserBirth = dateToString(DateTime.now());
+  late String tempUserNickname;
+  late String tempProfileMsg;
+  // late String tempProfileImage;
+  late String tempUserBirth;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
 
   @override
@@ -44,16 +44,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     super.initState();
 
     userProvider = Provider.of<UserModel>(context, listen: false);
+    userIdx = userProvider.userIdx;
     _asyncMethod();
   }
 
   _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
     tempUserNickname = await getSpecificUserData(userIdx, 'user_nickname');
     tempProfileMsg = await getSpecificUserData(userIdx, 'profile_message');
-    tempProfileImage =
-    await getSpecificUserData(userIdx, 'user_profileImage');
     tempUserBirth = await getSpecificUserData(userIdx, 'user_birth');
+    userProvider.userProfileImage = await getSpecificUserData(userIdx, 'user_profile_image');
+
     userNicknameTextEditController =
         TextEditingController(text: tempUserNickname);
     profileMessageTextEditController =
@@ -73,8 +73,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var deviceWidth = MediaQuery.of(context).size.width;
-    var deviceHeight = MediaQuery.of(context).size.height;
+    var deviceWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    var deviceHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     if (_isLoading) {
       // 로딩 중인 상태를 표시
@@ -106,43 +112,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             IconButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
-
-                if (userProvider.checkProvider(userNicknameTextEditController)) {
-                  FocusScope.of(context).unfocus();
-                  Future.delayed(const Duration(milliseconds: 100), () async {
-                    await updateSpecificUserData(
-                        userIdx, 'user_nickname', tempUserNickname);
-                    await updateSpecificUserData(userIdx, 'user_birth', tempUserBirth);
-                    await updateSpecificUserData(
-                        userIdx, 'profile_message', tempProfileMsg);
-                    await updateSpecificUserData(
-                        userIdx, 'user_profileImage', tempProfileImage);
-                  });
-
-                  Future.delayed(const Duration(milliseconds: 100), () {
-                    Navigator.pop(context);
-                    Fluttertoast.showToast(
-                      msg: "프로필이 저장되었습니다.",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.TOP_LEFT,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: ColorFamily.black,
-                      textColor: ColorFamily.white,
-                      fontSize: 14.0,
-                    );
-                  });
-                } else {
-                  FocusScope.of(context).unfocus();
-                  Fluttertoast.showToast(
-                    msg: "닉네임을 입력해주세요!",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: ColorFamily.pink,
-                    textColor: ColorFamily.white,
-                    fontSize: 14.0,
-                  );
-                }
+                _on_edit_done(context, userProvider);
               },
               icon: SvgPicture.asset('lib/assets/icons/done.svg'),
             )
@@ -176,9 +146,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                           height: deviceHeight * 0.6,
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
-                                              image: FileImage(
-                                                  File(userProvider
-                                                      .image!.path)),
+                                              image: userProvider.profileImageFile,
+                                              // FileImage(
+                                              //     File(userProvider
+                                              //         .image!.path)),
                                               fit: BoxFit.contain,
                                             ),
                                           ),
@@ -199,7 +170,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   fit: BoxFit.cover,
                                 )
                                     : Image.asset(
-                                  tempProfileImage,
+                                  userProvider.userProfileImage,
                                   width: deviceWidth * 0.35,
                                   height: deviceWidth * 0.35,
                                 ),
@@ -207,9 +178,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                             ),
                           ),
                           Positioned(
-                            top: deviceWidth * 0.25,
-                            left: deviceWidth * 0.26,
-                            child: const ProfileEditAlbum()
+                              top: deviceWidth * 0.25,
+                              left: deviceWidth * 0.26,
+                              child: const ProfileEditAlbum()
                           ),
                         ],
                       ),
@@ -374,6 +345,48 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             ],
           ),
         ),
+      );
+    }
+  }
+
+  Future<void> _on_edit_done(BuildContext context, userProvider) async {
+    var now = DateTime.now();
+    var imageName = "${userIdx}_$now";
+
+    if (userProvider.checkProvider(userNicknameTextEditController)) {
+      FocusScope.of(context).unfocus();
+      Future.delayed(const Duration(milliseconds: 100), () async {
+        await updateSpecificUserData(
+            userIdx, 'user_nickname', tempUserNickname);
+        await updateSpecificUserData(userIdx, 'user_birth', tempUserBirth);
+        await updateSpecificUserData(
+            userIdx, 'profile_message', tempProfileMsg);
+        await updateSpecificUserData(
+            userIdx, 'user_profile_image', imageName);
+        await uploadUserProfileImage(userProvider.image!, imageName);
+        userProvider.providerNotify();
+      });
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('프로필이 저장되었습니다.'),
+            duration: Duration(seconds: 2),
+            backgroundColor: ColorFamily.pink,
+          ),
+        );
+      });
+    } else {
+      FocusScope.of(context).unfocus();
+      Fluttertoast.showToast(
+        msg: "닉네임을 입력해주세요!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: ColorFamily.pink,
+        textColor: ColorFamily.white,
+        fontSize: 14.0,
       );
     }
   }

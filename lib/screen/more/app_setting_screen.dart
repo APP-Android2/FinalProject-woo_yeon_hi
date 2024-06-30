@@ -24,14 +24,12 @@ class AppSettingScreen extends StatefulWidget {
 }
 
 class _AppSettingScreenState extends State<AppSettingScreen> {
-  static const storage =
-      FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
+  dynamic userProvider;
   late int userIdx;
   late bool alarmsAllow;
   late int loginType;
 
   final LocalAuthentication auth = LocalAuthentication();
-
   late bool _isBioAuthSupported;
   late bool switchValue = false;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
@@ -39,6 +37,8 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    userIdx = userProvider.userIdx;
     auth.isDeviceSupported().then(
           (bool isSupported) =>
               setState(() => _isBioAuthSupported = isSupported),
@@ -47,7 +47,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
   }
 
   Future<void> _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
     alarmsAllow = await getSpecificUserData(userIdx, 'alarms_allow');
     loginType = await getSpecificUserData(userIdx, 'login_type');
 
@@ -194,8 +193,8 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                         child: InkWell(
                           splashFactory: NoSplash.splashFactory,
                           onTap: () async {
-                            await storage.delete(key: "loginData");
-                            signOut();
+                            // signOut();
+                            await updateSpecificUserData(userIdx, 'user_state', 2);
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (context) => const LoginScreen()),
@@ -224,22 +223,22 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
     }
   }
 
-  void signOut() async {
-    switch (loginType) {
-      case 1:
-        await GoogleSignIn().signOut();
-        break;
-      case 2:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case 0:
-        break;
-    }
-    updateSpecificUserData(userIdx, 'login_type', 0);
-  }
+  // void signOut() async {
+  //   switch (loginType) {
+  //     case 1:
+  //       await GoogleSignIn().signOut();
+  //       break;
+  //     case 2:
+  //       try {
+  //         await UserApi.instance.logout();
+  //         print('로그아웃 성공, SDK에서 토큰 삭제');
+  //       } catch (error) {
+  //         print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+  //       }
+  //       break;
+  //     case 0:
+  //       break;
+  //   }
+  //   updateSpecificUserData(userIdx, 'login_type', 0);
+  // }
 }

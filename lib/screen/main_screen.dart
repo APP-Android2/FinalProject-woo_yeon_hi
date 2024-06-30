@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
                   userAccount: '',
                   userNickname: '기본닉네임',
                   userBirth: dateToString(DateTime.now()),
-                  userProfileImage: 'lib/assets/images/default_profile.png',
+                  userProfileImage: 'default_profile.png',
                   loverUserIdx: 0,
                   loverNickname: '',
                   homePresetType: 0,

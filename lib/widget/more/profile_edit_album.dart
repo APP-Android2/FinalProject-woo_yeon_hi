@@ -111,7 +111,7 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
                     onTap: () {
                       setState(() {
                         userProvider.userProfileImage =
-                            "lib/assets/images/default_profile.png";
+                            "default_profile.png";
                         userProvider.setImage(null);
                         Navigator.pop(context);
                         FocusScope.of(context).unfocus();

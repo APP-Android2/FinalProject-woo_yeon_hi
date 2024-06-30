@@ -80,4 +80,9 @@ class UserModel with ChangeNotifier{
   void providerNotify(){
     notifyListeners();
   }
+
+  // Image profileImageFile = Image.network(
+  //   imageURL,
+  //   fit: BoxFit.cover,
+  // );
 }

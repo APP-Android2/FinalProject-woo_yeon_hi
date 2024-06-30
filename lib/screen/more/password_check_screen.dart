@@ -8,6 +8,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/user_dao.dart';
 import 'package:woo_yeon_hi/screen/more/app_lock_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -395,9 +396,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
       });
     } else {
       var passWord = listToString(checkingPassword);
-      await storage.write(
-          key: "appLockState",
-          value: "1");
+      await updateSpecificUserData(userProvider.userIdx, 'app_lock_state', 1);
       await storage.write(
           key: "lockPassword",
           value: passWord);
@@ -462,9 +461,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
     }
 
     if (authenticated) {
-      await storage.write(
-          key: "appLockState",
-          value: "2");
+      await updateSpecificUserData(userProvider.userIdx, 'app_lock_state', 2);
       Navigator.pop(context);
       Navigator.pushReplacement(
           context,

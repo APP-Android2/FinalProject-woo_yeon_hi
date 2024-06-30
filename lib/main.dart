@@ -102,11 +102,11 @@ class _WooYeonHiState extends State<WooYeonHi> {
               useMaterial3: true),
           home: widget.userIdx == 0
               ? const LoginScreen()
-              : widget.userState == 1
-                  ? const LoginScreen()
-                  : widget.appLockState == 0
-                      ? const MainScreen()
-                      : const PasswordEnterScreen(),
+              : widget.userState == 0
+                ? widget.appLockState == 0
+                  ? const MainScreen()
+                  : const PasswordEnterScreen()
+                : const LoginScreen(),
           onGenerateRoute: RouteGenerator.generateRoute,
         ));
   }

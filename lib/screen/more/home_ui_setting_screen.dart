@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
 import '../../dao/user_dao.dart';
+import '../../model/user_model.dart';
 import '../../style/text_style.dart';
 import '../../utils.dart';
 
@@ -20,7 +22,6 @@ class HomeUiSettingScreen extends StatefulWidget {
 }
 
 class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
-  static const storage = FlutterSecureStorage();
 
   var presetImages = [
     "lib/assets/images/home_preset_standard_4x.png",
@@ -29,21 +30,24 @@ class _HomeUiSettingScreenState extends State<HomeUiSettingScreen> {
     "lib/assets/images/home_preset_dateplan_ledger_4x.png",
   ];
 
-  late int presetIndex;
+  dynamic userProvider;
   late int userIdx;
   late int homePresetType;
+
+  late int presetIndex;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
 
   @override
   void initState(){
     super.initState();
 
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    userIdx = userProvider.userIdx;
     _asyncMethod();
     presetIndex = homePresetType;
   }
 
   Future<void> _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
     homePresetType = await getSpecificUserData(userIdx, 'home_preset_type');
 
     setState(() {

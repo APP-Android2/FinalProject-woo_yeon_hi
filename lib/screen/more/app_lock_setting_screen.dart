@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:local_auth/local_auth.dart';
@@ -28,26 +27,28 @@ class AppLockSettingScreen extends StatefulWidget {
 class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
   final LocalAuthentication auth = LocalAuthentication();
   bool _isAuthenticating = false;
+
+  dynamic userProvider;
+  late int userIdx;
+  late String userAccount;
+  late String appLockState;
+
   late bool appLockSwitchValue = false;
   late bool bioLockSwitchValue = false;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
-  
-  static const storage = FlutterSecureStorage();
-  late String appLockState = "";
-  late String userAccount = "";
-
 
 
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    userIdx = userProvider.userIdx;
+    userAccount = userProvider.userAccount;
     _asyncMethod();
   }
 
   Future<void> _asyncMethod() async {
-    appLockState = (await storage.read(key: "appLockState"))??"0";
-    userAccount = (await storage.read(key: "loginAccount"))!;
-
+    appLockState = await getSpecificUserData(userIdx, 'app_lock_state');
     setState(() {
       if(appLockState=="0"){
         appLockSwitchValue = false;
@@ -77,7 +78,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
 
     if (_isLoading) {
       // 로딩 중인 상태를 표시
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
@@ -131,9 +132,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                         appLockSwitchValue = value;
                                         bioLockSwitchValue = value;
                                       });
-                                      await storage.write(
-                                          key: "appLockState",
-                                          value: "0");
+                                      await updateSpecificUserData(userIdx, 'app_lock_state', 0);
                                     }
                                   })
                             ],
@@ -194,7 +193,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                     : bioLockSwitchValue
                                         ? await _authenticateWithBiometrics()
                                         ? setState(() async {
-                                      await storage.write(key: 'appLockState', value: "2");
+                                      await updateSpecificUserData(userIdx, 'app_lock_state', 2);
                                     })
                                         : setState(() {
                                       bioLockSwitchValue = false;

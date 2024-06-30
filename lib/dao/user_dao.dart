@@ -15,7 +15,7 @@ Future<void> saveUserData(UserModel user) async {
     "user_account": user.userAccount,
     "user_nickname": user.userNickname,
     "user_birth": user.userBirth,
-    "user_profileImage": user.userProfileImage,
+    "user_profile_image": user.userProfileImage,
     "lover_user_idx": user.loverUserIdx,
     // "lover_nickname": user.loverNickname,
     "home_preset_type": user.homePresetType,
@@ -104,7 +104,7 @@ Future<void> uploadUserProfileImage(XFile imageFile, String imageName) async {
       .putFile(File(imageFile.path));
 }
 
-Future<Image> getProfileImagePath(String path) async {
+Future<Image> getUserProfileImage(String path) async {
   var imageURL = await FirebaseStorage.instance
       .ref('image/userProfile/$path')
       .getDownloadURL();

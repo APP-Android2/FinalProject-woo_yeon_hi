@@ -21,8 +21,7 @@ class TopBarUiSettingScreen extends StatefulWidget {
 }
 
 class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
-  static const storage = FlutterSecureStorage();
-
+  dynamic userProvider;
   late int userIdx;
   late int topBarType;
   late bool topBarActivate;
@@ -35,12 +34,13 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
   void initState(){
     super.initState();
 
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    userIdx = userProvider.userIdx;
     _asyncMethod();
     topBarIndex = topBarType;
   }
 
   Future<void> _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
     topBarType = await getSpecificUserData(userIdx, 'top_bar_type');
     topBarActivate = await getSpecificUserData(userIdx, 'top_bar_activate');
 
@@ -230,7 +230,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100.0),
                                 child: Image.asset(
-                                    'lib/assets/images/default_profile.png',
+                                    'default_profile.png',
                                     fit: BoxFit.cover,
                                     width: 80,
                                     height: 80),
@@ -252,7 +252,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100.0),
                               child: Image.asset(
-                                  'lib/assets/images/default_profile.png',
+                                  'default_profile.png',
                                   fit: BoxFit.cover,
                                   width: 80,
                                   height: 80),
@@ -313,7 +313,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100.0),
                                     child: Image.asset(
-                                        'lib/assets/images/default_profile.png',
+                                        'default_profile.png',
                                         fit: BoxFit.cover,
                                         width: 80,
                                         height: 80),
@@ -325,7 +325,7 @@ class _TopBarUiSettingScreenState extends State<TopBarUiSettingScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100.0),
                                     child: Image.asset(
-                                        'lib/assets/images/default_profile.png',
+                                        'default_profile.png',
                                         fit: BoxFit.cover,
                                         width: 80,
                                         height: 80),

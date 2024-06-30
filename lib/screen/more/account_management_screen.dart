@@ -3,12 +3,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/main.dart';
 import 'package:woo_yeon_hi/screen/more/account_delete_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/widget/more/account_management_top_app_bar.dart';
 
 import '../../dao/user_dao.dart';
+import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 import '../../utils.dart';
@@ -21,23 +23,22 @@ class AccountManagementScreen extends StatefulWidget {
 }
 
 class _AccountManagementScreenState extends State<AccountManagementScreen> {
-  static const storage = FlutterSecureStorage();
-  late String userAccount;
   late int userIdx;
+  late String userAccount;
+  dynamic userProvider;
   late int loginType;
-  late String appLockState;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
 
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    userIdx = userProvider.userIdx;
+    userAccount = userProvider.userAccount;
     _asyncMethod();
   }
 
   Future<void> _asyncMethod() async {
-    userAccount = (await storage.read(key: "userAccount"))!;
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
-    appLockState = (await storage.read(key: "appLockState"))!;
     loginType = await getSpecificUserData(userIdx, 'login_type');
     setState(() {
       _isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정
@@ -57,7 +58,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
     if (_isLoading) {
       // 로딩 중인 상태를 표시
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),

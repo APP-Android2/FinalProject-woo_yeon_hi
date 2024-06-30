@@ -28,6 +28,8 @@ class AccountDeleteScreen extends StatefulWidget {
 
 class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
   static const storage = FlutterSecureStorage();
+  dynamic userProvider;
+
   late int userIdx;
   late int loginType;
   bool isAgreed = false;
@@ -35,11 +37,12 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<UserModel>(context, listen: false);
+    userIdx = userProvider.userIdx;
     _asyncMethod();
   }
   
   Future<void> _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
     loginType = await getSpecificUserData(userIdx, 'login_type');
   }
   

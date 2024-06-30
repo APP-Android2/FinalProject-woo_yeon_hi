@@ -14,6 +14,7 @@ import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/utils.dart';
+import 'package:woo_yeon_hi/widget/more/user_profile_image.dart';
 import '../../dao/user_dao.dart';
 import '../../model/user_model.dart';
 import '../../widget/more/more_top_app_bar.dart';
@@ -28,7 +29,6 @@ class MoreScreen extends StatefulWidget {
 
 class _MoreScreenState extends State<MoreScreen> {
   dynamic userProvider;
-  static const storage = FlutterSecureStorage();
   late int userIdx;
   late String userNickname;
   late String profileMsg;
@@ -40,16 +40,14 @@ class _MoreScreenState extends State<MoreScreen> {
     super.initState();
 
     userProvider = Provider.of<UserModel>(context, listen: false);
-    // _asyncMethod();
+    userIdx = userProvider.userIdx;
   }
 
-  Future<int> _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
+  Future<void> _asyncMethod() async {
     userNickname = await getSpecificUserData(userIdx, 'user_nickname');
     profileMsg = await getSpecificUserData(userIdx, 'profile_message');
-    profileImage = await getSpecificUserData(userIdx, 'user_profileImage');
-    userBirth = await getSpecificUserData(userIdx, 'user_birth');
-    return 1;
+    profileImage = await getSpecificUserData(userIdx, 'user_profile_image');
+    userProvider.userProfileImage = profileImage;
   }
 
   @override
@@ -57,22 +55,26 @@ class _MoreScreenState extends State<MoreScreen> {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: const MoreTopAppBar(),
-        body: FutureBuilder(
-            future: _asyncMethod(),
-            builder: (BuildContext context, snapshot) {
-              if (snapshot.hasData == false) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else {
-                return Container(
+    return FutureBuilder(
+        future: _asyncMethod(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(
+                child: Text('Error: ${snapshot.error}'),
+              ),
+            );
+          } else {
+            return Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: const MoreTopAppBar(),
+                body: Container(
                   height: deviceHeight,
                   width: deviceWidth,
                   padding: const EdgeInsets.all(20),
@@ -84,50 +86,7 @@ class _MoreScreenState extends State<MoreScreen> {
                         width: deviceWidth - 40,
                         child: Row(
                           children: [
-                            Material(
-                              elevation: 1,
-                              borderRadius: BorderRadius.circular(65),
-                              child: InkWell(
-                                onTap: () {
-                                  userProvider.image != null
-                                      ? showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return Dialog(
-                                              child: Container(
-                                                width: deviceWidth * 0.8,
-                                                height: deviceHeight * 0.6,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: FileImage(File(
-                                                        userProvider
-                                                            .image!.path)),
-                                                    fit: BoxFit.contain,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          })
-                                      : null;
-                                },
-                                borderRadius: BorderRadius.circular(65),
-                                splashColor: Colors.transparent,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(65),
-                                  child: userProvider.image != null
-                                      ? Image.file(
-                                          File(userProvider.image!.path),
-                                          width: deviceWidth * 0.35,
-                                          height: deviceWidth * 0.35,
-                                          fit: BoxFit.cover)
-                                      : Image.asset(
-                                          profileImage,
-                                          width: deviceWidth * 0.35,
-                                          height: deviceWidth * 0.35,
-                                        ),
-                                ),
-                              ),
-                            ),
+                            UserProfileImage(profileImagePath: profileImage),
                             const SizedBox(width: 20),
                             SizedBox(
                               height: deviceWidth * 0.3,
@@ -146,14 +105,15 @@ class _MoreScreenState extends State<MoreScreen> {
                                               fontFamily:
                                                   FontFamily.mapleStoryBold)),
                                       InkWell(
-                                          onTap: () {
-                                            Navigator.push(
+                                          onTap: () async {
+                                            bool? updated = await Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            const ProfileEditScreen()))
-                                                .then(
-                                                    (value) => setState(() {}));
+                                                            const ProfileEditScreen()));
+                                            if (updated == true) {
+                                              _asyncMethod();
+                                            }
                                           },
                                           child: SizedBox(
                                               width: 40,
@@ -212,9 +172,9 @@ class _MoreScreenState extends State<MoreScreen> {
                           const AppSettingScreen()),
                     ],
                   ),
-                );
-              }
-            }));
+                ));
+          }
+        });
   }
 }
 

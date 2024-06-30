@@ -145,7 +145,7 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                     onTap: () async {
                                       // 자동로그인, write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
                                       await storage.write(
-                                      key: "loginAccount",
+                                      key: "userAccount",
                                       value: userProvider.userAccount);
                                       await storage.write(
                                           key: "userIdx",
@@ -191,7 +191,7 @@ Future<void> _registerUserData(BuildContext context, UserModel provider) async {
         'home_preset_type': provider.homePresetType,
         'user_state': 0,
         'login_type': provider.loginType,
-        'user_profile_image': "lib/assets/images/default_profile.png",
+        'user_profile_image': "default_profile.png",
         'top_bar_type': 0,
         'profile_message': "",
         'alarms_allow': false,
