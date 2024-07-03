@@ -110,7 +110,8 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                                       setState(() {
                                         switchValue = value;
                                       });
-                                      await updateSpecificUserData(userIdx, 'alarms_allow', switchValue);
+                                      await updateSpecificUserData(
+                                          userIdx, 'alarms_allow', switchValue);
                                     }),
                               ],
                             ),
@@ -195,7 +196,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                           splashFactory: NoSplash.splashFactory,
                           onTap: () async {
                             await storage.delete(key: "loginData");
-                            signOut();
+                            _logOut();
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (context) => const LoginScreen()),
@@ -224,7 +225,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
     }
   }
 
-  void signOut() async {
+  void _logOut() async {
     switch (loginType) {
       case 1:
         await GoogleSignIn().signOut();
@@ -241,5 +242,6 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
         break;
     }
     updateSpecificUserData(userIdx, 'login_type', 0);
+    updateSpecificUserData(userIdx, 'user_state', 2);
   }
 }

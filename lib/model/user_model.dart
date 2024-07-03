@@ -4,14 +4,14 @@ import 'package:image_picker/image_picker.dart';
 
 import 'enums.dart';
 
-class UserModel with ChangeNotifier{
+class UserModel{
   int userIdx;
   int loginType;
   String userAccount;
   String userNickname;
   String userBirth;
   String userProfileImage;
-  int loverUserIdx;
+  int loverIdx;
   String loverNickname;
   int homePresetType;
   int topBarType;
@@ -29,7 +29,7 @@ class UserModel with ChangeNotifier{
         required this.userNickname,
         required this.userBirth,
         required this.userProfileImage,
-        required this.loverUserIdx,
+        required this.loverIdx,
         required this.loverNickname,
         required this.homePresetType,
         required this.topBarType,
@@ -49,7 +49,7 @@ class UserModel with ChangeNotifier{
         userNickname: data['user_nickname'],
         userBirth: data['user_birth'],
         userProfileImage: data['user_profile_image'],
-        loverUserIdx: data['lover_user_idx'],
+        loverIdx: data['lover_idx'],
         loverNickname: data['lover_nickname'],
         homePresetType: data['home_preset_type'],
         topBarType: data['top_bar_type'],
@@ -70,14 +70,15 @@ class UserModel with ChangeNotifier{
     }
   }
 
-  XFile? _image;
-  XFile? get image => _image;
-  void setImage(XFile? image) {
-    _image = image;
-    notifyListeners();
-  }
-
-  void providerNotify(){
-    notifyListeners();
-  }
+  //
+  // XFile? _image;
+  // XFile? get image => _image;
+  // void setImage(XFile? image) {
+  //   _image = image;
+  //   notifyListeners();
+  // }
+  //
+  // void providerNotify(){
+  //   notifyListeners();
+  // }
 }

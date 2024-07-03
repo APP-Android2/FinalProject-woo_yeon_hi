@@ -25,7 +25,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   late String userAccount;
   late int userIdx;
   late int loginType;
-  late String appLockState;
   bool _isLoading = true; // Loading 상태를 나타내는 변수
 
   @override
@@ -37,7 +36,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   Future<void> _asyncMethod() async {
     userAccount = (await storage.read(key: "userAccount"))!;
     userIdx = stringToInt((await storage.read(key: "userIdx"))!);
-    appLockState = (await storage.read(key: "appLockState"))!;
     loginType = await getSpecificUserData(userIdx, 'login_type');
     setState(() {
       _isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정
@@ -156,26 +154,5 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                 ],
               )));
     }
-  }
-  void signOut() async {
-    switch (loginType) {
-      case 1:
-        await GoogleSignIn().signOut();
-        break;
-      case 2:
-        try {
-          await UserApi.instance.logout();
-          print('로그아웃 성공, SDK에서 토큰 삭제');
-        } catch (error) {
-          print('로그아웃 실패, SDK에서 토큰 삭제 $error');
-        }
-        break;
-      case 0:
-        break;
-    }
-    updateSpecificUserData(userIdx, 'login_type', 0);
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.pop(context);
   }
 }

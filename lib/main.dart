@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:woo_yeon_hi/provider/login_register_provider.dart';
 import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
@@ -36,21 +37,67 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  int userIdx = stringToInt((await const FlutterSecureStorage().read(key: "userIdx"))??"");
-  int appLockState =  await getSpecificUserData(userIdx, 'app_lock_state')?? 0;
-  int userState = await getSpecificUserData(userIdx, 'user_state')?? 2;
+  initializeDateFormatting().then((_) async {
+    final userData = await fetchUserData();
 
-  initializeDateFormatting().then((_) async =>
-      runApp(WooYeonHi(userIdx: userIdx, appLockState: appLockState, userState: userState)));
+    runApp(MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => UserProvider())
+        ],
+        child: WooYeonHi(
+          userIdx: userData['userIdx'],
+          userAccount: userData['userAccount'],
+          alarmsAllow: userData['alarmsAllow'],
+          appLockState: userData['appLockState'],
+          homePresetType: userData['homePresetType'],
+          loginType: userData['loginType'],
+          loveDday: userData['loveDday'],
+          loverIdx: userData['loverIdx'],
+          profileMessage: userData['profileMessage'],
+          topBarActivate: userData['topBarActivate'],
+          topBarType: userData['topBarType'],
+          userBirth: userData['userBirth'],
+          userNickname: userData['userNickname'],
+          userProfileImage: userData['userProfileImage'],
+          userState: userData['userState'],
+        )));
+  });
 }
 
 class WooYeonHi extends StatefulWidget {
+  WooYeonHi(
+      {super.key,
+      required this.userIdx,
+      required this.userAccount,
+      required this.alarmsAllow,
+      required this.appLockState,
+      required this.homePresetType,
+      required this.loginType,
+      required this.loveDday,
+      required this.loverIdx,
+      required this.profileMessage,
+      required this.topBarActivate,
+      required this.topBarType,
+      required this.userBirth,
+      required this.userNickname,
+      required this.userProfileImage,
+      required this.userState});
 
-  WooYeonHi({super.key, required this.userIdx, required this.appLockState, required this.userState});
-
-  int userIdx;
-  int appLockState;
-  int userState;
+  final int userIdx;
+  final String userAccount;
+  final bool alarmsAllow;
+  final int appLockState;
+  final int homePresetType;
+  final int loginType;
+  final String loveDday;
+  final int loverIdx;
+  final String profileMessage;
+  final bool topBarActivate;
+  final int topBarType;
+  final String userBirth;
+  final String userNickname;
+  final String userProfileImage;
+  final int userState;
 
   @override
   State<WooYeonHi> createState() => _WooYeonHiState();
@@ -58,30 +105,20 @@ class WooYeonHi extends StatefulWidget {
 
 class _WooYeonHiState extends State<WooYeonHi> {
   @override
- build(BuildContext context) {
+  build(BuildContext context) {
     print("4: ${widget.userIdx}");
     print("5: ${widget.appLockState}");
     print("6: ${widget.userState}");
 
-    return ChangeNotifierProvider(
-        create: (context) => UserModel(
-            userIdx: 0,
-            loginType: 0,
-            userAccount: '',
-            userNickname: '',
-            userBirth: dateToString(DateTime.now()),
-            userProfileImage: '',
-            loverUserIdx: 0,
-            loverNickname: '',
-            homePresetType: 0,
-            topBarType: 0,
-            profileMessage: '',
-            alarmsAllow: false,
-            topBarActivate: false,
-            userState: 2,
-            loveDday: dateToString(DateTime.now()),
-            appLockState: 0
-        ),
+    Provider.of<UserProvider>(context, listen: false).setUserAllData(widget.userIdx, widget.userAccount, widget.alarmsAllow, widget.appLockState, widget.homePresetType, widget.loginType, widget.loveDday, widget.loverIdx, widget.profileMessage, widget.topBarActivate, widget.topBarType, widget.userBirth, widget.userNickname, widget.userProfileImage, widget.userState);
+    print("7: ${widget.userAccount}");
+    print("8: ${widget.userBirth}");
+    print("9: ${Provider.of<UserProvider>(context, listen: false).userBirth}");
+
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => CalendarProvider()),
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: "WooYeonHi",

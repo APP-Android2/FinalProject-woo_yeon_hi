@@ -15,6 +15,18 @@ void showToast(String message){
   );
 }
 
+void showBlackToast(String message){
+  Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: ColorFamily.black,
+      textColor: ColorFamily.white,
+      fontSize: 14.0
+  );
+}
+
 void dialogTitleWithContent(BuildContext context, String title, String content, VoidCallback onCancle, VoidCallback onConfirm){
   showDialog(
       context: context,

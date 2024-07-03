@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/user_dao.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
@@ -9,6 +10,7 @@ import 'package:woo_yeon_hi/widget/login/password_reset_top_app_bar.dart';
 
 import '../../model/enums.dart';
 import '../../model/user_model.dart';
+import '../../provider/login_register_provider.dart';
 import '../../style/text_style.dart';
 import '../register/code_connect_screen.dart';
 
@@ -27,14 +29,12 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
   String _authCodeText = "";
   String _authCode = getRandomString(6);
 
-  dynamic userProvider;
   dynamic authNumberTextEditController;
   DateTime? _timerStartTime;
 
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
     authNumberTextEditController = TextEditingController();
   }
 
@@ -42,7 +42,11 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
-
+    
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(
+        builder: (context, provider, _) {
     return Scaffold(
         appBar: const PasswordResetTopAppBar(),
         body: Container(
@@ -75,7 +79,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                             Padding(
                                 padding: const EdgeInsets.fromLTRB(10, 2, 0, 0),
                                 child:
-                                    userProvider.loginType == 2
+                                    provider.loginType == 2
                                         ? const Text("카카오 로그인",
                                             style: TextStyle(
                                                 color: ColorFamily.black,
@@ -90,7 +94,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                                                 fontSize: 12))),
                             Padding(
                               padding: const EdgeInsets.only(left: 20),
-                              child: Text(userProvider.userAccount,
+                              child: Text(provider.userAccount,
                                   style: TextStyleFamily.normalTextStyle),
                             ),
                           ],
@@ -261,13 +265,12 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if (authNumberTextEditController.text ==
                             "TEST") {
-                          setState(() {
-                            userProvider.appLockState = 0;
-                            userProvider.lockPassword = [0, 0, 0, 0];
-                          });
+                          await updateSpecificUserData(provider.userIdx, 'app_lock_state', 0);
+                          provider.setLockPassword([0, 0, 0, 0]);
+
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
@@ -301,6 +304,6 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                   ),
                 ),
               ]),
-            )));
+            )));}));
   }
 }

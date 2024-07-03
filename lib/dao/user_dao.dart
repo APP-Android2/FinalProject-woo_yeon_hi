@@ -16,7 +16,7 @@ Future<void> saveUserData(UserModel user) async {
     "user_nickname": user.userNickname,
     "user_birth": user.userBirth,
     "user_profileImage": user.userProfileImage,
-    "lover_user_idx": user.loverUserIdx,
+    "lover_idx": user.loverIdx,
     // "lover_nickname": user.loverNickname,
     "home_preset_type": user.homePresetType,
     "top_bar_type": user.topBarType,

@@ -94,7 +94,7 @@ Future<void> saveUserInfo(String userAccount) async {
 }
 
 
-Future<void> saveLoverUserIdx(int userIdx, int loverUserIdx) async {
+Future<void> saveLoverIdx(int userIdx, int loverIdx) async {
   try {
     // userAccount 필드와 일치하는 문서 검색
     var querySnapshot = await FirebaseFirestore.instance.collection('userData')
@@ -108,7 +108,7 @@ Future<void> saveLoverUserIdx(int userIdx, int loverUserIdx) async {
         String docId = doc.id;
 
         // 새로운 필드를 추가하여 문서 업데이트
-        await FirebaseFirestore.instance.collection('userData').doc(docId).update({'lover_idx': loverUserIdx});
+        await FirebaseFirestore.instance.collection('userData').doc(docId).update({'lover_idx': loverIdx});
       }
       print('문서 업데이트 완료');
     } else {
@@ -165,13 +165,13 @@ Future<void> updateCode(String code, int userIdx) async {
 }
 
 
-// dynamic getMyNickname(int loverUserIdx) async {
+// dynamic getMyNickname(int loverIdx) async {
 //   Map<String, dynamic> results = {};
 //   dynamic result;
 //
 //   Query<Map<String, dynamic>> query = FirebaseFirestore.instance
 //       .collection('userData')
-//       .where('user_idx', isEqualTo: loverUserIdx);
+//       .where('user_idx', isEqualTo: loverIdx);
 //
 //   var querySnapShot = await query.get();
 //   for (var doc in querySnapShot.docs) {

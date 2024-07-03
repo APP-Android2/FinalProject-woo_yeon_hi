@@ -57,8 +57,8 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
     final XFile? pickedFile = await picker.pickImage(source: imageSource);
     if (pickedFile != null) {
       setState(() {
-        userProvider.setImage(XFile(pickedFile.path));
-        userProvider.userProfileImage = userProvider.image!.path;
+        // userProvider.setImage(XFile(pickedFile.path));
+        // userProvider.userProfileImage = userProvider.image!.path;
       });
     }
   }

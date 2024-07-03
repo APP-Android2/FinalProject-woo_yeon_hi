@@ -30,12 +30,10 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
   late int userIdx;
   late String appLockState;
   late String lockPassword;
-  dynamic userProvider;
 
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
     _asyncMethod();
   }
 

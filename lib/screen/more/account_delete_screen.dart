@@ -37,12 +37,12 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
     super.initState();
     _asyncMethod();
   }
-  
+
   Future<void> _asyncMethod() async {
     userIdx = stringToInt((await storage.read(key: "userIdx"))!);
     loginType = await getSpecificUserData(userIdx, 'login_type');
   }
-  
+
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
@@ -57,15 +57,8 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
         color: ColorFamily.cream,
         child: Column(
           children: [
-            SizedBox(height: deviceHeight*0.05),
+            SizedBox(height: deviceHeight * 0.05),
             InkWell(
-              onTap: (){
-                signOut();
-                // deleteUserData(userAccount);
-                updateSpecificUserData(userIdx, 'user_state', 2);
-                storage.deleteAll();
-                Navigator.pop(context);
-              },
               child: Image.asset(
                 'lib/assets/images/warning.png',
                 height: 80,
@@ -85,39 +78,40 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               Text("를 누르면 자동으로 로그아웃되며,",
                   style: TextStyleFamily.smallTitleTextStyle)
             ]),
-            const Text("동일 계정으로는 30일 이내에 재가입이 불가능합니다.", style: TextStyleFamily.smallTitleTextStyle),
+            const Text("동일 계정으로는 30일 이내에 재가입이 불가능합니다.",
+                style: TextStyleFamily.smallTitleTextStyle),
             const SizedBox(height: 30),
             const Text("만약 계정 삭제 취소를 원하는 경우,",
                 style: TextStyle(
-                fontSize: 12,
-                color: ColorFamily.black,
-                fontFamily: FontFamily.mapleStoryLight)),
+                    fontSize: 12,
+                    color: ColorFamily.black,
+                    fontFamily: FontFamily.mapleStoryLight)),
             const Text("삭제일로부터 30일 이내에 해당 계정으로 로그인해주세요.",
                 style: TextStyle(
                     fontSize: 12,
                     color: ColorFamily.black,
                     fontFamily: FontFamily.mapleStoryLight)),
             const SizedBox(height: 50),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 30),
-                  const Text("위의 내용을 확인하였으며 동의합니다.",
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: ColorFamily.black,
-                        fontFamily: FontFamily.mapleStoryLight)),
-                  Checkbox(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
-                    side: const BorderSide(color: ColorFamily.black, width: 1.5),
-                    checkColor: ColorFamily.white,
-                    activeColor: ColorFamily.pink,
-                    value: isAgreed,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isAgreed = value!;
-                      });},
-                  ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const SizedBox(width: 30),
+              const Text("위의 내용을 확인하였으며 동의합니다.",
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: ColorFamily.black,
+                      fontFamily: FontFamily.mapleStoryLight)),
+              Checkbox(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3)),
+                side: const BorderSide(color: ColorFamily.black, width: 1.5),
+                checkColor: ColorFamily.white,
+                activeColor: ColorFamily.pink,
+                value: isAgreed,
+                onChanged: (bool? value) {
+                  setState(() {
+                    isAgreed = value!;
+                  });
+                },
+              ),
             ]),
             const SizedBox(height: 50),
             Material(
@@ -125,18 +119,17 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               elevation: 1,
               shadowColor: Colors.black,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(20.0),
               ),
               child: InkWell(
                   onTap: () {
-                    if(isAgreed){
+                    if (isAgreed) {
                       updateSpecificUserData(userIdx, 'user_state', 1);
-                      signOut();
+                      accountDeleting();
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => const LoginScreen()),
-                              (Route<dynamic> route) => false);
+                          (Route<dynamic> route) => false);
                       Fluttertoast.showToast(
                           msg: "우연히 계정이 삭제 처리되었습니다.",
                           toastLength: Toast.LENGTH_SHORT,
@@ -144,9 +137,8 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
                           timeInSecForIosWeb: 1,
                           backgroundColor: ColorFamily.black,
                           textColor: ColorFamily.white,
-                          fontSize: 14.0
-                      );
-                    }else{
+                          fontSize: 14.0);
+                    } else {
                       Fluttertoast.showToast(
                           msg: "동의 항목을 체크해주세요",
                           toastLength: Toast.LENGTH_SHORT,
@@ -154,15 +146,13 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
                           timeInSecForIosWeb: 1,
                           backgroundColor: ColorFamily.black,
                           textColor: ColorFamily.white,
-                          fontSize: 14.0
-                      );
+                          fontSize: 14.0);
                     }
                   },
-                  borderRadius:
-                  BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(20.0),
                   child: SizedBox(
                       height: 40,
-                      width: deviceWidth*0.6,
+                      width: deviceWidth * 0.6,
                       child: Container(
                         alignment: Alignment.center,
                         child: const Text(
@@ -177,7 +167,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
     );
   }
 
-  void signOut() async {
+  void accountDeleting() async {
     switch (loginType) {
       case 1:
         await GoogleSignIn().signOut();
@@ -193,7 +183,8 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
       case 0:
         break;
     }
-    updateSpecificUserData(userIdx, 'login_type', 0);
+    await updateSpecificUserData(userIdx, 'login_type', 0);
+    await updateSpecificUserData(userIdx, 'user_state', 1);
   }
 
   void exitApp() {

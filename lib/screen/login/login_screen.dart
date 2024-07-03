@@ -6,6 +6,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/dao/login_register_dao.dart';
 import 'package:woo_yeon_hi/dao/user_dao.dart';
+import 'package:woo_yeon_hi/provider/login_register_provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/login/account_processing_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
@@ -28,12 +29,14 @@ class LoginScreen extends StatefulWidget {
 class _RegisterScreen extends State<LoginScreen> {
   bool loginSuccess = false;
 
+
   signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     if (googleUser != null) {
+      Provider.of<UserProvider>(context, listen: false).setUserAccount(googleUser.email);
+      print("@@@: ${Provider.of<UserProvider>(context, listen: false).userAccount}");
       setState(() {
-        userProvider.userAccount = googleUser.email;
         loginSuccess = true;
       });
     } else{
@@ -79,8 +82,9 @@ class _RegisterScreen extends State<LoginScreen> {
   _fetchKakaoUserInfo() async {
     try {
       User user = await UserApi.instance.me();
+      Provider.of<UserProvider>(context, listen: false).setUserAccount(user.id.toString());
+      print("@@@: ${Provider.of<UserProvider>(context, listen: false).userAccount}");
       setState(() {
-        userProvider.userAccount = user.id.toString();
         loginSuccess = true;
       });
     } catch (error) {
@@ -89,14 +93,6 @@ class _RegisterScreen extends State<LoginScreen> {
     }
   }
 
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +105,9 @@ class _RegisterScreen extends State<LoginScreen> {
           width: deviceWidth,
           color: ColorFamily.cream,
           padding: const EdgeInsets.all(20),
-          child: Column(
+          child: Consumer<UserProvider>(
+            builder: (context, provider, child) {
+          return Column(
             children: [
               SizedBox(height: deviceHeight * 0.2),
               Image.asset(
@@ -127,7 +125,7 @@ class _RegisterScreen extends State<LoginScreen> {
                       ),
                       child: InkWell(
                         onTap: () async {
-                          switch (await getSpecificUserData(userProvider.userIdx, "user_state")??2) {
+                          switch (await getSpecificUserData(provider.userIdx, "user_state")??2) {
                             case 0:
                               Navigator.pushReplacement(
                                   context,
@@ -142,14 +140,10 @@ class _RegisterScreen extends State<LoginScreen> {
                             case 2:
                               await signInWithGoogle();
                               if (loginSuccess == true) {
-                                setState(() {
-                                  userProvider.loginType = 1;
-                                });
-                                await saveUserInfo(userProvider.userAccount);
+                                provider.setLoginType(1);
+                                await saveUserInfo(provider.userAccount);
                                 var userIdx = await getUserSequence();
-                                setState(() {
-                                  userProvider.userIdx = userIdx;
-                                });
+                                provider.setUserIdx(userIdx);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -187,7 +181,7 @@ class _RegisterScreen extends State<LoginScreen> {
                       ),
                       child: InkWell(
                         onTap: () async {
-                          switch (userProvider.userState) {
+                          switch (provider.userState) {
                             case 0:
                               Navigator.pushReplacement(
                                   context,
@@ -202,14 +196,13 @@ class _RegisterScreen extends State<LoginScreen> {
                             case 2:
                               await signInWithKakao();
                               if (loginSuccess == true) {
-                                setState(() {
-                                  userProvider.loginType = 2;
-                                });
-                                await saveUserInfo(userProvider.userAccount);
+                                provider.setLoginType(2);
+                                print("@@@@: ${Provider.of<UserProvider>(context, listen: false).userAccount}");
+                                print("####: ${provider.userAccount}");
+
+                                await saveUserInfo(provider.userAccount);
                                 var userIdx = await getUserSequence();
-                                setState(() {
-                                  userProvider.userIdx = userIdx;
-                                });
+                                provider.setUserIdx(userIdx);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -243,8 +236,8 @@ class _RegisterScreen extends State<LoginScreen> {
                 ],
               ),
             ],
-          ),
-        ));
+          );}
+        )));
   }
 
   showToast(String msg){

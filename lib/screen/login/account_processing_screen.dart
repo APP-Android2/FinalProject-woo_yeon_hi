@@ -9,6 +9,7 @@ import 'package:woo_yeon_hi/widget/login/account_processing_top_app_bar.dart';
 
 import '../../dao/user_dao.dart';
 import '../../model/user_model.dart';
+import '../../provider/login_register_provider.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 import '../../widget/login/account_processing_dialog.dart';
@@ -25,18 +26,14 @@ class _AccountProcessingScreenState extends State<AccountProcessingScreen> {
   final DateTime _accountDeletedDay = DateTime.now();
   final DateTime _cancelAvailableDay = DateTime.now().add(const Duration(days: 30));
 
-  dynamic userProvider;
-  @override
-  void initState() {
-    super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
-
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
-
+    return ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Consumer<UserProvider>(
+        builder: (context, provider, _) {
     return Scaffold(
       appBar: const AccountProcessingTopAppBar(),
       body: Container(
@@ -126,8 +123,7 @@ class _AccountProcessingScreenState extends State<AccountProcessingScreen> {
                                             overlayColor:
                                             MaterialStateProperty.all(ColorFamily.gray)),
                                         onPressed: () async {
-                                          await updateSpecificUserData(userProvider.userAccount, 'user_state', 0);
-                                          print("${userProvider.userAccount}");
+                                          await updateSpecificUserData(provider.userIdx, 'user_state', 0);
                                           Navigator.pop(context);
                                           Navigator.pop(context);
                                           Fluttertoast.showToast(
@@ -170,7 +166,7 @@ class _AccountProcessingScreenState extends State<AccountProcessingScreen> {
           ],
         ),
       ),
-    );
+    );}));
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/dao/user_dao.dart';
+import 'package:woo_yeon_hi/provider/login_register_provider.dart';
 import 'package:woo_yeon_hi/screen/home/home_screen_set1.dart';
 import 'package:woo_yeon_hi/screen/home/home_screen_set2.dart';
 import 'package:woo_yeon_hi/screen/home/home_screen_set4.dart';
@@ -31,25 +32,6 @@ class _MainScreenState extends State<MainScreen> {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
-          ChangeNotifierProvider(
-              create: (context) => UserModel(
-                  userIdx: 0,
-                  loginType: 0,
-                  userAccount: '',
-                  userNickname: '기본닉네임',
-                  userBirth: dateToString(DateTime.now()),
-                  userProfileImage: 'lib/assets/images/default_profile.png',
-                  loverUserIdx: 0,
-                  loverNickname: '',
-                  homePresetType: 0,
-                  topBarType: 0,
-                  profileMessage: '',
-                  alarmsAllow: false,
-                  topBarActivate: false,
-                  userState: 0,
-                  loveDday: dateToString(DateTime.now()),
-                  appLockState: 0
-              )),
           ChangeNotifierProvider(create: (context) => DiaryProvider()),
           ChangeNotifierProvider(create: (context) => FootprintProvider()),
           ChangeNotifierProvider(create: (context) => LedgerProvider()),
