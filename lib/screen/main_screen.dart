@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/dao/user_dao.dart';
-import 'package:woo_yeon_hi/provider/login_register_provider.dart';
-import 'package:woo_yeon_hi/screen/home/home_screen_set1.dart';
-import 'package:woo_yeon_hi/screen/home/home_screen_set2.dart';
-import 'package:woo_yeon_hi/screen/home/home_screen_set4.dart';
-import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
-import '../utils.dart';
-import 'home/home_screen_set3.dart';
-import '../model/enums.dart';
-import '../model/user_model.dart';
 import '../provider/diary_provider.dart';
 import '../provider/footprint_provider.dart';
 import '../provider/ledger_provider.dart';
@@ -41,7 +30,8 @@ class _MainScreenState extends State<MainScreen> {
               create: (context) => FootPrintDatePlanSlidableProvider()),
           ChangeNotifierProvider(
               create: (context) => FootprintDraggableSheetProvider()),
-          ChangeNotifierProvider(create: (_) => TabPageIndexProvider()),
+          ChangeNotifierProvider(create: (context) => BioAuthProvider()),
+          ChangeNotifierProvider(create: (context) => PasswordProvider()),
         ],
         child: MaterialApp(
           title: "WooYeonHi",

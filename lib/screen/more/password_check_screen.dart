@@ -8,59 +8,37 @@ import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/dao/user_dao.dart';
+import 'package:woo_yeon_hi/provider/login_register_provider.dart';
+import 'package:woo_yeon_hi/provider/more_provider.dart';
 import 'package:woo_yeon_hi/screen/more/app_lock_setting_screen.dart';
-import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
-import 'package:woo_yeon_hi/widget/more/app_lock_setting_top_app_bar.dart';
 
-import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 import '../../utils.dart';
 
 class PasswordCheckScreen extends StatefulWidget {
-  final bool bioAuth;
-
-  List<int> password;
-
-  PasswordCheckScreen(
-      {required this.bioAuth, super.key, required this.password});
+  const PasswordCheckScreen({super.key});
 
   @override
   State<PasswordCheckScreen> createState() => _PasswordCheckScreenState();
 }
 
 class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
-  bool _isAuthenticating = false;
   static const storage = FlutterSecureStorage();
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
-    var deviceWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    var deviceHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
 
     return PopScope(
         canPop: false,
-        onPopInvoked: (didPop) =>
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        AppLockSettingScreen(bioAuth: widget.bioAuth))),
+        onPopInvoked: (didPop) => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const AppLockSettingScreen())),
         child: Scaffold(
           appBar: AppBar(
             surfaceTintColor: ColorFamily.cream,
@@ -75,8 +53,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            AppLockSettingScreen(bioAuth: widget.bioAuth)));
+                        builder: (context) => const AppLockSettingScreen()));
               },
               icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
             ),
@@ -98,7 +75,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: List.generate(4, (index) {
                         return _buildPasswordIcon(
-                            index < checkingPassword.length);
+                            index < checkingPasswordList.length);
                       })),
                 ),
                 SizedBox(height: deviceHeight * 0.25),
@@ -333,12 +310,12 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
   Widget _buildPasswordIcon(bool isActive) {
     return isActive
         ? SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg",
-        width: 48, height: 48)
+            width: 48, height: 48)
         : Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg",
-          width: 24),
-    );
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: SvgPicture.asset("lib/assets/icons/password_bar_24px.svg",
+                width: 24),
+          );
   }
 
   bool firstNumInput = false;
@@ -346,24 +323,24 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
   bool thirdNumInput = false;
   bool fourthNumInput = false;
 
-  final List<int> checkingPassword = [];
+  final List<int> checkingPasswordList = [];
   final int _maxNumbers = 4;
 
   void _numInputCheck() {
     setState(() {
-      firstNumInput = checkingPassword.length > 0;
-      secondNumInput = checkingPassword.length > 1;
-      thirdNumInput = checkingPassword.length > 2;
-      fourthNumInput = checkingPassword.length > 3;
+      firstNumInput = checkingPasswordList.length > 0;
+      secondNumInput = checkingPasswordList.length > 1;
+      thirdNumInput = checkingPasswordList.length > 2;
+      fourthNumInput = checkingPasswordList.length > 3;
     });
   }
 
   void _addNumber(int number) {
     setState(() {
-      if (checkingPassword.length < _maxNumbers) {
-        checkingPassword.add(number);
+      if (checkingPasswordList.length < _maxNumbers) {
+        checkingPasswordList.add(number);
       }
-      if (checkingPassword.length == _maxNumbers) {
+      if (checkingPasswordList.length == _maxNumbers) {
         _checkPassword();
       }
     });
@@ -372,8 +349,8 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
 
   void _removeNumber() {
     setState(() {
-      if (checkingPassword.isNotEmpty) {
-        checkingPassword.removeLast();
+      if (checkingPasswordList.isNotEmpty) {
+        checkingPasswordList.removeLast();
       }
     });
     _numInputCheck();
@@ -381,7 +358,8 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
 
   Future<void> _checkPassword() async {
     var listEquality = const ListEquality();
-    if (!listEquality.equals(checkingPassword, widget.password)) {
+    if (!listEquality.equals(checkingPasswordList,
+        Provider.of<PasswordProvider>(context, listen: false).password)) {
       Fluttertoast.showToast(
           msg: "비밀번호를 다르게 입력하였습니다.\n다시 확인해주세요.",
           toastLength: Toast.LENGTH_SHORT,
@@ -394,21 +372,17 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
         _initiatePassword();
       });
     } else {
-      var passWord = listToString(checkingPassword);
-      await storage.write(
-          key: "appLockState",
-          value: "1");
-      await storage.write(
-          key: "lockPassword",
-          value: passWord);
-      if (widget.bioAuth == true) {
+      var password = listToString(checkingPasswordList);
+      await storage.write(key: "lockPassword", value: password);
+      if (Provider.of<BioAuthProvider>(context, listen: false)
+              .bioAuthSupported ==
+          true) {
         showBioAuthDialog(context);
       } else {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    AppLockSettingScreen(bioAuth: widget.bioAuth)));
+                builder: (context) => const AppLockSettingScreen()));
       }
     }
   }
@@ -420,7 +394,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
       thirdNumInput = false;
       fourthNumInput = false;
 
-      checkingPassword.clear();
+      checkingPasswordList.clear();
     });
   }
 
@@ -462,27 +436,22 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
     }
 
     if (authenticated) {
-      await storage.write(
-          key: "appLockState",
-          value: "2");
+      await updateSpecificUserData(
+          Provider.of<UserProvider>(context, listen: false).userIdx,
+          'app_lock_state',
+          2);
+      Provider.of<UserProvider>(context, listen: false).setAppLockState(2);
       Navigator.pop(context);
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  AppLockSettingScreen(bioAuth: widget.bioAuth)));
+              builder: (context) => const AppLockSettingScreen()));
     }
   }
 
   void showBioAuthDialog(BuildContext context) {
-    var deviceWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    var deviceHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
 
     showMaterialModalBottomSheet(
         backgroundColor: ColorFamily.white,
@@ -490,137 +459,140 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20), topLeft: Radius.circular(20))),
         context: context,
-        builder: (context) =>
-            SizedBox(
-                height: deviceHeight * 0.43,
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 30),
-                        const Text('생체 인증 등록',
-                            style: TextStyle(
-                                color: ColorFamily.black,
-                                fontFamily: FontFamily.mapleStoryLight,
-                                fontSize: 20)),
-                        const SizedBox(height: 50),
-                        SizedBox(
-                          width: deviceWidth * 0.55,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                  width: 64,
-                                  child: SvgPicture.asset(
-                                      "lib/assets/icons/fingerprint.svg",
-                                      height: 64)),
-                              SvgPicture.asset("lib/assets/icons/face_id.svg",
-                                  width: 64, height: 64)
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        SizedBox(
-                          width: deviceWidth * 0.55,
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("지문 인식",
-                                  style: TextStyleFamily
-                                      .appBarTitleLightTextStyle),
-                              Text("Face ID",
-                                  style: TextStyleFamily
-                                      .appBarTitleLightTextStyle)
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        const Text("기기에 등록되어 있는 생체정보를 통해",
-                            style: TextStyleFamily.normalTextStyle),
-                        const Text("앱 잠금을 해제할 수 있습니다.",
-                            style: TextStyleFamily.normalTextStyle),
-                      ],
+        builder: (context) => SizedBox(
+            height: deviceHeight * 0.43,
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    const Text('생체 인증 등록',
+                        style: TextStyle(
+                            color: ColorFamily.black,
+                            fontFamily: FontFamily.mapleStoryLight,
+                            fontSize: 20)),
+                    const SizedBox(height: 50),
+                    SizedBox(
+                      width: deviceWidth * 0.55,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                              width: 64,
+                              child: SvgPicture.asset(
+                                  "lib/assets/icons/fingerprint.svg",
+                                  height: 64)),
+                          SvgPicture.asset("lib/assets/icons/face_id.svg",
+                              width: 64, height: 64)
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    width: deviceWidth - 80,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Material(
-                            color: ColorFamily.white,
-                            elevation: 0.5,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: InkWell(
-                                onTap: () {
-                                  // setState(() {
-                                  //   userProvider.appLockState = 1;
-                                  // });
-                                  Navigator.pop(context);
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              AppLockSettingScreen(
-                                                  bioAuth:
-                                                  widget.bioAuth)));
-                                },
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: ColorFamily.gray, width: 0.2),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  height: 40,
-                                  alignment: Alignment.center,
-                                  child: const Text(
-                                    "다음에",
-                                    style: TextStyleFamily.normalTextStyle,
-                                  ),
-                                )),
-                          ),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                      width: deviceWidth * 0.55,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("지문 인식",
+                              style: TextStyleFamily.appBarTitleLightTextStyle),
+                          Text("Face ID",
+                              style: TextStyleFamily.appBarTitleLightTextStyle)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const Text("기기에 등록되어 있는 생체정보를 통해",
+                        style: TextStyleFamily.normalTextStyle),
+                    const Text("앱 잠금을 해제할 수 있습니다.",
+                        style: TextStyleFamily.normalTextStyle),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: deviceWidth - 80,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Material(
+                        color: ColorFamily.white,
+                        elevation: 0.5,
+                        shadowColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Material(
-                            color: ColorFamily.beige,
-                            elevation: 0.5,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                _authenticateWithBiometrics();
-                              },
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Container(
-                                height: 40,
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  "사용하기",
-                                  style: TextStyleFamily.normalTextStyle,
-                                ),
+                        child: InkWell(
+                            onTap: () async {
+                              await updateSpecificUserData(
+                                  Provider.of<UserProvider>(context,
+                                          listen: false)
+                                      .userIdx,
+                                  'app_lock_state',
+                                  1);
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .setAppLockState(1);
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AppLockSettingScreen()));
+                            },
+                            borderRadius: BorderRadius.circular(20.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: ColorFamily.gray, width: 0.2),
+                                  borderRadius: BorderRadius.circular(20)),
+                              height: 40,
+                              alignment: Alignment.center,
+                              child: const Text(
+                                "다음에",
+                                style: TextStyleFamily.normalTextStyle,
                               ),
+                            )),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: Material(
+                        color: ColorFamily.beige,
+                        elevation: 0.5,
+                        shadowColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            _authenticateWithBiometrics();
+                          },
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Container(
+                            height: 40,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "사용하기",
+                              style: TextStyleFamily.normalTextStyle,
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ]))).then((value) {
+                  ],
+                ),
+              ),
+            ]))).then((value) {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  AppLockSettingScreen(bioAuth: widget.bioAuth)));
+              builder: (context) => const AppLockSettingScreen()));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('앱 잠금이 설정되었습니다.',textAlign: TextAlign.center, style: TextStyleFamily.normalTextStyle),
+              backgroundColor: ColorFamily.pink,
+              duration: Duration(seconds: 1)));
     });
   }
 }
-

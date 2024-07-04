@@ -1,22 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/dao/user_dao.dart';
-import 'package:woo_yeon_hi/main.dart';
-import 'package:woo_yeon_hi/model/enums.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/more/account_delete_top_app_bar.dart';
 
-import '../../model/user_model.dart';
-import '../../utils.dart';
+import '../../provider/login_register_provider.dart';
 import '../login/login_screen.dart';
 
 class AccountDeleteScreen extends StatefulWidget {
@@ -27,21 +20,7 @@ class AccountDeleteScreen extends StatefulWidget {
 }
 
 class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
-  static const storage = FlutterSecureStorage();
-  late int userIdx;
-  late int loginType;
   bool isAgreed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _asyncMethod();
-  }
-
-  Future<void> _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
-    loginType = await getSpecificUserData(userIdx, 'login_type');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +34,8 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
         height: deviceHeight,
         padding: const EdgeInsets.all(20),
         color: ColorFamily.cream,
-        child: Column(
+        child: Consumer<UserProvider>(builder: (context, provider, child) {
+         return Column(
           children: [
             SizedBox(height: deviceHeight * 0.05),
             InkWell(
@@ -124,8 +104,8 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
               child: InkWell(
                   onTap: () {
                     if (isAgreed) {
-                      updateSpecificUserData(userIdx, 'user_state', 1);
-                      accountDeleting();
+                      updateSpecificUserData(provider.userIdx, 'user_state', 1);
+                      accountDeleting(context);
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => const LoginScreen()),
@@ -162,13 +142,13 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
                       ))),
             ),
           ],
-        ),
+        );}
       ),
-    );
+    ));
   }
 
-  void accountDeleting() async {
-    switch (loginType) {
+  void accountDeleting(BuildContext context) async {
+    switch (Provider.of<UserProvider>(context, listen: false).loginType) {
       case 1:
         await GoogleSignIn().signOut();
         break;
@@ -183,11 +163,7 @@ class _AccountDeleteScreenState extends State<AccountDeleteScreen> {
       case 0:
         break;
     }
-    await updateSpecificUserData(userIdx, 'login_type', 0);
-    await updateSpecificUserData(userIdx, 'user_state', 1);
-  }
-
-  void exitApp() {
-    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    await updateSpecificUserData(Provider.of<UserProvider>(context, listen: false).userIdx, 'login_type', 0);
+    await updateSpecificUserData(Provider.of<UserProvider>(context, listen: false).userIdx, 'user_state', 1);
   }
 }

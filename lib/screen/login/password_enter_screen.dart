@@ -9,14 +9,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/provider/login_register_provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_reset_screen.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/utils.dart';
-import '../../dao/user_dao.dart';
-import '../../model/user_model.dart';
 
 class PasswordEnterScreen extends StatefulWidget {
   const PasswordEnterScreen({super.key});
@@ -26,32 +25,17 @@ class PasswordEnterScreen extends StatefulWidget {
 }
 
 class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
-  static const storage = FlutterSecureStorage();
-  late int userIdx;
-  late String appLockState;
-  late String lockPassword;
-
-  @override
-  void initState() {
-    super.initState();
-    _asyncMethod();
-  }
-
-  _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "lockPassword"))??"");
-    appLockState = await getSpecificUserData(userIdx, 'app_lock_state')?? 1;
-    lockPassword = (await storage.read(key: "lockPassword"))??"0,0,0,0";
-
-    if(appLockState=="2")
-    {Future.delayed(const Duration(milliseconds: 500), () async {
-      _authenticateWithBiometrics();
-    });}
-  }
 
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
+
+    Provider.of<UserProvider>(context, listen: false).appLockState == 2
+      ? Future.delayed(const Duration(milliseconds: 500), () async {
+    _authenticateWithBiometrics();})
+      : null;
+
     return Scaffold(
         body: Container(
       width: deviceWidth,
@@ -377,10 +361,12 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
     _numInputCheck();
   }
 
-  void _checkPassword() {
+  Future<void> _checkPassword() async {
     var listEquality = const ListEquality();
+    var lockPassword = await _fetchPassword();
+
     if (!listEquality.equals(checkingPassword,
-        stringToList(lockPassword))) {
+        lockPassword)) {
       Fluttertoast.showToast(
           msg: "비밀번호가 일치하지 않습니다.",
           toastLength: Toast.LENGTH_SHORT,
@@ -393,7 +379,12 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
         _initiatePassword();
       });
     } else {
-      runApp(const MainScreen());
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const MainScreen()),
+              (route) => false);
+      // runApp(const MainScreen());
     }
   }
 
@@ -451,9 +442,10 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
     }
   }
 
-
-
-
-
+  Future<List<int>> _fetchPassword() async {
+    const storage = FlutterSecureStorage();
+    List<int> lockPassword = stringToList(((await storage.read(key: "lockPassword")) ?? ""));
+    return lockPassword;
+  }
 
 }

@@ -79,9 +79,7 @@ void signOut(BuildContext context) async {
 Future<Map<String, dynamic>> fetchUserData() async {
   const storage = FlutterSecureStorage();
   final userIdx = stringToInt((await storage.read(key: "userIdx")) ?? "");
-  print('가져와졌나1?: ${userIdx}');
   final userAccount = (await storage.read(key: "userAccount")) ?? "";
-  print('가져와졌나2?: ${userAccount}');
   final alarmsAllow = await getSpecificUserData(userIdx, 'alarms_allow') ?? false;
   final appLockState = await getSpecificUserData(userIdx, 'app_lock_state') ?? 0;
   final homePresetType = await getSpecificUserData(userIdx, 'home_preset_type') ?? 0;
@@ -95,7 +93,6 @@ Future<Map<String, dynamic>> fetchUserData() async {
   final userNickname = await getSpecificUserData(userIdx, 'user_nickname') ?? "기본닉네임";
   final userProfileImage = await getSpecificUserData(userIdx, 'user_profile_image') ?? "lib/assets/images/default_profile.png";
   final userState = await getSpecificUserData(userIdx, 'user_state') ?? 2;
-  print('가져와졌나3?: ${userState}');
 
   return {
     'userIdx': userIdx,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:woo_yeon_hi/provider/more_provider.dart';
 import 'package:woo_yeon_hi/screen/more/app_lock_setting_screen.dart';
 import 'package:woo_yeon_hi/screen/more/password_check_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
@@ -10,9 +11,7 @@ import 'package:woo_yeon_hi/style/color.dart';
 import '../../style/text_style.dart';
 
 class PasswordSettingScreen extends StatefulWidget {
-  final bool bioAuth;
-
-  const PasswordSettingScreen({required this.bioAuth, super.key});
+  const PasswordSettingScreen({super.key});
 
   @override
   State<PasswordSettingScreen> createState() => _PasswordSettingScreenState();
@@ -26,7 +25,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(bioAuth: widget.bioAuth))),
+      onPopInvoked: (didPop) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AppLockSettingScreen())),
       child: Scaffold(
         appBar: AppBar(
           surfaceTintColor: ColorFamily.cream,
@@ -35,7 +34,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
           title: const Text("앱 잠금 설정", style: TextStyleFamily.appBarTitleLightTextStyle,),
           leading: IconButton(
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppLockSettingScreen(bioAuth: widget.bioAuth)));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AppLockSettingScreen()));
             },
             icon: SvgPicture.asset('lib/assets/icons/arrow_back.svg'),
           ),
@@ -58,7 +57,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: List.generate(4, (index) {
                       return _buildPasswordIcon(
-                          index < password.length);
+                          index < passwordList.length);
                     })),
               ),
               SizedBox(height: deviceHeight*0.25),
@@ -291,8 +290,8 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
     );
   }
 
-  Widget _buildPasswordIcon(bool isActive) {
-    return isActive
+  Widget _buildPasswordIcon(bool isEntered) {
+    return isEntered
         ? SvgPicture.asset("lib/assets/icons/woo_yeon_hi_48px.svg",
         width: 48, height: 48)
         : Padding(
@@ -307,28 +306,29 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
   bool thirdNumInput = false;
   bool fourthNumInput = false;
 
-  final List<int> password = [];
+  final List<int> passwordList = [];
   final int _maxNumbers = 4;
 
   void _numInputCheck() {
     setState(() {
-      firstNumInput = password.length > 0;
-      secondNumInput = password.length > 1;
-      thirdNumInput = password.length > 2;
-      fourthNumInput = password.length > 3;
+      firstNumInput = passwordList.length > 0;
+      secondNumInput = passwordList.length > 1;
+      thirdNumInput = passwordList.length > 2;
+      fourthNumInput = passwordList.length > 3;
     });
   }
 
   void _addNumber(int number) {
     setState(() {
-      if (password.length < _maxNumbers) {
-        password.add(number);
+      if (passwordList.length < _maxNumbers) {
+        passwordList.add(number);
       }
-      if (password.length == _maxNumbers) {
+      if (passwordList.length == _maxNumbers) {
+        Provider.of<PasswordProvider>(context, listen: false).setPassword(passwordList);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => PasswordCheckScreen(bioAuth: widget.bioAuth, password: password),
+            builder: (context) => const PasswordCheckScreen(),
           ),
         );
         _initiatePassword();
@@ -339,8 +339,8 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen> {
 
   void _removeNumber() {
     setState(() {
-      if (password.isNotEmpty) {
-        password.removeLast();
+      if (passwordList.isNotEmpty) {
+        passwordList.removeLast();
       }
     });
     _numInputCheck();

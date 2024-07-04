@@ -1,25 +1,21 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/dialogs.dart';
+import 'package:woo_yeon_hi/provider/more_provider.dart';
 import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
 import '../../dao/user_dao.dart';
-import '../../model/user_model.dart';
+import '../../provider/login_register_provider.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 import '../../widget/more/app_lock_setting_top_app_bar.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 
 class AppLockSettingScreen extends StatefulWidget {
-  final bool bioAuth;
-  const AppLockSettingScreen({super.key, required this.bioAuth});
+  const AppLockSettingScreen({super.key});
 
   @override
   State<AppLockSettingScreen> createState() => _AppLockSettingScreenState();
@@ -28,224 +24,275 @@ class AppLockSettingScreen extends StatefulWidget {
 class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
   final LocalAuthentication auth = LocalAuthentication();
   bool _isAuthenticating = false;
-  late bool appLockSwitchValue = false;
-  late bool bioLockSwitchValue = false;
-  bool _isLoading = true; // Loading 상태를 나타내는 변수
-  
-  static const storage = FlutterSecureStorage();
-  late String appLockState = "";
-  late String userAccount = "";
-
-
+  late bool _isBioAuthSupported;
 
   @override
   void initState() {
     super.initState();
-    _asyncMethod();
   }
 
-  Future<void> _asyncMethod() async {
-    appLockState = (await storage.read(key: "appLockState"))??"0";
-    userAccount = (await storage.read(key: "loginAccount"))!;
-
-    setState(() {
-      if(appLockState=="0"){
-        appLockSwitchValue = false;
-        bioLockSwitchValue = false;
-      }else if(appLockState=="1"){
-        appLockSwitchValue = true;
-        bioLockSwitchValue = false;
-      }else{
-        appLockSwitchValue = true;
-        bioLockSwitchValue = true;
-      }
-      _isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정
-    });
+  Future<bool> _asyncMethod() async {
+    _isBioAuthSupported = await auth.isDeviceSupported();
+    return _isBioAuthSupported;
   }
-  
-  
+
   @override
   Widget build(BuildContext context) {
-    var deviceWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    var deviceHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    var deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
 
-    if (_isLoading) {
-      // 로딩 중인 상태를 표시
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else {
-      return Scaffold(
-          appBar: const AppLockSettingTopAppBar(),
-          body: Container(
-              width: deviceWidth,
-              height: deviceHeight,
-              padding: const EdgeInsets.all(20),
-              color: ColorFamily.cream,
-              child: Column(
-                children: [
-                  SizedBox(
-                      width: deviceWidth - 40,
-                      height: 60,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return FutureBuilder(
+        future: _asyncMethod(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData == false) {
+            return const SizedBox();
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                "network error",
+                style: TextStyleFamily.normalTextStyle,
+              ),
+            );
+          } else {
+            Provider.of<BioAuthProvider>(context, listen: false)
+                .setBioAuthSupported(_isBioAuthSupported);
+
+            return Scaffold(
+                appBar: const AppLockSettingTopAppBar(),
+                body: Container(
+                    width: deviceWidth,
+                    height: deviceHeight,
+                    padding: const EdgeInsets.all(20),
+                    color: ColorFamily.cream,
+                    child: Consumer<UserProvider>(
+                        builder: (context, provider, child) {
+                      return Column(
                         children: [
-                          const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("잠금 설정",
-                                  style: TextStyleFamily.smallTitleTextStyle),
-                              Switch(
-                                  value: appLockSwitchValue,
-                                  activeColor: ColorFamily.white,
-                                  activeTrackColor: ColorFamily.pink,
-                                  inactiveThumbColor: ColorFamily.gray,
-                                  inactiveTrackColor: ColorFamily.white,
-                                  trackOutlineColor:
-                                  appLockSwitchValue
-                                      ? MaterialStateProperty.all(
-                                      Colors.transparent)
-                                      : MaterialStateProperty.all(
-                                      ColorFamily.gray),
-                                  trackOutlineWidth: const MaterialStatePropertyAll(
-                                      1),
-                                  onChanged: (bool value) async {
-                                    if (appLockSwitchValue == false) {
-                                      Navigator.pushReplacement(context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PasswordSettingScreen(
-                                                      bioAuth: widget
-                                                          .bioAuth)));
-                                    } else {
-                                      setState(() {
-                                        appLockSwitchValue = value;
-                                        bioLockSwitchValue = value;
-                                      });
-                                      await storage.write(
-                                          key: "appLockState",
-                                          value: "0");
-                                    }
-                                  })
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 0.5,
-                            child:
-                            Divider(color: ColorFamily.gray, thickness: 0.5),
-                          )
-                        ],
-                      )),
-                  widget.bioAuth
-                      ? SizedBox(
-                      width: deviceWidth - 40,
-                      height: 60,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("생체 인증 (Touch ID, Face ID)",
-                                  style:
-                                  TextStyleFamily.smallTitleTextStyle),
-                              Switch(
-                                  value: bioLockSwitchValue,
-                                  activeColor: ColorFamily.white,
-                                  activeTrackColor: ColorFamily.pink,
-                                  inactiveThumbColor: ColorFamily.gray,
-                                  inactiveTrackColor: ColorFamily.white,
-                                  trackOutlineColor:
-                                  bioLockSwitchValue
-                                      ? MaterialStateProperty.all(Colors
-                                      .transparent)
-                                      : MaterialStateProperty.all(ColorFamily
-                                      .gray),
-                                  trackOutlineWidth: const MaterialStatePropertyAll(
-                                      1),
-                                  onChanged: (bool value) async {
-                                    setState(() {
-                                      bioLockSwitchValue = value;
-                                    });
-                                    appLockSwitchValue==false
-                                    ? setState(() {
-                                      bioLockSwitchValue = false;
-                                      Fluttertoast.showToast(
-                                          msg: "잠금 설정을 먼저 해주세요.",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: ColorFamily.black,
-                                          textColor: ColorFamily.white,
-                                          fontSize: 14.0
-                                      );
-                                    })
-                                    : bioLockSwitchValue
-                                        ? await _authenticateWithBiometrics()
-                                        ? setState(() async {
-                                      await storage.write(key: 'appLockState', value: "2");
-                                    })
-                                        : setState(() {
-                                      bioLockSwitchValue = false;
-                                    })
-                                        : _cancelAuthentication();
-                                  }),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 0.5,
-                            child: Divider(
-                                color: ColorFamily.gray, thickness: 0.5),
-                          )
-                        ],
-                      ))
-                      : SizedBox(
-                      width: deviceWidth - 40,
-                      height: 60,
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("생체 인증 (Touch ID, Face ID)",
-                                  style:
-                                  TextStyleFamily.smallTitleTextStyle),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                                "기기에 생체 인증 사용 설정이 안 되어 있거나, 생체 인증을 지원하지 않는 기기입니다.",
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    fontFamily:
-                                    FontFamily.mapleStoryLight,
-                                    color: ColorFamily.gray)),
-                          ),
                           SizedBox(
-                            height: 0.5,
-                            child: Divider(
-                                color: ColorFamily.gray, thickness: 0.5),
-                          )
+                              width: deviceWidth - 40,
+                              height: 60,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const SizedBox(height: 5),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("잠금 설정",
+                                          style: TextStyleFamily
+                                              .smallTitleTextStyle),
+                                      Switch(
+                                          value: provider.appLockState == 0
+                                              ? false
+                                              : true,
+                                          activeColor: ColorFamily.white,
+                                          activeTrackColor: ColorFamily.pink,
+                                          inactiveThumbColor: ColorFamily.gray,
+                                          inactiveTrackColor: ColorFamily.white,
+                                          trackOutlineColor:
+                                              provider.appLockState != 0
+                                                  ? MaterialStateProperty.all(
+                                                      Colors.transparent)
+                                                  : MaterialStateProperty.all(
+                                                      ColorFamily.gray),
+                                          trackOutlineWidth:
+                                              const MaterialStatePropertyAll(1),
+                                          onChanged: (bool value) async {
+                                            if (provider.appLockState == 0) {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PasswordSettingScreen()));
+                                            } else {
+                                              provider.setAppLockState(0);
+                                              await updateSpecificUserData(
+                                                  provider.userIdx,
+                                                  'app_lock_state',
+                                                  0);
+                                            }
+                                          })
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 0.5,
+                                    child: Divider(
+                                        color: ColorFamily.gray,
+                                        thickness: 0.5),
+                                  )
+                                ],
+                              )),
+                          _isBioAuthSupported
+                              ? SizedBox(
+                                  width: deviceWidth - 40,
+                                  height: 60,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                              "생체 인증 (Touch ID, Face ID)",
+                                              style: TextStyleFamily
+                                                  .smallTitleTextStyle),
+                                          Switch(
+                                              value: provider.appLockState == 2
+                                                  ? true
+                                                  : false,
+                                              activeColor: ColorFamily.white,
+                                              activeTrackColor:
+                                                  ColorFamily.pink,
+                                              inactiveThumbColor:
+                                                  ColorFamily.gray,
+                                              inactiveTrackColor:
+                                                  ColorFamily.white,
+                                              trackOutlineColor: provider
+                                                          .appLockState ==
+                                                      2
+                                                  ? MaterialStateProperty.all(
+                                                      Colors.transparent)
+                                                  : MaterialStateProperty.all(
+                                                      ColorFamily.gray),
+                                              trackOutlineWidth:
+                                                  const MaterialStatePropertyAll(
+                                                      1),
+                                              onChanged: (bool value) async {
+                                                provider.appLockState == 0
+                                                    ? {
+                                                        Fluttertoast.showToast(
+                                                            msg:
+                                                                "앱 잠금 설정을 먼저 해주세요.",
+                                                            toastLength: Toast
+                                                                .LENGTH_SHORT,
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .BOTTOM,
+                                                            timeInSecForIosWeb:
+                                                                1,
+                                                            backgroundColor:
+                                                                ColorFamily
+                                                                    .black,
+                                                            textColor:
+                                                                ColorFamily
+                                                                    .white,
+                                                            fontSize: 14.0),
+                                                        setState(() {
+                                                          value = false;
+                                                        })
+                                                      }
+                                                    : provider.appLockState == 1
+                                                        ? await _authenticateWithBiometrics()
+                                                            ? {
+                                                                provider
+                                                                    .setAppLockState(
+                                                                        2),
+                                                                await updateSpecificUserData(
+                                                                    provider
+                                                                        .userIdx,
+                                                                    'app_lock_state',
+                                                                    2),
+                                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                                    const SnackBar(
+                                                                        content:
+                                                                            Text(
+                                                                          '생체인증이 활성화되었습니다.',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                                style: TextStyleFamily.normalTextStyle
+                                                                        ),
+                                                                        backgroundColor:
+                                                                            ColorFamily
+                                                                                .pink,
+                                                                        duration:
+                                                                            Duration(seconds: 1)))
+                                                              }
+                                                            : setState(() {
+                                                                value = false;
+                                                              })
+                                                        : {
+                                                            _cancelAuthentication(),
+                                                            provider
+                                                                .setAppLockState(
+                                                                    1),
+                                                            await updateSpecificUserData(
+                                                                provider
+                                                                    .userIdx,
+                                                                'app_lock_state',
+                                                                1),
+                                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                                const SnackBar(
+                                                                    content:
+                                                                        Text(
+                                                                      '생체인증이 비활성화되었습니다.',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                          style: TextStyleFamily.normalTextStyle,
+                                                                    ),
+                                                                    backgroundColor:
+                                                                        ColorFamily
+                                                                            .pink,
+                                                                    duration: Duration(
+                                                                        seconds:
+                                                                            1)))
+                                                          };
+                                              })
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 0.5,
+                                        child: Divider(
+                                            color: ColorFamily.gray,
+                                            thickness: 0.5),
+                                      )
+                                    ],
+                                  ))
+                              : SizedBox(
+                                  width: deviceWidth - 40,
+                                  height: 60,
+                                  child: const Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("생체 인증 (Touch ID, Face ID)",
+                                              style: TextStyleFamily
+                                                  .smallTitleTextStyle),
+                                        ],
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                            "기기에 생체 인증 사용 설정이 안 되어 있거나, 생체 인증을 지원하지 않는 기기입니다.",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                fontFamily:
+                                                    FontFamily.mapleStoryLight,
+                                                color: ColorFamily.gray)),
+                                      ),
+                                      SizedBox(
+                                        height: 0.5,
+                                        child: Divider(
+                                            color: ColorFamily.gray,
+                                            thickness: 0.5),
+                                      )
+                                    ],
+                                  )),
                         ],
-                      )),
-                ],
-              )));
-    }
+                      );
+                    })));
+          }
+        });
   }
 
   Future<bool> _authenticateWithBiometrics() async {
@@ -270,8 +317,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
             signInTitle: '생체정보 스캔',
           )
         ],
-        localizedReason:
-        '기기에 등록된 생체정보를 스캔해주세요.',
+        localizedReason: '기기에 등록된 생체정보를 스캔해주세요.',
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,

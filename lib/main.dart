@@ -2,25 +2,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:woo_yeon_hi/provider/login_register_provider.dart';
-import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
+import 'package:woo_yeon_hi/provider/more_provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
-import 'package:woo_yeon_hi/style/color.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
-import 'package:woo_yeon_hi/model/user_model.dart';
 import 'package:woo_yeon_hi/routes/routes_generator.dart';
 import 'package:woo_yeon_hi/screen/login/login_screen.dart';
 import 'package:woo_yeon_hi/utils.dart';
 
-import 'dao/user_dao.dart';
 import 'firebase_options.dart';
-import 'model/enums.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -106,18 +100,13 @@ class WooYeonHi extends StatefulWidget {
 class _WooYeonHiState extends State<WooYeonHi> {
   @override
   build(BuildContext context) {
-    print("4: ${widget.userIdx}");
-    print("5: ${widget.appLockState}");
-    print("6: ${widget.userState}");
 
     Provider.of<UserProvider>(context, listen: false).setUserAllData(widget.userIdx, widget.userAccount, widget.alarmsAllow, widget.appLockState, widget.homePresetType, widget.loginType, widget.loveDday, widget.loverIdx, widget.profileMessage, widget.topBarActivate, widget.topBarType, widget.userBirth, widget.userNickname, widget.userProfileImage, widget.userState);
-    print("7: ${widget.userAccount}");
-    print("8: ${widget.userBirth}");
-    print("9: ${Provider.of<UserProvider>(context, listen: false).userBirth}");
 
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => CalendarProvider()),
+          ChangeNotifierProvider(create: (context) => PasswordProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

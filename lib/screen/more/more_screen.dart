@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/more/app_setting_screen.dart';
@@ -13,9 +11,7 @@ import 'package:woo_yeon_hi/screen/more/ui_style_setting_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-import 'package:woo_yeon_hi/utils.dart';
-import '../../dao/user_dao.dart';
-import '../../model/user_model.dart';
+import '../../provider/login_register_provider.dart';
 import '../../widget/more/more_top_app_bar.dart';
 import 'account_management_screen.dart';
 
@@ -27,30 +23,6 @@ class MoreScreen extends StatefulWidget {
 }
 
 class _MoreScreenState extends State<MoreScreen> {
-  dynamic userProvider;
-  static const storage = FlutterSecureStorage();
-  late int userIdx;
-  late String userNickname;
-  late String profileMsg;
-  late String profileImage;
-  late String userBirth;
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-    // _asyncMethod();
-  }
-
-  Future<int> _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
-    userNickname = await getSpecificUserData(userIdx, 'user_nickname');
-    profileMsg = await getSpecificUserData(userIdx, 'profile_message');
-    profileImage = await getSpecificUserData(userIdx, 'user_profileImage');
-    userBirth = await getSpecificUserData(userIdx, 'user_birth');
-    return 1;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,24 +32,14 @@ class _MoreScreenState extends State<MoreScreen> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: const MoreTopAppBar(),
-        body: FutureBuilder(
-            future: _asyncMethod(),
-            builder: (BuildContext context, snapshot) {
-              if (snapshot.hasData == false) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else {
-                return Container(
-                  height: deviceHeight,
-                  width: deviceWidth,
-                  padding: const EdgeInsets.all(20),
-                  color: ColorFamily.cream,
-                  child: Column(
+        body: Container(
+                height: deviceHeight,
+                width: deviceWidth,
+                padding: const EdgeInsets.all(20),
+                color: ColorFamily.cream,
+                child:
+                    Consumer<UserProvider>(builder: (context, provider, child) {
+                  return Column(
                     children: [
                       SizedBox(height: deviceHeight * 0.02),
                       SizedBox(
@@ -89,7 +51,7 @@ class _MoreScreenState extends State<MoreScreen> {
                               borderRadius: BorderRadius.circular(65),
                               child: InkWell(
                                 onTap: () {
-                                  userProvider.image != null
+                                  provider.image != null
                                       ? showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -100,8 +62,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                     image: FileImage(File(
-                                                        userProvider
-                                                            .image!.path)),
+                                                        provider.image!.path)),
                                                     fit: BoxFit.contain,
                                                   ),
                                                 ),
@@ -114,14 +75,13 @@ class _MoreScreenState extends State<MoreScreen> {
                                 splashColor: Colors.transparent,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(65),
-                                  child: userProvider.image != null
-                                      ? Image.file(
-                                          File(userProvider.image!.path),
+                                  child: provider.image != null
+                                      ? Image.file(File(provider.image!.path),
                                           width: deviceWidth * 0.35,
                                           height: deviceWidth * 0.35,
                                           fit: BoxFit.cover)
                                       : Image.asset(
-                                          profileImage,
+                                          provider.userProfileImage,
                                           width: deviceWidth * 0.35,
                                           height: deviceWidth * 0.35,
                                         ),
@@ -139,7 +99,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(userNickname,
+                                      Text(provider.userNickname,
                                           style: const TextStyle(
                                               color: ColorFamily.black,
                                               fontSize: 16,
@@ -167,7 +127,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                   const SizedBox(height: 15),
                                   SizedBox(
                                       width: deviceWidth * 0.4,
-                                      child: Text(profileMsg,
+                                      child: Text(provider.profileMsg,
                                           style: const TextStyle(
                                               color: ColorFamily.black,
                                               fontSize: 12,
@@ -211,10 +171,8 @@ class _MoreScreenState extends State<MoreScreen> {
                           'lib/assets/icons/setting.svg',
                           const AppSettingScreen()),
                     ],
-                  ),
-                );
-              }
-            }));
+                  );
+                })));
   }
 }
 
