@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
-import '../../model/user_model.dart';
+import '../../provider/login_register_provider.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
 
@@ -16,13 +15,6 @@ class ProfileEditAlbum extends StatefulWidget {
 
 class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
-  dynamic userProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +45,8 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
     );
   }
 
-  Future<void> getImage(UserModel userProvider, ImageSource imageSource) async {
+  Future<void> getImage(UserProvider userProvider,
+      ImageSource imageSource) async {
     final XFile? pickedFile = await picker.pickImage(source: imageSource);
     if (pickedFile != null) {
       setState(() {
@@ -69,78 +62,88 @@ class _ProfileEditAlbumState extends State<ProfileEditAlbum> {
         showDragHandle: true,
         backgroundColor: ColorFamily.white,
         builder: (context) {
-          return Wrap(
-            children: [
-              Column(
-                children: [
-                  InkWell(
-                    splashColor: ColorFamily.gray.withOpacity(0.5),
-                    onTap: () {
-                      getImage(userProvider, ImageSource.gallery);
-                      Navigator.pop(context);
-                      // FocusScope.of(context).unfocus();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      height: 70,
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SvgPicture.asset('lib/assets/icons/gallery.svg', height: 20,),
-                          const Text(
-                            "앨범에서 사진 선택",
-                            style: TextStyleFamily.smallTitleTextStyle,
-                          ),
-                          const SizedBox(
-                            width: 24,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 0.5,
-                    child: Divider(
-                      color: ColorFamily.gray,
-                      thickness: 0.5,
-                    ),
-                  ),
-                  InkWell(
-                    splashColor: ColorFamily.gray.withOpacity(0.5),
-                    onTap: () {
-                      setState(() {
-                        userProvider.userProfileImage =
-                            "lib/assets/images/default_profile.png";
-                        userProvider.setImage(null);
+          return Consumer<UserProvider>(builder: (context, provider, child) {
+            return Wrap(
+              children: [
+                Column(
+                  children: [
+                    InkWell(
+                      splashColor: ColorFamily.gray.withOpacity(0.5),
+                      onTap: () {
+                        getImage(provider, ImageSource.gallery);
                         Navigator.pop(context);
-                        FocusScope.of(context).unfocus();
-                        setState(() {});
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      height: 70,
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SvgPicture.asset('lib/assets/icons/profile_icon.svg', height: 20),
-                          const Text(
-                            "기본 프로필 사진으로 설정",
-                            style: TextStyleFamily.smallTitleTextStyle,
-                          ),
-                          const SizedBox(
-                            width: 24,
-                          )
-                        ],
+                        // FocusScope.of(context).unfocus();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        height: 70,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SvgPicture.asset(
+                              'lib/assets/icons/gallery.svg', height: 20,),
+                            const Text(
+                              "앨범에서 사진 선택",
+                              style: TextStyleFamily.smallTitleTextStyle,
+                            ),
+                            const SizedBox(
+                              width: 24,
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          );
+                    const SizedBox(
+                      height: 0.5,
+                      child: Divider(
+                        color: ColorFamily.gray,
+                        thickness: 0.5,
+                      ),
+                    ),
+                    InkWell(
+                      splashColor: ColorFamily.gray.withOpacity(0.5),
+                      onTap: () {
+                        provider.setUserProfileImage(
+                            "lib/assets/images/default_profile.png");
+                        setState(() {
+                          provider.setImage(null);
+                          Navigator.pop(context);
+                          FocusScope.of(context).unfocus();
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        height: 70,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SvgPicture.asset(
+                                'lib/assets/icons/profile_icon.svg',
+                                height: 20),
+                            const Text(
+                              "기본 프로필 사진으로 설정",
+                              style: TextStyleFamily.smallTitleTextStyle,
+                            ),
+                            const SizedBox(
+                              width: 24,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          });
         });
   }
 }

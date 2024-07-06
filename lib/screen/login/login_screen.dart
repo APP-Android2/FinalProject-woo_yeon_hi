@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/dao/login_register_dao.dart';
 import 'package:woo_yeon_hi/dao/user_dao.dart';
+import 'package:woo_yeon_hi/dialogs.dart';
 import 'package:woo_yeon_hi/provider/login_register_provider.dart';
-import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/login/account_processing_screen.dart';
 import 'package:woo_yeon_hi/screen/register/code_connect_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
-import '../../model/enums.dart';
-import '../../model/user_model.dart';
 import '../../style/color.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../main_screen.dart';
 
@@ -27,6 +25,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _RegisterScreen extends State<LoginScreen> {
+  static const storage = FlutterSecureStorage();
   bool loginSuccess = false;
 
 
@@ -35,12 +34,11 @@ class _RegisterScreen extends State<LoginScreen> {
 
     if (googleUser != null) {
       Provider.of<UserProvider>(context, listen: false).setUserAccount(googleUser.email);
-      print("@@@: ${Provider.of<UserProvider>(context, listen: false).userAccount}");
       setState(() {
         loginSuccess = true;
       });
     } else{
-      showToast("구글 계정 로그인에 실패하였습니다.");
+      showBlackToast("구글 계정 로그인에 실패하였습니다.");
     }
   }
 
@@ -52,10 +50,10 @@ class _RegisterScreen extends State<LoginScreen> {
         await _fetchKakaoUserInfo();
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
-        showToast("카카오 계정 로그인에 실패하였습니다.");
+        showBlackToast("카카오 계정 로그인에 실패하였습니다.");
         if (error is PlatformException && error.code == 'CANCELED') {
           print('사용자가 로그인 취소');
-          showToast("카카오 계정 로그인을 취소하였습니다.");
+          showBlackToast("카카오 계정 로그인을 취소하였습니다.");
           return;
         }
 
@@ -65,7 +63,7 @@ class _RegisterScreen extends State<LoginScreen> {
           await _fetchKakaoUserInfo();
         } catch (error) {
           print('카카오 계정으로 로그인 실패 $error');
-          showToast("카카오 계정 로그인에 실패하였습니다.");
+          showBlackToast("카카오 계정 로그인에 실패하였습니다.");
         }
       }
     } else {
@@ -74,7 +72,7 @@ class _RegisterScreen extends State<LoginScreen> {
         await UserApi.instance.loginWithKakaoAccount();
         await _fetchKakaoUserInfo();
       } catch (error) {
-        showToast("카카오 계정 로그인에 실패하였습니다.");
+        showBlackToast("카카오 계정 로그인에 실패하였습니다.");
       }
     }
   }
@@ -83,13 +81,12 @@ class _RegisterScreen extends State<LoginScreen> {
     try {
       User user = await UserApi.instance.me();
       Provider.of<UserProvider>(context, listen: false).setUserAccount(user.id.toString());
-      print("@@@: ${Provider.of<UserProvider>(context, listen: false).userAccount}");
       setState(() {
         loginSuccess = true;
       });
     } catch (error) {
       print('사용자 정보 요청 실패 $error');
-      showToast("사용자 정보 요청에 실패하였습니다.");
+      showBlackToast("사용자 정보 요청에 실패하였습니다.");
     }
   }
 
@@ -141,6 +138,12 @@ class _RegisterScreen extends State<LoginScreen> {
                               await signInWithGoogle();
                               if (loginSuccess == true) {
                                 provider.setLoginType(1);
+                                await storage.write(
+                                    key: "userAccount",
+                                    value: provider.userAccount);
+                                await storage.write(
+                                    key: "userIdx",
+                                    value: "${provider.userIdx}");
                                 await saveUserInfo(provider.userAccount);
                                 var userIdx = await getUserSequence();
                                 provider.setUserIdx(userIdx);
@@ -149,7 +152,7 @@ class _RegisterScreen extends State<LoginScreen> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const CodeConnectScreen()));
-                                showToast("구글 계정으로 로그인 되었습니다.");
+                                showBlackToast("구글 계정으로 로그인 되었습니다.");
                               }
                           }
                         },
@@ -197,9 +200,12 @@ class _RegisterScreen extends State<LoginScreen> {
                               await signInWithKakao();
                               if (loginSuccess == true) {
                                 provider.setLoginType(2);
-                                print("@@@@: ${Provider.of<UserProvider>(context, listen: false).userAccount}");
-                                print("####: ${provider.userAccount}");
-
+                                await storage.write(
+                                    key: "userAccount",
+                                    value: provider.userAccount);
+                                await storage.write(
+                                    key: "userIdx",
+                                    value: "${provider.userIdx}");
                                 await saveUserInfo(provider.userAccount);
                                 var userIdx = await getUserSequence();
                                 provider.setUserIdx(userIdx);
@@ -207,7 +213,7 @@ class _RegisterScreen extends State<LoginScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => const CodeConnectScreen()));
-                                showToast("카카오 계정으로 로그인 되었습니다.");
+                                showBlackToast("카카오 계정으로 로그인 되었습니다.");
                               }
                           }
                         },
@@ -238,15 +244,5 @@ class _RegisterScreen extends State<LoginScreen> {
             ],
           );}
         )));
-  }
-
-  showToast(String msg){
-     Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: ColorFamily.black,
-        textColor: ColorFamily.white,
-        fontSize: 14.0);
   }
 }

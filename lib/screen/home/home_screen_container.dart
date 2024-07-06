@@ -20,9 +20,6 @@ class HomeScreenContainer extends StatefulWidget {
 class _HomeScreenContainerState extends State<HomeScreenContainer> {
   @override
   Widget build(BuildContext context) {
-    print("홈프리셋: ${Provider.of<UserProvider>(context, listen: false).homePresetType}");
-    print("유저idx: ${Provider.of<UserProvider>(context, listen: false).userIdx}");
-    print("유저account: ${Provider.of<UserProvider>(context, listen: false).userAccount}");
     return Consumer<UserProvider>(builder: (context, provider, child) {
       return provider.homePresetType == 0
           ? const HomeScreenSet1()

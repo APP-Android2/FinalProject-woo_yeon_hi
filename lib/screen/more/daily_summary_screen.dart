@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:woo_yeon_hi/dao/more_dao.dart';
+import 'package:woo_yeon_hi/provider/login_register_provider.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/utils.dart';
 import 'package:woo_yeon_hi/widget/more/daily_summary_top_app_bar.dart';
 
-import '../../dao/user_dao.dart';
 import '../../model/dDay_model.dart';
-import '../../model/user_model.dart';
 import '../../style/font.dart';
 import '../calendar/calendar_detail_screen.dart';
 import '../ledger/ledger_detail_screen.dart';
@@ -25,31 +23,7 @@ class DailySummaryScreen extends StatefulWidget {
 }
 
 class _DailySummaryScreenState extends State<DailySummaryScreen> {
-  static const storage = FlutterSecureStorage();
-  late int userIdx;
-  late String loveDday;
-
-  late DateTime _summaryDay;
-  dynamic userProvider;
-  bool _isLoading = true; // Loading 상태를 나타내는 변수
-
-  @override
-  void initState() {
-    super.initState();
-
-    userProvider = Provider.of<UserModel>(context, listen: false);
-    _asyncMethod();
-    _summaryDay = DateTime.now();
-  }
-
-  _asyncMethod() async {
-    userIdx = stringToInt((await storage.read(key: "userIdx"))!);
-    loveDday = await getSpecificUserData(userIdx, 'love_dDay');
-
-    setState(() {
-      _isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정
-    });
-  }
+  DateTime _summaryDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -371,7 +345,7 @@ class _DailySummaryScreenState extends State<DailySummaryScreen> {
                       child: Stack(
                         children: [
                           TableCalendar(
-                            firstDay: stringToDate(loveDday),
+                            firstDay: stringToDate(Provider.of<UserProvider>(context, listen: false).loveDday),
                             lastDay: DateTime.now(),
                             focusedDay: _focusedDay,
                             locale: 'ko_kr',

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/dao/user_dao.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 
-import '../../model/user_model.dart';
+import '../../provider/login_register_provider.dart';
 import '../../style/text_style.dart';
 
 class AccountProcessingDialog extends StatefulWidget {
@@ -18,13 +18,6 @@ class AccountProcessingDialog extends StatefulWidget {
 }
 
 class _AccountProcessingDialogState extends State<AccountProcessingDialog> {
-
-  dynamic userProvider;
-  @override
-  void initState() {
-    super.initState();
-    userProvider = Provider.of<UserModel>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,30 +62,33 @@ class _AccountProcessingDialogState extends State<AccountProcessingDialog> {
                           "취소",
                           style: TextStyleFamily.dialogButtonTextStyle,
                         )),
-                    TextButton(
-                        style: ButtonStyle(
-                            overlayColor:
-                                MaterialStateProperty.all(ColorFamily.gray)),
-                        onPressed: () async {
-                          await updateSpecificUserData(userProvider.userAccount, 'user_state', 0);
-                          print("${userProvider.userAccount}");
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Fluttertoast.showToast(
-                              msg: "계정 복구가 완료되었습니다.\n다시 로그인 해주세요.",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 3,
-                              backgroundColor: ColorFamily.black,
-                              textColor: ColorFamily.white,
-                              fontSize: 14.0
-                          );
-                        },
-                        child: const Text(
-                          "확인",
-                          style: TextStyleFamily.dialogButtonTextStyle_pink,
-                        ))
-                  ],
+                           Consumer<UserProvider>(builder: (context, provider, child) {
+                             return TextButton(
+                                 style: ButtonStyle(
+                                     overlayColor:
+                                     MaterialStateProperty.all(
+                                         ColorFamily.gray)),
+                                 onPressed: () async {
+                                   await updateSpecificUserData(
+                                       provider.userIdx, 'user_state', 0);
+                                   Navigator.pop(context);
+                                   Navigator.pop(context);
+                                   Fluttertoast.showToast(
+                                       msg: "계정 복구가 완료되었습니다.\n다시 로그인 해주세요.",
+                                       toastLength: Toast.LENGTH_LONG,
+                                       gravity: ToastGravity.BOTTOM,
+                                       timeInSecForIosWeb: 3,
+                                       backgroundColor: ColorFamily.black,
+                                       textColor: ColorFamily.white,
+                                       fontSize: 14.0
+                                   );
+                                 },
+                                 child: const Text(
+                                   "확인",
+                                   style: TextStyleFamily
+                                       .dialogButtonTextStyle_pink,
+                                 ));
+                           })],
                 )
               ],
             ),

@@ -15,9 +15,8 @@ Future<void> saveUserData(UserModel user) async {
     "user_account": user.userAccount,
     "user_nickname": user.userNickname,
     "user_birth": user.userBirth,
-    "user_profileImage": user.userProfileImage,
+    "user_profile_image": user.userProfileImage,
     "lover_idx": user.loverIdx,
-    // "lover_nickname": user.loverNickname,
     "home_preset_type": user.homePresetType,
     "top_bar_type": user.topBarType,
     "profile_message": user.profileMessage,
@@ -61,7 +60,8 @@ dynamic getSpecificUserData(int userIdx, String data) async {
   return result;
 }
 
-Future<void> updateSpecificUserData(int userIdx, String updateItem, var updateContent) async {
+Future<void> updateSpecificUserData(
+    int userIdx, String updateItem, var updateContent) async {
   var querySnapshot = await FirebaseFirestore.instance
       .collection('userData')
       .where('user_idx', isEqualTo: userIdx)
@@ -72,12 +72,14 @@ Future<void> updateSpecificUserData(int userIdx, String updateItem, var updateCo
 }
 
 Future<void> deleteUserData(int userIdx) async {
-  QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+  QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+      .instance
       .collection('userData')
       .where('user_idx', isEqualTo: userIdx)
       .get();
 
-  for (DocumentSnapshot<Map<String, dynamic>> docSnapshot in querySnapshot.docs) {
+  for (DocumentSnapshot<Map<String, dynamic>> docSnapshot
+      in querySnapshot.docs) {
     await docSnapshot.reference.delete();
   }
 }

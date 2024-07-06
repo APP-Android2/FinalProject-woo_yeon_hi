@@ -27,7 +27,16 @@ void showBlackToast(String message){
   );
 }
 
-void dialogTitleWithContent(BuildContext context, String title, String content, VoidCallback onCancle, VoidCallback onConfirm){
+void showPinkSnackBar(BuildContext context, String message){
+  ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, textAlign: TextAlign.center, style: TextStyleFamily.normalTextStyle),
+        backgroundColor: ColorFamily.pink,
+        duration: const Duration(seconds: 1))
+  );
+}
+
+void dialogTitleWithContent(BuildContext context, String title, String content, VoidCallback onCancel, VoidCallback onConfirm){
   showDialog(
       context: context,
       builder: (context) {
@@ -66,7 +75,7 @@ void dialogTitleWithContent(BuildContext context, String title, String content, 
                             style: ButtonStyle(
                                 overlayColor: MaterialStateProperty.all(
                                     ColorFamily.gray)),
-                            onPressed: onCancle,
+                            onPressed: onCancel,
                             child: const Text(
                               "취소",
                               style: TextStyleFamily.dialogButtonTextStyle,

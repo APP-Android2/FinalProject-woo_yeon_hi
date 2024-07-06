@@ -37,13 +37,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
     "lib/assets/images/home_preset_dateplan_ledger_4x.png",
   ];
 
-  int presetPosition = 0;
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   presetPosition = UserProvider().homePresetType;
-  // }
+  int presetIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -167,13 +161,13 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                   SizedBox(
                                     height: deviceHeight * 0.5,
                                     child: Swiper(
-                                      index: presetPosition,
+                                      index: presetIndex,
                                       viewportFraction: 0.5,
                                       scale: 0.6,
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return Container(
-                                          decoration: presetPosition == index
+                                          decoration: presetIndex == index
                                               ? BoxDecoration(
                                                   border: Border.all(
                                                       color: ColorFamily.pink,
@@ -204,16 +198,16 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                       autoplay: false,
                                       onIndexChanged: (index) {
                                         setState(() {
-                                          presetPosition = index;
+                                          presetIndex = index;
                                         });
                                         provider
-                                            .setHomePresetType(presetPosition);
+                                            .setHomePresetType(presetIndex);
                                       },
                                     ),
                                   ),
                                   const SizedBox(height: 10),
                                   AnimatedSmoothIndicator(
-                                    activeIndex: presetPosition,
+                                    activeIndex: presetIndex,
                                     count: presetImages.length,
                                     effect: const ScrollingDotsEffect(
                                       dotColor: ColorFamily.beige,
@@ -267,7 +261,7 @@ class _RegisterDoneScreenState extends State<HomePresetSettingScreen> {
                                     child: InkWell(
                                       onTap: () {
                                         provider
-                                            .setHomePresetType(presetPosition);
+                                            .setHomePresetType(presetIndex);
                                         Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(

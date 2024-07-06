@@ -8,6 +8,7 @@ import 'package:woo_yeon_hi/screen/more/password_setting_screen.dart';
 import 'package:woo_yeon_hi/style/font.dart';
 
 import '../../dao/user_dao.dart';
+import '../../dialogs.dart';
 import '../../provider/login_register_provider.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
@@ -138,7 +139,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text(
-                                              "생체 인증 (Touch ID, Face ID)",
+                                              "생체 인증 (지문 인식, 얼굴 인식)",
                                               style: TextStyleFamily
                                                   .smallTitleTextStyle),
                                           Switch(
@@ -164,24 +165,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                                       1),
                                               onChanged: (bool value) async {
                                                 provider.appLockState == 0
-                                                    ? {
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "앱 잠금 설정을 먼저 해주세요.",
-                                                            toastLength: Toast
-                                                                .LENGTH_SHORT,
-                                                            gravity:
-                                                                ToastGravity
-                                                                    .BOTTOM,
-                                                            timeInSecForIosWeb:
-                                                                1,
-                                                            backgroundColor:
-                                                                ColorFamily
-                                                                    .black,
-                                                            textColor:
-                                                                ColorFamily
-                                                                    .white,
-                                                            fontSize: 14.0),
+                                                    ? {showBlackToast("앱 잠금 설정을 먼저 해주세요."),
                                                         setState(() {
                                                           value = false;
                                                         })
@@ -197,20 +181,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                                                         .userIdx,
                                                                     'app_lock_state',
                                                                     2),
-                                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                                    const SnackBar(
-                                                                        content:
-                                                                            Text(
-                                                                          '생체인증이 활성화되었습니다.',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                                style: TextStyleFamily.normalTextStyle
-                                                                        ),
-                                                                        backgroundColor:
-                                                                            ColorFamily
-                                                                                .pink,
-                                                                        duration:
-                                                                            Duration(seconds: 1)))
+                                                                showPinkSnackBar(context, '생체인증이 활성화되었습니다.')
                                                               }
                                                             : setState(() {
                                                                 value = false;
@@ -225,22 +196,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                                                     .userIdx,
                                                                 'app_lock_state',
                                                                 1),
-                                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                                const SnackBar(
-                                                                    content:
-                                                                        Text(
-                                                                      '생체인증이 비활성화되었습니다.',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                          style: TextStyleFamily.normalTextStyle,
-                                                                    ),
-                                                                    backgroundColor:
-                                                                        ColorFamily
-                                                                            .pink,
-                                                                    duration: Duration(
-                                                                        seconds:
-                                                                            1)))
+                                                  showPinkSnackBar(context, '생체인증이 비활성화되었습니다.')
                                                           };
                                               })
                                         ],
@@ -265,7 +221,7 @@ class _AppLockSettingScreenState extends State<AppLockSettingScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("생체 인증 (Touch ID, Face ID)",
+                                          Text("생체 인증 (지문 인식, 얼굴 인식)",
                                               style: TextStyleFamily
                                                   .smallTitleTextStyle),
                                         ],

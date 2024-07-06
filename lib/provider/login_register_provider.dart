@@ -65,22 +65,9 @@ class UserProvider extends ChangeNotifier {
 
   List<int> get lockPassword => _lockPassword;
 
-  TextEditingController _userNicknameTextEditController = TextEditingController();
-  TextEditingController _loverNickNameTextEditController = TextEditingController();
-  TextEditingController _profileMessageTextEditController = TextEditingController();
+
   TextEditingController _codeTextEditController = TextEditingController();
-
-  TextEditingController get userNicknameTextEditController =>
-      _userNicknameTextEditController;
-
-  TextEditingController get loverNickNameTextEditController =>
-      _loverNickNameTextEditController;
-
-  TextEditingController get profileMessageTextEditController =>
-      _profileMessageTextEditController;
-
   TextEditingController get codeTextEditController => _codeTextEditController;
-
 
   XFile? _image;
 
@@ -166,8 +153,8 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setHomePresetType(int presetPosition) {
-    _homePresetType = presetPosition;
+  void setHomePresetType(int presetIndex) {
+    _homePresetType = presetIndex;
     notifyListeners();
   }
 
@@ -181,11 +168,22 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setUserAllData(int userIdx, String userAccount, bool alarmsAllow,
-      int appLockState, int homePresetType, int loginType,
-      String loveDday, int loverIdx, String profileMessage, bool topBarActivate,
-      int topBarType, String userBirth,
-      String userNickname, String userProfileImage, int userState) {
+  void setUserAllData(
+      int userIdx,
+      String userAccount,
+      bool alarmsAllow,
+      int appLockState,
+      int homePresetType,
+      int loginType,
+      String loveDday,
+      int loverIdx,
+      String profileMessage,
+      bool topBarActivate,
+      int topBarType,
+      String userBirth,
+      String userNickname,
+      String userProfileImage,
+      int userState) {
     _userIdx = userIdx;
     _userAccount = userAccount;
     _alarmsAllow = alarmsAllow;
@@ -203,6 +201,16 @@ class UserProvider extends ChangeNotifier {
     _userState = userState;
   }
 
+  void setUserProfile(String profileImage, String userNickname,
+      String userBirth, String profileMsg) {
+    _userProfileImage = profileImage;
+    _userNickname = userNickname;
+    _userBirth = userBirth;
+    _profileMsg = profileMsg;
+
+    notifyListeners();
+  }
+
   bool checkProvider(TextEditingController textEditingController) {
     if (textEditingController.text.isEmpty ||
         textEditingController.text == "") {
@@ -211,7 +219,6 @@ class UserProvider extends ChangeNotifier {
       return true;
     }
   }
-
 
   signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -266,86 +273,56 @@ class UserProvider extends ChangeNotifier {
   }
 }
 
-
 class ConnectCodeProvider extends ChangeNotifier {
-
   bool _isCodeGenerated = false;
   bool _isCodeExpired = false;
-  String _randomCodeText = "";
+  String _connectCodeText = "";
   TextEditingController _codeTextEditController = TextEditingController();
 
   bool get isCodeGenerated => _isCodeGenerated;
+
   bool get isCodeExpired => _isCodeExpired;
-  String get randomCodeText => _randomCodeText;
+
+  String get connectCodeText => _connectCodeText;
+
   TextEditingController get codeTextEditController => _codeTextEditController;
 
-  void setIsCodeGenerated(bool bool){
+  void setIsCodeGenerated(bool bool) {
     _isCodeGenerated = bool;
     notifyListeners();
   }
 
-  void setIsCodeExpired(bool bool){
+  void setIsCodeExpired(bool bool) {
     _isCodeExpired = bool;
     notifyListeners();
   }
 
-  void setRandomCodeText(String randomCode){
-    _randomCodeText = randomCode;
+  void setConnectCodeText(String randomCode) {
+    _connectCodeText = randomCode;
     notifyListeners();
   }
 
-  void setCodeText(String randomCode){
-    _randomCodeText = randomCode;
+  void setCodeText(String randomCode) {
+    _connectCodeText = randomCode;
     notifyListeners();
   }
 }
 
-class CalendarProvider extends ChangeNotifier{
+class CalendarProvider extends ChangeNotifier {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay = DateTime.now();
 
   DateTime get focusedDay => _focusedDay;
+
   DateTime? get selectedDay => _selectedDay;
 
-  void setFocusedDay(DateTime date){
+  void setFocusedDay(DateTime date) {
     _focusedDay = date;
     notifyListeners();
   }
-  void setSelectedDay(DateTime date){
+
+  void setSelectedDay(DateTime date) {
     _selectedDay = date;
     notifyListeners();
   }
 }
-
-class AuthCodeProvider extends ChangeNotifier {
-
-  bool _showErrorMessage = false;
-  bool _isAuthCodeGenerated = false;
-  bool _isAuthCodeExpired = false;
-  String _authCodeText = "";
-  TextEditingController _authNumberTextEditController = TextEditingController();
-
-  bool get showErrorMessage => _showErrorMessage;
-  bool get isAuthCodeGenerated => _isAuthCodeGenerated;
-  bool get isAuthCodeExpired => _isAuthCodeExpired;
-  String get authCodeText => _authCodeText;
-  TextEditingController get authNumberTextEditController => _authNumberTextEditController;
-
-  void setShowErrorMessage(bool error){
-    _showErrorMessage = error;
-    notifyListeners();
-  }
-  void setIsAuthCodeGenerated(bool generated){
-    _isAuthCodeGenerated = generated;
-    notifyListeners();
-  }
-  void setIsAuthCodeExpired(bool expired){
-    _isAuthCodeExpired = expired;
-    notifyListeners();
-  }
-  void setAuthCodeText(String authCode){
-    _authCodeText = authCode;
-    notifyListeners();
-  }
-}
-

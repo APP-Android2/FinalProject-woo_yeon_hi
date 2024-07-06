@@ -34,7 +34,7 @@ class CodeConnectScreen extends StatefulWidget {
 class _ConnectCodeScreenState extends State<CodeConnectScreen> {
   bool _isCodeGenerated = false;
   bool _isCodeExpired = false;
-  String _codeText = "";
+  String _connectCode = "";
   String _randomCode = getRandomString(8);
   dynamic codeTextEditController;
 
@@ -141,7 +141,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                       alignment:
                                                           Alignment.center,
                                                       children: [
-                                                        Text(_codeText,
+                                                        Text(_connectCode,
                                                             style: const TextStyle(
                                                                 color:
                                                                     ColorFamily
@@ -241,8 +241,8 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                                         ),
                                                                   onEnd:
                                                                       () async {
-                                                                    await deleteCodeData(
-                                                                        _codeText);
+                                                                    await deleteConnectCodeData(
+                                                                        _connectCode);
                                                                     setState(
                                                                         () {
                                                                       _isCodeExpired =
@@ -268,13 +268,12 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                   ? InkWell(
                                                       onTap: () async {
                                                         setState(() {
-                                                          _codeText =
+                                                          _connectCode =
                                                               _randomCode;
                                                         });
 
-                                                        if (await saveCodeData(
-                                                            _codeText,
-                                                            'connect_code',
+                                                        if (await saveConnectCodeData(
+                                                            _connectCode,
                                                             provider.userIdx)) {
                                                           setState(() {
                                                             _isCodeGenerated =
@@ -291,22 +290,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                             _isCodeExpired =
                                                                 false;
                                                           });
-                                                          Fluttertoast.showToast(
-                                                              msg: "다시 시도해주세요.",
-                                                              toastLength: Toast
-                                                                  .LENGTH_SHORT,
-                                                              gravity:
-                                                                  ToastGravity
-                                                                      .BOTTOM,
-                                                              timeInSecForIosWeb:
-                                                                  1,
-                                                              backgroundColor:
-                                                                  ColorFamily
-                                                                      .black,
-                                                              textColor:
-                                                                  ColorFamily
-                                                                      .white,
-                                                              fontSize: 14.0);
+                                                          showBlackToast("다시 시도해주세요.");
                                                         }
                                                       },
                                                       borderRadius:
@@ -332,34 +316,33 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                             _randomCode =
                                                                 getRandomString(
                                                                     8);
-                                                            _codeText =
+                                                            _connectCode =
                                                                 _randomCode;
                                                             _timerStartTime =
                                                                 DateTime.now();
                                                             _isCodeExpired =
                                                                 false;
                                                           });
-                                                          await saveCodeData(
-                                                              _codeText,
-                                                              'connect_code',
+                                                          await saveConnectCodeData(
+                                                              _connectCode,
                                                               provider.userIdx);
                                                         } else {
                                                           if (await isCodeDataExist(
-                                                                      _codeText) ==
+                                                              _connectCode) ==
                                                                   true &&
                                                               await isCodeConnected(
-                                                                      _codeText) ==
+                                                                  _connectCode) ==
                                                                   true) {
                                                             var guestIdx =
-                                                                await getSpecificCodeData(
-                                                                    _codeText,
+                                                                await getSpecificConnectCodeData(
+                                                                    _connectCode,
                                                                     'guest_idx');
                                                             await saveLoverIdx(
                                                                 provider
                                                                     .userIdx,
                                                                 guestIdx);
-                                                            await deleteCodeData(
-                                                                _codeText);
+                                                            await deleteConnectCodeData(
+                                                                _connectCode);
                                                             provider
                                                                 .setLoverIdx(
                                                                     guestIdx);
@@ -371,42 +354,10 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                                         const DdaySettingScreen(
                                                                             isHost:
                                                                                 true)),
-                                                                (route) =>
-                                                                    false);
-                                                            Fluttertoast.showToast(
-                                                                msg: "연결되었습니다!",
-                                                                toastLength: Toast
-                                                                    .LENGTH_SHORT,
-                                                                gravity:
-                                                                    ToastGravity
-                                                                        .BOTTOM,
-                                                                timeInSecForIosWeb:
-                                                                    1,
-                                                                backgroundColor:
-                                                                    ColorFamily
-                                                                        .pink,
-                                                                textColor:
-                                                                    ColorFamily
-                                                                        .white,
-                                                                fontSize: 14.0);
+                                                                (route) => false);
+                                                            showBlackToast("연결되었습니다!");
                                                           } else {
-                                                            Fluttertoast.showToast(
-                                                                msg:
-                                                                    "해당 코드로 연결된 상대가 없습니다.",
-                                                                toastLength: Toast
-                                                                    .LENGTH_SHORT,
-                                                                gravity:
-                                                                    ToastGravity
-                                                                        .BOTTOM,
-                                                                timeInSecForIosWeb:
-                                                                    1,
-                                                                backgroundColor:
-                                                                    ColorFamily
-                                                                        .black,
-                                                                textColor:
-                                                                    ColorFamily
-                                                                        .white,
-                                                                fontSize: 14.0);
+                                                            showBlackToast("해당 코드로 연결된 상대가 없습니다.");
                                                           }
                                                         }
                                                       },
@@ -481,24 +432,12 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                             ),
                                             child: InkWell(
                                                 onTap: () async {
-                                                  if (await getSpecificCodeData(
+                                                  if (await getSpecificConnectCodeData(
                                                           codeTextEditController
                                                               .text,
                                                           'host_idx') ==
                                                       provider.userIdx) {
-                                                    Fluttertoast.showToast(
-                                                        msg:
-                                                            "본인의 코드로 연결할 수 없습니다.",
-                                                        toastLength:
-                                                            Toast.LENGTH_SHORT,
-                                                        gravity:
-                                                            ToastGravity.BOTTOM,
-                                                        timeInSecForIosWeb: 1,
-                                                        backgroundColor:
-                                                            ColorFamily.black,
-                                                        textColor:
-                                                            ColorFamily.white,
-                                                        fontSize: 14.0);
+                                                    showBlackToast("본인의 코드로 연결할 수 없습니다.");
                                                   } else if (await isCodeDataExist(
                                                               codeTextEditController
                                                                   .text) ==
@@ -508,16 +447,16 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                                   .text) ==
                                                           false) {
                                                     var hostIdx =
-                                                        await getSpecificCodeData(
+                                                        await getSpecificConnectCodeData(
                                                             codeTextEditController
                                                                 .text,
                                                             'host_idx');
-                                                    await deleteCodeData(
-                                                        _codeText);
+                                                    await deleteConnectCodeData(
+                                                        _connectCode);
                                                     await saveLoverIdx(
                                                         provider.userIdx,
                                                         hostIdx);
-                                                    await updateCode(
+                                                    await updateConnectCode(
                                                         codeTextEditController
                                                             .text,
                                                         provider.userIdx);
@@ -532,31 +471,9 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                                                                     isHost:
                                                                         false)),
                                                         (route) => false);
-                                                    Fluttertoast.showToast(
-                                                        msg: "연결되었습니다!",
-                                                        toastLength:
-                                                            Toast.LENGTH_SHORT,
-                                                        gravity:
-                                                            ToastGravity.BOTTOM,
-                                                        timeInSecForIosWeb: 1,
-                                                        backgroundColor:
-                                                            ColorFamily.pink,
-                                                        textColor:
-                                                            ColorFamily.white,
-                                                        fontSize: 14.0);
+                                                    showBlackToast("연결되었습니다!");
                                                   } else {
-                                                    Fluttertoast.showToast(
-                                                        msg: "유효하지 않은 연결코드입니다.",
-                                                        toastLength:
-                                                            Toast.LENGTH_SHORT,
-                                                        gravity:
-                                                            ToastGravity.BOTTOM,
-                                                        timeInSecForIosWeb: 1,
-                                                        backgroundColor:
-                                                            ColorFamily.black,
-                                                        textColor:
-                                                            ColorFamily.white,
-                                                        fontSize: 14.0);
+                                                    showBlackToast("유효하지 않은 연결코드입니다.");
                                                   }
                                                 },
                                                 borderRadius:
@@ -580,7 +497,7 @@ class _ConnectCodeScreenState extends State<CodeConnectScreen> {
                               child: TextButton(
                                 onPressed: () async {
                                   signOut(context);
-                                  await deleteCodeData(_codeText);
+                                  await deleteConnectCodeData(_connectCode);
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(

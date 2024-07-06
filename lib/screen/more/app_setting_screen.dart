@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/widget/more/app_setting_top_app_bar.dart';
 
 import '../../dao/user_dao.dart';
+import '../../dialogs.dart';
 import '../../provider/login_register_provider.dart';
 import '../../style/color.dart';
 import '../../style/text_style.dart';
@@ -69,16 +70,8 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                                       provider.setAlarmsAllow(value);
                                       await updateSpecificUserData(provider.userIdx, 'alarms_allow', value);
                                       value
-                                      ? ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                              content: Text('앱 알림이 설정되었습니다.',textAlign: TextAlign.center, style: TextStyleFamily.normalTextStyle),
-                                              backgroundColor: ColorFamily.pink,
-                                              duration: Duration(seconds: 1)))
-                                      : ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                          content: Text('앱 알림이 해제되었습니다.',textAlign: TextAlign.center, style: TextStyleFamily.normalTextStyle),
-                                              backgroundColor: ColorFamily.pink,
-                                              duration: Duration(seconds: 1)));
+                                      ? showPinkSnackBar(context, '앱 알림이 설정되었습니다.')
+                                      : showPinkSnackBar(context, '앱 알림이 해제되었습니다.');
                                     }),
                               ],
                             ),
@@ -162,12 +155,12 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                         child: InkWell(
                           splashFactory: NoSplash.splashFactory,
                           onTap: () async {
-                            await storage.delete(key: "loginData");
                             _logOut(context);
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (context) => const LoginScreen()),
                                 (Route<dynamic> route) => false);
+                            showBlackToast("로그아웃 되었습니다.");
                           },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,7 +201,8 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
       case 0:
         break;
     }
-    updateSpecificUserData(Provider.of<UserProvider>(context, listen: false).userIdx, 'login_type', 0);
-    updateSpecificUserData(Provider.of<UserProvider>(context, listen: false).userIdx, 'user_state', 2);
+    await updateSpecificUserData(Provider.of<UserProvider>(context, listen: false).userIdx, 'login_type', 0);
+    await updateSpecificUserData(Provider.of<UserProvider>(context, listen: false).userIdx, 'user_state', 2);
+    await storage.delete(key: "lockPassword");
   }
 }

@@ -3,7 +3,7 @@ import 'package:woo_yeon_hi/dao/user_dao.dart';
 
 import '../model/user_model.dart';
 
-Future<bool> saveCodeData(String code, String codeType, int idx) async {
+Future<bool> saveConnectCodeData(String code, int idx) async {
   var querySnapshot = await FirebaseFirestore.instance
       .collection('CodeData')
       .where('code', isEqualTo: code)
@@ -12,7 +12,7 @@ Future<bool> saveCodeData(String code, String codeType, int idx) async {
     return false;
   } else{
     await FirebaseFirestore.instance.collection('CodeData').add({
-      'code': code,
+      'connect_code': code,
       'host_idx': idx,
       'code_connect_state': false
     });
@@ -20,16 +20,7 @@ Future<bool> saveCodeData(String code, String codeType, int idx) async {
   }
 }
 
-// Future<void> updateCodeData(String updateCode, String codeType) async {
-//   var querySnapshot = await FirebaseFirestore.instance
-//       .collection('CodeData')
-//       .get();
-//
-//   var document = querySnapshot.docs.first;
-//   document.reference.update({codeType: updateCode});
-// }
-
-Future<void> deleteCodeData(String code) async {
+Future<void> deleteConnectCodeData(String code) async {
   QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
       .collection('CodeData')
       .where('code', isEqualTo: code)
@@ -119,7 +110,7 @@ Future<void> saveLoverIdx(int userIdx, int loverIdx) async {
   }
 }
 
-dynamic getSpecificCodeData(String code, String dataField) async {
+dynamic getSpecificConnectCodeData(String code, String dataField) async {
   Map<String, dynamic> results = {};
   dynamic result;
 
@@ -138,7 +129,7 @@ dynamic getSpecificCodeData(String code, String dataField) async {
 }
 
 
-Future<void> updateCode(String code, int userIdx) async {
+Future<void> updateConnectCode(String code, int userIdx) async {
   try {
     // userIdx 필드와 일치하는 문서 검색
     var querySnapshot = await FirebaseFirestore.instance.collection('CodeData')
@@ -163,22 +154,3 @@ Future<void> updateCode(String code, int userIdx) async {
     print('문서 업데이트 중 오류 발생: $e');
   }
 }
-
-
-// dynamic getMyNickname(int loverIdx) async {
-//   Map<String, dynamic> results = {};
-//   dynamic result;
-//
-//   Query<Map<String, dynamic>> query = FirebaseFirestore.instance
-//       .collection('userData')
-//       .where('user_idx', isEqualTo: loverIdx);
-//
-//   var querySnapShot = await query.get();
-//   for (var doc in querySnapShot.docs) {
-//     results = doc.data();
-//   }
-//
-//   result = results['lover_nickname'];
-//
-//   return result;
-// }

@@ -17,3 +17,37 @@ class PasswordProvider extends ChangeNotifier {
     _password = passwordList;
   }
 }
+
+class AuthCodeProvider extends ChangeNotifier {
+  bool _isAuthCodeGenerated = false;
+  bool _isAuthCodeExpired = false;
+  String _authCodeText = "";
+  bool _showError = false;
+  TextEditingController _authNumberTextEditController = TextEditingController();
+
+  bool get isAuthCodeGenerated => _isAuthCodeGenerated;
+  bool get isAuthCodeExpired => _isAuthCodeExpired;
+  String get authCodeText => _authCodeText;
+  bool get showError => _showError;
+  TextEditingController get authNumberTextEditController => _authNumberTextEditController;
+
+  void setIsAuthCodeGenerated(bool bool){
+    _isAuthCodeGenerated = bool;
+    notifyListeners();
+  }
+
+  void setIsAuthCodeExpired(bool bool){
+    _isAuthCodeExpired = bool;
+    notifyListeners();
+  }
+
+  void setAuthCodeText(String randomCode){
+    _authCodeText = randomCode;
+    notifyListeners();
+  }
+
+  void setShowError(bool isError){
+    _showError = isError;
+    notifyListeners();
+  }
+}

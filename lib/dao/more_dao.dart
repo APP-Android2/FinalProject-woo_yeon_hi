@@ -30,3 +30,54 @@ Future<bool> isExistOnSummaryDate(DateTime date) async {
     return false;
   }
 }
+
+Future<bool> saveAuthCodeData(String code, int idx) async {
+  var querySnapshot = await FirebaseFirestore.instance
+      .collection('CodeData')
+      .where('code', isEqualTo: code)
+      .get();
+  if(querySnapshot.docs.isNotEmpty){
+    return false;
+  } else{
+    await FirebaseFirestore.instance.collection('CodeData').add({
+      'auth_code': code,
+      'user_idx': idx,
+    });
+    return true;
+  }
+}
+
+Future<String?> isVerifiedCode(String code, int idx) async {
+  Map<String, dynamic> results = {};
+  String? result;
+
+  try {
+    Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+        .collection('CodeData')
+        .where('auth_code', isEqualTo: code);
+    var querySnapShot = await query.get();
+    for (var doc in querySnapShot.docs) {
+      results = doc.data();
+    }
+    if(results['user_idx']==idx){
+      result = results['auth_code'];
+    } else {
+      result = null;
+    }
+  } catch (error) {
+    result = null;
+  }
+
+  return result;
+}
+
+Future<void> deleteAuthCodeData(int userIdx) async {
+  QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+      .collection('CodeData')
+      .where('user_idx', isEqualTo: userIdx)
+      .get();
+
+  for (DocumentSnapshot<Map<String, dynamic>> docSnapshot in querySnapshot.docs) {
+    await docSnapshot.reference.delete();
+  }
+}

@@ -17,6 +17,8 @@ import 'package:woo_yeon_hi/style/font.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/utils.dart';
 
+import '../../dialogs.dart';
+
 class PasswordEnterScreen extends StatefulWidget {
   const PasswordEnterScreen({super.key});
 
@@ -27,14 +29,23 @@ class PasswordEnterScreen extends StatefulWidget {
 class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
 
   @override
+  void initState() {
+    super.initState();
+    _bioAuthDialog();
+  }
+
+  Future<void> _bioAuthDialog () async {
+    Provider.of<UserProvider>(context, listen: false).appLockState == 2
+        ? Future.delayed(const Duration(milliseconds: 500), () async {
+      _authenticateWithBiometrics();})
+        : null;
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
-
-    Provider.of<UserProvider>(context, listen: false).appLockState == 2
-      ? Future.delayed(const Duration(milliseconds: 500), () async {
-    _authenticateWithBiometrics();})
-      : null;
 
     return Scaffold(
         body: Container(
@@ -265,13 +276,17 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
                   height: deviceHeight * 0.08,
                   width: (deviceWidth - 40) / 3,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _authenticateWithBiometrics();
+                    },
                     child: Container(
                       alignment: Alignment.center,
-                      child: const Text(
-                        "",
-                        style: TextStyleFamily.passwordTextStyle,
-                      ),
+                      child:
+                      Provider.of<UserProvider>(context, listen: false).appLockState == 2
+                      ? const Text(
+                        "생체인증",
+                        style: TextStyleFamily.smallTitleTextStyle)
+                      : const Text("", style: TextStyleFamily.smallTitleTextStyle)
                     ),
                   ),
                 ),
@@ -367,14 +382,7 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
 
     if (!listEquality.equals(checkingPassword,
         lockPassword)) {
-      Fluttertoast.showToast(
-          msg: "비밀번호가 일치하지 않습니다.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: ColorFamily.black,
-          textColor: ColorFamily.white,
-          fontSize: 14.0);
+      showBlackToast("비밀번호가 일치하지 않습니다.");
       Future.delayed(const Duration(milliseconds: 100), () {
         _initiatePassword();
       });
@@ -384,27 +392,30 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
           MaterialPageRoute(
               builder: (context) => const MainScreen()),
               (route) => false);
-      // runApp(const MainScreen());
     }
   }
 
   void _initiatePassword() {
     setState(() {
-      firstNumInput = false;
-      secondNumInput = false;
-      thirdNumInput = false;
-      fourthNumInput = false;
-
       checkingPassword.clear();
     });
   }
 
   final LocalAuthentication auth = LocalAuthentication();
+  bool _isAuthenticating = false;
+  bool _isAuthenticated = false;
 
   Future<void> _authenticateWithBiometrics() async {
+    if (_isAuthenticating || _isAuthenticated) {
+      return;
+    }
+
     bool authenticated = false;
     try {
-      setState(() {});
+      setState(() {
+        _isAuthenticating = true;
+      });
+
       authenticated = await auth.authenticate(
         authMessages: [
           const AndroidAuthMessages(
@@ -422,23 +433,40 @@ class _PasswordEnterScreenState extends State<PasswordEnterScreen> {
         ],
         localizedReason: '기기에 등록된 생체정보를 스캔해주세요.',
         options: const AuthenticationOptions(
+          sensitiveTransaction: true,
           stickyAuth: true,
           biometricOnly: true,
         ),
       );
-      setState(() {});
     } on PlatformException catch (e) {
       print(e);
-      setState(() {});
       return;
+    } finally {
+      setState(() {
+        _isAuthenticating = false;
+      });
     }
+
     if (!mounted) {
       return;
     }
 
     if (authenticated) {
-      Navigator.pop(context);
-      runApp(const MainScreen());
+      var lockPassword = await _fetchPassword();
+      setState(() {
+        checkingPassword.add(lockPassword[0]);
+        checkingPassword.add(lockPassword[1]);
+        checkingPassword.add(lockPassword[2]);
+        checkingPassword.add(lockPassword[3]);
+        _isAuthenticated = true;
+      });
+      await Future.delayed(const Duration(milliseconds: 100), () {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const MainScreen()),
+              (route) => false);
+      });
     }
   }
 

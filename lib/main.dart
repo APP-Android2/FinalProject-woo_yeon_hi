@@ -1,8 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:woo_yeon_hi/provider/diary_provider.dart';
+import 'package:woo_yeon_hi/provider/footprint_provider.dart';
+import 'package:woo_yeon_hi/provider/ledger_provider.dart';
 import 'package:woo_yeon_hi/provider/login_register_provider.dart';
 import 'package:woo_yeon_hi/provider/more_provider.dart';
+import 'package:woo_yeon_hi/provider/tab_page_index_provider.dart';
 import 'package:woo_yeon_hi/screen/login/password_enter_screen.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 
@@ -106,6 +110,19 @@ class _WooYeonHiState extends State<WooYeonHi> {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => CalendarProvider()),
+          ChangeNotifierProvider(create: (context) => PasswordProvider()),
+          ChangeNotifierProvider(create: (context) => AuthCodeProvider()),
+          ChangeNotifierProvider(create: (context) => TabPageIndexProvider()),
+          ChangeNotifierProvider(create: (context) => DiaryProvider()),
+          ChangeNotifierProvider(create: (context) => FootprintProvider()),
+          ChangeNotifierProvider(create: (context) => LedgerProvider()),
+          ChangeNotifierProvider(
+              create: (context) => FootPrintSlidableProvider()),
+          ChangeNotifierProvider(
+              create: (context) => FootPrintDatePlanSlidableProvider()),
+          ChangeNotifierProvider(
+              create: (context) => FootprintDraggableSheetProvider()),
+          ChangeNotifierProvider(create: (context) => BioAuthProvider()),
           ChangeNotifierProvider(create: (context) => PasswordProvider()),
         ],
         child: MaterialApp(

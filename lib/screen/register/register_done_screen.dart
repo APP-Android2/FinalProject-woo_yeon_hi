@@ -1,15 +1,11 @@
 import 'package:animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:woo_yeon_hi/screen/main_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 
-import '../../dao/login_register_dao.dart';
-import '../../dao/user_dao.dart';
-import '../../model/user_model.dart';
 import '../../provider/login_register_provider.dart';
 import '../../style/font.dart';
 
@@ -26,15 +22,14 @@ class RegisterDoneScreen extends StatefulWidget {
 
 class _RegisterDoneScreen extends State<RegisterDoneScreen>
     with TickerProviderStateMixin {
-  static const storage =
-      FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
 
   @override
   Widget build(BuildContext context) {
     var deviceWidth = MediaQuery.of(context).size.width;
     var deviceHeight = MediaQuery.of(context).size.height;
 
-    _registerUserData(context, Provider.of<UserProvider>(context, listen: false));
+    _registerUserData(
+        context, Provider.of<UserProvider>(context, listen: false));
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -148,17 +143,16 @@ class _RegisterDoneScreen extends State<RegisterDoneScreen>
                                       ),
                                       child: InkWell(
                                           onTap: () async {
-                                            // 자동로그인, write 함수를 통하여 key에 맞는 정보를 적게 됩니다.
-                                            await storage.write(
-                                                key: "userAccount",
-                                                value: provider.userAccount);
-                                            await storage.write(
-                                                key: "userIdx",
-                                                value: "${provider.userIdx}");
                                             Future.delayed(
                                                 const Duration(
                                                     milliseconds: 500), () {
-                                              runApp(const MainScreen());
+                                              Navigator.of(context)
+                                                  .pushAndRemoveUntil(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const MainScreen()),
+                                                      (Route<dynamic> route) =>
+                                                          false);
                                             });
                                           },
                                           borderRadius:

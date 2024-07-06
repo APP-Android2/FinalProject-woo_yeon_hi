@@ -14,6 +14,7 @@ import 'package:woo_yeon_hi/provider/more_provider.dart';
 import 'package:woo_yeon_hi/screen/more/app_lock_setting_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 
+import '../../dialogs.dart';
 import '../../style/font.dart';
 import '../../style/text_style.dart';
 import '../../utils.dart';
@@ -360,14 +361,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
     var listEquality = const ListEquality();
     if (!listEquality.equals(checkingPasswordList,
         Provider.of<PasswordProvider>(context, listen: false).password)) {
-      Fluttertoast.showToast(
-          msg: "비밀번호를 다르게 입력하였습니다.\n다시 확인해주세요.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: ColorFamily.black,
-          textColor: ColorFamily.white,
-          fontSize: 14.0);
+      showBlackToast("비밀번호를 다르게 입력하였습니다.");
       Future.delayed(const Duration(milliseconds: 100), () {
         _initiatePassword();
       });
@@ -496,7 +490,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
                         children: [
                           Text("지문 인식",
                               style: TextStyleFamily.appBarTitleLightTextStyle),
-                          Text("Face ID",
+                          Text("얼굴 인식",
                               style: TextStyleFamily.appBarTitleLightTextStyle)
                         ],
                       ),
@@ -588,11 +582,7 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
           context,
           MaterialPageRoute(
               builder: (context) => const AppLockSettingScreen()));
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('앱 잠금이 설정되었습니다.',textAlign: TextAlign.center, style: TextStyleFamily.normalTextStyle),
-              backgroundColor: ColorFamily.pink,
-              duration: Duration(seconds: 1)));
+      showPinkSnackBar(context, '앱 잠금이 설정되었습니다.');
     });
   }
 }
