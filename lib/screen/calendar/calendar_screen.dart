@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:woo_yeon_hi/dao/schedule_dao.dart';
 import 'package:woo_yeon_hi/screen/calendar/calendar_add_screen.dart';
-import 'package:woo_yeon_hi/screen/calendar/calendar_search_screen.dart';
 import 'package:woo_yeon_hi/style/color.dart';
 import 'package:woo_yeon_hi/style/text_style.dart';
 import 'package:woo_yeon_hi/widget/calendar/calendar_date.dart';
@@ -18,8 +18,28 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
 
+  // 일정 데이터
+  List<Map<String, dynamic>> scheduleData = [];
+
   // 참 거짓으로 상태를 나눔
   bool _isCalendar = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 화면 생성 시
+    getData();
+  }
+
+  // 데이터를 가져옴
+  Future<void> getData() async {
+    var tempScheduleData = await getScheduleData();
+
+    setState(() {
+      scheduleData = tempScheduleData;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +50,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         surfaceTintColor: ColorFamily.cream,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        title: Text(
+        title: const Text(
           "캘린더",
           style: TextStyleFamily.appBarTitleBoldTextStyle
         ),
@@ -58,16 +78,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ? SvgPicture.asset("lib/assets/icons/list.svg")
                     : SvgPicture.asset("lib/assets/icons/calendar.svg"),
                 ),
-                const SizedBox(width: 10),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CalendarSearchScreen())
-                    );
-                  },
-                  child: SvgPicture.asset("lib/assets/icons/search.svg"),
-                ),
-                const SizedBox(width: 5),
+                const SizedBox(width: 7),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -79,7 +90,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ],
             ),
           ),
-          _isCalendar ? CalendarDate() : CalendarList(),
+          _isCalendar ? CalendarDate(scheduleData) : CalendarList(scheduleData),
         ],
       )
     );

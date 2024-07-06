@@ -38,6 +38,7 @@ Future<void> main() async {
   initializeDateFormatting().then((_) async {
     final userData = await fetchUserData();
 
+
     runApp(MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => UserProvider())
@@ -65,6 +66,7 @@ Future<void> main() async {
 class WooYeonHi extends StatefulWidget {
   WooYeonHi(
       {super.key,
+
       required this.userIdx,
       required this.userAccount,
       required this.alarmsAllow,

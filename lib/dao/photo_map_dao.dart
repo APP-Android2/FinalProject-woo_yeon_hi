@@ -46,6 +46,20 @@ Future<List<PhotoMap>> getPhotoMap(int userIdx) async {
   return results;
 }
 
+Future<PhotoMap> getPhotoMapByMapIdx(int mapIdx) async {
+  List<PhotoMap> results = [];
+  var querySnapshot = await FirebaseFirestore.instance.collection('PhotoMapData')
+      .where('map_idx', isEqualTo: mapIdx)
+      .get();
+
+  for(var doc in querySnapshot.docs){
+    results.add(PhotoMap.fromData(doc.data()));
+  }
+  return results.first;
+}
+
+
+
 Future<void> uploadPhotoMapImage(Uint8List data, String imageName) async {
   await FirebaseStorage.instance
       .ref('image/photoMap/$imageName')
