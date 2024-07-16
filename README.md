@@ -53,8 +53,8 @@
 
 시연 영상 링크 : <a href="https://youtu.be/@@@@@@@">Youtube</a>
 
+### Etc
+
 <hr>
 
-
-
-
+<img src="https://github.com/user-attachments/assets/62bafaba-0a56-4b98-86ec-2c8f7fbde3be" width="450" height="650"/>
